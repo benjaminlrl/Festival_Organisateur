@@ -1,0 +1,87 @@
+﻿using Lib_Entities.Entities;
+using Lib_Metier.Data.Configurations;
+using Lib_Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Lib_Services.Services
+{
+    /// <summary>
+    /// Service métier responsable des opérations CRUD sur l'entité <see cref="Espace"/>.
+    /// </summary>
+    public class EspaceService : IEspaceService
+    {
+        private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Initialise une nouvelle instance de <see cref="EspaceService"/>.
+        /// </summary>
+        /// <param name="context">Contexte de données utilisé pour les opérations persistées.</param>
+        public EspaceService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        /// <summary>
+        /// Retourne la liste complète des espaces présents en base.
+        /// Exécute immédiatement la requête via <c>ToList()</c>.
+        /// </summary>
+        /// <returns>Liste d'objets <see cref="Espace"/>.</returns>
+        public List<Espace> Lister()
+        {
+            // ToList force l'exécution de la requête et charge les entités en mémoire.
+            return _context.Espaces.ToList();
+        }
+
+        /// <summary>
+        /// Récupère un espace par son identifiant.
+        /// </summary>
+        /// <param name="idEspace">Identifiant de l'espace cherché.</param>
+        /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
+        public Espace? Obtenir(int idEspace)
+        {
+            // Find utilise le cache du contexte s'il existe, sinon interroge la base.
+            return _context.Espaces.Find(idEspace);
+        }
+
+        /// <summary>
+        /// Crée un nouvel espace en base.
+        /// Appelle immédiatement <c>SaveChanges()</c> pour persister l'entité.
+        /// </summary>
+        /// <param name="espace">Instance de <see cref="Espace"/> à créer.</param>
+        public void Creer(Espace espace)
+        {
+            // Ajout de l'entité au contexte puis persistance immédiate.
+            _context.Espaces.Add(espace);
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Met à jour un espace existant.
+        /// L'appel à <c>Update</c> marque toutes les propriétés comme modifiées.
+        /// </summary>
+        /// <param name="espace">Instance modifiée de <see cref="Espace"/>.</param>
+        public void Modifier(Espace espace)
+        {
+            _context.Espaces.Update(espace);
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Supprime un espace identifié par son identifiant s'il existe.
+        /// </summary>
+        /// <param name="idEspace">Identifiant de l'espace à supprimer.</param>
+        public void Supprimer(int idEspace)
+        {
+            // Recherche de l'entité (utilise le cache si possible).
+            var espace = _context.Espaces.Find(idEspace);
+            if (espace != null)
+            {
+                _context.Espaces.Remove(espace);
+                _context.SaveChanges();
+            }
+        }
+    }
+
+}

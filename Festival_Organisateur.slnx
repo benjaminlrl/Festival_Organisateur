@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ApplicationUi/ApplicationUi.csproj" />
+  <Project Path="Lib_Entities/Lib_Entities.csproj" />
+  <Project Path="Lib_Metier/Lib_Metier.csproj" />
+  <Project Path="Lib_Services/Lib_Services.csproj" />
+</Solution>

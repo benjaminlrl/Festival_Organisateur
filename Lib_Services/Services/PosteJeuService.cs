@@ -1,0 +1,88 @@
+﻿using Lib_Entities.Entities;
+using Lib_Metier.Data.Configurations;
+using Lib_Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Lib_Services.Services
+{
+    /// <summary>
+    /// Service d'accès aux données pour l'entité <see cref="PosteJeu"/>.
+    /// Fournit les opérations CRUD de base 
+    /// </summary>
+    public class PosteJeuService : IPosteJeuService
+    {
+        // Contexte Entity Framework 
+        private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Constructeur .
+        /// </summary>
+        /// <param name="context">Instance de <see cref="ApplicationDbContext"/></param>
+        public PosteJeuService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        /// <summary>
+        /// Récupère l'ensemble des postes de jeu depuis la base de données.
+        /// </summary>
+        /// <returns>Liste de <see cref="PosteJeu"/>.</returns>
+        public List<PosteJeu> Lister()
+        {
+            // ToList matérialise la requête et ramène les entités en mémoire.
+            return _context.PostesJeu.ToList();
+        }
+
+        /// <summary>
+        /// Récupère un poste de jeu par son identifiant.
+        /// </summary>
+        /// <param name="idposteJeu">Identifiant du poste de jeu recherché.</param>
+        /// <returns>L'entité <see cref="PosteJeu"/> si trouvée ; sinon null.</returns>
+        public PosteJeu? Obtenir(int idposteJeu)
+        {
+            // Find retourne null si l'entité n'existe pas dans le contexte/la base.
+            return _context.PostesJeu.Find(idposteJeu);
+        }
+
+        /// <summary>
+        /// Ajoute un nouveau poste de jeu .
+        /// </summary>
+        /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> à créer.</param>
+        public void Creer(PosteJeu posteJeu)
+        {
+            // Ajout à l'ensemble suivi d'un commit via SaveChanges.
+            _context.PostesJeu.Add(posteJeu);
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Met à jour un poste de jeu existant et persiste la modification.
+        /// </summary>
+        /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> contenant les valeurs mises à jour.</param>
+        public void Modifier(PosteJeu posteJeu)
+        {
+            // Marque l'entité comme modifiée puis enregistre les changements.
+            _context.PostesJeu.Update(posteJeu);
+            _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Supprime un poste de jeu identifié par son identifiant si présent.
+        /// </summary>
+        /// <param name="idposteJeu">Identifiant du poste de jeu à supprimer.</param>
+        public void Supprimer(int idposteJeu)
+        {
+            // Récupération en lecture puis suppression conditionnelle pour éviter les exceptions.
+            var posteJeu = _context.PostesJeu.Find(idposteJeu);
+            if (posteJeu != null)
+            {
+                _context.PostesJeu.Remove(posteJeu);
+                _context.SaveChanges();
+            }
+        }
+
+    }
+
+}
