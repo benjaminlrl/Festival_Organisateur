@@ -206,7 +206,7 @@
             dataGridTournois.BackgroundColor = Color.White;
             dataGridTournois.BorderStyle = BorderStyle.None;
             dataGridTournois.ColumnHeadersHeight = 34;
-            dataGridTournois.Location = new Point(23, 277);
+            dataGridTournois.Location = new Point(23, 314);
             dataGridTournois.Margin = new Padding(4);
             dataGridTournois.Name = "dataGridTournois";
             dataGridTournois.ReadOnly = true;
@@ -258,7 +258,7 @@
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(23, 17);
+            panelForm.Location = new Point(23, 54);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
             panelForm.Size = new Size(900, 253);
@@ -288,6 +288,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(192, 255, 255);
             Controls.Add(dataGridTournois);
             Controls.Add(panelForm);
             Name = "UcEspaces";
