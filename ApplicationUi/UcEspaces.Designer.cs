@@ -40,16 +40,16 @@
             textBoxNom = new TextBox();
             labelNom = new Label();
             labelCapaciteMaxi = new Label();
-            dataGridTournois = new DataGridView();
+            dataGridEspaces = new DataGridView();
             numericUpDownSuperficie = new NumericUpDown();
             tableLayoutPanel = new TableLayoutPanel();
-            panelForm = new Panel();
             labelDescription = new Label();
             textBoxDescription = new TextBox();
+            panelForm = new Panel();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCapaciteMaxi).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridEspaces).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownSuperficie).BeginInit();
             tableLayoutPanel.SuspendLayout();
             panelForm.SuspendLayout();
@@ -200,20 +200,20 @@
             labelCapaciteMaxi.TabIndex = 8;
             labelCapaciteMaxi.Text = "Capacité maximale*:";
             // 
-            // dataGridTournois
+            // dataGridEspaces
             // 
-            dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridTournois.BackgroundColor = Color.White;
-            dataGridTournois.BorderStyle = BorderStyle.None;
-            dataGridTournois.ColumnHeadersHeight = 34;
-            dataGridTournois.Location = new Point(23, 314);
-            dataGridTournois.Margin = new Padding(4);
-            dataGridTournois.Name = "dataGridTournois";
-            dataGridTournois.ReadOnly = true;
-            dataGridTournois.RowHeadersWidth = 62;
-            dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridTournois.Size = new Size(900, 383);
-            dataGridTournois.TabIndex = 4;
+            dataGridEspaces.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridEspaces.BackgroundColor = Color.White;
+            dataGridEspaces.BorderStyle = BorderStyle.None;
+            dataGridEspaces.ColumnHeadersHeight = 34;
+            dataGridEspaces.Location = new Point(23, 314);
+            dataGridEspaces.Margin = new Padding(4);
+            dataGridEspaces.Name = "dataGridEspaces";
+            dataGridEspaces.ReadOnly = true;
+            dataGridEspaces.RowHeadersWidth = 62;
+            dataGridEspaces.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridEspaces.Size = new Size(900, 383);
+            dataGridEspaces.TabIndex = 4;
             // 
             // numericUpDownSuperficie
             // 
@@ -253,17 +253,6 @@
             tableLayoutPanel.Size = new Size(879, 143);
             tableLayoutPanel.TabIndex = 0;
             // 
-            // panelForm
-            // 
-            panelForm.BackColor = Color.White;
-            panelForm.Controls.Add(tableLayoutPanel);
-            panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(23, 54);
-            panelForm.Margin = new Padding(4);
-            panelForm.Name = "panelForm";
-            panelForm.Size = new Size(900, 253);
-            panelForm.TabIndex = 3;
-            // 
             // labelDescription
             // 
             labelDescription.AutoSize = true;
@@ -284,12 +273,23 @@
             textBoxDescription.Size = new Size(282, 31);
             textBoxDescription.TabIndex = 17;
             // 
+            // panelForm
+            // 
+            panelForm.BackColor = Color.White;
+            panelForm.Controls.Add(tableLayoutPanel);
+            panelForm.Controls.Add(panelButtons);
+            panelForm.Location = new Point(23, 54);
+            panelForm.Margin = new Padding(4);
+            panelForm.Name = "panelForm";
+            panelForm.Size = new Size(900, 253);
+            panelForm.TabIndex = 3;
+            // 
             // UcEspaces
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 255);
-            Controls.Add(dataGridTournois);
+            Controls.Add(dataGridEspaces);
             Controls.Add(panelForm);
             Name = "UcEspaces";
             Size = new Size(949, 720);
@@ -297,7 +297,7 @@
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericUpDownCapaciteMaxi).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridEspaces).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownSuperficie).EndInit();
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
@@ -319,7 +319,7 @@
         private TextBox textBoxNom;
         private Label labelNom;
         private Label labelCapaciteMaxi;
-        private DataGridView dataGridTournois;
+        private DataGridView dataGridEspaces;
         private NumericUpDown numericUpDownSuperficie;
         private TableLayoutPanel tableLayoutPanel;
         private Panel panelForm;
