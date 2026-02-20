@@ -142,7 +142,7 @@ namespace ApplicationUi
             comboBoxEspace.Location = new Point(584, 109);
             comboBoxEspace.Margin = new Padding(4);
             comboBoxEspace.Name = "comboBoxEspace";
-            comboBoxEspace.Size = new Size(217, 34);
+            comboBoxEspace.Size = new Size(291, 34);
             comboBoxEspace.TabIndex = 5;
             // 
             // textBoxNom

@@ -14,7 +14,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Numéro.
         /// </summary>
-        public int IdPlateform { get; set; }
+        public int IdPlateforme { get; set; }
 
         /// <summary>
         /// Libellé .

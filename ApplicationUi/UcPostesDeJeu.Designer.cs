@@ -30,11 +30,18 @@
         {
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
+            comboBoxPlateforme = new ComboBox();
+            labelPlateforme = new Label();
             labelDescription = new Label();
             textBoxReference = new TextBox();
             labelReference = new Label();
             labelFonctionnel = new Label();
             textBoxDescription = new TextBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            radioButtonFonctionnelTrue = new RadioButton();
+            radioButtonFonctionnelFalse = new RadioButton();
+            labelEspace = new Label();
+            comboBoxEspace = new ComboBox();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
@@ -42,20 +49,13 @@
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             label1 = new Label();
-            dataGridPostesDeJeu = new DataGridView();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            radioButtonFonctionnelTrue = new RadioButton();
-            radioButtonFonctionnelFalse = new RadioButton();
-            labelEspace = new Label();
-            comboBoxEspace = new ComboBox();
-            labelPlateforme = new Label();
-            comboBoxPlateforme = new ComboBox();
+            dataGridPostesJeu = new DataGridView();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridPostesDeJeu).BeginInit();
-            flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
             SuspendLayout();
             // 
             // panelForm
@@ -96,6 +96,26 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.Size = new Size(879, 143);
             tableLayoutPanel.TabIndex = 0;
+            // 
+            // comboBoxPlateforme
+            // 
+            comboBoxPlateforme.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxPlateforme.Location = new Point(584, 39);
+            comboBoxPlateforme.Margin = new Padding(4);
+            comboBoxPlateforme.Name = "comboBoxPlateforme";
+            comboBoxPlateforme.Size = new Size(217, 33);
+            comboBoxPlateforme.TabIndex = 22;
+            // 
+            // labelPlateforme
+            // 
+            labelPlateforme.AutoSize = true;
+            labelPlateforme.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelPlateforme.Location = new Point(584, 0);
+            labelPlateforme.Margin = new Padding(4, 0, 4, 0);
+            labelPlateforme.Name = "labelPlateforme";
+            labelPlateforme.Size = new Size(128, 28);
+            labelPlateforme.TabIndex = 21;
+            labelPlateforme.Text = "Plateforme :";
             // 
             // labelDescription
             // 
@@ -148,6 +168,58 @@
             textBoxDescription.Size = new Size(282, 31);
             textBoxDescription.TabIndex = 17;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(radioButtonFonctionnelTrue);
+            flowLayoutPanel1.Controls.Add(radioButtonFonctionnelFalse);
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.Location = new Point(3, 108);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(284, 35);
+            flowLayoutPanel1.TabIndex = 18;
+            // 
+            // radioButtonFonctionnelTrue
+            // 
+            radioButtonFonctionnelTrue.AutoSize = true;
+            radioButtonFonctionnelTrue.Location = new Point(3, 3);
+            radioButtonFonctionnelTrue.Name = "radioButtonFonctionnelTrue";
+            radioButtonFonctionnelTrue.Size = new Size(65, 29);
+            radioButtonFonctionnelTrue.TabIndex = 1;
+            radioButtonFonctionnelTrue.TabStop = true;
+            radioButtonFonctionnelTrue.Text = "Oui";
+            radioButtonFonctionnelTrue.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonFonctionnelFalse
+            // 
+            radioButtonFonctionnelFalse.AutoSize = true;
+            radioButtonFonctionnelFalse.Location = new Point(74, 3);
+            radioButtonFonctionnelFalse.Name = "radioButtonFonctionnelFalse";
+            radioButtonFonctionnelFalse.Size = new Size(71, 29);
+            radioButtonFonctionnelFalse.TabIndex = 2;
+            radioButtonFonctionnelFalse.TabStop = true;
+            radioButtonFonctionnelFalse.Text = "Non";
+            radioButtonFonctionnelFalse.UseVisualStyleBackColor = true;
+            // 
+            // labelEspace
+            // 
+            labelEspace.AutoSize = true;
+            labelEspace.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelEspace.Location = new Point(584, 79);
+            labelEspace.Margin = new Padding(4, 0, 4, 0);
+            labelEspace.Name = "labelEspace";
+            labelEspace.Size = new Size(147, 26);
+            labelEspace.TabIndex = 19;
+            labelEspace.Text = "Espace / Lieu :";
+            // 
+            // comboBoxEspace
+            // 
+            comboBoxEspace.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxEspace.Location = new Point(584, 109);
+            comboBoxEspace.Margin = new Padding(4);
+            comboBoxEspace.Name = "comboBoxEspace";
+            comboBoxEspace.Size = new Size(217, 33);
+            comboBoxEspace.TabIndex = 20;
+            // 
             // panelButtons
             // 
             panelButtons.Controls.Add(groupBox1);
@@ -186,6 +258,7 @@
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
+            buttonAjouter.Click += buttonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -241,92 +314,20 @@
             label1.Size = new Size(0, 25);
             label1.TabIndex = 6;
             // 
-            // dataGridPostesDeJeu
+            // dataGridPostesJeu
             // 
-            dataGridPostesDeJeu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridPostesDeJeu.BackgroundColor = Color.White;
-            dataGridPostesDeJeu.BorderStyle = BorderStyle.None;
-            dataGridPostesDeJeu.ColumnHeadersHeight = 34;
-            dataGridPostesDeJeu.Location = new Point(24, 299);
-            dataGridPostesDeJeu.Margin = new Padding(4);
-            dataGridPostesDeJeu.Name = "dataGridPostesDeJeu";
-            dataGridPostesDeJeu.ReadOnly = true;
-            dataGridPostesDeJeu.RowHeadersWidth = 62;
-            dataGridPostesDeJeu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridPostesDeJeu.Size = new Size(900, 383);
-            dataGridPostesDeJeu.TabIndex = 6;
-            // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Controls.Add(radioButtonFonctionnelTrue);
-            flowLayoutPanel1.Controls.Add(radioButtonFonctionnelFalse);
-            flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(3, 108);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(284, 35);
-            flowLayoutPanel1.TabIndex = 18;
-            // 
-            // radioButtonFonctionnelTrue
-            // 
-            radioButtonFonctionnelTrue.AutoSize = true;
-            radioButtonFonctionnelTrue.Location = new Point(3, 3);
-            radioButtonFonctionnelTrue.Name = "radioButtonFonctionnelTrue";
-            radioButtonFonctionnelTrue.Size = new Size(65, 29);
-            radioButtonFonctionnelTrue.TabIndex = 1;
-            radioButtonFonctionnelTrue.TabStop = true;
-            radioButtonFonctionnelTrue.Text = "Oui";
-            radioButtonFonctionnelTrue.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonFonctionnelFalse
-            // 
-            radioButtonFonctionnelFalse.AutoSize = true;
-            radioButtonFonctionnelFalse.Location = new Point(74, 3);
-            radioButtonFonctionnelFalse.Name = "radioButtonFonctionnelFalse";
-            radioButtonFonctionnelFalse.Size = new Size(71, 29);
-            radioButtonFonctionnelFalse.TabIndex = 2;
-            radioButtonFonctionnelFalse.TabStop = true;
-            radioButtonFonctionnelFalse.Text = "Non";
-            radioButtonFonctionnelFalse.UseVisualStyleBackColor = true;
-            // 
-            // labelEspace
-            // 
-            labelEspace.AutoSize = true;
-            labelEspace.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelEspace.Location = new Point(584, 79);
-            labelEspace.Margin = new Padding(4, 0, 4, 0);
-            labelEspace.Name = "labelEspace";
-            labelEspace.Size = new Size(147, 26);
-            labelEspace.TabIndex = 19;
-            labelEspace.Text = "Espace / Lieu :";
-            // 
-            // comboBoxEspace
-            // 
-            comboBoxEspace.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxEspace.Location = new Point(584, 109);
-            comboBoxEspace.Margin = new Padding(4);
-            comboBoxEspace.Name = "comboBoxEspace";
-            comboBoxEspace.Size = new Size(217, 33);
-            comboBoxEspace.TabIndex = 20;
-            // 
-            // labelPlateforme
-            // 
-            labelPlateforme.AutoSize = true;
-            labelPlateforme.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelPlateforme.Location = new Point(584, 0);
-            labelPlateforme.Margin = new Padding(4, 0, 4, 0);
-            labelPlateforme.Name = "labelPlateforme";
-            labelPlateforme.Size = new Size(128, 28);
-            labelPlateforme.TabIndex = 21;
-            labelPlateforme.Text = "Plateforme :";
-            // 
-            // comboBoxPlateforme
-            // 
-            comboBoxPlateforme.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPlateforme.Location = new Point(584, 39);
-            comboBoxPlateforme.Margin = new Padding(4);
-            comboBoxPlateforme.Name = "comboBoxPlateforme";
-            comboBoxPlateforme.Size = new Size(217, 33);
-            comboBoxPlateforme.TabIndex = 22;
+            dataGridPostesJeu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridPostesJeu.BackgroundColor = Color.White;
+            dataGridPostesJeu.BorderStyle = BorderStyle.None;
+            dataGridPostesJeu.ColumnHeadersHeight = 34;
+            dataGridPostesJeu.Location = new Point(24, 299);
+            dataGridPostesJeu.Margin = new Padding(4);
+            dataGridPostesJeu.Name = "dataGridPostesJeu";
+            dataGridPostesJeu.ReadOnly = true;
+            dataGridPostesJeu.RowHeadersWidth = 62;
+            dataGridPostesJeu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridPostesJeu.Size = new Size(900, 383);
+            dataGridPostesJeu.TabIndex = 6;
             // 
             // UcPostesDeJeu
             // 
@@ -334,18 +335,18 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Cornsilk;
             Controls.Add(panelForm);
-            Controls.Add(dataGridPostesDeJeu);
+            Controls.Add(dataGridPostesJeu);
             Name = "UcPostesDeJeu";
             Size = new Size(949, 720);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             panelButtons.ResumeLayout(false);
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridPostesDeJeu).EndInit();
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
             ResumeLayout(false);
         }
 
@@ -365,7 +366,7 @@
         private Button buttonModifier;
         private Button buttonSupprimer;
         private Label label1;
-        private DataGridView dataGridPostesDeJeu;
+        private DataGridView dataGridPostesJeu;
         private FlowLayoutPanel flowLayoutPanel1;
         private RadioButton radioButtonFonctionnelTrue;
         private RadioButton radioButtonFonctionnelFalse;
