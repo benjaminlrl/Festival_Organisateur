@@ -66,8 +66,8 @@ namespace ApplicationUi
             buttonModifier.Enabled = _tournoiSelectionne != null;
             buttonSupprimer.Enabled = _tournoiSelectionne != null;
             radioButtonEnCours.Checked = false;
-            radioButtonPlanifié.Checked = true;    
-            radioButtonTermine.Checked = false; 
+            radioButtonPlanifié.Checked = true;
+            radioButtonTermine.Checked = false;
         }
         private void RemplirFormulaire(Tournoi tournoi)
         {
@@ -207,9 +207,12 @@ namespace ApplicationUi
             return retour;
         }
 
-         #endregion
+        #endregion
 
+        private void dataGridTournois_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
+        }
     }
 }
 

@@ -17,6 +17,8 @@ namespace ApplicationUi
 
         private void InitializeComponent()
         {
+            tableLayoutPanel1 = new TableLayoutPanel();
+            dataGridTournois = new DataGridView();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
             labelDuree = new Label();
@@ -41,7 +43,8 @@ namespace ApplicationUi
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             label1 = new Label();
-            dataGridTournois = new DataGridView();
+            tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownNbParticip).BeginInit();
@@ -49,19 +52,51 @@ namespace ApplicationUi
             flowLayoutPanel1.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
             SuspendLayout();
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(dataGridTournois, 0, 1);
+            tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(949, 720);
+            tableLayoutPanel1.TabIndex = 3;
+            // 
+            // dataGridTournois
+            // 
+            dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridTournois.BackgroundColor = Color.White;
+            dataGridTournois.BorderStyle = BorderStyle.None;
+            dataGridTournois.ColumnHeadersHeight = 34;
+            dataGridTournois.Dock = DockStyle.Bottom;
+            dataGridTournois.Location = new Point(4, 364);
+            dataGridTournois.Margin = new Padding(4);
+            dataGridTournois.Name = "dataGridTournois";
+            dataGridTournois.ReadOnly = true;
+            dataGridTournois.RowHeadersWidth = 62;
+            dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridTournois.Size = new Size(941, 352);
+            dataGridTournois.TabIndex = 3;
+            dataGridTournois.CellContentClick += dataGridTournois_CellContentClick;
             // 
             // panelForm
             // 
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(20, 60);
+            panelForm.Dock = DockStyle.Fill;
+            panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(900, 253);
-            panelForm.TabIndex = 1;
+            panelForm.Size = new Size(941, 352);
+            panelForm.TabIndex = 2;
             // 
             // tableLayoutPanel
             // 
@@ -81,7 +116,8 @@ namespace ApplicationUi
             tableLayoutPanel.Controls.Add(dateTimePickerDateTournoi, 1, 1);
             tableLayoutPanel.Controls.Add(numericUpDownDuree, 1, 3);
             tableLayoutPanel.Controls.Add(flowLayoutPanel1, 2, 1);
-            tableLayoutPanel.Location = new Point(10, 12);
+            tableLayoutPanel.Dock = DockStyle.Top;
+            tableLayoutPanel.Location = new Point(0, 0);
             tableLayoutPanel.Margin = new Padding(4);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 5;
@@ -90,14 +126,14 @@ namespace ApplicationUi
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(879, 143);
+            tableLayoutPanel.Size = new Size(941, 143);
             tableLayoutPanel.TabIndex = 0;
             // 
             // labelDuree
             // 
             labelDuree.AutoSize = true;
             labelDuree.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDuree.Location = new Point(294, 79);
+            labelDuree.Location = new Point(314, 79);
             labelDuree.Margin = new Padding(4, 0, 4, 0);
             labelDuree.Name = "labelDuree";
             labelDuree.Size = new Size(151, 26);
@@ -108,7 +144,7 @@ namespace ApplicationUi
             // 
             labelStatut.AutoSize = true;
             labelStatut.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelStatut.Location = new Point(584, 0);
+            labelStatut.Location = new Point(624, 0);
             labelStatut.Margin = new Padding(4, 0, 4, 0);
             labelStatut.Name = "labelStatut";
             labelStatut.Size = new Size(81, 28);
@@ -119,7 +155,7 @@ namespace ApplicationUi
             // 
             labelDateHeure.AutoSize = true;
             labelDateHeure.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDateHeure.Location = new Point(294, 0);
+            labelDateHeure.Location = new Point(314, 0);
             labelDateHeure.Margin = new Padding(4, 0, 4, 0);
             labelDateHeure.Name = "labelDateHeure";
             labelDateHeure.Size = new Size(153, 28);
@@ -139,7 +175,7 @@ namespace ApplicationUi
             // comboBoxEspace
             // 
             comboBoxEspace.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxEspace.Location = new Point(584, 109);
+            comboBoxEspace.Location = new Point(624, 109);
             comboBoxEspace.Margin = new Padding(4);
             comboBoxEspace.Name = "comboBoxEspace";
             comboBoxEspace.Size = new Size(291, 34);
@@ -180,7 +216,7 @@ namespace ApplicationUi
             // 
             labelEspace.AutoSize = true;
             labelEspace.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelEspace.Location = new Point(584, 79);
+            labelEspace.Location = new Point(624, 79);
             labelEspace.Margin = new Padding(4, 0, 4, 0);
             labelEspace.Name = "labelEspace";
             labelEspace.Size = new Size(147, 26);
@@ -191,7 +227,7 @@ namespace ApplicationUi
             // 
             dateTimePickerDateTournoi.CustomFormat = "dd/MM/yyyy HH:mm";
             dateTimePickerDateTournoi.Format = DateTimePickerFormat.Custom;
-            dateTimePickerDateTournoi.Location = new Point(294, 39);
+            dateTimePickerDateTournoi.Location = new Point(314, 39);
             dateTimePickerDateTournoi.Margin = new Padding(4);
             dateTimePickerDateTournoi.MaxDate = new DateTime(2026, 5, 25, 17, 0, 0, 0);
             dateTimePickerDateTournoi.MinDate = new DateTime(2026, 5, 23, 9, 0, 0, 0);
@@ -204,7 +240,7 @@ namespace ApplicationUi
             // numericUpDownDuree
             // 
             numericUpDownDuree.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownDuree.Location = new Point(294, 109);
+            numericUpDownDuree.Location = new Point(314, 109);
             numericUpDownDuree.Margin = new Padding(4);
             numericUpDownDuree.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownDuree.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
@@ -219,9 +255,9 @@ namespace ApplicationUi
             flowLayoutPanel1.Controls.Add(radioButtonEnCours);
             flowLayoutPanel1.Controls.Add(radioButtonTermine);
             flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(583, 38);
+            flowLayoutPanel1.Location = new Point(623, 38);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(293, 38);
+            flowLayoutPanel1.Size = new Size(315, 38);
             flowLayoutPanel1.TabIndex = 16;
             // 
             // radioButtonPlanifié
@@ -235,7 +271,6 @@ namespace ApplicationUi
             radioButtonPlanifié.TabStop = true;
             radioButtonPlanifié.Text = "Planifié";
             radioButtonPlanifié.UseVisualStyleBackColor = true;
-            radioButtonPlanifié.CheckedChanged += radioButtonPlanifié_CheckedChanged;
             // 
             // radioButtonEnCours
             // 
@@ -248,7 +283,6 @@ namespace ApplicationUi
             radioButtonEnCours.TabStop = true;
             radioButtonEnCours.Text = "En Cours";
             radioButtonEnCours.UseVisualStyleBackColor = true;
-            radioButtonEnCours.CheckedChanged += radioButtonEnCours_CheckedChanged;
             // 
             // radioButtonTermine
             // 
@@ -261,7 +295,6 @@ namespace ApplicationUi
             radioButtonTermine.TabStop = true;
             radioButtonTermine.Text = "Terminé";
             radioButtonTermine.UseVisualStyleBackColor = true;
-            radioButtonTermine.CheckedChanged += radioButtonTermine_CheckedChanged;
             // 
             // panelButtons
             // 
@@ -279,7 +312,7 @@ namespace ApplicationUi
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Dock = DockStyle.Fill;
+            groupBox1.Dock = DockStyle.Bottom;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(879, 82);
@@ -317,7 +350,6 @@ namespace ApplicationUi
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += buttonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -333,7 +365,6 @@ namespace ApplicationUi
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonModifier_Click;
             // 
             // buttonSupprimer
             // 
@@ -349,7 +380,6 @@ namespace ApplicationUi
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += buttonSupprimer_Click;
             // 
             // label1
             // 
@@ -360,33 +390,18 @@ namespace ApplicationUi
             label1.Size = new Size(0, 26);
             label1.TabIndex = 6;
             // 
-            // dataGridTournois
-            // 
-            dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridTournois.BackgroundColor = Color.White;
-            dataGridTournois.BorderStyle = BorderStyle.None;
-            dataGridTournois.ColumnHeadersHeight = 34;
-            dataGridTournois.Location = new Point(20, 320);
-            dataGridTournois.Margin = new Padding(4);
-            dataGridTournois.Name = "dataGridTournois";
-            dataGridTournois.ReadOnly = true;
-            dataGridTournois.RowHeadersWidth = 62;
-            dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridTournois.Size = new Size(900, 383);
-            dataGridTournois.TabIndex = 2;
-            dataGridTournois.CellClick += dataGridTournois_CellClick;
-            // 
             // UcTournois
             // 
             AutoScaleDimensions = new SizeF(11F, 26F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 225);
-            Controls.Add(panelForm);
-            Controls.Add(dataGridTournois);
+            Controls.Add(tableLayoutPanel1);
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
             Name = "UcTournois";
             Size = new Size(949, 720);
+            tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
@@ -397,39 +412,36 @@ namespace ApplicationUi
             panelButtons.ResumeLayout(false);
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
+        private TableLayoutPanel tableLayoutPanel1;
+        private DataGridView dataGridTournois;
         private Panel panelForm;
-            private TableLayoutPanel tableLayoutPanel;
-
-            private TextBox textBoxNom;
-            private DateTimePicker dateTimePickerDateTournoi;
-
-            private Panel panelButtons;
-
-            private DataGridView dataGridTournois;
-        private Button buttonEffacer;
-        private Button buttonModifier;
-        private Button buttonSupprimer;
+        private TableLayoutPanel tableLayoutPanel;
+        private Label labelDuree;
+        private Label labelStatut;
+        private Label labelDateHeure;
         private NumericUpDown numericUpDownNbParticip;
         private ComboBox comboBoxEspace;
+        private TextBox textBoxNom;
         private Label labelNom;
-        private Label labelDateHeure;
         private Label labelNbParticipants;
-        private Label labelStatut;
         private Label labelEspace;
-        private Label labelDuree;
-        private Label label1;
-        private GroupBox groupBox1;
+        private DateTimePicker dateTimePickerDateTournoi;
         private NumericUpDown numericUpDownDuree;
         private FlowLayoutPanel flowLayoutPanel1;
         private RadioButton radioButtonPlanifié;
         private RadioButton radioButtonEnCours;
         private RadioButton radioButtonTermine;
+        private Panel panelButtons;
+        private GroupBox groupBox1;
         private Button buttonAjouter;
+        private Button buttonEffacer;
+        private Button buttonModifier;
+        private Button buttonSupprimer;
+        private Label label1;
     }
     }
 
