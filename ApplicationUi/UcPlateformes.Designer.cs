@@ -94,7 +94,6 @@
             labelNom.Size = new Size(232, 28);
             labelNom.TabIndex = 6;
             labelNom.Text = "Nom de la plateforme :";
-            labelNom.Click += labelNom_Click;
             // 
             // panelButtons
             // 
@@ -134,6 +133,7 @@
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
+            buttonAjouter.Click += buttonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -203,6 +203,7 @@
             dataGridPlateformes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridPlateformes.Size = new Size(900, 383);
             dataGridPlateformes.TabIndex = 6;
+            dataGridPlateformes.CellContentClick += dataGridPlateformes_CellContentClick;
             // 
             // UcPlateformes
             // 

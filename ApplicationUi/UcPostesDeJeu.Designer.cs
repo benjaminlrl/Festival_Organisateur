@@ -143,7 +143,7 @@
             radioButtonFonctionnelTrue.TabStop = true;
             radioButtonFonctionnelTrue.Text = "Oui";
             radioButtonFonctionnelTrue.UseVisualStyleBackColor = true;
-            radioButtonFonctionnelTrue.CheckedChanged += radioButtonFonctionnelTrue_CheckedChanged_1;
+            radioButtonFonctionnelTrue.CheckedChanged += radioButtonFonctionnelTrue_CheckedChanged;
             // 
             // radioButtonFonctionnelFalse
             // 

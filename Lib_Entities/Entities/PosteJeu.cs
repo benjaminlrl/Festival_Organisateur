@@ -30,7 +30,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Lien vers l'id de la plateforme contenant ce poste. 
         /// </summary>
-        public int IdPlateform { get; set; }
+        public int IdPlateforme { get; set; }
 
         /// <summary>
         /// Propriété de navigation vers la `Plateforme` associée.

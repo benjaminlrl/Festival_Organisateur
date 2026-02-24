@@ -26,7 +26,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Surface totale de l'espace en unités mètres carrées .
         /// </summary>
-        public double Superficie { get; set; }
+        public int Superficie { get; set; }
 
         /// <summary>
         /// Capacité maximale d'accueil (nombre maximal de personnes).

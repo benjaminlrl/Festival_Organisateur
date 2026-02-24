@@ -38,8 +38,8 @@ namespace Lib_Metier.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("nom");
 
-                    b.Property<double>("Superficie")
-                        .HasColumnType("REAL")
+                    b.Property<int>("Superficie")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("superficie");
 
                     b.HasKey("IdEspace");
@@ -49,17 +49,17 @@ namespace Lib_Metier.Migrations
 
             modelBuilder.Entity("Lib_Entities.Entities.Plateforme", b =>
                 {
-                    b.Property<int>("IdPlateform")
+                    b.Property<int>("IdPlateforme")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("id_plateform");
+                        .HasColumnName("id_plateforme");
 
                     b.Property<string>("Libelle")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("libelle");
 
-                    b.HasKey("IdPlateform");
+                    b.HasKey("IdPlateforme");
 
                     b.ToTable("Plateforme", (string)null);
                 });
@@ -80,9 +80,9 @@ namespace Lib_Metier.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("id_espace");
 
-                    b.Property<int>("IdPlateform")
+                    b.Property<int>("IdPlateforme")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("id_plateform");
+                        .HasColumnName("id_plateforme");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -93,7 +93,7 @@ namespace Lib_Metier.Migrations
 
                     b.HasIndex("IdEspace");
 
-                    b.HasIndex("IdPlateform");
+                    b.HasIndex("IdPlateforme");
 
                     b.ToTable("Poste_Jeu", (string)null);
                 });
@@ -148,7 +148,7 @@ namespace Lib_Metier.Migrations
 
                     b.HasOne("Lib_Entities.Entities.Plateforme", "Plateforme")
                         .WithMany("PostesJeu")
-                        .HasForeignKey("IdPlateform")
+                        .HasForeignKey("IdPlateforme")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

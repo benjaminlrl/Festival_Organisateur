@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 namespace ApplicationUi
 {
+    // TODO: régler bug : lors de la sélection d'un poste de jeu, l'état fonctionnel n'est pas correctement affiché dans les radio buttons (toujours sur "non fonctionnel")
     public partial class UcPostesDeJeu : UserControl
     {
         private readonly ITournoiService _serviceTournoi;
@@ -27,8 +28,10 @@ namespace ApplicationUi
             _serviceTournoi = new TournoiService(new ApplicationDbContext());
             _serviceEspace = new EspaceService(new ApplicationDbContext());
             _servicePosteJeu = new PosteJeuService(new ApplicationDbContext());
+            _servicePlateforme = new PlateformeService(new ApplicationDbContext());
             ChargerPlateformes();
             ChargerEspaces();
+            ChargerPostesDeJeu();
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
@@ -71,16 +74,13 @@ namespace ApplicationUi
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             radioButtonFonctionnelTrue.Checked = false;
-            radioButtonFonctionnelFalse.Checked = true;
+            radioButtonFonctionnelFalse.Checked = false;
         }
         private void MEP_DataGrid()
         // TODO: Modifier les données de la grille pour afficher les informations du poste de jeu 
         {
-            dataGridPostesJeu.Columns["Reference"].Visible = false;
-            dataGridPostesJeu.Columns["Fonctionnel"].Visible = false;
             dataGridPostesJeu.Columns["idPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["NomEspace"].HeaderText = "Espace";
-            dataGridPostesJeu.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void dataGridPostesJeu_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -111,8 +111,16 @@ namespace ApplicationUi
             comboBoxEspace.SelectedValue = posteJeu.IdEspace;
 
             // Fonctionnel (RadioButtons)
-            radioButtonFonctionnelTrue.Checked = posteJeu.Fonctionnel == true;
-            radioButtonFonctionnelFalse.Checked = posteJeu.Fonctionnel == true;
+            if (posteJeu.Fonctionnel)
+            {
+                radioButtonFonctionnelTrue.Checked = posteJeu.Fonctionnel == true;
+                radioButtonFonctionnelFalse.Checked = posteJeu.Fonctionnel == false;
+            }
+            else
+            {
+                radioButtonFonctionnelTrue.Checked = posteJeu.Fonctionnel == false;
+                radioButtonFonctionnelFalse.Checked = posteJeu.Fonctionnel == true;
+            }
         }
 
         private void radioButtonFonctionnelFalse_CheckedChanged(object sender, EventArgs e)
@@ -120,7 +128,7 @@ namespace ApplicationUi
             fonctionnelSelectionne = false;
         }
 
-        private void radioButtonFonctionnelTrue_CheckedChanged_1(object sender, EventArgs e)
+        private void radioButtonFonctionnelTrue_CheckedChanged(object sender, EventArgs e)
         {
             fonctionnelSelectionne = true;
         }
@@ -140,7 +148,7 @@ namespace ApplicationUi
                 {
                     Reference = textBoxReference.Text,
                     Fonctionnel = fonctionnelSelectionne,
-                    IdPlateform = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
+                    IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
                     IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace
                 };
                 _servicePosteJeu.Creer(posteJeu);
@@ -161,7 +169,7 @@ namespace ApplicationUi
             _posteJeuSelectionne.Reference = textBoxReference.Text;
             _posteJeuSelectionne.Fonctionnel = fonctionnelSelectionne; // true ou false selon le choix de l'utilisateur
             _posteJeuSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
-            _posteJeuSelectionne.IdPlateform = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme;
+            _posteJeuSelectionne.IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme;
 
             _servicePosteJeu.Modifier(_posteJeuSelectionne);
             ChargerPostesDeJeu();

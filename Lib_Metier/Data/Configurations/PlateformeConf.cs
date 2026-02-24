@@ -29,7 +29,7 @@ namespace Lib_Metier.Data.Configurations
             // Mapping explicite des colonnes : utile pour conserver la compatibilité
             // avec un schéma existant ou des conventions de nommage particulières.
             builder.Property(p => p.IdPlateforme)
-                   .HasColumnName("id_plateform");
+                   .HasColumnName("id_plateforme");
 
             builder.Property(p => p.Libelle)
                    .HasColumnName("libelle");

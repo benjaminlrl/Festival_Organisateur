@@ -214,6 +214,7 @@
             dataGridEspaces.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridEspaces.Size = new Size(900, 383);
             dataGridEspaces.TabIndex = 4;
+            dataGridEspaces.CellContentClick += dataGridEspaces_CellContentClick;
             // 
             // numericUpDownSuperficie
             // 
