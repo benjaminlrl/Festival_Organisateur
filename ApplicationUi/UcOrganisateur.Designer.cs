@@ -35,6 +35,7 @@ namespace ApplicationUi
             buttonSupprimer = new Button();
             label1 = new Label();
             dataGridOrganisateurs = new DataGridView();
+            labelError = new Label();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
@@ -47,7 +48,7 @@ namespace ApplicationUi
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(20, 60);
+            panelForm.Location = new Point(20, 120);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
             panelForm.Size = new Size(900, 210);
@@ -85,7 +86,7 @@ namespace ApplicationUi
             labelLogin.Location = new Point(4, 0);
             labelLogin.Margin = new Padding(4, 0, 4, 0);
             labelLogin.Name = "labelLogin";
-            labelLogin.Size = new Size(80, 26);
+            labelLogin.Size = new Size(90, 28);
             labelLogin.TabIndex = 0;
             labelLogin.Text = "Login * :";
             // 
@@ -93,10 +94,10 @@ namespace ApplicationUi
             // 
             labelMail.AutoSize = true;
             labelMail.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelMail.Location = new Point(224, 0);
+            labelMail.Location = new Point(223, 0);
             labelMail.Margin = new Padding(4, 0, 4, 0);
             labelMail.Name = "labelMail";
-            labelMail.Size = new Size(70, 26);
+            labelMail.Size = new Size(80, 28);
             labelMail.TabIndex = 1;
             labelMail.Text = "Mail * :";
             // 
@@ -104,10 +105,10 @@ namespace ApplicationUi
             // 
             labelMotDePasse.AutoSize = true;
             labelMotDePasse.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelMotDePasse.Location = new Point(444, 0);
+            labelMotDePasse.Location = new Point(442, 0);
             labelMotDePasse.Margin = new Padding(4, 0, 4, 0);
             labelMotDePasse.Name = "labelMotDePasse";
-            labelMotDePasse.Size = new Size(130, 26);
+            labelMotDePasse.Size = new Size(164, 28);
             labelMotDePasse.TabIndex = 2;
             labelMotDePasse.Text = "Mot de passe * :";
             // 
@@ -115,10 +116,10 @@ namespace ApplicationUi
             // 
             labelRole.AutoSize = true;
             labelRole.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelRole.Location = new Point(664, 0);
+            labelRole.Location = new Point(661, 0);
             labelRole.Margin = new Padding(4, 0, 4, 0);
             labelRole.Name = "labelRole";
-            labelRole.Size = new Size(68, 26);
+            labelRole.Size = new Size(80, 28);
             labelRole.TabIndex = 3;
             labelRole.Text = "Rôle * :";
             // 
@@ -133,7 +134,7 @@ namespace ApplicationUi
             // 
             // textBoxMail
             // 
-            textBoxMail.Location = new Point(224, 39);
+            textBoxMail.Location = new Point(223, 39);
             textBoxMail.Margin = new Padding(4);
             textBoxMail.Name = "textBoxMail";
             textBoxMail.PlaceholderText = "Ex: jean@mail.com";
@@ -142,18 +143,18 @@ namespace ApplicationUi
             // 
             // textBoxMotDePasse
             // 
-            textBoxMotDePasse.Location = new Point(444, 39);
+            textBoxMotDePasse.Location = new Point(442, 39);
             textBoxMotDePasse.Margin = new Padding(4);
             textBoxMotDePasse.Name = "textBoxMotDePasse";
-            textBoxMotDePasse.PlaceholderText = "Min. 12 caract., 1 maj., 1 spécial";
             textBoxMotDePasse.PasswordChar = '●';
+            textBoxMotDePasse.PlaceholderText = "Min. 12 caract., 1 maj., 1 spécial";
             textBoxMotDePasse.Size = new Size(210, 31);
             textBoxMotDePasse.TabIndex = 2;
             // 
             // comboBoxRole
             // 
             comboBoxRole.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxRole.Location = new Point(664, 39);
+            comboBoxRole.Location = new Point(661, 39);
             comboBoxRole.Margin = new Padding(4);
             comboBoxRole.Name = "comboBoxRole";
             comboBoxRole.Size = new Size(210, 34);
@@ -211,7 +212,7 @@ namespace ApplicationUi
             buttonEffacer.Name = "buttonEffacer";
             buttonEffacer.Size = new Size(150, 45);
             buttonEffacer.TabIndex = 3;
-            buttonEffacer.Text = " 🧽  Effacer";
+            buttonEffacer.Text = " \U0001f9fd  Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
             buttonEffacer.Click += buttonEffacer_Click;
             // 
@@ -262,27 +263,40 @@ namespace ApplicationUi
             dataGridOrganisateurs.BackgroundColor = Color.White;
             dataGridOrganisateurs.BorderStyle = BorderStyle.None;
             dataGridOrganisateurs.ColumnHeadersHeight = 34;
-            dataGridOrganisateurs.Location = new Point(20, 280);
+            dataGridOrganisateurs.Location = new Point(20, 361);
             dataGridOrganisateurs.Margin = new Padding(4);
             dataGridOrganisateurs.Name = "dataGridOrganisateurs";
             dataGridOrganisateurs.ReadOnly = true;
             dataGridOrganisateurs.RowHeadersWidth = 62;
             dataGridOrganisateurs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridOrganisateurs.Size = new Size(900, 383);
+            dataGridOrganisateurs.Size = new Size(900, 434);
             dataGridOrganisateurs.TabIndex = 2;
             dataGridOrganisateurs.CellClick += dataGridOrganisateurs_CellClick;
+            // 
+            // labelError
+            // 
+            labelError.Anchor = AnchorStyles.None;
+            labelError.Font = new Font("Segoe UI Light", 14F);
+            labelError.ForeColor = Color.FromArgb(255, 128, 128);
+            labelError.Location = new Point(235, 18);
+            labelError.Margin = new Padding(4, 0, 4, 0);
+            labelError.Name = "labelError";
+            labelError.Size = new Size(469, 84);
+            labelError.TabIndex = 3;
+            labelError.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // UcOrganisateur
             // 
             AutoScaleDimensions = new SizeF(11F, 26F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 253);
+            Controls.Add(labelError);
             Controls.Add(panelForm);
             Controls.Add(dataGridOrganisateurs);
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
             Name = "UcOrganisateur";
-            Size = new Size(949, 720);
+            Size = new Size(950, 809);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
@@ -313,5 +327,6 @@ namespace ApplicationUi
         private Button buttonSupprimer;
         private Label label1;
         private DataGridView dataGridOrganisateurs;
+        private Label labelError;
     }
 }

@@ -94,17 +94,64 @@ namespace ApplicationUi
 
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
-            // TODO : valider les champs puis appeler _serviceOrganisateur.Creer(...)
+            // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel organisateur
+            if (IdentifiantValide(textBoxLogin.Text) == false)
+            {
+                labelError.Text = "L'identifiant doit contenir entre 3 et 12 caractères.";
+                return;
+            }
+            if (MdpValide(textBoxMotDePasse.Text) != "true")
+                labelError.Text = MdpValide(textBoxMotDePasse.Text);
+
+            _serviceOrganisateur.Creer(new Organisateur
+            {
+                Login = textBoxLogin.Text,
+                Mail = textBoxMail.Text,
+                motPasse = textBoxMotDePasse.Text,
+                IdRole = (int)comboBoxRole.SelectedValue
+            });
+            ChargerOrganisateurs();
+            Raz_Zones();
         }
 
         private void buttonModifier_Click(object sender, EventArgs e)
         {
-            // TODO : valider les champs puis appeler _serviceOrganisateur.Modifier(...)
+            // On check si l'identifiant & le mot de passe sont valides, puis on modifie l'organisateur selectionné
+            if (IdentifiantValide(textBoxLogin.Text) == false)
+            {
+                labelError.Text = "L'identifiant doit contenir entre 3 et 12 caractères.";
+                return;
+            }
+            if(textBoxMotDePasse.Text != "")
+                if (MdpValide(textBoxMotDePasse.Text) != "true")
+                    labelError.Text = MdpValide(textBoxMotDePasse.Text);
+
+            // Modifiée seulement les valeurs qui ont été modifiées
+            if (textBoxLogin.Text != "" || _organisateurSelectionne.Login != textBoxLogin.Text)
+                _organisateurSelectionne.Login = textBoxLogin.Text;
+            if (textBoxMail.Text != "" || _organisateurSelectionne.Mail != textBoxMail.Text)
+                _organisateurSelectionne.Mail = textBoxMail.Text;
+            if (textBoxMotDePasse.Text != "" || _organisateurSelectionne.motPasse != textBoxMotDePasse.Text)
+                _organisateurSelectionne.motPasse = BCrypt.Net.BCrypt.HashPassword(textBoxMotDePasse.Text); // on oublie pas de hashé
+            if ((int)comboBoxRole.SelectedValue != _organisateurSelectionne.IdRole)
+                _organisateurSelectionne.IdRole = (int)comboBoxRole.SelectedValue;
+
+            _serviceOrganisateur.Modifier(_organisateurSelectionne);
+            ChargerOrganisateurs();
+            Raz_Zones();
         }
 
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
-            // TODO : appeler _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login)
+            // On check si un orgnisateur est sélectionné, puis on le supprime
+            if (_organisateurSelectionne == null)
+            {
+                labelError.Text = "Aucun organisateur sélectionné.";
+                return;
+            }
+            _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login);
+            ChargerOrganisateurs();
+            Raz_Zones();
         }
 
         private void buttonEffacer_Click(object sender, EventArgs e)
@@ -114,7 +161,7 @@ namespace ApplicationUi
 
         private void dataGridOrganisateurs_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // On récupére l'organisateur cliqué et appeler RemplirFormulaire(...)
+            // On récupére l'organisateur cliqué et on appelle RemplirFormulaire(...)
             if (e.RowIndex < 0)
                 return;
 
@@ -131,17 +178,17 @@ namespace ApplicationUi
 
         #region Validations
 
-        public static bool MdpValide(string motDePasse)
+        public static string MdpValide(string motDePasse)
         {
             if (motDePasse.Length < 12)
-                return false;
+                return "Le mot de passe doit contenir plus de 12 caractères.";
             if (motDePasse.Any(char.IsUpper) == false)
-                return false;
+                return "Le mot de passe doit contenir au moins 1 majuscule.";
             if (motDePasse.Any(char.IsDigit) == false)
-                return false;
+                return "Le mot de passe doit contenir au moins 1 chiffre.";
             if (motDePasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
-                return false;
-            return true;
+                return "Le mot de passe doit contenir au moins 1 caractère spéciale.";
+            return "true";
         }
 
         public static bool IdentifiantValide(string identifiant)
