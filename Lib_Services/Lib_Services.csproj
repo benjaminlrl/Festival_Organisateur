@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Lib_Entities\Lib_Entities.csproj" />
     <ProjectReference Include="..\Lib_Metier\Lib_Metier.csproj" />
   </ItemGroup>

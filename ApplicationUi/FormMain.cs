@@ -51,5 +51,10 @@ namespace ApplicationUi
         {
             Application.Exit();
         }
+
+        private void btnOrganisateur_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcOrganisateur(), "Gestion des Organisateurs");
+        }
     }
 }

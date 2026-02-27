@@ -31,7 +31,7 @@ namespace Lib_Services.Services
         public List<Espace> Lister()
         {
             // ToList force l'exécution de la requête et charge les entités en mémoire.
-            return _context.Espaces.ToList();
+            return _context.Espace.ToList();
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Lib_Services.Services
         public Espace? Obtenir(int idEspace)
         {
             // Find utilise le cache du contexte s'il existe, sinon interroge la base.
-            return _context.Espaces.Find(idEspace);
+            return _context.Espace.Find(idEspace);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Lib_Services.Services
         public void Creer(Espace espace)
         {
             // Ajout de l'entité au contexte puis persistance immédiate.
-            _context.Espaces.Add(espace);
+            _context.Espace.Add(espace);
             _context.SaveChanges();
         }
 
@@ -64,7 +64,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Espace"/>.</param>
         public void Modifier(Espace espace)
         {
-            _context.Espaces.Update(espace);
+            _context.Espace.Update(espace);
             _context.SaveChanges();
         }
 
@@ -75,10 +75,10 @@ namespace Lib_Services.Services
         public void Supprimer(int idEspace)
         {
             // Recherche de l'entité (utilise le cache si possible).
-            var espace = _context.Espaces.Find(idEspace);
+            var espace = _context.Espace.Find(idEspace);
             if (espace != null)
             {
-                _context.Espaces.Remove(espace);
+                _context.Espace.Remove(espace);
                 _context.SaveChanges();
             }
         }
