@@ -12,6 +12,5 @@ namespace Lib_Services.Interfaces
         void Supprimer(int idEspace);
         List<Espace> Lister();
         Espace? Obtenir(int idEspace);
-
     }
 }

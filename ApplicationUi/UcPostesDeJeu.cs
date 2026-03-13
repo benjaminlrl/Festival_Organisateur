@@ -6,13 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
 namespace ApplicationUi
 {
-    // TODO: régler bug : lors de la sélection d'un poste de jeu, l'état fonctionnel n'est pas correctement affiché dans les radio buttons (toujours sur "non fonctionnel")
     public partial class UcPostesDeJeu : UserControl
     {
         private readonly ITournoiService _serviceTournoi;
@@ -47,6 +47,7 @@ namespace ApplicationUi
         {
             comboBoxEspace.DataSource = null;
             comboBoxEspace.DataSource = _serviceEspace.Lister();
+            // charge les espaces dans le comboBox et affiche le nom tout en conservant l'id en valeur
             comboBoxEspace.DisplayMember = "Nom";
             comboBoxEspace.ValueMember = "IdEspace";
         }
@@ -55,9 +56,9 @@ namespace ApplicationUi
         {
             comboBoxPlateforme.DataSource = null;
             comboBoxPlateforme.DataSource = _servicePlateforme.Lister();
-
+            // charge les plateformes dans le comboBox et affiche le libellé tout en conservant l'id en valeur
             comboBoxPlateforme.DisplayMember = "Libelle";
-            comboBoxPlateforme.ValueMember = "IdPLateforme";
+            comboBoxPlateforme.ValueMember = "IdPlateforme";
         }
         /// <summary>
         /// Resets all tournament-related input fields and controls to their default values.
@@ -79,7 +80,9 @@ namespace ApplicationUi
         private void MEP_DataGrid()
         // TODO: Modifier les données de la grille pour afficher les informations du poste de jeu 
         {
-            dataGridPostesJeu.Columns["idPlateforme"].Visible = false;
+            dataGridPostesJeu.Columns["Espace"].Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
+            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
@@ -91,7 +94,7 @@ namespace ApplicationUi
 
             _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
 
-            if (_posteJeuSelectionne != null)
+            if (_posteJeuSelectionne != null) 
                 RemplirFormulaire(_posteJeuSelectionne);
 
             buttonModifier.Enabled = _posteJeuSelectionne != null;
@@ -107,19 +110,17 @@ namespace ApplicationUi
             comboBoxEspace.SelectedValue = posteJeu.IdEspace;
 
             // ComboBox Plateforme
-            comboBoxEspace.SelectedItem = posteJeu.Espace;
-            comboBoxEspace.SelectedValue = posteJeu.IdEspace;
+            comboBoxPlateforme.SelectedItem = posteJeu.Plateforme;
+            comboBoxPlateforme.SelectedValue = posteJeu.IdPlateforme;
 
             // Fonctionnel (RadioButtons)
             if (posteJeu.Fonctionnel)
             {
-                radioButtonFonctionnelTrue.Checked = posteJeu.Fonctionnel == true;
-                radioButtonFonctionnelFalse.Checked = posteJeu.Fonctionnel == false;
+                radioButtonFonctionnelTrue.Checked = true;
             }
             else
             {
-                radioButtonFonctionnelTrue.Checked = posteJeu.Fonctionnel == false;
-                radioButtonFonctionnelFalse.Checked = posteJeu.Fonctionnel == true;
+                radioButtonFonctionnelFalse.Checked = true;
             }
         }
 
@@ -136,6 +137,29 @@ namespace ApplicationUi
         #region Validations
         private bool ValiderPosteJeu()
         {
+            // valider que la référence n'est pas vide ou composée uniquement d'espaces
+            if (string.IsNullOrWhiteSpace(textBoxReference.Text))
+            {
+                MessageBox.Show("La référence du poste de jeu est obligatoire.",
+                    "Validation",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // on efface le contenu pour forcer l'utilisateur à saisir une valeur valide
+                textBoxReference.Clear();
+                return false;
+            }
+            else
+            {
+                // vérifie que la référence saisie n'existe pas déjà pour un autre poste de jeu
+                if (_servicePosteJeu.ReferenceExiste(textBoxReference.Text) != null)
+                {
+                    MessageBox.Show($"Le poste de {textBoxReference.Text} existe déjà",
+                        "Validation",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // on efface le contenu pour forcer l'utilisateur à saisir une valeur valide
+                    textBoxReference.Clear();
+                    return false;
+                }
+            }
             return true;
         }
         #endregion

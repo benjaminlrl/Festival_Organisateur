@@ -358,13 +358,14 @@ namespace ApplicationUi
             buttonModifier.FlatStyle = FlatStyle.Flat;
             buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(470, 25);
+            buttonModifier.Location = new Point(450, 25);
             buttonModifier.Margin = new Padding(4);
             buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(150, 45);
+            buttonModifier.Size = new Size(176, 45);
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
+            buttonModifier.Click += buttonModifier_Click_1;
             // 
             // buttonSupprimer
             // 
@@ -373,10 +374,10 @@ namespace ApplicationUi
             buttonSupprimer.FlatStyle = FlatStyle.Flat;
             buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(670, 25);
+            buttonSupprimer.Location = new Point(652, 25);
             buttonSupprimer.Margin = new Padding(4);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(150, 45);
+            buttonSupprimer.Size = new Size(202, 45);
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;

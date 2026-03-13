@@ -251,6 +251,7 @@
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
+            buttonEffacer.Click += buttonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -259,10 +260,10 @@
             buttonModifier.FlatStyle = FlatStyle.Flat;
             buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(470, 25);
+            buttonModifier.Location = new Point(443, 25);
             buttonModifier.Margin = new Padding(4);
             buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(150, 45);
+            buttonModifier.Size = new Size(177, 45);
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
@@ -275,13 +276,14 @@
             buttonSupprimer.FlatStyle = FlatStyle.Flat;
             buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(670, 25);
+            buttonSupprimer.Location = new Point(628, 25);
             buttonSupprimer.Margin = new Padding(4);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(150, 45);
+            buttonSupprimer.Size = new Size(192, 45);
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
+            buttonSupprimer.Click += buttonSupprimer_Click;
             // 
             // label1
             // 

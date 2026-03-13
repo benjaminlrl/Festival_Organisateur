@@ -86,7 +86,7 @@
             buttonAjouter.FlatStyle = FlatStyle.Flat;
             buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(270, 25);
+            buttonAjouter.Location = new Point(255, 25);
             buttonAjouter.Margin = new Padding(4);
             buttonAjouter.Name = "buttonAjouter";
             buttonAjouter.Size = new Size(150, 45);
@@ -116,10 +116,10 @@
             buttonModifier.FlatStyle = FlatStyle.Flat;
             buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(470, 25);
+            buttonModifier.Location = new Point(443, 25);
             buttonModifier.Margin = new Padding(4);
             buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(150, 45);
+            buttonModifier.Size = new Size(192, 45);
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
@@ -134,7 +134,7 @@
             buttonSupprimer.Location = new Point(670, 25);
             buttonSupprimer.Margin = new Padding(4);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(150, 45);
+            buttonSupprimer.Size = new Size(196, 45);
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
@@ -152,17 +152,17 @@
             // 
             labelSuperficie.AutoSize = true;
             labelSuperficie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelSuperficie.Location = new Point(294, 79);
+            labelSuperficie.Location = new Point(294, 0);
             labelSuperficie.Margin = new Padding(4, 0, 4, 0);
             labelSuperficie.Name = "labelSuperficie";
-            labelSuperficie.Size = new Size(179, 26);
+            labelSuperficie.Size = new Size(179, 28);
             labelSuperficie.TabIndex = 14;
             labelSuperficie.Text = "Superficie en m² :";
             // 
             // numericUpDownCapaciteMaxi
             // 
             numericUpDownCapaciteMaxi.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownCapaciteMaxi.Location = new Point(4, 109);
+            numericUpDownCapaciteMaxi.Location = new Point(294, 109);
             numericUpDownCapaciteMaxi.Margin = new Padding(4);
             numericUpDownCapaciteMaxi.Maximum = new decimal(new int[] { 30, 0, 0, 0 });
             numericUpDownCapaciteMaxi.Name = "numericUpDownCapaciteMaxi";
@@ -193,7 +193,7 @@
             // 
             labelCapaciteMaxi.AutoSize = true;
             labelCapaciteMaxi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelCapaciteMaxi.Location = new Point(4, 79);
+            labelCapaciteMaxi.Location = new Point(294, 79);
             labelCapaciteMaxi.Margin = new Padding(4, 0, 4, 0);
             labelCapaciteMaxi.Name = "labelCapaciteMaxi";
             labelCapaciteMaxi.Size = new Size(205, 26);
@@ -219,7 +219,7 @@
             // numericUpDownSuperficie
             // 
             numericUpDownSuperficie.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownSuperficie.Location = new Point(294, 109);
+            numericUpDownSuperficie.Location = new Point(294, 39);
             numericUpDownSuperficie.Margin = new Padding(4);
             numericUpDownSuperficie.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownSuperficie.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
@@ -234,14 +234,14 @@
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34F));
-            tableLayoutPanel.Controls.Add(labelDescription, 1, 0);
-            tableLayoutPanel.Controls.Add(labelSuperficie, 1, 2);
-            tableLayoutPanel.Controls.Add(numericUpDownCapaciteMaxi, 0, 3);
             tableLayoutPanel.Controls.Add(textBoxNom, 0, 1);
             tableLayoutPanel.Controls.Add(labelNom, 0, 0);
-            tableLayoutPanel.Controls.Add(labelCapaciteMaxi, 0, 2);
-            tableLayoutPanel.Controls.Add(numericUpDownSuperficie, 1, 3);
-            tableLayoutPanel.Controls.Add(textBoxDescription, 1, 1);
+            tableLayoutPanel.Controls.Add(labelDescription, 2, 0);
+            tableLayoutPanel.Controls.Add(labelSuperficie, 1, 0);
+            tableLayoutPanel.Controls.Add(numericUpDownSuperficie, 1, 1);
+            tableLayoutPanel.Controls.Add(textBoxDescription, 2, 1);
+            tableLayoutPanel.Controls.Add(labelCapaciteMaxi, 1, 2);
+            tableLayoutPanel.Controls.Add(numericUpDownCapaciteMaxi, 1, 3);
             tableLayoutPanel.Location = new Point(10, 12);
             tableLayoutPanel.Margin = new Padding(4);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -258,7 +258,7 @@
             // 
             labelDescription.AutoSize = true;
             labelDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDescription.Location = new Point(294, 0);
+            labelDescription.Location = new Point(584, 0);
             labelDescription.Margin = new Padding(4, 0, 4, 0);
             labelDescription.Name = "labelDescription";
             labelDescription.Size = new Size(252, 28);
@@ -267,11 +267,13 @@
             // 
             // textBoxDescription
             // 
-            textBoxDescription.Location = new Point(294, 39);
+            textBoxDescription.Location = new Point(584, 39);
             textBoxDescription.Margin = new Padding(4);
+            textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
-            textBoxDescription.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
-            textBoxDescription.Size = new Size(282, 31);
+            textBoxDescription.PlaceholderText = "Ex: Description de l'espace";
+            tableLayoutPanel.SetRowSpan(textBoxDescription, 3);
+            textBoxDescription.Size = new Size(282, 103);
             textBoxDescription.TabIndex = 17;
             // 
             // panelForm

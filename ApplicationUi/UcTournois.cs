@@ -213,6 +213,11 @@ namespace ApplicationUi
         {
 
         }
+
+        private void buttonModifier_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

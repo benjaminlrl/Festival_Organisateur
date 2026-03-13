@@ -12,5 +12,7 @@ namespace Lib_Services.Interfaces
         void Supprimer(int idPosteJeu);
         List<PosteJeu> Lister();
         PosteJeu? Obtenir(int idPosteJeu);
+        PosteJeu? ReferenceExiste(string reference);
+
     }
 }
