@@ -40,13 +40,13 @@ namespace ApplicationUi
         private void ChargerPostesDeJeu()
         {
             dataGridPostesJeu.DataSource = null;
-            dataGridPostesJeu.DataSource = _servicePosteJeu.Lister();
+            dataGridPostesJeu.DataSource = _servicePosteJeu.Lister("");
             MEP_DataGrid();
         }
         private void ChargerEspaces()
         {
             comboBoxEspace.DataSource = null;
-            comboBoxEspace.DataSource = _serviceEspace.Lister();
+            comboBoxEspace.DataSource = _serviceEspace.Lister("");
             // charge les espaces dans le comboBox et affiche le nom tout en conservant l'id en valeur
             comboBoxEspace.DisplayMember = "Nom";
             comboBoxEspace.ValueMember = "IdEspace";
@@ -55,7 +55,7 @@ namespace ApplicationUi
         private void ChargerPlateformes()
         {
             comboBoxPlateforme.DataSource = null;
-            comboBoxPlateforme.DataSource = _servicePlateforme.Lister();
+            comboBoxPlateforme.DataSource = _servicePlateforme.Lister("");
             // charge les plateformes dans le comboBox et affiche le libellé tout en conservant l'id en valeur
             comboBoxPlateforme.DisplayMember = "Libelle";
             comboBoxPlateforme.ValueMember = "IdPlateforme";

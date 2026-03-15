@@ -15,22 +15,34 @@ namespace ApplicationUi
     public partial class UcEspaces : UserControl
     {
         private readonly IEspaceService _serviceEspace;
+        private readonly IPosteJeuService _servicePosteJeu;
         private Espace? _espaceSelectionee = null;
         public UcEspaces()
         {
             InitializeComponent();
             _serviceEspace = new EspaceService(new ApplicationDbContext());
+            _servicePosteJeu = new PosteJeuService(new ApplicationDbContext());
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
             buttonEffacer.Text = " 🧽  Effacer";
             ChargerEspaces();
         }
         #region Evènements
-        private void ChargerEspaces()
+        private void ChargerEspaces(string filtre = "")
         {
             dataGridEspaces.DataSource = null;
-            dataGridEspaces.DataSource = _serviceEspace.Lister();
+            dataGridEspaces.DataSource = _serviceEspace.Lister(filtre);
             MEP_DataGrid();
+        }
+
+        /// <summary>
+        /// Charge les postes de jeux de l'espace selectionnee
+        /// </summary>
+        private void ChargerPostesJeu()
+        {
+            dataGridPostesJeu.DataSource = null;
+            dataGridPostesJeu.DataSource = _espaceSelectionee.PostesJeu.ToList();
+            MEP_DataGridPostesJeu();
         }
 
         /// <summary>
@@ -50,11 +62,20 @@ namespace ApplicationUi
         // TODO: Modifier les données de la grille pour afficher les informations du poste de jeu 
         {
             dataGridEspaces.Columns["idEspace"].Visible = false;
+            dataGridEspaces.Columns["Tournois"].Visible = false;
+            dataGridEspaces.Columns["PostesJeu"].Visible = false;
             dataGridEspaces.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        }
+
+        private void MEP_DataGridPostesJeu()
+        {
+            if (dataGridPostesJeu != null)
+                dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void dataGridEspaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            List<PosteJeu> postesJeu = new List<PosteJeu>();
             // on ne gère le clic que sur les lignes, pas sur les en-têtes
             if (e.RowIndex < 0)
                 return;
@@ -74,11 +95,38 @@ namespace ApplicationUi
             textBoxDescription.Text = espace.Description;
             numericUpDownCapaciteMaxi.Value = espace.CapaciteMaxi;
             numericUpDownSuperficie.Value = espace.Superficie;
+            ChargerPostesJeu();
         }
         #endregion
         #region Validations
         private bool ValiderEspace()
         {
+
+            if (string.IsNullOrWhiteSpace(textBoxNom.Text))
+            {
+                MessageBox.Show("Le nom de l'espace est requis.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (numericUpDownCapaciteMaxi.Value <= 0)
+            {
+                MessageBox.Show("La capacité maximale doit être supérieure à zéro.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (numericUpDownSuperficie.Value <= 0)
+            {
+                MessageBox.Show("La superficie doit être supérieure à zéro.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (textBoxDescription.Text.Length > 500)
+            {
+                MessageBox.Show("La description ne peut pas dépasser 500 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (_espaceSelectionee != null && _serviceEspace.NomExiste(_espaceSelectionee.Nom))
+            {
+                MessageBox.Show("Un autre espace avec ce nom existe déjà.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
             return true;
         }
         #endregion
@@ -138,6 +186,21 @@ namespace ApplicationUi
 
         }
 
+        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            ChargerEspaces(textBoxRecherche.Text);
+        }
+
         #endregion
+
+        private void buttonPostesJeu_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

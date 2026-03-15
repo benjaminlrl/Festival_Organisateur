@@ -37,7 +37,7 @@ namespace ApplicationUi
         private void ChargerTournois()
         {
             dataGridTournois.DataSource = null;
-            dataGridTournois.DataSource = _serviceTournoi.Lister();
+            dataGridTournois.DataSource = _serviceTournoi.Lister("");
             MEP_DataGrid();
         }
         private void MEP_DataGrid()
@@ -51,7 +51,7 @@ namespace ApplicationUi
         private void ChargerEspaces()
         {
             comboBoxEspace.DataSource = null;
-            comboBoxEspace.DataSource = _serviceEspace.Lister();
+            comboBoxEspace.DataSource = _serviceEspace.Lister("");
             comboBoxEspace.DisplayMember = "Nom";
             comboBoxEspace.ValueMember = "IdEspace";
         }

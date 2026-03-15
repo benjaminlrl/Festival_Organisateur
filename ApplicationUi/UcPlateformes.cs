@@ -29,7 +29,7 @@ namespace ApplicationUi
         private void ChargerPlateformes()
         {
             dataGridPlateformes.DataSource = null;
-            dataGridPlateformes.DataSource = _servicePlateforme.Lister();
+            dataGridPlateformes.DataSource = _servicePlateforme.Lister("");
             MEP_DataGrid();
         }
 

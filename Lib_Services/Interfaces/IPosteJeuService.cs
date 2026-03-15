@@ -10,7 +10,7 @@ namespace Lib_Services.Interfaces
         void Creer(PosteJeu posteJeu);
         void Modifier(PosteJeu posteJeu);
         void Supprimer(int idPosteJeu);
-        List<PosteJeu> Lister();
+        List<PosteJeu> Lister(string filtre);
         PosteJeu? Obtenir(int idPosteJeu);
         PosteJeu? ReferenceExiste(string reference);
 

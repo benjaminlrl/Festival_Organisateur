@@ -10,7 +10,7 @@ namespace Lib_Services.Interfaces
         void Creer(Plateforme plateforme);
         void Modifier(Plateforme plateforme);
         void Supprimer(int idplateforme);
-        List<Plateforme> Lister();
+        List<Plateforme> Lister(string filtre);
         Plateforme? Obtenir(int idplateforme);
     }
 }

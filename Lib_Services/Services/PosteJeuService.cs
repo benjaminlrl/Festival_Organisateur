@@ -28,12 +28,20 @@ namespace Lib_Services.Services
 
         /// <summary>
         /// Récupère l'ensemble des postes de jeu depuis la base de données.
+        /// Si un filtre est fourni, ne retourne que 
+        /// les postes de jeu dont la référence correspond au filtre.
         /// </summary>
+        /// <param name="filtre">Optionnel : référence à filtrer.</param>
         /// <returns>Liste de <see cref="PosteJeu"/>.</returns>
-        public List<PosteJeu> Lister()
+        public List<PosteJeu> Lister(string filtre = "")
         {
             // ToList matérialise la requête et ramène les entités en mémoire.
-            return _context.PostesJeu.ToList();
+            if (string.IsNullOrWhiteSpace(filtre)) 
+                return _context.PostesJeu
+                .ToList();
+            return _context.PostesJeu
+                .Where(p => p.Reference.Contains(filtre))
+                .ToList();
         }
 
         /// <summary>
@@ -94,7 +102,6 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
     }
 
 }

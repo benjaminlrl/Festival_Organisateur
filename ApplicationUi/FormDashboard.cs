@@ -66,7 +66,7 @@ namespace ApplicationUi
                 try
                 {
                     // Statistiques Tournois
-                    var tournois = _tournoiRepository.Lister();
+                    var tournois = _tournoiRepository.Lister("");
                     labelStatTotal.Text = tournois.Count.ToString();
 
                     int planifies = tournois.Count(t => t.Statut?.ToLower() == "planifié");
@@ -84,7 +84,7 @@ namespace ApplicationUi
                     labelStatInscrits.Text = $"Taux de remplissage : {tauxRemplissage}%";
 
                     // Statistiques Espaces
-                    var espaces = _espaceRepository.Lister();
+                    var espaces = _espaceRepository.Lister("");
                     labelStatEspacesTotal.Text = espaces.Count.ToString();
 
                     // Espaces disponibles (sans tournoi programmé aujourd'hui)

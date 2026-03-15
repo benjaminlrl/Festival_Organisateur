@@ -28,13 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panelButtons = new Panel();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
             buttonEffacer = new Button();
             buttonModifier = new Button();
             buttonSupprimer = new Button();
-            label1 = new Label();
             labelSuperficie = new Label();
             numericUpDownCapaciteMaxi = new NumericUpDown();
             textBoxNom = new TextBox();
@@ -46,24 +44,24 @@
             labelDescription = new Label();
             textBoxDescription = new TextBox();
             panelForm = new Panel();
-            panelButtons.SuspendLayout();
+            tableLayoutPanelCRUD = new TableLayoutPanel();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            dataGridPostesJeu = new DataGridView();
+            process1 = new System.Diagnostics.Process();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            textBoxRecherche = new TextBox();
+            label1 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCapaciteMaxi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridEspaces).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownSuperficie).BeginInit();
             tableLayoutPanel.SuspendLayout();
             panelForm.SuspendLayout();
+            tableLayoutPanelCRUD.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
+            tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
-            // 
-            // panelButtons
-            // 
-            panelButtons.Controls.Add(groupBox1);
-            panelButtons.Controls.Add(label1);
-            panelButtons.Location = new Point(10, 155);
-            panelButtons.Margin = new Padding(4);
-            panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(879, 82);
-            panelButtons.TabIndex = 1;
             // 
             // groupBox1
             // 
@@ -71,13 +69,14 @@
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.Location = new Point(0, 0);
+            groupBox1.Dock = DockStyle.Bottom;
+            groupBox1.Location = new Point(3, 222);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(879, 82);
+            groupBox1.Size = new Size(881, 116);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
+            groupBox1.Enter += groupBox1_Enter;
             // 
             // buttonAjouter
             // 
@@ -93,6 +92,7 @@
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
+            buttonAjouter.Click += buttonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -139,20 +139,11 @@
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(0, 0);
-            label1.Margin = new Padding(4, 0, 4, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(0, 25);
-            label1.TabIndex = 6;
-            // 
             // labelSuperficie
             // 
             labelSuperficie.AutoSize = true;
             labelSuperficie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelSuperficie.Location = new Point(294, 0);
+            labelSuperficie.Location = new Point(4, 105);
             labelSuperficie.Margin = new Padding(4, 0, 4, 0);
             labelSuperficie.Name = "labelSuperficie";
             labelSuperficie.Size = new Size(179, 28);
@@ -162,20 +153,22 @@
             // numericUpDownCapaciteMaxi
             // 
             numericUpDownCapaciteMaxi.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownCapaciteMaxi.Location = new Point(294, 109);
+            numericUpDownCapaciteMaxi.Location = new Point(294, 150);
             numericUpDownCapaciteMaxi.Margin = new Padding(4);
-            numericUpDownCapaciteMaxi.Maximum = new decimal(new int[] { 30, 0, 0, 0 });
+            numericUpDownCapaciteMaxi.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericUpDownCapaciteMaxi.Name = "numericUpDownCapaciteMaxi";
             numericUpDownCapaciteMaxi.Size = new Size(88, 31);
             numericUpDownCapaciteMaxi.TabIndex = 3;
             // 
             // textBoxNom
             // 
+            tableLayoutPanel.SetColumnSpan(textBoxNom, 2);
             textBoxNom.Location = new Point(4, 39);
             textBoxNom.Margin = new Padding(4);
+            textBoxNom.Multiline = true;
             textBoxNom.Name = "textBoxNom";
-            textBoxNom.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
-            textBoxNom.Size = new Size(281, 31);
+            textBoxNom.PlaceholderText = "Ex: Espace playstation";
+            textBoxNom.Size = new Size(400, 31);
             textBoxNom.TabIndex = 0;
             // 
             // labelNom
@@ -193,10 +186,10 @@
             // 
             labelCapaciteMaxi.AutoSize = true;
             labelCapaciteMaxi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelCapaciteMaxi.Location = new Point(294, 79);
+            labelCapaciteMaxi.Location = new Point(294, 105);
             labelCapaciteMaxi.Margin = new Padding(4, 0, 4, 0);
             labelCapaciteMaxi.Name = "labelCapaciteMaxi";
-            labelCapaciteMaxi.Size = new Size(205, 26);
+            labelCapaciteMaxi.Size = new Size(205, 28);
             labelCapaciteMaxi.TabIndex = 8;
             labelCapaciteMaxi.Text = "Capacité maximale*:";
             // 
@@ -206,20 +199,21 @@
             dataGridEspaces.BackgroundColor = Color.White;
             dataGridEspaces.BorderStyle = BorderStyle.None;
             dataGridEspaces.ColumnHeadersHeight = 34;
-            dataGridEspaces.Location = new Point(23, 314);
+            dataGridEspaces.Dock = DockStyle.Fill;
+            dataGridEspaces.Location = new Point(4, 439);
             dataGridEspaces.Margin = new Padding(4);
             dataGridEspaces.Name = "dataGridEspaces";
             dataGridEspaces.ReadOnly = true;
             dataGridEspaces.RowHeadersWidth = 62;
             dataGridEspaces.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridEspaces.Size = new Size(900, 383);
+            dataGridEspaces.Size = new Size(888, 299);
             dataGridEspaces.TabIndex = 4;
             dataGridEspaces.CellContentClick += dataGridEspaces_CellContentClick;
             // 
             // numericUpDownSuperficie
             // 
             numericUpDownSuperficie.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownSuperficie.Location = new Point(294, 39);
+            numericUpDownSuperficie.Location = new Point(4, 150);
             numericUpDownSuperficie.Margin = new Padding(4);
             numericUpDownSuperficie.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownSuperficie.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
@@ -237,12 +231,13 @@
             tableLayoutPanel.Controls.Add(textBoxNom, 0, 1);
             tableLayoutPanel.Controls.Add(labelNom, 0, 0);
             tableLayoutPanel.Controls.Add(labelDescription, 2, 0);
-            tableLayoutPanel.Controls.Add(labelSuperficie, 1, 0);
-            tableLayoutPanel.Controls.Add(numericUpDownSuperficie, 1, 1);
             tableLayoutPanel.Controls.Add(textBoxDescription, 2, 1);
-            tableLayoutPanel.Controls.Add(labelCapaciteMaxi, 1, 2);
-            tableLayoutPanel.Controls.Add(numericUpDownCapaciteMaxi, 1, 3);
-            tableLayoutPanel.Location = new Point(10, 12);
+            tableLayoutPanel.Controls.Add(numericUpDownCapaciteMaxi, 1, 4);
+            tableLayoutPanel.Controls.Add(labelCapaciteMaxi, 1, 3);
+            tableLayoutPanel.Controls.Add(labelSuperficie, 0, 3);
+            tableLayoutPanel.Controls.Add(numericUpDownSuperficie, 0, 4);
+            tableLayoutPanel.Dock = DockStyle.Fill;
+            tableLayoutPanel.Location = new Point(4, 4);
             tableLayoutPanel.Margin = new Padding(4);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 5;
@@ -251,7 +246,7 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(879, 143);
+            tableLayoutPanel.Size = new Size(879, 211);
             tableLayoutPanel.TabIndex = 0;
             // 
             // labelDescription
@@ -272,32 +267,123 @@
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Description de l'espace";
-            tableLayoutPanel.SetRowSpan(textBoxDescription, 3);
-            textBoxDescription.Size = new Size(282, 103);
+            tableLayoutPanel.SetRowSpan(textBoxDescription, 4);
+            textBoxDescription.Size = new Size(281, 168);
             textBoxDescription.TabIndex = 17;
             // 
             // panelForm
             // 
             panelForm.BackColor = Color.White;
-            panelForm.Controls.Add(tableLayoutPanel);
-            panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(23, 54);
+            panelForm.Controls.Add(tableLayoutPanelCRUD);
+            panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(900, 253);
+            panelForm.Size = new Size(887, 341);
             panelForm.TabIndex = 3;
+            // 
+            // tableLayoutPanelCRUD
+            // 
+            tableLayoutPanelCRUD.ColumnCount = 1;
+            tableLayoutPanelCRUD.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanelCRUD.Controls.Add(tableLayoutPanel, 0, 0);
+            tableLayoutPanelCRUD.Controls.Add(groupBox1, 0, 1);
+            tableLayoutPanelCRUD.Dock = DockStyle.Fill;
+            tableLayoutPanelCRUD.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+            tableLayoutPanelCRUD.Location = new Point(0, 0);
+            tableLayoutPanelCRUD.Name = "tableLayoutPanelCRUD";
+            tableLayoutPanelCRUD.RowCount = 2;
+            tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 64.22288F));
+            tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 35.7771263F));
+            tableLayoutPanelCRUD.Size = new Size(887, 341);
+            tableLayoutPanelCRUD.TabIndex = 8;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65.40146F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.59854F));
+            tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
+            tableLayoutPanel1.Controls.Add(dataGridEspaces, 0, 2);
+            tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 1, 2);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 80.15717F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 19.8428288F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 306F));
+            tableLayoutPanel1.Size = new Size(1370, 742);
+            tableLayoutPanel1.TabIndex = 5;
+            // 
+            // dataGridPostesJeu
+            // 
+            dataGridPostesJeu.AllowUserToAddRows = false;
+            dataGridPostesJeu.AllowUserToDeleteRows = false;
+            dataGridPostesJeu.AllowUserToOrderColumns = true;
+            dataGridPostesJeu.BackgroundColor = Color.White;
+            dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridPostesJeu.Dock = DockStyle.Fill;
+            dataGridPostesJeu.Location = new Point(899, 438);
+            dataGridPostesJeu.Name = "dataGridPostesJeu";
+            dataGridPostesJeu.ReadOnly = true;
+            dataGridPostesJeu.RowHeadersWidth = 62;
+            dataGridPostesJeu.Size = new Size(468, 301);
+            dataGridPostesJeu.TabIndex = 5;
+            // 
+            // process1
+            // 
+            process1.StartInfo.CreateNewProcessGroup = false;
+            process1.StartInfo.Domain = "";
+            process1.StartInfo.LoadUserProfile = false;
+            process1.StartInfo.Password = null;
+            process1.StartInfo.StandardErrorEncoding = null;
+            process1.StartInfo.StandardInputEncoding = null;
+            process1.StartInfo.StandardOutputEncoding = null;
+            process1.StartInfo.UseCredentialsForNetworkingOnly = false;
+            process1.StartInfo.UserName = "";
+            process1.SynchronizingObject = this;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.2921352F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.70786F));
+            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
+            tableLayoutPanel2.Controls.Add(label1, 0, 0);
+            tableLayoutPanel2.Location = new Point(3, 352);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(890, 80);
+            tableLayoutPanel2.TabIndex = 6;
+            // 
+            // textBoxRecherche
+            // 
+            textBoxRecherche.Location = new Point(148, 3);
+            textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.Size = new Size(426, 31);
+            textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(131, 30);
+            label1.TabIndex = 1;
+            label1.Text = "Recherche :";
             // 
             // UcEspaces
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 255);
-            Controls.Add(dataGridEspaces);
-            Controls.Add(panelForm);
+            Controls.Add(tableLayoutPanel1);
             Name = "UcEspaces";
-            Size = new Size(949, 720);
-            panelButtons.ResumeLayout(false);
-            panelButtons.PerformLayout();
+            Size = new Size(1370, 742);
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericUpDownCapaciteMaxi).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridEspaces).EndInit();
@@ -305,18 +391,20 @@
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             panelForm.ResumeLayout(false);
+            tableLayoutPanelCRUD.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Panel panelButtons;
         private GroupBox groupBox1;
         private Button buttonAjouter;
         private Button buttonEffacer;
         private Button buttonModifier;
         private Button buttonSupprimer;
-        private Label label1;
         private Label labelSuperficie;
         private NumericUpDown numericUpDownCapaciteMaxi;
         private TextBox textBoxNom;
@@ -328,5 +416,12 @@
         private Panel panelForm;
         private Label labelDescription;
         private TextBox textBoxDescription;
+        private TableLayoutPanel tableLayoutPanel1;
+        private System.Diagnostics.Process process1;
+        private TableLayoutPanel tableLayoutPanelCRUD;
+        private DataGridView dataGridPostesJeu;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TextBox textBoxRecherche;
+        private Label label1;
     }
 }
