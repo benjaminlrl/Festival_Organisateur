@@ -2,6 +2,7 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,29 +10,36 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 
 namespace ApplicationUi
 {
     public partial class UcEspaces : UserControl
     {
         private readonly IEspaceService _serviceEspace;
-        private readonly IPosteJeuService _servicePosteJeu;
         private Espace? _espaceSelectionee = null;
+        // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
+        private string _filtre = "";
+        // Champ pour suivre l'ordre de tri actuel sur la colonne Nom
+        private string _orderNom = "ASC";
         public UcEspaces()
         {
             InitializeComponent();
             _serviceEspace = new EspaceService(new ApplicationDbContext());
-            _servicePosteJeu = new PosteJeuService(new ApplicationDbContext());
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
-            buttonEffacer.Text = " 🧽  Effacer";
+            buttonEffacer.Text = "🧽  Effacer";
             ChargerEspaces();
         }
         #region Evènements
-        private void ChargerEspaces(string filtre = "")
+        /// <summary>
+        /// Charge les espaces depuis la base de données et les affiche dans le DataGridView.
+        /// </summary>
+        /// <param name="filtre"></param>
+        private void ChargerEspaces()
         {
             dataGridEspaces.DataSource = null;
-            dataGridEspaces.DataSource = _serviceEspace.Lister(filtre);
+            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre);
             MEP_DataGrid();
         }
 
@@ -57,9 +65,9 @@ namespace ApplicationUi
             textBoxDescription.Clear();
             numericUpDownCapaciteMaxi.Value = numericUpDownCapaciteMaxi.Minimum;
             numericUpDownSuperficie.Value = numericUpDownSuperficie.Minimum;
+            _filtre = "";
         }
         private void MEP_DataGrid()
-        // TODO: Modifier les données de la grille pour afficher les informations du poste de jeu 
         {
             dataGridEspaces.Columns["idEspace"].Visible = false;
             dataGridEspaces.Columns["Tournois"].Visible = false;
@@ -69,16 +77,39 @@ namespace ApplicationUi
 
         private void MEP_DataGridPostesJeu()
         {
-            if (dataGridPostesJeu != null)
-                dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void dataGridEspaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             List<PosteJeu> postesJeu = new List<PosteJeu>();
-            // on ne gère le clic que sur les lignes, pas sur les en-têtes
-            if (e.RowIndex < 0)
+            // Le clic sur l'en-tête permet d'ordonner les resultats, mais ne doit pas déclencher la sélection d'un 
+            // Si le clic est sur la colonne Nom, on inverse l'ordre de tri et on recharge les espaces
+            if (e.RowIndex < 0) 
+            {
+                switch (e.ColumnIndex)
+                {
+                    case 1:
+                        if (_orderNom == "ASC")
+                        {
+                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderByDescending(e => e.Nom).ToList();
+                            _orderNom = "DESC";
+                        }
+                        else
+                        {
+                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderBy(e => e.Nom).ToList();
+                            _orderNom = "ASC";
+                        }
+                        break;
+                    default:
+                        return;
+                }                    
                 return;
+            }
+
+            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre);
+                MEP_DataGrid();
+
 
             _espaceSelectionee = dataGridEspaces.Rows[e.RowIndex].DataBoundItem as Espace;
 
@@ -89,16 +120,31 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _espaceSelectionee != null;
         }
 
+        /// <summary>
+        /// Remplit les champs du formulaire avec les informations de l'espace spécifié.
+        /// </summary>
+        /// <remarks>Cette méthode met à jour les contrôles du formulaire pour refléter les propriétés de
+        /// l'espace fourni. Elle doit être appelée lors de l'affichage ou de la modification d'un espace
+        /// existant.</remarks>
+        /// <param name="espace">L'objet Espace contenant les données à afficher dans le formulaire. Ne doit pas être null.</param>
         private void RemplirFormulaire(Espace espace)
         {
             textBoxNom.Text = espace.Nom;
             textBoxDescription.Text = espace.Description;
             numericUpDownCapaciteMaxi.Value = espace.CapaciteMaxi;
             numericUpDownSuperficie.Value = espace.Superficie;
-            ChargerPostesJeu();
+            ChargerPostesJeu(); // Charge les postes de jeu associés à l'espace sélectionné
+                                // pour les afficher dans le DataGridView correspondante
         }
         #endregion
         #region Validations
+        /// <summary>
+        /// Vérifie que les champs obligatoires pour un espace sont valides avant de poursuivre l'opération.
+        /// </summary>
+        /// <remarks>Affiche une boîte de dialogue d'avertissement pour chaque validation échouée afin
+        /// d'informer l'utilisateur de la correction à apporter. Cette méthode doit être appelée avant d'enregistrer ou
+        /// de modifier un espace pour garantir l'intégrité des données saisies.</remarks>
+        /// <returns>true si tous les champs requis sont valides et respectent les contraintes ; sinon, false.</returns>
         private bool ValiderEspace()
         {
 
@@ -131,6 +177,14 @@ namespace ApplicationUi
         }
         #endregion
         #region Boutons
+        /// <summary>
+        /// Gère l'événement de clic sur le bouton d'ajout pour créer un nouvel espace à partir des informations saisies
+        /// par l'utilisateur.
+        /// </summary>
+        /// <remarks>Cette méthode valide les champs de saisie avant de créer un nouvel espace. Si la
+        /// validation échoue, aucun espace n'est ajouté.</remarks>
+        /// <param name="sender">L'objet à l'origine de l'événement, généralement le bouton Ajouter.</param>
+        /// <param name="e">Les données d'événement associées au clic du bouton.</param>
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
             if (ValiderEspace())
@@ -148,6 +202,15 @@ namespace ApplicationUi
             }
 
         }
+        /// <summary>
+        /// Gère l'événement de clic sur le bouton de modification pour appliquer les changements apportés à l'espace
+        /// sélectionné.
+        /// </summary>
+        /// <remarks>Cette méthode met à jour les informations de l'espace actuellement sélectionné dans
+        /// le tableau, puis recharge la liste des espaces et réinitialise les zones de saisie. Aucun traitement n'est
+        /// effectué si aucune ligne n'est sélectionnée ou si aucun espace n'est sélectionné.</remarks>
+        /// <param name="sender">L'objet à l'origine de l'événement, généralement le bouton Modifier.</param>
+        /// <param name="e">Les données d'événement associées au clic sur le bouton.</param>
         private void buttonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridEspaces.CurrentRow == null)
@@ -166,10 +229,23 @@ namespace ApplicationUi
             ChargerEspaces();
             Raz_Zones();
         }
+        /// <summary>
+        /// Gère l'événement de clic sur le bouton Effacer et réinitialise les zones de saisie du formulaire.
+        /// </summary>
+        /// <param name="sender">L'objet à l'origine de l'événement, généralement le bouton Effacer.</param>
+        /// <param name="e">Les données d'événement associées au clic sur le bouton.</param>
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
+        /// <summary>
+        /// Gère l'événement de clic sur le bouton de suppression pour retirer l'espace sélectionné de la liste.
+        /// </summary>
+        /// <remarks>Cette méthode vérifie qu'une ligne et un espace sont sélectionnés avant de procéder à
+        /// la suppression. Après la suppression, la liste des espaces est rechargée et les zones associées sont
+        /// réinitialisées.</remarks>
+        /// <param name="sender">L'objet source de l'événement, généralement le bouton de suppression.</param>
+        /// <param name="e">Les données d'événement associées au clic sur le bouton.</param>
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
             if (dataGridEspaces.CurrentRow == null)
@@ -185,10 +261,17 @@ namespace ApplicationUi
             Raz_Zones();
 
         }
-
+        /// <summary>
+        /// Gère l'événement déclenché lorsque le texte de la zone de recherche est modifié.
+        /// </summary>
+        /// <remarks>Utilisez cet événement pour mettre à jour dynamiquement les résultats de recherche en
+        /// fonction de la saisie de l'utilisateur.</remarks>
+        /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
+        /// <param name="e">Les données associées à l'événement de modification du texte.</param>
         private void textBoxRecherche_TextChanged(object sender, EventArgs e)
         {
-            ChargerEspaces(textBoxRecherche.Text);
+            _filtre = textBoxRecherche.Text;
+            ChargerEspaces();
         }
 
         #endregion

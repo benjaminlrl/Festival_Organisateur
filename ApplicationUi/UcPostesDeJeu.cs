@@ -35,6 +35,10 @@ namespace ApplicationUi
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
+            // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
+            // TODO: Ajouter un graphique pour indiquer le nombre de postes de jeu
+            // fonctionnels vs non fonctionnels
+            // TODO: ajouter une option de filtrage croissant décroissant sur la référence du poste de jeu
         }
         #region Evènements
         private void ChargerPostesDeJeu()
