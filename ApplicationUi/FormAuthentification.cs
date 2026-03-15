@@ -26,12 +26,19 @@ namespace ApplicationUi
         // Boutton Connexion
         private async void btnLogin_ClickAsync(object sender, EventArgs e)
         {
+            if(string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                labelError.Text = "Veuillez remplir tous les champs.";
+                await Task.Delay(5000);
+                labelError.Text = "";
+                return;
+            }
+
             if (_organisateurService.EstIdentique(txtPassword.Text, txtUsername.Text.Trim()))
             {
                 this.Hide();
                 new FormMain().Show();
-            }
-            else
+            }else
             {
                 labelError.Text = "Login ou mot de passe incorrect.";
                 await Task.Delay(5000);
@@ -54,7 +61,7 @@ namespace ApplicationUi
         {
             Application.Exit();
         }
-        
+
         // Effet de focus sur les champs (fait par IA)
         private void txt_Enter(object sender, EventArgs e)
         {

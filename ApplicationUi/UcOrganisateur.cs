@@ -34,9 +34,12 @@ namespace ApplicationUi
 
         private void ChargerOrganisateurs()
         {
-            // On charge la liste des organisateurs dans le dataGrid
+            // On charge la liste des organisateurs dans le dataGrid (sans les admins)
             dataGridOrganisateurs.DataSource = null;
-            dataGridOrganisateurs.DataSource = _serviceOrganisateur.Lister();
+            var listeOrganisateur = _serviceOrganisateur.Lister()
+                .Where(o => !o.Login.Contains("admin"))
+                .ToList();
+            dataGridOrganisateurs.DataSource = listeOrganisateur;
             MEP_DataGrid();
         }
 
@@ -46,16 +49,9 @@ namespace ApplicationUi
             dataGridOrganisateurs.Columns["IdRole"].Visible = false;
             dataGridOrganisateurs.Columns["Login"].DisplayIndex = 0;
             dataGridOrganisateurs.Columns["Mail"].DisplayIndex = 1;
-            dataGridOrganisateurs.Columns["motPasse"].DisplayIndex = 2;
-            dataGridOrganisateurs.Columns["motPasse"].HeaderText = "Mot de passe";
+            dataGridOrganisateurs.Columns["motPasse"].Visible = false;
             dataGridOrganisateurs.Columns["Role"].Visible = false;
             dataGridOrganisateurs.Columns["NomRole"].HeaderText = "Rôle";
-
-            // Code garder si on veut cacher le hashage du mot de passe dans le dataGrid
-            //foreach (DataGridViewRow row in dataGridOrganisateurs.Rows)
-            //{
-            //    row.Cells["motPasse"].Value = "••••••••";
-            //}
         }
 
         private void ChargerRoles()
@@ -69,7 +65,7 @@ namespace ApplicationUi
 
         private void Raz_Zones()
         {
-            // On remettre tous les champs à vide
+            // On remet tous les champs à vide
             textBoxLogin.Clear();
             textBoxMail.Clear();
             textBoxMotDePasse.Clear();
@@ -97,7 +93,7 @@ namespace ApplicationUi
             // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel organisateur
             if (IdentifiantValide(textBoxLogin.Text) == false)
             {
-                labelError.Text = "L'identifiant doit contenir entre 3 et 12 caractères.";
+                labelError.Text = "Le login doit contenir entre 3 et 12 caractères.";
                 return;
             }
             if (MdpValide(textBoxMotDePasse.Text) != "true")
@@ -119,7 +115,7 @@ namespace ApplicationUi
             // On check si l'identifiant & le mot de passe sont valides, puis on modifie l'organisateur selectionné
             if (IdentifiantValide(textBoxLogin.Text) == false)
             {
-                labelError.Text = "L'identifiant doit contenir entre 3 et 12 caractères.";
+                labelError.Text = "Le login doit contenir entre 3 et 12 caractères.";
                 return;
             }
             if(textBoxMotDePasse.Text != "")
@@ -144,6 +140,8 @@ namespace ApplicationUi
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
+            //Ne pas pouvoir suppr l'organisateur connecté
+            //Ne pas pouvoir suppr "admin"
             if (_organisateurSelectionne == null)
             {
                 labelError.Text = "Aucun organisateur sélectionné.";

@@ -86,7 +86,7 @@ namespace ApplicationUi
             labelLogin.Location = new Point(4, 0);
             labelLogin.Margin = new Padding(4, 0, 4, 0);
             labelLogin.Name = "labelLogin";
-            labelLogin.Size = new Size(90, 28);
+            labelLogin.Size = new Size(78, 23);
             labelLogin.TabIndex = 0;
             labelLogin.Text = "Login * :";
             // 
@@ -97,7 +97,7 @@ namespace ApplicationUi
             labelMail.Location = new Point(223, 0);
             labelMail.Margin = new Padding(4, 0, 4, 0);
             labelMail.Name = "labelMail";
-            labelMail.Size = new Size(80, 28);
+            labelMail.Size = new Size(68, 23);
             labelMail.TabIndex = 1;
             labelMail.Text = "Mail * :";
             // 
@@ -108,7 +108,7 @@ namespace ApplicationUi
             labelMotDePasse.Location = new Point(442, 0);
             labelMotDePasse.Margin = new Padding(4, 0, 4, 0);
             labelMotDePasse.Name = "labelMotDePasse";
-            labelMotDePasse.Size = new Size(164, 28);
+            labelMotDePasse.Size = new Size(139, 23);
             labelMotDePasse.TabIndex = 2;
             labelMotDePasse.Text = "Mot de passe * :";
             // 
@@ -119,7 +119,7 @@ namespace ApplicationUi
             labelRole.Location = new Point(661, 0);
             labelRole.Margin = new Padding(4, 0, 4, 0);
             labelRole.Name = "labelRole";
-            labelRole.Size = new Size(80, 28);
+            labelRole.Size = new Size(68, 23);
             labelRole.TabIndex = 3;
             labelRole.Text = "Rôle * :";
             // 
@@ -129,7 +129,7 @@ namespace ApplicationUi
             textBoxLogin.Margin = new Padding(4);
             textBoxLogin.Name = "textBoxLogin";
             textBoxLogin.PlaceholderText = "Ex: jdupont";
-            textBoxLogin.Size = new Size(210, 31);
+            textBoxLogin.Size = new Size(210, 27);
             textBoxLogin.TabIndex = 0;
             // 
             // textBoxMail
@@ -138,7 +138,7 @@ namespace ApplicationUi
             textBoxMail.Margin = new Padding(4);
             textBoxMail.Name = "textBoxMail";
             textBoxMail.PlaceholderText = "Ex: jean@mail.com";
-            textBoxMail.Size = new Size(210, 31);
+            textBoxMail.Size = new Size(210, 27);
             textBoxMail.TabIndex = 1;
             // 
             // textBoxMotDePasse
@@ -147,8 +147,8 @@ namespace ApplicationUi
             textBoxMotDePasse.Margin = new Padding(4);
             textBoxMotDePasse.Name = "textBoxMotDePasse";
             textBoxMotDePasse.PasswordChar = '●';
-            textBoxMotDePasse.PlaceholderText = "Min. 12 caract., 1 maj., 1 spécial";
-            textBoxMotDePasse.Size = new Size(210, 31);
+            textBoxMotDePasse.PlaceholderText = "Min. 12 caract., 1 maj., 1 spécial, 1 chiffre";
+            textBoxMotDePasse.Size = new Size(210, 27);
             textBoxMotDePasse.TabIndex = 2;
             // 
             // comboBoxRole
@@ -157,7 +157,7 @@ namespace ApplicationUi
             comboBoxRole.Location = new Point(661, 39);
             comboBoxRole.Margin = new Padding(4);
             comboBoxRole.Name = "comboBoxRole";
-            comboBoxRole.Size = new Size(210, 34);
+            comboBoxRole.Size = new Size(210, 31);
             comboBoxRole.TabIndex = 3;
             // 
             // panelButtons
@@ -242,7 +242,7 @@ namespace ApplicationUi
             buttonSupprimer.Location = new Point(670, 25);
             buttonSupprimer.Margin = new Padding(4);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(150, 45);
+            buttonSupprimer.Size = new Size(162, 45);
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
@@ -254,7 +254,7 @@ namespace ApplicationUi
             label1.Location = new Point(0, 0);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 26);
+            label1.Size = new Size(0, 23);
             label1.TabIndex = 6;
             // 
             // dataGridOrganisateurs
@@ -275,7 +275,6 @@ namespace ApplicationUi
             // 
             // labelError
             // 
-            labelError.Anchor = AnchorStyles.None;
             labelError.Font = new Font("Segoe UI Light", 14F);
             labelError.ForeColor = Color.FromArgb(255, 128, 128);
             labelError.Location = new Point(235, 18);
@@ -287,7 +286,7 @@ namespace ApplicationUi
             // 
             // UcOrganisateur
             // 
-            AutoScaleDimensions = new SizeF(11F, 26F);
+            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 253);
             Controls.Add(labelError);
