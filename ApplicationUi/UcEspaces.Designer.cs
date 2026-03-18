@@ -46,11 +46,15 @@
             panelForm = new Panel();
             tableLayoutPanelCRUD = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            dataGridPostesJeu = new DataGridView();
-            process1 = new System.Diagnostics.Process();
             tableLayoutPanel2 = new TableLayoutPanel();
             textBoxRecherche = new TextBox();
             label1 = new Label();
+            dataGridPostesJeu = new DataGridView();
+            process1 = new System.Diagnostics.Process();
+            groupBoxStatsEspaces = new GroupBox();
+            labelStatEspacesLibres = new Label();
+            labelStatEspacesTotal = new Label();
+            labelTitreEspaces = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCapaciteMaxi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridEspaces).BeginInit();
@@ -59,8 +63,9 @@
             panelForm.SuspendLayout();
             tableLayoutPanelCRUD.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
             tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
+            groupBoxStatsEspaces.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
@@ -304,8 +309,9 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.59854F));
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
             tableLayoutPanel1.Controls.Add(dataGridEspaces, 0, 2);
-            tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 1, 2);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
+            tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 1, 0);
+            tableLayoutPanel1.Controls.Add(groupBoxStatsEspaces, 1, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -315,34 +321,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 306F));
             tableLayoutPanel1.Size = new Size(1370, 742);
             tableLayoutPanel1.TabIndex = 5;
-            // 
-            // dataGridPostesJeu
-            // 
-            dataGridPostesJeu.AllowUserToAddRows = false;
-            dataGridPostesJeu.AllowUserToDeleteRows = false;
-            dataGridPostesJeu.AllowUserToOrderColumns = true;
-            dataGridPostesJeu.BackgroundColor = Color.White;
-            dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridPostesJeu.Dock = DockStyle.Fill;
-            dataGridPostesJeu.Location = new Point(899, 438);
-            dataGridPostesJeu.Name = "dataGridPostesJeu";
-            dataGridPostesJeu.ReadOnly = true;
-            dataGridPostesJeu.RowHeadersWidth = 62;
-            dataGridPostesJeu.Size = new Size(468, 301);
-            dataGridPostesJeu.TabIndex = 5;
-            // 
-            // process1
-            // 
-            process1.StartInfo.CreateNewProcessGroup = false;
-            process1.StartInfo.Domain = "";
-            process1.StartInfo.LoadUserProfile = false;
-            process1.StartInfo.Password = null;
-            process1.StartInfo.StandardErrorEncoding = null;
-            process1.StartInfo.StandardInputEncoding = null;
-            process1.StartInfo.StandardOutputEncoding = null;
-            process1.StartInfo.UseCredentialsForNetworkingOnly = false;
-            process1.StartInfo.UserName = "";
-            process1.SynchronizingObject = this;
             // 
             // tableLayoutPanel2
             // 
@@ -362,7 +340,7 @@
             // 
             textBoxRecherche.Location = new Point(148, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(426, 31);
+            textBoxRecherche.Size = new Size(739, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -375,6 +353,82 @@
             label1.Size = new Size(131, 30);
             label1.TabIndex = 1;
             label1.Text = "Recherche :";
+            // 
+            // dataGridPostesJeu
+            // 
+            dataGridPostesJeu.AllowUserToAddRows = false;
+            dataGridPostesJeu.AllowUserToDeleteRows = false;
+            dataGridPostesJeu.AllowUserToOrderColumns = true;
+            dataGridPostesJeu.BackgroundColor = Color.White;
+            dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridPostesJeu.Location = new Point(899, 3);
+            dataGridPostesJeu.Name = "dataGridPostesJeu";
+            dataGridPostesJeu.ReadOnly = true;
+            dataGridPostesJeu.RowHeadersWidth = 62;
+            dataGridPostesJeu.Size = new Size(468, 301);
+            dataGridPostesJeu.TabIndex = 5;
+            // 
+            // process1
+            // 
+            process1.StartInfo.CreateNewProcessGroup = false;
+            process1.StartInfo.Domain = "";
+            process1.StartInfo.LoadUserProfile = false;
+            process1.StartInfo.Password = null;
+            process1.StartInfo.StandardErrorEncoding = null;
+            process1.StartInfo.StandardInputEncoding = null;
+            process1.StartInfo.StandardOutputEncoding = null;
+            process1.StartInfo.UseCredentialsForNetworkingOnly = false;
+            process1.StartInfo.UserName = "";
+            process1.SynchronizingObject = this;
+            // 
+            // groupBoxStatsEspaces
+            // 
+            groupBoxStatsEspaces.BackColor = Color.White;
+            groupBoxStatsEspaces.Controls.Add(labelStatEspacesLibres);
+            groupBoxStatsEspaces.Controls.Add(labelStatEspacesTotal);
+            groupBoxStatsEspaces.Controls.Add(labelTitreEspaces);
+            groupBoxStatsEspaces.Location = new Point(900, 440);
+            groupBoxStatsEspaces.Margin = new Padding(4, 5, 4, 5);
+            groupBoxStatsEspaces.Name = "groupBoxStatsEspaces";
+            groupBoxStatsEspaces.Padding = new Padding(4, 5, 4, 5);
+            groupBoxStatsEspaces.Size = new Size(457, 200);
+            groupBoxStatsEspaces.TabIndex = 7;
+            groupBoxStatsEspaces.TabStop = false;
+            // 
+            // labelStatEspacesLibres
+            // 
+            labelStatEspacesLibres.Font = new Font("Segoe UI", 9.75F);
+            labelStatEspacesLibres.Location = new Point(29, 142);
+            labelStatEspacesLibres.Margin = new Padding(4, 0, 4, 0);
+            labelStatEspacesLibres.Name = "labelStatEspacesLibres";
+            labelStatEspacesLibres.Size = new Size(400, 33);
+            labelStatEspacesLibres.TabIndex = 2;
+            labelStatEspacesLibres.Text = "Disponibles : 8";
+            labelStatEspacesLibres.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelStatEspacesTotal
+            // 
+            labelStatEspacesTotal.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
+            labelStatEspacesTotal.ForeColor = Color.FromArgb(255, 152, 0);
+            labelStatEspacesTotal.Location = new Point(29, 58);
+            labelStatEspacesTotal.Margin = new Padding(4, 0, 4, 0);
+            labelStatEspacesTotal.Name = "labelStatEspacesTotal";
+            labelStatEspacesTotal.Size = new Size(400, 75);
+            labelStatEspacesTotal.TabIndex = 1;
+            labelStatEspacesTotal.Text = "12";
+            labelStatEspacesTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelTitreEspaces
+            // 
+            labelTitreEspaces.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTitreEspaces.ForeColor = Color.FromArgb(100, 100, 100);
+            labelTitreEspaces.Location = new Point(29, 25);
+            labelTitreEspaces.Margin = new Padding(4, 0, 4, 0);
+            labelTitreEspaces.Name = "labelTitreEspaces";
+            labelTitreEspaces.Size = new Size(400, 33);
+            labelTitreEspaces.TabIndex = 0;
+            labelTitreEspaces.Text = "🏢 ESPACES";
+            labelTitreEspaces.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // UcEspaces
             // 
@@ -393,9 +447,10 @@
             panelForm.ResumeLayout(false);
             tableLayoutPanelCRUD.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
+            groupBoxStatsEspaces.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -423,5 +478,9 @@
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox textBoxRecherche;
         private Label label1;
+        private GroupBox groupBoxStatsEspaces;
+        private Label labelStatEspacesLibres;
+        private Label labelStatEspacesTotal;
+        private Label labelTitreEspaces;
     }
 }

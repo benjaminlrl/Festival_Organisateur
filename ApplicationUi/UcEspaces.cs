@@ -41,6 +41,7 @@ namespace ApplicationUi
             dataGridEspaces.DataSource = null;
             dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre);
             MEP_DataGrid();
+            ChargerStatistiques();
         }
 
         /// <summary>
@@ -51,6 +52,33 @@ namespace ApplicationUi
             dataGridPostesJeu.DataSource = null;
             dataGridPostesJeu.DataSource = _espaceSelectionee.PostesJeu.ToList();
             MEP_DataGridPostesJeu();
+        }
+
+        /// <summary>
+        /// Permet de charger les statistiques liées aux espaces, notamment le nombre total d'espaces 
+        /// et le nombre d'espaces libres (sans tournoi associé). 
+        /// Les statistiques sont affichées dans des labels dédiés, 
+        /// avec une indication visuelle (couleur) pour les espaces libres.
+        /// Cette méthode est appelée après le chargement des espaces pour garantir 
+        /// que les statistiques sont à jour.
+        /// </summary>
+        private void ChargerStatistiques()
+        {
+            // Un espace libre est un espae qui n'a pas de tournoi associé
+            int nbEspacesLibres = _serviceEspace.Lister(_filtre).Count(e => e.Tournois == null);
+
+            labelStatEspacesTotal.Text = $"{_serviceEspace.Lister("").Count()}";
+
+            if (nbEspacesLibres == 0)
+            {
+                labelStatEspacesLibres.Text = "Aucun espace libre";
+                labelStatEspacesLibres.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelStatEspacesLibres.Text = $"Disponibles : {nbEspacesLibres}";
+                labelStatEspacesLibres.ForeColor = Color.Green;
+            }
         }
 
         /// <summary>
@@ -82,35 +110,31 @@ namespace ApplicationUi
 
         private void dataGridEspaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            List<PosteJeu> postesJeu = new List<PosteJeu>();
-            // Le clic sur l'en-tête permet d'ordonner les resultats, mais ne doit pas déclencher la sélection d'un 
-            // Si le clic est sur la colonne Nom, on inverse l'ordre de tri et on recharge les espaces
-            if (e.RowIndex < 0) 
-            {
+            // Ignorer les clics sur l'en-tête (gérés pour le tri)
+            if (e.RowIndex < 0)
+            {   // TODO: ordonner sur les champs descriptions, superficie, capaciteMaxi
                 switch (e.ColumnIndex)
                 {
                     case 1:
                         if (_orderNom == "ASC")
                         {
-                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderByDescending(e => e.Nom).ToList();
+                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderByDescending(x => x.Nom).ToList();
                             _orderNom = "DESC";
                         }
                         else
                         {
-                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderBy(e => e.Nom).ToList();
+                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderBy(x => x.Nom).ToList();
                             _orderNom = "ASC";
                         }
+                        MEP_DataGrid();
                         break;
                     default:
                         return;
-                }                    
+                }
                 return;
             }
 
-            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre);
-                MEP_DataGrid();
-
-
+            // Ne pas recharger le DataSource lors d'un clic sur une cellule : cela réinitialise la sélection
             _espaceSelectionee = dataGridEspaces.Rows[e.RowIndex].DataBoundItem as Espace;
 
             if (_espaceSelectionee != null)
