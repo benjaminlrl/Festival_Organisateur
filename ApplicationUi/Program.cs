@@ -20,12 +20,12 @@ namespace ApplicationUi
             // Applique toutes les migrations en attente
                 context.Database.Migrate();
 
-            if (!context.Espace.Any())
+            if (!context.Espaces.Any())
             {
-                context.Espace.Add(new Espace 
+                context.Espaces.Add(new Espace 
                 { Nom = "Nintendo", Description = "Espace dédié aux jeux de switch",
                     Superficie = 30, CapaciteMaxi = 30 });
-                context.Espace.Add(new Espace
+                context.Espaces.Add(new Espace
                 { Nom = "X Box", Description = "Espace dédié aux jeux sur support Xbox One et Xbox",
                     Superficie = 50, CapaciteMaxi = 40 });
 

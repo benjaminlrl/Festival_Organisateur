@@ -115,14 +115,14 @@ namespace ApplicationUi
             dataGridTournois.BorderStyle = BorderStyle.None;
             dataGridTournois.ColumnHeadersHeight = 34;
             dataGridTournois.Dock = DockStyle.Bottom;
-            dataGridTournois.Location = new Point(4, 299);
+            dataGridTournois.Location = new Point(4, 333);
             dataGridTournois.Margin = new Padding(4);
             dataGridTournois.Name = "dataGridTournois";
             dataGridTournois.ReadOnly = true;
             dataGridTournois.RowHeadersWidth = 62;
             dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridTournois.Size = new Size(941, 417);
-            dataGridTournois.TabIndex = 3;
+            dataGridTournois.Size = new Size(941, 383);
+            dataGridTournois.TabIndex = 2;
             dataGridTournois.VirtualMode = true;
             dataGridTournois.CellClick += dataGridTournois_CellClick;
             // 
@@ -432,21 +432,6 @@ namespace ApplicationUi
             label1.Name = "label1";
             label1.Size = new Size(0, 26);
             label1.TabIndex = 6;
-            // 
-            // dataGridTournois
-            // 
-            dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridTournois.BackgroundColor = Color.White;
-            dataGridTournois.BorderStyle = BorderStyle.None;
-            dataGridTournois.Location = new Point(20, 320);
-            dataGridTournois.Margin = new Padding(4);
-            dataGridTournois.Name = "dataGridTournois";
-            dataGridTournois.ReadOnly = true;
-            dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridTournois.Size = new Size(900, 383);
-            dataGridTournois.TabIndex = 2;
-            dataGridTournois.CellClick += dataGridTournois_CellClick;
-
             // 
             // UcTournois
             // 

@@ -110,8 +110,8 @@ namespace Lib_Metier.Migrations
                 columns: table => new
                 {
                     login = table.Column<string>(type: "TEXT", nullable: false),
-                    mail = table.Column<string>(type: "TEXT", nullable: false),
                     motPasse = table.Column<string>(type: "TEXT", nullable: false),
+                    mail = table.Column<string>(type: "TEXT", nullable: false),
                     id_role = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
