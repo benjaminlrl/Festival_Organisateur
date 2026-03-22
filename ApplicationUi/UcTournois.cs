@@ -212,16 +212,6 @@ namespace ApplicationUi
 
         #endregion
 
-        private void dataGridTournois_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void buttonModifier_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
         /// <summary>
         /// Permet de filtrer la liste des tournois affichés en fonction du texte saisi dans la zone de recherche.
         /// </summary>

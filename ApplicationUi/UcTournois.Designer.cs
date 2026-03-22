@@ -124,7 +124,7 @@ namespace ApplicationUi
             dataGridTournois.Size = new Size(941, 417);
             dataGridTournois.TabIndex = 3;
             dataGridTournois.VirtualMode = true;
-            dataGridTournois.CellContentClick += dataGridTournois_CellContentClick;
+            dataGridTournois.CellClick += dataGridTournois_CellClick;
             // 
             // panelForm
             // 
@@ -390,6 +390,7 @@ namespace ApplicationUi
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
+            buttonEffacer.Click += buttonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -405,7 +406,7 @@ namespace ApplicationUi
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonModifier_Click_1;
+            buttonModifier.Click += buttonModifier_Click;
             // 
             // buttonSupprimer
             // 
@@ -421,6 +422,7 @@ namespace ApplicationUi
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
+            buttonSupprimer.Click += buttonSupprimer_Click;
             // 
             // label1
             // 
