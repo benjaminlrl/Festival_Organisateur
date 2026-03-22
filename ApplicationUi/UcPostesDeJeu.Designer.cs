@@ -319,7 +319,7 @@
             dataGridPostesJeu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridPostesJeu.Size = new Size(882, 225);
             dataGridPostesJeu.TabIndex = 6;
-            dataGridPostesJeu.CellContentClick += dataGridPostesJeu_CellContentClick;
+            dataGridPostesJeu.CellClick += dataGridPostesJeu_CellClick;
             // 
             // tableLayoutPanel1
             // 

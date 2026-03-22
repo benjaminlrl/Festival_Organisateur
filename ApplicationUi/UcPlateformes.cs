@@ -18,6 +18,7 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private Plateforme? _plateformeSelectionee = null;
         private string filtre;
+        private string ordreChamp;
         public UcPlateformes()
         {
             InitializeComponent();
@@ -26,6 +27,7 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _plateformeSelectionee != null;
             filtre = "";
             buttonEffacer.Text = " 🧽  Effacer";
+            ordreChamp = "ASC";
             ChargerPlateformes();
         }
         #region Evènements
@@ -72,11 +74,32 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
-        private void dataGridPlateformes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // on ne gère le clic que sur les lignes, pas sur les en-têtes
+            // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
+            {
+                var donnees = _servicePlateforme.Lister(filtre);
+
+                // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
+                // à des fonctions de sélection de clé
+                var map = new Dictionary<int, Func<Plateforme, object>>
+                {
+                    {dataGridPlateformes.Columns["Libelle"].Index, p => p.Libelle},
+                };
+
+                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                    return;
+
+                dataGridPlateformes.DataSource = ordreChamp == "ASC"
+                    ? donnees.OrderByDescending(keySelector).ToList()
+                    : donnees.OrderBy(keySelector).ToList();
+
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                MEP_DataGrid();
                 return;
+            }
 
             _plateformeSelectionee = dataGridPlateformes.Rows[e.RowIndex].DataBoundItem as Plateforme;
 
@@ -162,5 +185,10 @@ namespace ApplicationUi
 
         }
         #endregion
+
+        private void dataGridPlateformes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

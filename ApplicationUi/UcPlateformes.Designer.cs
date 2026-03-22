@@ -218,7 +218,7 @@
             dataGridPlateformes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridPlateformes.Size = new Size(397, 297);
             dataGridPlateformes.TabIndex = 6;
-            dataGridPlateformes.CellContentClick += dataGridPlateformes_CellContentClick;
+            dataGridPlateformes.CellClick += dataGridPlateformes_CellClick;
             // 
             // tableLayoutPanel1
             // 

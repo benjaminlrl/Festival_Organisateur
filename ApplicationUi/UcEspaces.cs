@@ -19,9 +19,9 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private Espace? _espaceSelectionee = null;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
-        private string filtre = "";
+        private string filtre;
         // Champ pour suivre l'ordre de tri actuel sur la colonne Nom
-        private string orderChamp = "ASC";
+        private string ordreChamp;
         public UcEspaces()
         {
             InitializeComponent();
@@ -29,6 +29,8 @@ namespace ApplicationUi
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
             buttonEffacer.Text = "🧽  Effacer";
+            ordreChamp = "ASC";
+            filtre = "";
             ChargerEspaces();
         }
         #region Evènements
@@ -80,39 +82,7 @@ namespace ApplicationUi
                 labelStatEspacesLibres.ForeColor = Color.Green;
             }
         }
-        /// <summary>
-        /// Trie et recharge les données du contrôle DataGrid en fonction du champ spécifié, en alternant l'ordre
-        /// croissant et décroissant à chaque appel.
-        /// </summary>
-        /// <remarks>L'ordre de tri alterne entre croissant et décroissant à chaque appel de la méthode.
-        /// Utilisez cette méthode pour permettre à l'utilisateur de trier dynamiquement les données
-        /// affichées.</remarks>
-        /// <param name="champ">Le nom du champ selon lequel trier les données affichées dans le DataGrid. Ce paramètre doit 
-        /// correspondre à une propriété valide des éléments de la source de données.</param>
-        private void ChargerDataGridOrdonner(string champ)
-        {
-            var donnees = _serviceEspace.Lister(filtre);
-            // Dictionnaire de sélecteurs pour les champs de tri,
-            // permettant d'associer chaque champ à une fonction d'extraction
-            // de la valeur correspondante dans l'entité Espace.
-            var selecteurs = new Dictionary<string, Func<Espace, object>>
-            {
-                { "Nom",       e => e.Nom   },
-                { "Description",   e => e.Description  },
-                { "Superficie",   e => e.Superficie  },
-                { "CapaciteMaxi",  e => e.CapaciteMaxi  },
-            };
 
-            if (!selecteurs.TryGetValue(champ, out var selecteur)) return;
-
-            // Trie par ordre
-            dataGridEspaces.DataSource = orderChamp == "ASC"
-                ? donnees.OrderByDescending(selecteur).ToList()
-                : donnees.OrderBy(selecteur).ToList();
-
-            // Change la valeur de l'ordre dybnamiquement
-            orderChamp = orderChamp == "ASC" ? "DESC" : "ASC";
-        }
 
         /// <summary>
         /// Resets all tournament-related input fields and controls to their default values.
@@ -141,32 +111,30 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
-        private void dataGridEspaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridEspaces_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {   // ordonner sur les champs descriptions, superficie, capaciteMaxi
-                switch (e.ColumnIndex)
+                var donnees = _serviceEspace.Lister(filtre);
+                var map = new Dictionary<int, Func<Espace, object>>
                 {
-                    case 1:
-                        ChargerDataGridOrdonner("Nom");
-                        MEP_DataGrid();
-                        break;
-                    case 2:
-                        ChargerDataGridOrdonner("Description");
-                        MEP_DataGrid();
-                        break;
-                    case 3:
-                        ChargerDataGridOrdonner("Superficie");
-                        MEP_DataGrid();
-                        break;
-                    case 4:
-                        ChargerDataGridOrdonner("CapaciteMaxi");
-                        MEP_DataGrid();
-                        break;
-                    default:
-                        return;
-                }
+                    {dataGridEspaces.Columns["Nom"].Index, e => e.Nom },
+                    {dataGridEspaces.Columns["Description"].Index, e => e.Description},
+                    {dataGridEspaces.Columns["Superficie"].Index, e => e.Superficie},
+                    {dataGridEspaces.Columns["CapaciteMaxi"].Index, e => e.CapaciteMaxi},
+                };
+                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                    return;
+                // Appliquer le tri
+                dataGridEspaces.DataSource = ordreChamp == "ASC"
+                    ? donnees.OrderByDescending(keySelector).ToList()
+                    : donnees.OrderBy(keySelector).ToList();
+
+                // Inverser l’ordre
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                MEP_DataGrid();
                 return;
             }
 
@@ -347,6 +315,11 @@ namespace ApplicationUi
         }
 
         private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dataGridEspaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

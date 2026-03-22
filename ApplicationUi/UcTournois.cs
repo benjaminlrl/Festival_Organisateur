@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace ApplicationUi
 {
@@ -21,6 +22,7 @@ namespace ApplicationUi
         private String statutSelectionne = "Planifié";
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
+        private string ordreChamp;
 
 
         public UcTournois()
@@ -34,6 +36,7 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _tournoiSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
             filtre = "";
+            ordreChamp = "ASC";
         }
 
         #region Evènements
@@ -162,10 +165,35 @@ namespace ApplicationUi
         }
         private void dataGridTournois_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // on ne gère le clic que sur les lignes, pas sur les en-têtes
+            // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
-                return;
+            {   // ordonner sur les champs descriptions, superficie, capaciteMaxi
+                var donnees = _serviceTournoi.Lister(filtre);
+                
+                // Utiliser un dictionnaire
+                var map = new Dictionary<int, Func<Tournoi, object>>
+                {
+                    {dataGridTournois.Columns["DateHeure"].Index, t => t.DateHeure},
+                    {dataGridTournois.Columns["NbParticipants"].Index, t => t.NbParticipants},
+                    {dataGridTournois.Columns["DureePrevue"].Index, t => t.DureePrevue},
+                    {dataGridTournois.Columns["Nom"].Index, t => t.Nom},
+                    {dataGridTournois.Columns["Statut"].Index, t => t.Statut}
+                };
 
+                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                    return;
+
+                dataGridTournois.DataSource = ordreChamp == "ASC"
+                    ? donnees.OrderByDescending(keySelector).ToList()
+                    : donnees.OrderBy(keySelector).ToList();
+
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                MEP_DataGrid();
+                return;
+            }
+
+            // Ne pas recharger le DataSource lors d'un clic sur une cellule : cela réinitialise la sélection
             _tournoiSelectionne = dataGridTournois.Rows[e.RowIndex].DataBoundItem as Tournoi;
 
             if (_tournoiSelectionne != null)

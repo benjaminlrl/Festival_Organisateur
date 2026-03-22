@@ -23,7 +23,7 @@ namespace ApplicationUi
         private bool fonctionnelSelectionne;
         private PosteJeu? _posteJeuSelectionne;
         private string filtre;
-        private string orderChamp;
+        private string ordreChamp;
 
         public UcPostesDeJeu()
         {
@@ -35,7 +35,7 @@ namespace ApplicationUi
             _posteJeuSelectionne = null;
             fonctionnelSelectionne = false;
             filtre = "";
-            orderChamp = "ASC";
+            ordreChamp = "ASC";
             ChargerPlateformes();
             ChargerEspaces();
             ChargerPostesDeJeu();
@@ -72,40 +72,6 @@ namespace ApplicationUi
             // charge les plateformes dans le comboBox et affiche le libellé tout en conservant l'id en valeur
             comboBoxPlateforme.DisplayMember = "Libelle";
             comboBoxPlateforme.ValueMember = "IdPlateforme";
-        }
-
-        /// <summary>
-        /// Trie et recharge les données du contrôle DataGrid en fonction du champ spécifié, en alternant l'ordre
-        /// croissant et décroissant à chaque appel.
-        /// </summary>
-        /// <remarks>L'ordre de tri alterne entre croissant et décroissant à chaque appel de la méthode.
-        /// Utilisez cette méthode pour permettre à l'utilisateur de trier dynamiquement les données
-        /// affichées.</remarks>
-        /// <param name="champ">Le nom du champ selon lequel trier les données affichées dans le DataGrid. Ce paramètre doit 
-        /// correspondre à une propriété valide des éléments de la source de données.</param>
-        private void ChargerDataGridOrdonner(string champ)
-        {
-            var donnees = _servicePosteJeu.Lister(filtre);
-            // Dictionnaire de sélecteurs pour les champs de tri,
-            // permettant d'associer chaque champ à une fonction d'extraction
-            // de la valeur correspondante dans l'entité Espace.
-            var selecteurs = new Dictionary<string, Func<PosteJeu, object>>
-            {
-                { "Reference",       p => p.Reference   },
-                { "Fonctionnel",   p => p.Fonctionnel  },
-                { "IdPlateforme",   p => p.IdPlateforme  },
-                { "IdEspace",   p => p.IdEspace  },
-            };
-
-            if (!selecteurs.TryGetValue(champ, out var selecteur)) return;
-
-            // Trie par ordre
-            dataGridPostesJeu.DataSource = orderChamp == "ASC"
-                ? donnees.OrderByDescending(selecteur).ToList()
-                : donnees.OrderBy(selecteur).ToList();
-
-            // Change la valeur de l'ordre dybnamiquement
-            orderChamp = orderChamp == "ASC" ? "DESC" : "ASC";
         }
 
         /// <summary>
@@ -162,36 +128,40 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
             dataGridPostesJeu.Columns["Plateforme"].Visible = false;
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"].HeaderText = "Espace";
+            dataGridPostesJeu.Columns["NomPlateforme"].HeaderText = "Plateforme";
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
-        private void dataGridPostesJeu_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridPostesJeu_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // on ne gère le clic que sur les lignes, pas sur les en-têtes
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
+            // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
-            {   // TODO: ordonner sur les champs idEspace et idPlateforme en cliquant sur les en-têtes de ces colonnes
-                switch (e.ColumnIndex)
+            {
+                var donnees = _servicePosteJeu.Lister(filtre);
+
+                // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
+                // à des fonctions de sélection de clé
+                var map = new Dictionary<int, Func<PosteJeu, object>>
                 {
-                    case 1:
-                        ChargerDataGridOrdonner("Reference");
-                        MEP_DataGrid();
-                        break;
-                    case 2:
-                        ChargerDataGridOrdonner("Fonctionnel");
-                        MEP_DataGrid();
-                        break;
-                    case 3:
-                        ChargerDataGridOrdonner("IdPl ateforme");
-                        MEP_DataGrid();
-                        break;
-                    case 4:
-                        ChargerDataGridOrdonner("IdEspace");
-                        MEP_DataGrid();
-                        break;
-                    default:
-                        return;
-                }
+                    {dataGridPostesJeu.Columns["Reference"].Index, p => p.Reference},
+                    {dataGridPostesJeu.Columns["Fonctionnel"].Index, p => p.Fonctionnel},
+                    {dataGridPostesJeu.Columns["NomEspace"].Index, p => p.NomEspace},
+                    {dataGridPostesJeu.Columns["Nomplateforme"].Index, p => p.NomPlateforme},
+                };
+
+                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                    return;
+
+                dataGridPostesJeu.DataSource = ordreChamp == "ASC"
+                    ? donnees.OrderByDescending(keySelector).ToList()
+                    : donnees.OrderBy(keySelector).ToList();
+
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                MEP_DataGrid();
                 return;
             }
 
