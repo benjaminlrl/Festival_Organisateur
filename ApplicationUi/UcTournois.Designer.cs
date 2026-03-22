@@ -388,7 +388,7 @@ namespace ApplicationUi
             buttonEffacer.Name = "buttonEffacer";
             buttonEffacer.Size = new Size(150, 45);
             buttonEffacer.TabIndex = 3;
-            buttonEffacer.Text = " Effacer";
+            buttonEffacer.Text = " \U0001f9fd  Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
             buttonEffacer.Click += buttonEffacer_Click;
             // 
@@ -432,6 +432,21 @@ namespace ApplicationUi
             label1.Name = "label1";
             label1.Size = new Size(0, 26);
             label1.TabIndex = 6;
+            // 
+            // dataGridTournois
+            // 
+            dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridTournois.BackgroundColor = Color.White;
+            dataGridTournois.BorderStyle = BorderStyle.None;
+            dataGridTournois.Location = new Point(20, 320);
+            dataGridTournois.Margin = new Padding(4);
+            dataGridTournois.Name = "dataGridTournois";
+            dataGridTournois.ReadOnly = true;
+            dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridTournois.Size = new Size(900, 383);
+            dataGridTournois.TabIndex = 2;
+            dataGridTournois.CellClick += dataGridTournois_CellClick;
+
             // 
             // UcTournois
             // 
