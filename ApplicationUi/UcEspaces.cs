@@ -138,7 +138,7 @@ namespace ApplicationUi
 
         private void MEP_DataGridPostesJeu()
         {
-             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void dataGridEspaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -342,6 +342,11 @@ namespace ApplicationUi
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
         {
 
         }

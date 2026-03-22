@@ -47,8 +47,8 @@
             tableLayoutPanelCRUD = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
-            textBoxRecherche = new TextBox();
             label1 = new Label();
+            textBoxRecherche = new TextBox();
             dataGridPostesJeu = new DataGridView();
             groupBoxStatsEspaces = new GroupBox();
             labelStatEspacesLibres = new Label();
@@ -325,10 +325,10 @@
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.2921352F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.70786F));
-            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.7640457F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.2359543F));
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
+            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
             tableLayoutPanel2.Location = new Point(3, 332);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -336,14 +336,7 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Size = new Size(890, 48);
             tableLayoutPanel2.TabIndex = 6;
-            // 
-            // textBoxRecherche
-            // 
-            textBoxRecherche.Location = new Point(148, 3);
-            textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(739, 31);
-            textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            tableLayoutPanel2.Paint += tableLayoutPanel2_Paint;
             // 
             // label1
             // 
@@ -354,6 +347,14 @@
             label1.Size = new Size(131, 30);
             label1.TabIndex = 1;
             label1.Text = "Recherche :";
+            // 
+            // textBoxRecherche
+            // 
+            textBoxRecherche.Location = new Point(170, 3);
+            textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.Size = new Size(717, 31);
+            textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // dataGridPostesJeu
             // 

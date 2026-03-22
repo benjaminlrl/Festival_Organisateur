@@ -41,6 +41,9 @@
             label1 = new Label();
             dataGridPlateformes = new DataGridView();
             tableLayoutPanel1 = new TableLayoutPanel();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            label2 = new Label();
+            textBoxRecherche = new TextBox();
             dataGridPostesJeu = new DataGridView();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
@@ -48,6 +51,7 @@
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridPlateformes).BeginInit();
             tableLayoutPanel1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
             SuspendLayout();
             // 
@@ -204,13 +208,13 @@
             dataGridPlateformes.BackgroundColor = Color.White;
             dataGridPlateformes.BorderStyle = BorderStyle.None;
             dataGridPlateformes.ColumnHeadersHeight = 34;
-            dataGridPlateformes.Location = new Point(4, 361);
+            dataGridPlateformes.Location = new Point(4, 309);
             dataGridPlateformes.Margin = new Padding(4);
             dataGridPlateformes.Name = "dataGridPlateformes";
             dataGridPlateformes.ReadOnly = true;
             dataGridPlateformes.RowHeadersWidth = 62;
             dataGridPlateformes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridPlateformes.Size = new Size(900, 349);
+            dataGridPlateformes.Size = new Size(900, 401);
             dataGridPlateformes.TabIndex = 6;
             dataGridPlateformes.CellContentClick += dataGridPlateformes_CellContentClick;
             // 
@@ -219,16 +223,51 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.2895355F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.7104664F));
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
-            tableLayoutPanel1.Controls.Add(dataGridPlateformes, 0, 1);
             tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 1, 0);
+            tableLayoutPanel1.Controls.Add(dataGridPlateformes, 0, 2);
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 88.20375F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 11.7962465F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 408F));
             tableLayoutPanel1.Size = new Size(1317, 714);
             tableLayoutPanel1.TabIndex = 7;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.7640457F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.2359543F));
+            tableLayoutPanel2.Controls.Add(label2, 0, 0);
+            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
+            tableLayoutPanel2.Dock = DockStyle.Bottom;
+            tableLayoutPanel2.Location = new Point(3, 272);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(906, 30);
+            tableLayoutPanel2.TabIndex = 8;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(3, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(131, 30);
+            label2.TabIndex = 1;
+            label2.Text = "Recherche :";
+            // 
+            // textBoxRecherche
+            // 
+            textBoxRecherche.Location = new Point(173, 3);
+            textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.Size = new Size(717, 31);
+            textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // dataGridPostesJeu
             // 
@@ -239,7 +278,8 @@
             dataGridPostesJeu.Location = new Point(915, 3);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
             dataGridPostesJeu.RowHeadersWidth = 62;
-            dataGridPostesJeu.Size = new Size(399, 351);
+            tableLayoutPanel1.SetRowSpan(dataGridPostesJeu, 2);
+            dataGridPostesJeu.Size = new Size(399, 299);
             dataGridPostesJeu.TabIndex = 7;
             // 
             // UcPlateformes
@@ -258,6 +298,8 @@
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridPlateformes).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
             ResumeLayout(false);
         }
@@ -284,5 +326,8 @@
         private DataGridView dataGridPlateformes;
         private TableLayoutPanel tableLayoutPanel1;
         private DataGridView dataGridPostesJeu;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Label label2;
+        private TextBox textBoxRecherche;
     }
 }

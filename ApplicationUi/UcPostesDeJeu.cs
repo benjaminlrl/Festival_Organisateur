@@ -51,7 +51,7 @@ namespace ApplicationUi
         private void ChargerPostesDeJeu()
         {
             dataGridPostesJeu.DataSource = null;
-            dataGridPostesJeu.DataSource = _servicePosteJeu.Lister("");
+            dataGridPostesJeu.DataSource = _servicePosteJeu.Lister(filtre);
             MEP_DataGrid();
             ChargerStatistiques();
         }
@@ -119,7 +119,7 @@ namespace ApplicationUi
         private void ChargerStatistiques()
         {
             // Un espace libre est un espae qui n'a pas de tournoi associé
-            int nbPostesJeuFonctionnels = _servicePosteJeu.Lister(filtre).Count(e => e.Fonctionnel == true);
+            int nbPostesJeuFonctionnels = _servicePosteJeu.Lister("").Count(e => e.Fonctionnel == true);
 
             labelStatPostesJeuTotal.Text = $"{_servicePosteJeu.Lister("").Count()}";
 
@@ -235,6 +235,18 @@ namespace ApplicationUi
         {
             fonctionnelSelectionne = true;
         }
+
+        /// <summary>
+        /// Permet de filtrer les postes de jeu affichés dans le DataGrid en 
+        /// fonction du texte saisi dans la zone de recherche.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            filtre = textBoxRecherche.Text;
+            ChargerPostesDeJeu();
+        }
         #endregion
         #region Validations
         private bool ValiderPosteJeu()
@@ -322,5 +334,6 @@ namespace ApplicationUi
         }
 
         #endregion
+
     }
 }

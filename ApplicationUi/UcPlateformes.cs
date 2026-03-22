@@ -40,7 +40,7 @@ namespace ApplicationUi
         {
             dataGridPostesJeu.DataSource = null;
             dataGridPostesJeu.DataSource = _plateformeSelectionee.PostesJeu.ToList();
-            MEP_DataGrid();
+            MEP_DataGridPostesJeu();
         }
 
         /// <summary>
@@ -57,7 +57,17 @@ namespace ApplicationUi
         // TODO: Modifier les données de la grille pour afficher les informations du poste de jeu 
         {
             dataGridPlateformes.Columns["idPlateforme"].Visible = false;
-            dataGridPlateformes.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPlateformes.Columns["PostesJeu"].Visible = false;
+        }
+
+        private void MEP_DataGridPostesJeu()
+        {
+            dataGridPostesJeu.Columns["Espace"].Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
+            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
+            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void dataGridPlateformes_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -86,6 +96,19 @@ namespace ApplicationUi
         {
             return true;
         }
+
+        /// <summary>
+        /// Permet de filtrer les résultats affichés dans la grille des plateformes 
+        /// en fonction du texte saisi dans la zone de recherche.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            filtre = textBoxRecherche.Text;
+            ChargerPlateformes();
+        }
+
         #endregion
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
