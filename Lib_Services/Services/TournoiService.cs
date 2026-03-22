@@ -34,7 +34,12 @@ namespace Lib_Services.Services
                     .Include(t => t.Espace)
                     .ToList();
             return _context.Tournois
-                    .Where(t => t.Nom.Contains(filtre))
+                    .Where(t => t.Nom.Contains(filtre)
+                        || t.NbParticipants.ToString().Contains(filtre)
+                        || t.DureePrevue.ToString().Contains(filtre)
+                        || t.DateHeure.ToString().Contains(filtre)
+                        || t.Statut.Contains(filtre)
+                        || t.Espace.Nom.Contains(filtre))
                     .Include(t => t.Espace)
                     .ToList();
         }

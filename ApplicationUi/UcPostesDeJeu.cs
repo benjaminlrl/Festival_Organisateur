@@ -158,6 +158,8 @@ namespace ApplicationUi
         // et masquer les colonnes idEspace et idPlateforme
         {
             dataGridPostesJeu.Columns["Espace"].Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
             dataGridPostesJeu.Columns["Plateforme"].Visible = false;
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;

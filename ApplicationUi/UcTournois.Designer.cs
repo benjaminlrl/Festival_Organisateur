@@ -18,6 +18,9 @@ namespace ApplicationUi
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            label2 = new Label();
+            textBoxRecherche = new TextBox();
             dataGridTournois = new DataGridView();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
@@ -44,6 +47,7 @@ namespace ApplicationUi
             buttonSupprimer = new Button();
             label1 = new Label();
             tableLayoutPanel1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
@@ -58,16 +62,51 @@ namespace ApplicationUi
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(dataGridTournois, 0, 1);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
+            tableLayoutPanel1.Controls.Add(dataGridTournois, 0, 2);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 86.44068F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 13.5593224F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 424F));
             tableLayoutPanel1.Size = new Size(949, 720);
             tableLayoutPanel1.TabIndex = 3;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.7640457F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.2359543F));
+            tableLayoutPanel2.Controls.Add(label2, 0, 0);
+            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
+            tableLayoutPanel2.Dock = DockStyle.Bottom;
+            tableLayoutPanel2.Location = new Point(3, 262);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(943, 30);
+            tableLayoutPanel2.TabIndex = 9;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(3, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(131, 30);
+            label2.TabIndex = 1;
+            label2.Text = "Recherche :";
+            // 
+            // textBoxRecherche
+            // 
+            textBoxRecherche.Location = new Point(179, 3);
+            textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.Size = new Size(717, 31);
+            textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // dataGridTournois
             // 
@@ -76,14 +115,15 @@ namespace ApplicationUi
             dataGridTournois.BorderStyle = BorderStyle.None;
             dataGridTournois.ColumnHeadersHeight = 34;
             dataGridTournois.Dock = DockStyle.Bottom;
-            dataGridTournois.Location = new Point(4, 364);
+            dataGridTournois.Location = new Point(4, 299);
             dataGridTournois.Margin = new Padding(4);
             dataGridTournois.Name = "dataGridTournois";
             dataGridTournois.ReadOnly = true;
             dataGridTournois.RowHeadersWidth = 62;
             dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridTournois.Size = new Size(941, 352);
+            dataGridTournois.Size = new Size(941, 417);
             dataGridTournois.TabIndex = 3;
+            dataGridTournois.VirtualMode = true;
             dataGridTournois.CellContentClick += dataGridTournois_CellContentClick;
             // 
             // panelForm
@@ -95,7 +135,7 @@ namespace ApplicationUi
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(941, 352);
+            panelForm.Size = new Size(941, 247);
             panelForm.TabIndex = 2;
             // 
             // tableLayoutPanel
@@ -402,6 +442,8 @@ namespace ApplicationUi
             Name = "UcTournois";
             Size = new Size(949, 720);
             tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
@@ -443,6 +485,9 @@ namespace ApplicationUi
         private Button buttonModifier;
         private Button buttonSupprimer;
         private Label label1;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Label label2;
+        private TextBox textBoxRecherche;
     }
     }
 

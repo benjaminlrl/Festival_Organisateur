@@ -2,6 +2,7 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private String statutSelectionne = "Planifié";
         private Tournoi? _tournoiSelectionne = null;
+        private string filtre;
 
 
         public UcTournois()
@@ -31,13 +33,14 @@ namespace ApplicationUi
             buttonModifier.Enabled = _tournoiSelectionne != null;
             buttonSupprimer.Enabled = _tournoiSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
+            filtre = "";
         }
 
         #region Evènements
         private void ChargerTournois()
         {
             dataGridTournois.DataSource = null;
-            dataGridTournois.DataSource = _serviceTournoi.Lister("");
+            dataGridTournois.DataSource = _serviceTournoi.Lister(filtre);
             MEP_DataGrid();
         }
         private void MEP_DataGrid()
@@ -217,6 +220,17 @@ namespace ApplicationUi
         private void buttonModifier_Click_1(object sender, EventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// Permet de filtrer la liste des tournois affichés en fonction du texte saisi dans la zone de recherche.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            filtre = textBoxRecherche.Text;
+            ChargerTournois();
         }
     }
 }

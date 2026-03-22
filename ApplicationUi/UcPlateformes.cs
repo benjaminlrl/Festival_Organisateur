@@ -67,6 +67,8 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["IdEspace"].Visible = false;
             dataGridPostesJeu.Columns["Plateforme"].Visible = false;
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"].Visible = false;
+            dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
