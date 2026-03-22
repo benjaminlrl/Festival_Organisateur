@@ -13,5 +13,6 @@ namespace Lib_Services.Interfaces
         List<Organisateur> Lister();
         Organisateur? Obtenir(string Login);
         bool EstIdentique(string motPasse, string Login);
+        string estAutoriser(Organisateur organisateur, Organisateur.LesUC unUC, string action);
     }
 }

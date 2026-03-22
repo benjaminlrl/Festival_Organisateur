@@ -34,7 +34,7 @@ namespace ApplicationUi
 
         private void ChargerOrganisateurs()
         {
-            // On charge la liste des organisateurs dans le dataGrid (sans les admins)
+            // On charge la liste des organisateurs dans le dataGrid (sans les logins contenant admin)
             dataGridOrganisateurs.DataSource = null;
             var listeOrganisateur = _serviceOrganisateur.Lister()
                 .Where(o => !o.Login.Contains("admin"))
@@ -91,13 +91,13 @@ namespace ApplicationUi
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
             // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel organisateur
-            if (IdentifiantValide(textBoxLogin.Text) == false)
+            if (Validations.IdentifiantValide(textBoxLogin.Text) == false)
             {
                 labelError.Text = "Le login doit contenir entre 3 et 12 caractères.";
                 return;
             }
-            if (MdpValide(textBoxMotDePasse.Text) != "true")
-                labelError.Text = MdpValide(textBoxMotDePasse.Text);
+            if (Validations.MdpValide(textBoxMotDePasse.Text) != "true")
+                labelError.Text = Validations.MdpValide(textBoxMotDePasse.Text);
 
             _serviceOrganisateur.Creer(new Organisateur
             {
@@ -113,14 +113,14 @@ namespace ApplicationUi
         private void buttonModifier_Click(object sender, EventArgs e)
         {
             // On check si l'identifiant & le mot de passe sont valides, puis on modifie l'organisateur selectionné
-            if (IdentifiantValide(textBoxLogin.Text) == false)
+            if (Validations.IdentifiantValide(textBoxLogin.Text) == false)
             {
                 labelError.Text = "Le login doit contenir entre 3 et 12 caractères.";
                 return;
             }
             if(textBoxMotDePasse.Text != "")
-                if (MdpValide(textBoxMotDePasse.Text) != "true")
-                    labelError.Text = MdpValide(textBoxMotDePasse.Text);
+                if (Validations.MdpValide(textBoxMotDePasse.Text) != "true")
+                    labelError.Text = Validations.MdpValide(textBoxMotDePasse.Text);
 
             // Modifiée seulement les valeurs qui ont été modifiées
             if (textBoxLogin.Text != "" || _organisateurSelectionne.Login != textBoxLogin.Text)
@@ -170,30 +170,6 @@ namespace ApplicationUi
 
             buttonModifier.Enabled = _organisateurSelectionne != null;
             buttonSupprimer.Enabled = _organisateurSelectionne != null;
-        }
-
-        #endregion
-
-        #region Validations
-
-        public static string MdpValide(string motDePasse)
-        {
-            if (motDePasse.Length < 12)
-                return "Le mot de passe doit contenir plus de 12 caractères.";
-            if (motDePasse.Any(char.IsUpper) == false)
-                return "Le mot de passe doit contenir au moins 1 majuscule.";
-            if (motDePasse.Any(char.IsDigit) == false)
-                return "Le mot de passe doit contenir au moins 1 chiffre.";
-            if (motDePasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
-                return "Le mot de passe doit contenir au moins 1 caractère spéciale.";
-            return "true";
-        }
-
-        public static bool IdentifiantValide(string identifiant)
-        {
-            if (identifiant.Length < 3 || identifiant.Length > 12)
-                return false;
-            return true;
         }
 
         #endregion

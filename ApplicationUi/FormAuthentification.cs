@@ -1,4 +1,5 @@
-﻿using Lib_Metier.Data.Configurations;
+﻿using Lib_Entities.Entities;
+using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
 using System;
@@ -15,6 +16,7 @@ namespace ApplicationUi
     public partial class FormAuthentification : Form
     {
         private readonly IOrganisateurService _organisateurService;
+        private Organisateur organisateurConnecte;
         public FormAuthentification()
         {
             InitializeComponent();
@@ -37,7 +39,8 @@ namespace ApplicationUi
             if (_organisateurService.EstIdentique(txtPassword.Text, txtUsername.Text.Trim()))
             {
                 this.Hide();
-                new FormMain().Show();
+                organisateurConnecte = _organisateurService.Obtenir(txtUsername.Text);
+                new FormMain(organisateurConnecte).Show();
             }else
             {
                 labelError.Text = "Login ou mot de passe incorrect.";

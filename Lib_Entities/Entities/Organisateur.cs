@@ -44,5 +44,14 @@ namespace Lib_Entities.Entities
         /// Id du rôle de l'organisateur.
         /// </summary>
         public int IdRole { get; set; }
+
+        /// <summary>
+        /// Les différents UserController pour les permissions.
+        /// </summary>
+        public enum LesUC
+        {
+            UcOrganisateur,
+            UcTournois
+        }
     }
 }

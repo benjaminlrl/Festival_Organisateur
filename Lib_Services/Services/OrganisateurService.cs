@@ -102,6 +102,79 @@ namespace Lib_Services.Services
                 return false;
             return BCrypt.Net.BCrypt.Verify(motDePasse, organisateur.motPasse);
         }
+        /// <summary>
+        /// Retourne si l'organisateur a accès au UserController (unUC) demandée avec telle action
+        /// Consulter - Modifier - Supprimer
+        /// </summary>
+        /// <returns>"true" (en string) si il a l'autorisation, sinon un msg d'erreur.</returns>
+        public string estAutoriser(Organisateur unOrganisateur, Organisateur.LesUC unUC, string action)
+        {
+            Role role = unOrganisateur.Role;
+            // Les administrateurs ont le droit à tout
+            if (role.Libelle == "Administrateur")
+            {
+                return "true";
+            }
+
+            // Role Gestionnaire de stock
+            if (role.Libelle == "Gestionnaire de Stock")
+            {
+                if (action == "Consulter")
+                {
+                    if (unUC == Organisateur.LesUC.UcTournois) //Rajouter interface Jeu,Espace,PosteJeu,Plateforme, Lot & LotComposant
+                    {
+                        return "true";
+                    }
+                }
+                else if (action == "Modifier" || action == "Supprimer")
+                {
+                    if (unUC == Organisateur.LesUC.UcTournois) //Modifier en Lot & LotComposant
+                    {
+                        return "true";
+                    }
+                }
+            }
+
+            //Role Gestionnaire de l'Espace
+            if (role.Libelle == "Gestionnaire de l'Espace")
+            {
+                if (action == "Consulter")
+                {
+                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Plateforme,Jeu,Participer
+                    {
+                        return "true";
+                    }
+                }
+                else if (action == "Modifier" || action == "Supprimer")
+                {
+                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Espace,PosteJeu
+                    {
+                        return "true";
+                    }
+                }
+            }
+
+            //Role Gestionnaire des tournois
+            if (role.Libelle == "Gestionnaire des tournois")
+            {
+                if (action == "Consulter")
+                {
+                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Participer, SoumisVote, Espace,
+                                                       //PosteJeu, Plateforme, Jeu, Lot, Voter
+                    {
+                        return "true";
+                    }
+                }
+                else if (action == "Modifier" || action == "Supprimer")
+                {
+                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Participer, SoumisVote
+                    {
+                        return "true";
+                    }
+                }
+            }
+            return "error|Vous n'avez pas les droits d'accès.";
+        }
     }
 
 }

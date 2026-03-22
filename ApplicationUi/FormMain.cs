@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Lib_Entities.Entities;
+using Lib_Metier.Data.Configurations;
+using Lib_Services.Interfaces;
+using Lib_Services.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,9 +14,12 @@ namespace ApplicationUi
 {
     public partial class FormMain : Form
     {
-        public FormMain()
+        private readonly IOrganisateurService _organisateurService;
+        private readonly Organisateur organisateurConnecte;
+        public FormMain(Organisateur organisateurConnecte)
         {
             InitializeComponent();
+            _organisateurService = new OrganisateurService(new ApplicationDbContext());
         }
 
 
@@ -44,7 +51,11 @@ namespace ApplicationUi
         // ===============================
         private void btnTournois_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcTournois(), "Gestion des tournois");
+
+            if (_organisateurService.estAutoriser(organisateurConnecte, Organisateur.LesUC.UcTournois, "Consultation") == "true")
+            {
+                LoadUserControl(new UcTournois(), "Gestion des tournois");
+            }
         }
 
         private void btnQuitter_Click(object? sender, EventArgs e)
@@ -54,7 +65,10 @@ namespace ApplicationUi
 
         private void btnOrganisateur_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcOrganisateur(), "Gestion des Organisateurs");
+            if (_organisateurService.estAutoriser(organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Consultation") == "true")
+            {
+                LoadUserControl(new UcOrganisateur(), "Gestion des Organisateurs");
+            }
         }
     }
 }
