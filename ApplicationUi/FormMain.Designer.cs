@@ -67,6 +67,7 @@ namespace ApplicationUi
             btnPlateformes.TabIndex = 0;
             btnPlateformes.Text = "      Plateformes";
             btnPlateformes.UseVisualStyleBackColor = false;
+            btnPlateformes.Click += btnPlateformes_Click;
             // 
             // btnPostes
             // 
@@ -84,6 +85,7 @@ namespace ApplicationUi
             btnPostes.TabIndex = 1;
             btnPostes.Text = "        Postes de jeu";
             btnPostes.UseVisualStyleBackColor = false;
+            btnPostes.Click += btnPostes_Click;
             // 
             // btnEspaces
             // 
@@ -102,6 +104,7 @@ namespace ApplicationUi
             btnEspaces.TabIndex = 2;
             btnEspaces.Text = "Espaces";
             btnEspaces.UseVisualStyleBackColor = false;
+            btnEspaces.Click += btnEspaces_Click;
             // 
             // btnTournois
             // 

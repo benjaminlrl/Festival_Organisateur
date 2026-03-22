@@ -25,12 +25,23 @@ namespace Lib_Services.Services
         /// Retourne la liste complète des tournois avec l'espace associé chargé.
         /// </summary>
         /// <returns>Liste des tournois.</returns>
-        public List<Tournoi> Lister()
+        /// <param name="filtre">Optionnel : filtre .</param>
+        public List<Tournoi> Lister(string filtre = "")
         {
-            // Include(e => e.Espace) pour éviter le chargement paresseux lors de l'affichage.
+            // Include(t => t.Espace) pour éviter le chargement paresseux lors de l'affichage.
+            if (string.IsNullOrWhiteSpace(filtre))
+                return _context.Tournois
+                    .Include(t => t.Espace)
+                    .ToList();
             return _context.Tournois
-                           .Include(t => t.Espace)
-                           .ToList();
+                    .Where(t => t.Nom.Contains(filtre)
+                        || t.NbParticipants.ToString().Contains(filtre)
+                        || t.DureePrevue.ToString().Contains(filtre)
+                        || t.DateHeure.ToString().Contains(filtre)
+                        || t.Statut.Contains(filtre)
+                        || t.Espace.Nom.Contains(filtre))
+                    .Include(t => t.Espace)
+                    .ToList();
         }
 
         /// <summary>

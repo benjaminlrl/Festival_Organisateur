@@ -44,7 +44,7 @@ namespace Lib_Metier.Data.Configurations
         /// <summary>
         /// Ensemble des Espaces (table `Espace`).
         /// </summary>
-        public DbSet<Espace> Espace => Set<Espace>();
+        public DbSet<Espace> Espaces => Set<Espace>();
 
         /// <summary>
         /// Ensemble des Role (table `Role`).

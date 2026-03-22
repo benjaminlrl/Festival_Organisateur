@@ -40,7 +40,8 @@ namespace ApplicationUi
             {
                 this.Hide();
                 organisateurConnecte = _organisateurService.Obtenir(txtUsername.Text);
-                new FormMain(organisateurConnecte).Show();
+                if (organisateurConnecte != null)
+                    new FormMain(organisateurConnecte).Show();
             }else
             {
                 labelError.Text = "Login ou mot de passe incorrect.";

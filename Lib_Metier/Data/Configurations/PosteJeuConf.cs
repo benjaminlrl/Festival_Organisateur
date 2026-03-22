@@ -45,8 +45,8 @@ namespace Lib_Metier.Data.Configurations
                     );
 
             // Clés étrangères (noms de colonnes explicites)
-            builder.Property(p => p.IdPlateform)
-                   .HasColumnName("id_plateform");
+            builder.Property(p => p.IdPlateforme)
+                   .HasColumnName("id_plateforme");
 
             builder.Property(p => p.IdEspace)
                    .HasColumnName("id_espace");
@@ -54,7 +54,7 @@ namespace Lib_Metier.Data.Configurations
             // Relation vers Plateforme : une plateforme possède plusieurs postes
             builder.HasOne(p => p.Plateforme)
                    .WithMany(pl => pl.PostesJeu)
-                   .HasForeignKey(p => p.IdPlateform);
+                   .HasForeignKey(p => p.IdPlateforme);
 
             // Relation vers Espace : un espace contient plusieurs postes
             builder.HasOne(p => p.Espace)

@@ -10,8 +10,7 @@ namespace Lib_Services.Interfaces
         void Creer(Espace espace);
         void Modifier(Espace espace);
         void Supprimer(int idEspace);
-        List<Espace> Lister();
+        List<Espace> Lister(string filtre);
         Espace? Obtenir(int idEspace);
-
     }
 }

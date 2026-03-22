@@ -1,6 +1,7 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,13 +26,25 @@ namespace Lib_Services.Services
 
         /// <summary>
         /// Retourne la liste complète des espaces présents en base.
-        /// Exécute immédiatement la requête via <c>ToList()</c>.
+        /// Charge également les postes de jeu associés à chaque espace.
+        /// Si un filtre est fourni, retourne les espaces 
+        /// dont le nom ou la description correspond au filtre.
         /// </summary>
+        /// <param name="filtre">Optionnel, filtre</param>
         /// <returns>Liste d'objets <see cref="Espace"/>.</returns>
-        public List<Espace> Lister()
+        public List<Espace> Lister(string filtre = "")
         {
             // ToList force l'exécution de la requête et charge les entités en mémoire.
-            return _context.Espace.ToList();
+            if (string.IsNullOrWhiteSpace(filtre))
+                return _context.Espaces
+                .Include(e => e.PostesJeu)
+                .ToList();
+            return
+                _context.Espaces
+                .Include(e => e.PostesJeu)
+                .Where(e => e.Nom.Contains(filtre)
+                    || e.Description.Contains(filtre))
+                .ToList();
         }
 
         /// <summary>
@@ -42,7 +55,7 @@ namespace Lib_Services.Services
         public Espace? Obtenir(int idEspace)
         {
             // Find utilise le cache du contexte s'il existe, sinon interroge la base.
-            return _context.Espace.Find(idEspace);
+            return _context.Espaces.Find(idEspace);
         }
 
         /// <summary>
@@ -53,7 +66,7 @@ namespace Lib_Services.Services
         public void Creer(Espace espace)
         {
             // Ajout de l'entité au contexte puis persistance immédiate.
-            _context.Espace.Add(espace);
+            _context.Espaces.Add(espace);
             _context.SaveChanges();
         }
 
@@ -64,7 +77,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Espace"/>.</param>
         public void Modifier(Espace espace)
         {
-            _context.Espace.Update(espace);
+            _context.Espaces.Update(espace);
             _context.SaveChanges();
         }
 
@@ -75,10 +88,10 @@ namespace Lib_Services.Services
         public void Supprimer(int idEspace)
         {
             // Recherche de l'entité (utilise le cache si possible).
-            var espace = _context.Espace.Find(idEspace);
+            var espace = _context.Espaces.Find(idEspace);
             if (espace != null)
             {
-                _context.Espace.Remove(espace);
+                _context.Espaces.Remove(espace);
                 _context.SaveChanges();
             }
         }

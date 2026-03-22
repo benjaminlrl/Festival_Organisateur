@@ -19,7 +19,7 @@ namespace Lib_Metier.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     nom = table.Column<string>(type: "TEXT", nullable: false),
                     description = table.Column<string>(type: "TEXT", nullable: false),
-                    superficie = table.Column<double>(type: "REAL", nullable: false),
+                    superficie = table.Column<int>(type: "INTEGER", nullable: false),
                     capaciteMaxi = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -31,13 +31,13 @@ namespace Lib_Metier.Migrations
                 name: "Plateforme",
                 columns: table => new
                 {
-                    id_plateform = table.Column<int>(type: "INTEGER", nullable: false)
+                    id_plateforme = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     libelle = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Plateforme", x => x.id_plateform);
+                    table.PrimaryKey("PK_Plateforme", x => x.id_plateforme);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,7 +85,7 @@ namespace Lib_Metier.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     reference = table.Column<string>(type: "TEXT", nullable: false),
                     fonctionnel = table.Column<string>(type: "TEXT", nullable: false),
-                    id_plateform = table.Column<int>(type: "INTEGER", nullable: false),
+                    id_plateforme = table.Column<int>(type: "INTEGER", nullable: false),
                     id_espace = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -98,10 +98,10 @@ namespace Lib_Metier.Migrations
                         principalColumn: "id_espace",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Poste_Jeu_Plateforme_id_plateform",
-                        column: x => x.id_plateform,
+                        name: "FK_Poste_Jeu_Plateforme_id_plateforme",
+                        column: x => x.id_plateforme,
                         principalTable: "Plateforme",
-                        principalColumn: "id_plateform",
+                        principalColumn: "id_plateforme",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -110,8 +110,8 @@ namespace Lib_Metier.Migrations
                 columns: table => new
                 {
                     login = table.Column<string>(type: "TEXT", nullable: false),
-                    mail = table.Column<string>(type: "TEXT", nullable: false),
                     motPasse = table.Column<string>(type: "TEXT", nullable: false),
+                    mail = table.Column<string>(type: "TEXT", nullable: false),
                     id_role = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -179,9 +179,9 @@ namespace Lib_Metier.Migrations
                 column: "id_espace");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Poste_Jeu_id_plateform",
+                name: "IX_Poste_Jeu_id_plateforme",
                 table: "Poste_Jeu",
-                column: "id_plateform");
+                column: "id_plateforme");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tournoi_id_espace",

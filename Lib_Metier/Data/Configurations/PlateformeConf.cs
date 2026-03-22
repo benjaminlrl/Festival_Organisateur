@@ -24,12 +24,12 @@ namespace Lib_Metier.Data.Configurations
             builder.ToTable("Plateforme");
 
             // Définition de la clé primaire
-            builder.HasKey(p => p.IdPlateform);
+            builder.HasKey(p => p.IdPlateforme);
 
             // Mapping explicite des colonnes : utile pour conserver la compatibilité
             // avec un schéma existant ou des conventions de nommage particulières.
-            builder.Property(p => p.IdPlateform)
-                   .HasColumnName("id_plateform");
+            builder.Property(p => p.IdPlateforme)
+                   .HasColumnName("id_plateforme");
 
             builder.Property(p => p.Libelle)
                    .HasColumnName("libelle");
