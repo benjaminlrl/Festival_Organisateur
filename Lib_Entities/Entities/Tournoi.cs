@@ -60,6 +60,11 @@ namespace Lib_Entities.Entities
         /// retourne chaîne vide si l'espace est null.
         /// </summary>
         public string NomEspace => Espace?.Nom ?? string.Empty;
+
+        /// <summary>
+        /// Lot concerné pour le Tournoi
+        /// </summary>
+        public ICollection<Lot> Lot { get; set; }
     }
 
 }

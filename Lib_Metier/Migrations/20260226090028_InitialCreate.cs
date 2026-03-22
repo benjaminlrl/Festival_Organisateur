@@ -41,6 +41,19 @@ namespace Lib_Metier.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    id_role = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Libelle = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.id_role);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tournoi",
                 columns: table => new
                 {
@@ -92,6 +105,74 @@ namespace Lib_Metier.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Organisateur",
+                columns: table => new
+                {
+                    login = table.Column<string>(type: "TEXT", nullable: false),
+                    mail = table.Column<string>(type: "TEXT", nullable: false),
+                    motPasse = table.Column<string>(type: "TEXT", nullable: false),
+                    id_role = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organisateur", x => x.login);
+                    table.ForeignKey(
+                        name: "FK_Organisateur_Role_id_role",
+                        column: x => x.id_role,
+                        principalTable: "Role",
+                        principalColumn: "id_role",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lot",
+                columns: table => new
+                {
+                    Numero = table.Column<int>(type: "INTEGER", nullable: false),
+                    libelle = table.Column<string>(type: "TEXT", nullable: false),
+                    valeurTotale = table.Column<float>(type: "REAL", nullable: false),
+                    rangAttribution = table.Column<int>(type: "INTEGER", nullable: false),
+                    estAttribue = table.Column<bool>(type: "INTEGER", nullable: false),
+                    numeroTournoi = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lot", x => x.Numero);
+                    table.ForeignKey(
+                        name: "FK_Lot_Tournoi_Numero",
+                        column: x => x.Numero,
+                        principalTable: "Tournoi",
+                        principalColumn: "numeroTournoi",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LotComposant",
+                columns: table => new
+                {
+                    Numero = table.Column<int>(type: "INTEGER", nullable: false),
+                    libelle = table.Column<int>(type: "INTEGER", nullable: false),
+                    description = table.Column<int>(type: "INTEGER", nullable: false),
+                    valeur = table.Column<int>(type: "INTEGER", nullable: false),
+                    numero_lot = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LotComposant", x => x.Numero);
+                    table.ForeignKey(
+                        name: "FK_LotComposant_Lot_Numero",
+                        column: x => x.Numero,
+                        principalTable: "Lot",
+                        principalColumn: "Numero",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Organisateur_id_role",
+                table: "Organisateur",
+                column: "id_role");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Poste_Jeu_id_espace",
                 table: "Poste_Jeu",
@@ -112,13 +193,25 @@ namespace Lib_Metier.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "LotComposant");
+
+            migrationBuilder.DropTable(
+                name: "Organisateur");
+
+            migrationBuilder.DropTable(
                 name: "Poste_Jeu");
 
             migrationBuilder.DropTable(
-                name: "Tournoi");
+                name: "Lot");
+
+            migrationBuilder.DropTable(
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Plateforme");
+
+            migrationBuilder.DropTable(
+                name: "Tournoi");
 
             migrationBuilder.DropTable(
                 name: "Espace");

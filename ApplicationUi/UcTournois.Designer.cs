@@ -100,7 +100,7 @@ namespace ApplicationUi
             labelDuree.Location = new Point(294, 79);
             labelDuree.Margin = new Padding(4, 0, 4, 0);
             labelDuree.Name = "labelDuree";
-            labelDuree.Size = new Size(99, 17);
+            labelDuree.Size = new Size(128, 23);
             labelDuree.TabIndex = 14;
             labelDuree.Text = "Durée prévue :";
             // 
@@ -111,7 +111,7 @@ namespace ApplicationUi
             labelStatut.Location = new Point(584, 0);
             labelStatut.Margin = new Padding(4, 0, 4, 0);
             labelStatut.Name = "labelStatut";
-            labelStatut.Size = new Size(53, 17);
+            labelStatut.Size = new Size(70, 23);
             labelStatut.TabIndex = 11;
             labelStatut.Text = "Statut :";
             // 
@@ -122,7 +122,7 @@ namespace ApplicationUi
             labelDateHeure.Location = new Point(294, 0);
             labelDateHeure.Margin = new Padding(4, 0, 4, 0);
             labelDateHeure.Name = "labelDateHeure";
-            labelDateHeure.Size = new Size(100, 17);
+            labelDateHeure.Size = new Size(129, 23);
             labelDateHeure.TabIndex = 7;
             labelDateHeure.Text = "Date et heure :";
             // 
@@ -133,7 +133,7 @@ namespace ApplicationUi
             numericUpDownNbParticip.Margin = new Padding(4);
             numericUpDownNbParticip.Maximum = new decimal(new int[] { 30, 0, 0, 0 });
             numericUpDownNbParticip.Name = "numericUpDownNbParticip";
-            numericUpDownNbParticip.Size = new Size(88, 23);
+            numericUpDownNbParticip.Size = new Size(88, 27);
             numericUpDownNbParticip.TabIndex = 3;
             // 
             // comboBoxEspace
@@ -142,7 +142,7 @@ namespace ApplicationUi
             comboBoxEspace.Location = new Point(584, 109);
             comboBoxEspace.Margin = new Padding(4);
             comboBoxEspace.Name = "comboBoxEspace";
-            comboBoxEspace.Size = new Size(217, 26);
+            comboBoxEspace.Size = new Size(217, 31);
             comboBoxEspace.TabIndex = 5;
             // 
             // textBoxNom
@@ -151,7 +151,7 @@ namespace ApplicationUi
             textBoxNom.Margin = new Padding(4);
             textBoxNom.Name = "textBoxNom";
             textBoxNom.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
-            textBoxNom.Size = new Size(281, 23);
+            textBoxNom.Size = new Size(281, 27);
             textBoxNom.TabIndex = 0;
             // 
             // labelNom
@@ -161,7 +161,7 @@ namespace ApplicationUi
             labelNom.Location = new Point(4, 0);
             labelNom.Margin = new Padding(4, 0, 4, 0);
             labelNom.Name = "labelNom";
-            labelNom.Size = new Size(126, 17);
+            labelNom.Size = new Size(162, 23);
             labelNom.TabIndex = 6;
             labelNom.Text = "Nom du tournoi * :";
             // 
@@ -172,7 +172,7 @@ namespace ApplicationUi
             labelNbParticipants.Location = new Point(4, 79);
             labelNbParticipants.Margin = new Padding(4, 0, 4, 0);
             labelNbParticipants.Name = "labelNbParticipants";
-            labelNbParticipants.Size = new Size(162, 17);
+            labelNbParticipants.Size = new Size(212, 23);
             labelNbParticipants.TabIndex = 8;
             labelNbParticipants.Text = "Nombre de participants :";
             // 
@@ -183,7 +183,7 @@ namespace ApplicationUi
             labelEspace.Location = new Point(584, 79);
             labelEspace.Margin = new Padding(4, 0, 4, 0);
             labelEspace.Name = "labelEspace";
-            labelEspace.Size = new Size(97, 17);
+            labelEspace.Size = new Size(124, 23);
             labelEspace.TabIndex = 13;
             labelEspace.Text = "Espace / Lieu :";
             // 
@@ -197,7 +197,7 @@ namespace ApplicationUi
             dateTimePickerDateTournoi.MinDate = new DateTime(2026, 5, 23, 9, 0, 0, 0);
             dateTimePickerDateTournoi.Name = "dateTimePickerDateTournoi";
             dateTimePickerDateTournoi.ShowUpDown = true;
-            dateTimePickerDateTournoi.Size = new Size(200, 23);
+            dateTimePickerDateTournoi.Size = new Size(200, 27);
             dateTimePickerDateTournoi.TabIndex = 1;
             dateTimePickerDateTournoi.Value = new DateTime(2026, 5, 23, 9, 0, 0, 0);
             // 
@@ -209,7 +209,7 @@ namespace ApplicationUi
             numericUpDownDuree.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownDuree.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownDuree.Name = "numericUpDownDuree";
-            numericUpDownDuree.Size = new Size(88, 23);
+            numericUpDownDuree.Size = new Size(88, 27);
             numericUpDownDuree.TabIndex = 15;
             numericUpDownDuree.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
@@ -230,7 +230,7 @@ namespace ApplicationUi
             radioButtonPlanifié.Location = new Point(10, 3);
             radioButtonPlanifié.Margin = new Padding(10, 3, 5, 3);
             radioButtonPlanifié.Name = "radioButtonPlanifié";
-            radioButtonPlanifié.Size = new Size(73, 22);
+            radioButtonPlanifié.Size = new Size(88, 27);
             radioButtonPlanifié.TabIndex = 0;
             radioButtonPlanifié.TabStop = true;
             radioButtonPlanifié.Text = "Planifié";
@@ -240,10 +240,10 @@ namespace ApplicationUi
             // radioButtonEnCours
             // 
             radioButtonEnCours.AutoSize = true;
-            radioButtonEnCours.Location = new Point(93, 3);
+            radioButtonEnCours.Location = new Point(108, 3);
             radioButtonEnCours.Margin = new Padding(5, 3, 5, 3);
             radioButtonEnCours.Name = "radioButtonEnCours";
-            radioButtonEnCours.Size = new Size(81, 22);
+            radioButtonEnCours.Size = new Size(97, 27);
             radioButtonEnCours.TabIndex = 1;
             radioButtonEnCours.TabStop = true;
             radioButtonEnCours.Text = "En Cours";
@@ -253,10 +253,10 @@ namespace ApplicationUi
             // radioButtonTermine
             // 
             radioButtonTermine.AutoSize = true;
-            radioButtonTermine.Location = new Point(184, 3);
+            radioButtonTermine.Location = new Point(5, 36);
             radioButtonTermine.Margin = new Padding(5, 3, 3, 3);
             radioButtonTermine.Name = "radioButtonTermine";
-            radioButtonTermine.Size = new Size(76, 22);
+            radioButtonTermine.Size = new Size(92, 27);
             radioButtonTermine.TabIndex = 2;
             radioButtonTermine.TabStop = true;
             radioButtonTermine.Text = "Terminé";
@@ -315,7 +315,7 @@ namespace ApplicationUi
             buttonEffacer.Name = "buttonEffacer";
             buttonEffacer.Size = new Size(150, 45);
             buttonEffacer.TabIndex = 3;
-            buttonEffacer.Text = " Effacer";
+            buttonEffacer.Text = " \U0001f9fd  Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
             buttonEffacer.Click += buttonEffacer_Click;
             // 
@@ -345,7 +345,7 @@ namespace ApplicationUi
             buttonSupprimer.Location = new Point(670, 25);
             buttonSupprimer.Margin = new Padding(4);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(150, 45);
+            buttonSupprimer.Size = new Size(163, 45);
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
@@ -357,7 +357,7 @@ namespace ApplicationUi
             label1.Location = new Point(0, 0);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 18);
+            label1.Size = new Size(0, 23);
             label1.TabIndex = 6;
             // 
             // dataGridTournois
@@ -365,19 +365,20 @@ namespace ApplicationUi
             dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridTournois.BackgroundColor = Color.White;
             dataGridTournois.BorderStyle = BorderStyle.None;
+            dataGridTournois.ColumnHeadersHeight = 34;
             dataGridTournois.Location = new Point(20, 320);
             dataGridTournois.Margin = new Padding(4);
             dataGridTournois.Name = "dataGridTournois";
             dataGridTournois.ReadOnly = true;
+            dataGridTournois.RowHeadersWidth = 62;
             dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridTournois.Size = new Size(900, 383);
             dataGridTournois.TabIndex = 2;
             dataGridTournois.CellClick += dataGridTournois_CellClick;
-
             // 
             // UcTournois
             // 
-            AutoScaleDimensions = new SizeF(7F, 18F);
+            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 225);
             Controls.Add(panelForm);
