@@ -15,13 +15,16 @@ namespace ApplicationUi
     public partial class UcPlateformes : UserControl
     {
         private readonly IPlateformeService _servicePlateforme;
+        private readonly IEspaceService _serviceEspace;
         private Plateforme? _plateformeSelectionee = null;
+        private string filtre;
         public UcPlateformes()
         {
             InitializeComponent();
             _servicePlateforme = new PlateformeService(new ApplicationDbContext());
             buttonModifier.Enabled = _plateformeSelectionee != null;
             buttonSupprimer.Enabled = _plateformeSelectionee != null;
+            filtre = "";
             buttonEffacer.Text = " 🧽  Effacer";
             ChargerPlateformes();
         }
@@ -29,7 +32,14 @@ namespace ApplicationUi
         private void ChargerPlateformes()
         {
             dataGridPlateformes.DataSource = null;
-            dataGridPlateformes.DataSource = _servicePlateforme.Lister("");
+            dataGridPlateformes.DataSource = _servicePlateforme.Lister(filtre);
+            MEP_DataGrid();
+        }
+
+        private void ChargerPostesJeu()
+        {
+            dataGridPostesJeu.DataSource = null;
+            dataGridPostesJeu.DataSource = _plateformeSelectionee.PostesJeu.ToList();
             MEP_DataGrid();
         }
 
@@ -68,6 +78,7 @@ namespace ApplicationUi
         private void RemplirFormulaire(Plateforme plateforme)
         {
             textBoxNom.Text = plateforme.Libelle;
+            ChargerPostesJeu();
         }
         #endregion
         #region Validations

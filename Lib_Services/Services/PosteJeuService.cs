@@ -38,9 +38,13 @@ namespace Lib_Services.Services
             // ToList matérialise la requête et ramène les entités en mémoire.
             if (string.IsNullOrWhiteSpace(filtre)) 
                 return _context.PostesJeu
-                .ToList();
+                    .Include(p => p.Espace)
+                    .Include(p => p.Plateforme)
+                    .ToList();
             return _context.PostesJeu
                 .Where(p => p.Reference.Contains(filtre))
+                .Where(p => p.Espace.Nom.Contains(filtre))
+                .Where(p => p.Plateforme.Libelle.Contains(filtre))
                 .ToList();
         }
 

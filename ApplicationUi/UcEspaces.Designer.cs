@@ -50,11 +50,11 @@
             textBoxRecherche = new TextBox();
             label1 = new Label();
             dataGridPostesJeu = new DataGridView();
-            process1 = new System.Diagnostics.Process();
             groupBoxStatsEspaces = new GroupBox();
             labelStatEspacesLibres = new Label();
             labelStatEspacesTotal = new Label();
             labelTitreEspaces = new Label();
+            process1 = new System.Diagnostics.Process();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownCapaciteMaxi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridEspaces).BeginInit();
@@ -70,14 +70,14 @@
             // 
             // groupBox1
             // 
+            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox1.Controls.Add(buttonAjouter);
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Dock = DockStyle.Bottom;
-            groupBox1.Location = new Point(3, 222);
+            groupBox1.Location = new Point(3, 195);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(881, 116);
+            groupBox1.Size = new Size(881, 101);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
@@ -205,13 +205,13 @@
             dataGridEspaces.BorderStyle = BorderStyle.None;
             dataGridEspaces.ColumnHeadersHeight = 34;
             dataGridEspaces.Dock = DockStyle.Fill;
-            dataGridEspaces.Location = new Point(4, 439);
+            dataGridEspaces.Location = new Point(4, 387);
             dataGridEspaces.Margin = new Padding(4);
             dataGridEspaces.Name = "dataGridEspaces";
             dataGridEspaces.ReadOnly = true;
             dataGridEspaces.RowHeadersWidth = 62;
             dataGridEspaces.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridEspaces.Size = new Size(888, 299);
+            dataGridEspaces.Size = new Size(888, 351);
             dataGridEspaces.TabIndex = 4;
             dataGridEspaces.CellContentClick += dataGridEspaces_CellContentClick;
             // 
@@ -229,6 +229,7 @@
             // 
             // tableLayoutPanel
             // 
+            tableLayoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel.ColumnCount = 3;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
@@ -241,7 +242,6 @@
             tableLayoutPanel.Controls.Add(labelCapaciteMaxi, 1, 3);
             tableLayoutPanel.Controls.Add(labelSuperficie, 0, 3);
             tableLayoutPanel.Controls.Add(numericUpDownSuperficie, 0, 4);
-            tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(4, 4);
             tableLayoutPanel.Margin = new Padding(4);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -251,7 +251,7 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(879, 211);
+            tableLayoutPanel.Size = new Size(879, 184);
             tableLayoutPanel.TabIndex = 0;
             // 
             // labelDescription
@@ -273,7 +273,7 @@
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Description de l'espace";
             tableLayoutPanel.SetRowSpan(textBoxDescription, 4);
-            textBoxDescription.Size = new Size(281, 168);
+            textBoxDescription.Size = new Size(281, 141);
             textBoxDescription.TabIndex = 17;
             // 
             // panelForm
@@ -283,23 +283,23 @@
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(887, 341);
+            panelForm.Size = new Size(887, 299);
             panelForm.TabIndex = 3;
             // 
             // tableLayoutPanelCRUD
             // 
+            tableLayoutPanelCRUD.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanelCRUD.ColumnCount = 1;
             tableLayoutPanelCRUD.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanelCRUD.Controls.Add(tableLayoutPanel, 0, 0);
             tableLayoutPanelCRUD.Controls.Add(groupBox1, 0, 1);
-            tableLayoutPanelCRUD.Dock = DockStyle.Fill;
             tableLayoutPanelCRUD.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
             tableLayoutPanelCRUD.Location = new Point(0, 0);
             tableLayoutPanelCRUD.Name = "tableLayoutPanelCRUD";
             tableLayoutPanelCRUD.RowCount = 2;
             tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 64.22288F));
             tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 35.7771263F));
-            tableLayoutPanelCRUD.Size = new Size(887, 341);
+            tableLayoutPanelCRUD.Size = new Size(887, 299);
             tableLayoutPanelCRUD.TabIndex = 8;
             // 
             // tableLayoutPanel1
@@ -318,7 +318,7 @@
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 80.15717F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 19.8428288F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 306F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 358F));
             tableLayoutPanel1.Size = new Size(1370, 742);
             tableLayoutPanel1.TabIndex = 5;
             // 
@@ -329,11 +329,12 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.70786F));
             tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
-            tableLayoutPanel2.Location = new Point(3, 352);
+            tableLayoutPanel2.Dock = DockStyle.Bottom;
+            tableLayoutPanel2.Location = new Point(3, 332);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(890, 80);
+            tableLayoutPanel2.Size = new Size(890, 48);
             tableLayoutPanel2.TabIndex = 6;
             // 
             // textBoxRecherche
@@ -361,6 +362,7 @@
             dataGridPostesJeu.AllowUserToOrderColumns = true;
             dataGridPostesJeu.BackgroundColor = Color.White;
             dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridPostesJeu.Dock = DockStyle.Top;
             dataGridPostesJeu.Location = new Point(899, 3);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
             dataGridPostesJeu.ReadOnly = true;
@@ -368,30 +370,18 @@
             dataGridPostesJeu.Size = new Size(468, 301);
             dataGridPostesJeu.TabIndex = 5;
             // 
-            // process1
-            // 
-            process1.StartInfo.CreateNewProcessGroup = false;
-            process1.StartInfo.Domain = "";
-            process1.StartInfo.LoadUserProfile = false;
-            process1.StartInfo.Password = null;
-            process1.StartInfo.StandardErrorEncoding = null;
-            process1.StartInfo.StandardInputEncoding = null;
-            process1.StartInfo.StandardOutputEncoding = null;
-            process1.StartInfo.UseCredentialsForNetworkingOnly = false;
-            process1.StartInfo.UserName = "";
-            process1.SynchronizingObject = this;
-            // 
             // groupBoxStatsEspaces
             // 
             groupBoxStatsEspaces.BackColor = Color.White;
             groupBoxStatsEspaces.Controls.Add(labelStatEspacesLibres);
             groupBoxStatsEspaces.Controls.Add(labelStatEspacesTotal);
             groupBoxStatsEspaces.Controls.Add(labelTitreEspaces);
-            groupBoxStatsEspaces.Location = new Point(900, 440);
+            groupBoxStatsEspaces.Dock = DockStyle.Top;
+            groupBoxStatsEspaces.Location = new Point(900, 388);
             groupBoxStatsEspaces.Margin = new Padding(4, 5, 4, 5);
             groupBoxStatsEspaces.Name = "groupBoxStatsEspaces";
             groupBoxStatsEspaces.Padding = new Padding(4, 5, 4, 5);
-            groupBoxStatsEspaces.Size = new Size(457, 200);
+            groupBoxStatsEspaces.Size = new Size(466, 200);
             groupBoxStatsEspaces.TabIndex = 7;
             groupBoxStatsEspaces.TabStop = false;
             // 
@@ -429,6 +419,19 @@
             labelTitreEspaces.TabIndex = 0;
             labelTitreEspaces.Text = "🏢 ESPACES";
             labelTitreEspaces.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // process1
+            // 
+            process1.StartInfo.CreateNewProcessGroup = false;
+            process1.StartInfo.Domain = "";
+            process1.StartInfo.LoadUserProfile = false;
+            process1.StartInfo.Password = null;
+            process1.StartInfo.StandardErrorEncoding = null;
+            process1.StartInfo.StandardInputEncoding = null;
+            process1.StartInfo.StandardOutputEncoding = null;
+            process1.StartInfo.UseCredentialsForNetworkingOnly = false;
+            process1.StartInfo.UserName = "";
+            process1.SynchronizingObject = this;
             // 
             // UcEspaces
             // 

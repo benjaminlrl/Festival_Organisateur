@@ -19,9 +19,9 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private Espace? _espaceSelectionee = null;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
-        private string _filtre = "";
+        private string filtre = "";
         // Champ pour suivre l'ordre de tri actuel sur la colonne Nom
-        private string _orderNom = "ASC";
+        private string orderChamp = "ASC";
         public UcEspaces()
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace ApplicationUi
         private void ChargerEspaces()
         {
             dataGridEspaces.DataSource = null;
-            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre);
+            dataGridEspaces.DataSource = _serviceEspace.Lister(filtre);
             MEP_DataGrid();
             ChargerStatistiques();
         }
@@ -65,7 +65,7 @@ namespace ApplicationUi
         private void ChargerStatistiques()
         {
             // Un espace libre est un espae qui n'a pas de tournoi associé
-            int nbEspacesLibres = _serviceEspace.Lister(_filtre).Count(e => e.Tournois == null);
+            int nbEspacesLibres = _serviceEspace.Lister(filtre).Count(e => e.Tournois == null);
 
             labelStatEspacesTotal.Text = $"{_serviceEspace.Lister("").Count()}";
 
@@ -80,6 +80,39 @@ namespace ApplicationUi
                 labelStatEspacesLibres.ForeColor = Color.Green;
             }
         }
+        /// <summary>
+        /// Trie et recharge les données du contrôle DataGrid en fonction du champ spécifié, en alternant l'ordre
+        /// croissant et décroissant à chaque appel.
+        /// </summary>
+        /// <remarks>L'ordre de tri alterne entre croissant et décroissant à chaque appel de la méthode.
+        /// Utilisez cette méthode pour permettre à l'utilisateur de trier dynamiquement les données
+        /// affichées.</remarks>
+        /// <param name="champ">Le nom du champ selon lequel trier les données affichées dans le DataGrid. Ce paramètre doit 
+        /// correspondre à une propriété valide des éléments de la source de données.</param>
+        private void ChargerDataGridOrdonner(string champ)
+        {
+            var donnees = _serviceEspace.Lister(filtre);
+            // Dictionnaire de sélecteurs pour les champs de tri,
+            // permettant d'associer chaque champ à une fonction d'extraction
+            // de la valeur correspondante dans l'entité Espace.
+            var selecteurs = new Dictionary<string, Func<Espace, object>>
+            {
+                { "Nom",       e => e.Nom   },
+                { "Description",   e => e.Description  },
+                { "Superficie",   e => e.Superficie  },
+                { "CapaciteMaxi",  e => e.CapaciteMaxi  },
+            };
+
+            if (!selecteurs.TryGetValue(champ, out var selecteur)) return;
+
+            // Trie par ordre
+            dataGridEspaces.DataSource = orderChamp == "ASC"
+                ? donnees.OrderByDescending(selecteur).ToList()
+                : donnees.OrderBy(selecteur).ToList();
+
+            // Change la valeur de l'ordre dybnamiquement
+            orderChamp = orderChamp == "ASC" ? "DESC" : "ASC";
+        }
 
         /// <summary>
         /// Resets all tournament-related input fields and controls to their default values.
@@ -93,7 +126,7 @@ namespace ApplicationUi
             textBoxDescription.Clear();
             numericUpDownCapaciteMaxi.Value = numericUpDownCapaciteMaxi.Minimum;
             numericUpDownSuperficie.Value = numericUpDownSuperficie.Minimum;
-            _filtre = "";
+            filtre = "";
         }
         private void MEP_DataGrid()
         {
@@ -112,20 +145,23 @@ namespace ApplicationUi
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
-            {   // TODO: ordonner sur les champs descriptions, superficie, capaciteMaxi
+            {   // ordonner sur les champs descriptions, superficie, capaciteMaxi
                 switch (e.ColumnIndex)
                 {
                     case 1:
-                        if (_orderNom == "ASC")
-                        {
-                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderByDescending(x => x.Nom).ToList();
-                            _orderNom = "DESC";
-                        }
-                        else
-                        {
-                            dataGridEspaces.DataSource = _serviceEspace.Lister(_filtre).OrderBy(x => x.Nom).ToList();
-                            _orderNom = "ASC";
-                        }
+                        ChargerDataGridOrdonner("Nom");
+                        MEP_DataGrid();
+                        break;
+                    case 2:
+                        ChargerDataGridOrdonner("Description");
+                        MEP_DataGrid();
+                        break;
+                    case 3:
+                        ChargerDataGridOrdonner("Superficie");
+                        MEP_DataGrid();
+                        break;
+                    case 4:
+                        ChargerDataGridOrdonner("CapaciteMaxi");
                         MEP_DataGrid();
                         break;
                     default:
@@ -192,7 +228,7 @@ namespace ApplicationUi
                 MessageBox.Show("La description ne peut pas dépasser 500 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
-            if (_espaceSelectionee != null && _serviceEspace.NomExiste(_espaceSelectionee.Nom))
+            if (_serviceEspace.Lister("").Any(e => e.Nom == textBoxNom.Text))
             {
                 MessageBox.Show("Un autre espace avec ce nom existe déjà.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
@@ -294,7 +330,7 @@ namespace ApplicationUi
         /// <param name="e">Les données associées à l'événement de modification du texte.</param>
         private void textBoxRecherche_TextChanged(object sender, EventArgs e)
         {
-            _filtre = textBoxRecherche.Text;
+            filtre = textBoxRecherche.Text;
             ChargerEspaces();
         }
 

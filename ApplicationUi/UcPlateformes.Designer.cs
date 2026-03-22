@@ -40,11 +40,15 @@
             buttonSupprimer = new Button();
             label1 = new Label();
             dataGridPlateformes = new DataGridView();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            dataGridPostesJeu = new DataGridView();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridPlateformes).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
             SuspendLayout();
             // 
             // panelForm
@@ -52,7 +56,7 @@
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(24, 39);
+            panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
             panelForm.Size = new Size(900, 253);
@@ -121,6 +125,7 @@
             // 
             // buttonAjouter
             // 
+            buttonAjouter.AccessibleDescription = "Permet d'ajouter une plateforme";
             buttonAjouter.BackColor = Color.FromArgb(76, 175, 80);
             buttonAjouter.FlatAppearance.BorderSize = 0;
             buttonAjouter.FlatStyle = FlatStyle.Flat;
@@ -137,6 +142,7 @@
             // 
             // buttonEffacer
             // 
+            buttonEffacer.AccessibleDescription = "Vide le champ du formulaire";
             buttonEffacer.BackColor = Color.MediumPurple;
             buttonEffacer.FlatAppearance.BorderSize = 0;
             buttonEffacer.FlatStyle = FlatStyle.Flat;
@@ -152,6 +158,7 @@
             // 
             // buttonModifier
             // 
+            buttonModifier.AccessibleDescription = "Permet de modifier une plateforme";
             buttonModifier.BackColor = Color.FromArgb(33, 150, 243);
             buttonModifier.FlatAppearance.BorderSize = 0;
             buttonModifier.FlatStyle = FlatStyle.Flat;
@@ -167,6 +174,7 @@
             // 
             // buttonSupprimer
             // 
+            buttonSupprimer.AccessibleDescription = "Permet de supprimer une plateforme";
             buttonSupprimer.BackColor = Color.FromArgb(244, 67, 54);
             buttonSupprimer.FlatAppearance.BorderSize = 0;
             buttonSupprimer.FlatStyle = FlatStyle.Flat;
@@ -191,29 +199,57 @@
             // 
             // dataGridPlateformes
             // 
+            dataGridPlateformes.AccessibleDescription = "Toutes les plateformes enregistrées dans la base de données";
             dataGridPlateformes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridPlateformes.BackgroundColor = Color.White;
             dataGridPlateformes.BorderStyle = BorderStyle.None;
             dataGridPlateformes.ColumnHeadersHeight = 34;
-            dataGridPlateformes.Location = new Point(24, 299);
+            dataGridPlateformes.Location = new Point(4, 361);
             dataGridPlateformes.Margin = new Padding(4);
             dataGridPlateformes.Name = "dataGridPlateformes";
             dataGridPlateformes.ReadOnly = true;
             dataGridPlateformes.RowHeadersWidth = 62;
             dataGridPlateformes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridPlateformes.Size = new Size(900, 383);
+            dataGridPlateformes.Size = new Size(900, 349);
             dataGridPlateformes.TabIndex = 6;
             dataGridPlateformes.CellContentClick += dataGridPlateformes_CellContentClick;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.2895355F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.7104664F));
+            tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
+            tableLayoutPanel1.Controls.Add(dataGridPlateformes, 0, 1);
+            tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 1, 0);
+            tableLayoutPanel1.Location = new Point(3, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(1317, 714);
+            tableLayoutPanel1.TabIndex = 7;
+            // 
+            // dataGridPostesJeu
+            // 
+            dataGridPostesJeu.AccessibleDescription = "Postes de jeu liés à la plateforme séléctionnée";
+            dataGridPostesJeu.BackgroundColor = Color.White;
+            dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridPostesJeu.Dock = DockStyle.Fill;
+            dataGridPostesJeu.Location = new Point(915, 3);
+            dataGridPostesJeu.Name = "dataGridPostesJeu";
+            dataGridPostesJeu.RowHeadersWidth = 62;
+            dataGridPostesJeu.Size = new Size(399, 351);
+            dataGridPostesJeu.TabIndex = 7;
             // 
             // UcPlateformes
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(128, 128, 255);
-            Controls.Add(panelForm);
-            Controls.Add(dataGridPlateformes);
+            Controls.Add(tableLayoutPanel1);
             Name = "UcPlateformes";
-            Size = new Size(949, 720);
+            Size = new Size(1334, 720);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
@@ -221,6 +257,8 @@
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridPlateformes).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
             ResumeLayout(false);
         }
 
@@ -244,5 +282,7 @@
         private Button buttonSupprimer;
         private Label label1;
         private DataGridView dataGridPlateformes;
+        private TableLayoutPanel tableLayoutPanel1;
+        private DataGridView dataGridPostesJeu;
     }
 }

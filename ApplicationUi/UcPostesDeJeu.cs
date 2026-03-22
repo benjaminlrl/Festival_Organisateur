@@ -10,6 +10,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 
 namespace ApplicationUi
 {
@@ -19,8 +20,10 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly IPosteJeuService _servicePosteJeu;
         private readonly IPlateformeService _servicePlateforme;
-        private bool fonctionnelSelectionne = false;
-        private PosteJeu? _posteJeuSelectionne = null;
+        private bool fonctionnelSelectionne;
+        private PosteJeu? _posteJeuSelectionne;
+        private string filtre;
+        private string orderChamp;
 
         public UcPostesDeJeu()
         {
@@ -29,6 +32,10 @@ namespace ApplicationUi
             _serviceEspace = new EspaceService(new ApplicationDbContext());
             _servicePosteJeu = new PosteJeuService(new ApplicationDbContext());
             _servicePlateforme = new PlateformeService(new ApplicationDbContext());
+            _posteJeuSelectionne = null;
+            fonctionnelSelectionne = false;
+            filtre = "";
+            orderChamp = "ASC";
             ChargerPlateformes();
             ChargerEspaces();
             ChargerPostesDeJeu();
@@ -46,7 +53,9 @@ namespace ApplicationUi
             dataGridPostesJeu.DataSource = null;
             dataGridPostesJeu.DataSource = _servicePosteJeu.Lister("");
             MEP_DataGrid();
+            ChargerStatistiques();
         }
+
         private void ChargerEspaces()
         {
             comboBoxEspace.DataSource = null;
@@ -64,6 +73,68 @@ namespace ApplicationUi
             comboBoxPlateforme.DisplayMember = "Libelle";
             comboBoxPlateforme.ValueMember = "IdPlateforme";
         }
+
+        /// <summary>
+        /// Trie et recharge les données du contrôle DataGrid en fonction du champ spécifié, en alternant l'ordre
+        /// croissant et décroissant à chaque appel.
+        /// </summary>
+        /// <remarks>L'ordre de tri alterne entre croissant et décroissant à chaque appel de la méthode.
+        /// Utilisez cette méthode pour permettre à l'utilisateur de trier dynamiquement les données
+        /// affichées.</remarks>
+        /// <param name="champ">Le nom du champ selon lequel trier les données affichées dans le DataGrid. Ce paramètre doit 
+        /// correspondre à une propriété valide des éléments de la source de données.</param>
+        private void ChargerDataGridOrdonner(string champ)
+        {
+            var donnees = _servicePosteJeu.Lister(filtre);
+            // Dictionnaire de sélecteurs pour les champs de tri,
+            // permettant d'associer chaque champ à une fonction d'extraction
+            // de la valeur correspondante dans l'entité Espace.
+            var selecteurs = new Dictionary<string, Func<PosteJeu, object>>
+            {
+                { "Reference",       p => p.Reference   },
+                { "Fonctionnel",   p => p.Fonctionnel  },
+                { "IdPlateforme",   p => p.IdPlateforme  },
+                { "IdEspace",   p => p.IdEspace  },
+            };
+
+            if (!selecteurs.TryGetValue(champ, out var selecteur)) return;
+
+            // Trie par ordre
+            dataGridPostesJeu.DataSource = orderChamp == "ASC"
+                ? donnees.OrderByDescending(selecteur).ToList()
+                : donnees.OrderBy(selecteur).ToList();
+
+            // Change la valeur de l'ordre dybnamiquement
+            orderChamp = orderChamp == "ASC" ? "DESC" : "ASC";
+        }
+
+        /// <summary>
+        /// Permet de charger les statistiques liées aux postes de jeu, notamment le nombre total de postes 
+        /// et le nombre de postes fonctionnels.
+        /// Les statistiques sont affichées dans des labels dédiés, 
+        /// avec une indication visuelle (couleur) pour les postes fonctionnels.
+        /// Cette méthode est appelée après le chargement des postes pour garantir 
+        /// que les statistiques sont à jour.
+        /// </summary>
+        private void ChargerStatistiques()
+        {
+            // Un espace libre est un espae qui n'a pas de tournoi associé
+            int nbPostesJeuFonctionnels = _servicePosteJeu.Lister(filtre).Count(e => e.Fonctionnel == true);
+
+            labelStatPostesJeuTotal.Text = $"{_servicePosteJeu.Lister("").Count()}";
+
+            if (nbPostesJeuFonctionnels == 0)
+            {
+                labelStatPostesJeuFonctionnels.Text = "Aucun poste fonctionnel";
+                labelStatPostesJeuFonctionnels.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelStatPostesJeuFonctionnels.Text = $"Fonctionnels : {nbPostesJeuFonctionnels}";
+                labelStatPostesJeuFonctionnels.ForeColor = Color.Green;
+            }
+        }
+
         /// <summary>
         /// Resets all tournament-related input fields and controls to their default values.
         /// </summary>
@@ -82,7 +153,9 @@ namespace ApplicationUi
             radioButtonFonctionnelFalse.Checked = false;
         }
         private void MEP_DataGrid()
-        // TODO: Modifier les données de la grille pour afficher les informations du poste de jeu 
+        // TODO: Modifier les données de la grille pour afficher le nom de l'espace
+        // et le nom de la plateforme au lieu des ids
+        // et masquer les colonnes idEspace et idPlateforme
         {
             dataGridPostesJeu.Columns["Espace"].Visible = false;
             dataGridPostesJeu.Columns["Plateforme"].Visible = false;
@@ -93,16 +166,41 @@ namespace ApplicationUi
         private void dataGridPostesJeu_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // on ne gère le clic que sur les lignes, pas sur les en-têtes
+            // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
+            {   // TODO: ordonner sur les champs idEspace et idPlateforme en cliquant sur les en-têtes de ces colonnes
+                switch (e.ColumnIndex)
+                {
+                    case 1:
+                        ChargerDataGridOrdonner("Reference");
+                        MEP_DataGrid();
+                        break;
+                    case 2:
+                        ChargerDataGridOrdonner("Fonctionnel");
+                        MEP_DataGrid();
+                        break;
+                    case 3:
+                        ChargerDataGridOrdonner("IdPl ateforme");
+                        MEP_DataGrid();
+                        break;
+                    case 4:
+                        ChargerDataGridOrdonner("IdEspace");
+                        MEP_DataGrid();
+                        break;
+                    default:
+                        return;
+                }
                 return;
+            }
 
             _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
 
-            if (_posteJeuSelectionne != null) 
+            if (_posteJeuSelectionne != null)
                 RemplirFormulaire(_posteJeuSelectionne);
 
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
+
         }
 
         private void RemplirFormulaire(PosteJeu posteJeu)

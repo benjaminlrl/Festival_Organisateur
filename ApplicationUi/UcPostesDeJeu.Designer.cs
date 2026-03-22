@@ -48,12 +48,19 @@
             buttonSupprimer = new Button();
             label1 = new Label();
             dataGridPostesJeu = new DataGridView();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            groupBoxStatsPostesJeu = new GroupBox();
+            labelStatPostesJeuFonctionnels = new Label();
+            labelStatPostesJeuTotal = new Label();
+            labelTitreEspaces = new Label();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
+            groupBoxStatsPostesJeu.SuspendLayout();
             SuspendLayout();
             // 
             // panelForm
@@ -61,10 +68,10 @@
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(24, 39);
+            panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(900, 253);
+            panelForm.Size = new Size(799, 253);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel
@@ -300,25 +307,90 @@
             dataGridPostesJeu.BackgroundColor = Color.White;
             dataGridPostesJeu.BorderStyle = BorderStyle.None;
             dataGridPostesJeu.ColumnHeadersHeight = 34;
-            dataGridPostesJeu.Location = new Point(24, 299);
+            dataGridPostesJeu.Location = new Point(4, 273);
             dataGridPostesJeu.Margin = new Padding(4);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
             dataGridPostesJeu.ReadOnly = true;
             dataGridPostesJeu.RowHeadersWidth = 62;
             dataGridPostesJeu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridPostesJeu.Size = new Size(900, 383);
+            dataGridPostesJeu.Size = new Size(799, 261);
             dataGridPostesJeu.TabIndex = 6;
             dataGridPostesJeu.CellContentClick += dataGridPostesJeu_CellContentClick;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60.5855865F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 39.4144135F));
+            tableLayoutPanel1.Controls.Add(groupBoxStatsPostesJeu, 1, 1);
+            tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 0, 1);
+            tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
+            tableLayoutPanel1.Location = new Point(29, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(1332, 538);
+            tableLayoutPanel1.TabIndex = 7;
+            // 
+            // groupBoxStatsPostesJeu
+            // 
+            groupBoxStatsPostesJeu.BackColor = Color.White;
+            groupBoxStatsPostesJeu.Controls.Add(labelStatPostesJeuFonctionnels);
+            groupBoxStatsPostesJeu.Controls.Add(labelStatPostesJeuTotal);
+            groupBoxStatsPostesJeu.Controls.Add(labelTitreEspaces);
+            groupBoxStatsPostesJeu.Dock = DockStyle.Top;
+            groupBoxStatsPostesJeu.Location = new Point(811, 274);
+            groupBoxStatsPostesJeu.Margin = new Padding(4, 5, 4, 5);
+            groupBoxStatsPostesJeu.Name = "groupBoxStatsPostesJeu";
+            groupBoxStatsPostesJeu.Padding = new Padding(4, 5, 4, 5);
+            groupBoxStatsPostesJeu.Size = new Size(517, 200);
+            groupBoxStatsPostesJeu.TabIndex = 8;
+            groupBoxStatsPostesJeu.TabStop = false;
+            // 
+            // labelStatPostesJeuFonctionnels
+            // 
+            labelStatPostesJeuFonctionnels.Font = new Font("Segoe UI", 9.75F);
+            labelStatPostesJeuFonctionnels.Location = new Point(29, 142);
+            labelStatPostesJeuFonctionnels.Margin = new Padding(4, 0, 4, 0);
+            labelStatPostesJeuFonctionnels.Name = "labelStatPostesJeuFonctionnels";
+            labelStatPostesJeuFonctionnels.Size = new Size(400, 33);
+            labelStatPostesJeuFonctionnels.TabIndex = 2;
+            labelStatPostesJeuFonctionnels.Text = "Fonctionnels : 8";
+            labelStatPostesJeuFonctionnels.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelStatPostesJeuTotal
+            // 
+            labelStatPostesJeuTotal.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
+            labelStatPostesJeuTotal.ForeColor = Color.FromArgb(255, 152, 0);
+            labelStatPostesJeuTotal.Location = new Point(29, 58);
+            labelStatPostesJeuTotal.Margin = new Padding(4, 0, 4, 0);
+            labelStatPostesJeuTotal.Name = "labelStatPostesJeuTotal";
+            labelStatPostesJeuTotal.Size = new Size(400, 75);
+            labelStatPostesJeuTotal.TabIndex = 1;
+            labelStatPostesJeuTotal.Text = "12";
+            labelStatPostesJeuTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelTitreEspaces
+            // 
+            labelTitreEspaces.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTitreEspaces.ForeColor = Color.FromArgb(100, 100, 100);
+            labelTitreEspaces.Location = new Point(29, 25);
+            labelTitreEspaces.Margin = new Padding(4, 0, 4, 0);
+            labelTitreEspaces.Name = "labelTitreEspaces";
+            labelTitreEspaces.Size = new Size(400, 33);
+            labelTitreEspaces.TabIndex = 0;
+            labelTitreEspaces.Text = "🏢 POSTES DE JEU";
+            labelTitreEspaces.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // UcPostesDeJeu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Cornsilk;
-            Controls.Add(panelForm);
-            Controls.Add(dataGridPostesJeu);
+            Controls.Add(tableLayoutPanel1);
             Name = "UcPostesDeJeu";
-            Size = new Size(949, 720);
+            Size = new Size(1364, 720);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
@@ -328,6 +400,8 @@
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
+            groupBoxStatsPostesJeu.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -353,5 +427,10 @@
         private Label labelPlateforme;
         private ComboBox comboBoxEspace;
         private ComboBox comboBoxPlateforme;
+        private TableLayoutPanel tableLayoutPanel1;
+        private GroupBox groupBoxStatsPostesJeu;
+        private Label labelStatPostesJeuFonctionnels;
+        private Label labelStatPostesJeuTotal;
+        private Label labelTitreEspaces;
     }
 }

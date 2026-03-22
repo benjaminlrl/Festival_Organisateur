@@ -95,17 +95,6 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
-        /// <summary>
-        /// Vérifie si un espace avec le même nom existe déjà en base.
-        /// </summary>
-        /// <param name="nom">Nom de l'espace a vérfier</param>
-        /// <returns>Vrai si il existe sinon faux</returns>
-        public bool NomExiste(string nom)
-        {
-            // Vérifie l'existence d'un espace avec le même nom.
-            return _context.Espaces.Any(e => e.Nom == nom);
-        }
     }
 
 }
