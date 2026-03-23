@@ -20,11 +20,12 @@ namespace ApplicationUi
         private Organisateur? _organisateurSelectionne = null;
         private readonly Organisateur _organisateurConnecte;
 
-        public UcOrganisateur()
+        public UcOrganisateur(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _serviceRole = new RoleService(new ApplicationDbContext());
+            _organisateurConnecte = unOrganisateurConnecte;
             ChargerOrganisateurs();
             ChargerRoles();
             buttonModifier.Enabled = _organisateurSelectionne != null;

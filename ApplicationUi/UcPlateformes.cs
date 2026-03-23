@@ -19,7 +19,8 @@ namespace ApplicationUi
         private Plateforme? _plateformeSelectionee = null;
         private string filtre;
         private string ordreChamp;
-        public UcPlateformes()
+        private readonly Organisateur _organisateurConnecte;
+        public UcPlateformes(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             _servicePlateforme = new PlateformeService(new ApplicationDbContext());
@@ -28,6 +29,7 @@ namespace ApplicationUi
             filtre = "";
             buttonEffacer.Text = " 🧽  Effacer";
             ordreChamp = "ASC";
+            _organisateurConnecte = unOrganisateurConnecte;
             ChargerPlateformes();
         }
         #region Evènements

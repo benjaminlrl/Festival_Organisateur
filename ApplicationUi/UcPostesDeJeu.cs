@@ -24,8 +24,9 @@ namespace ApplicationUi
         private PosteJeu? _posteJeuSelectionne;
         private string filtre;
         private string ordreChamp;
+        private readonly Organisateur _organisateurConnecte;
 
-        public UcPostesDeJeu()
+        public UcPostesDeJeu(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             _serviceTournoi = new TournoiService(new ApplicationDbContext());
@@ -36,6 +37,7 @@ namespace ApplicationUi
             fonctionnelSelectionne = false;
             filtre = "";
             ordreChamp = "ASC";
+            _organisateurConnecte = unOrganisateurConnecte;
             ChargerPlateformes();
             ChargerEspaces();
             ChargerPostesDeJeu();

@@ -11,6 +11,21 @@ namespace Lib_Services.Services
     /// <summary>
     /// Service métier responsable des opérations CRUD sur l'entité <see cref="Organisateur"/>.
     /// </summary>
+
+    /// Administrateur :
+    /// • CRUD → toutes les tables
+    ///
+    /// Gestionnaire du stock :
+    /// • CRUD : Lot, LotComposant,
+    /// • Consultation : Tournoi, Jeu, Espace, PosteJeu, Plateforme
+    ///
+    /// Gestionnaire de l’espace :
+    /// • CRUD : Espace, PosteJeu, Tournoi
+    /// • Consultation : Plateforme, Jeu, Participer
+    ///
+    /// Gestionnaire des tournois :
+    /// • CRUD : Tournoi, Participer, SoumisVote
+    /// • Consultation : Espace , PosteJeu, Plateforme, Jeu, Lot, Voter
     public class RoleService : IRoleService
     {
         private readonly ApplicationDbContext _context;
@@ -31,8 +46,9 @@ namespace Lib_Services.Services
         /// <returns>L'entité <see cref="Role"/> si trouvée, sinon null.</returns>
         public Role? Obtenir(string Libelle)
         {
-            // Find utilise le cache du contexte s'il existe, sinon interroge la base.
-            return _context.Role.FirstOrDefault(r => r.Libelle == Libelle);
+            return _context.Role
+                           .AsNoTracking()  // ← ajout
+                           .FirstOrDefault(r => r.Libelle == Libelle);
         }
 
         /// <summary>
