@@ -23,9 +23,10 @@ namespace ApplicationUi
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
         private string ordreChamp;
+        private readonly Organisateur _organisateurConnecte;
 
 
-        public UcTournois()
+        public UcTournois(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             _serviceTournoi = new TournoiService(new ApplicationDbContext());
@@ -34,6 +35,7 @@ namespace ApplicationUi
             ChargerEspaces();
             buttonModifier.Enabled = _tournoiSelectionne != null;
             buttonSupprimer.Enabled = _tournoiSelectionne != null;
+            _organisateurConnecte = unOrganisateurConnecte;
             buttonEffacer.Text = " 🧽  Effacer";
             filtre = "";
             ordreChamp = "ASC";

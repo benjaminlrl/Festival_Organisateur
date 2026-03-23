@@ -44,8 +44,9 @@ namespace Lib_Services.Services
         /// <returns>L'entité <see cref="Organisateur"/> si trouvée, sinon null.</returns>
         public Organisateur? Obtenir(string Login)
         {
-            // Find utilise le cache du contexte s'il existe, sinon interroge la base.
-            return _context.Organisateur.Find(Login);
+            return _context.Organisateur
+                           .Include(o => o.Role)
+                           .FirstOrDefault(o => o.Login == Login);
         }
 
         /// <summary>
@@ -58,6 +59,8 @@ namespace Lib_Services.Services
             // Regarde si le login n'existe pas déjà
             if(Obtenir(organisateur.Login) != null)
                 throw new InvalidOperationException("Ce login est déjà pris.");
+            if (organisateur.Role != null)
+                _context.Entry(organisateur.Role).State = EntityState.Unchanged;
             // Ajout de l'entité au contexte puis persistance immédiate.
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);
@@ -113,17 +116,19 @@ namespace Lib_Services.Services
         {
             Role role = unOrganisateur.Role;
             // Les administrateurs ont le droit à tout
+            System.Diagnostics.Debug.WriteLine($"ESTAUTORISER : {role.Libelle} {unUC} {action}");
             if (role.Libelle == "Administrateur")
             {
                 return "true";
             }
 
             // Role Gestionnaire de stock
-            if (role.Libelle == "Gestionnaire de Stock")
+            if (role.Libelle == "Gestionnaire du stock")
             {
                 if (action == "Consulter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois) //Rajouter interface Jeu,Espace,PosteJeu,Plateforme, Lot & LotComposant
+                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcPostesDeJeu 
+                        || unUC == Organisateur.LesUC.UcEspaces || unUC == Organisateur.LesUC.UcPlateformes) //Rajouter interface Lot & LotComposant
                     {
                         return "true";
                     }
@@ -138,18 +143,21 @@ namespace Lib_Services.Services
             }
 
             //Role Gestionnaire de l'Espace
-            if (role.Libelle == "Gestionnaire de l'Espace")
+            if (role.Libelle == "Gestionnaire de l'espace")
             {
                 if (action == "Consulter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Plateforme,Jeu,Participer
+                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcPlateformes 
+                        || unUC == Organisateur.LesUC.UcPostesDeJeu || unUC == Organisateur.LesUC.UcPlateformes 
+                        || unUC == Organisateur.LesUC.UcEspaces) //Ajouter ,Jeu,Participer
                     {
                         return "true";
                     }
                 }
                 else if (action == "Modifier" || action == "Supprimer")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Espace,PosteJeu
+                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcEspaces 
+                        || unUC == Organisateur.LesUC.UcPostesDeJeu)
                     {
                         return "true";
                     }
@@ -161,8 +169,8 @@ namespace Lib_Services.Services
             {
                 if (action == "Consulter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Participer, SoumisVote, Espace,
-                                                       //PosteJeu, Plateforme, Jeu, Lot, Voter
+                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcEspaces 
+                        || unUC == Organisateur.LesUC.UcPostesDeJeu || unUC == Organisateur.LesUC.UcPlateformes) //Ajouter Jeu, Lot, Votre, SoumisVote
                     {
                         return "true";
                     }

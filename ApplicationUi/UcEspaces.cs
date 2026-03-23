@@ -22,7 +22,8 @@ namespace ApplicationUi
         private string filtre;
         // Champ pour suivre l'ordre de tri actuel sur la colonne Nom
         private string ordreChamp;
-        public UcEspaces()
+        private readonly Organisateur _organisateurConnecte;
+        public UcEspaces(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             _serviceEspace = new EspaceService(new ApplicationDbContext());
@@ -31,6 +32,7 @@ namespace ApplicationUi
             buttonEffacer.Text = "🧽  Effacer";
             ordreChamp = "ASC";
             filtre = "";
+            _organisateurConnecte = unOrganisateurConnecte;
             ChargerEspaces();
         }
         #region Evènements

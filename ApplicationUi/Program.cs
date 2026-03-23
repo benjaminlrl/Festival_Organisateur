@@ -99,11 +99,8 @@ namespace ApplicationUi
                     Libelle = "Gestionnaire des tournois"
                 });
             }
-            organisateurService.Supprimer("admin");
-            // Créé un utilisateur si y'a rien dedans
-            var roleAdmin = roleService.Obtenir("Administrateur");
-            System.Diagnostics.Debug.WriteLine($"Role trouvé : {roleAdmin?.Libelle ?? "NULL"}");
-            System.Diagnostics.Debug.WriteLine($"Nb rôles en base : {context.Role.Count()}");
+
+            // Créé un utilisateur admin si pas déjà fait
             if (!context.Organisateur.Any())
             {
                 organisateurService.Creer(new Organisateur
@@ -113,7 +110,6 @@ namespace ApplicationUi
                     Mail = "mailSio2026@gmail.com",
                     Role = roleService.Obtenir("Administrateur")
                 });
-                context.SaveChanges();
             }
 
             // lancement du formulaire principal
