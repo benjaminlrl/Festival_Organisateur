@@ -18,6 +18,7 @@ namespace ApplicationUi
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IRoleService _serviceRole;
         private Organisateur? _organisateurSelectionne = null;
+        private readonly Organisateur _organisateurConnecte;
 
         public UcOrganisateur()
         {
@@ -28,6 +29,14 @@ namespace ApplicationUi
             ChargerRoles();
             buttonModifier.Enabled = _organisateurSelectionne != null;
             buttonSupprimer.Enabled = _organisateurSelectionne != null;
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Modifier") != "true")
+            {
+                buttonModifier.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Supprimer") != "true")
+            {
+                buttonSupprimer.Visible = false;
+            }
         }
 
         #region Chargement

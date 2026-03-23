@@ -68,9 +68,9 @@ namespace Lib_Services.Services
         public void Supprimer(Role role)
         {
             // Recherche de l'entité (utilise le cache si possible).
-            var roleChercher = _context.Organisateur.Find(role);
+            var roleChercher = _context.Role.Find(role);
             if (roleChercher != null)
-                _context.Organisateur.Remove(roleChercher);
+                _context.Role.Remove(roleChercher);
                 _context.SaveChanges();
         }
 

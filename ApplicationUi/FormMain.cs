@@ -14,13 +14,33 @@ namespace ApplicationUi
 {
     public partial class FormMain : Form
     {
-        private readonly IOrganisateurService _organisateurService;
-        private readonly Organisateur organisateurConnecte;
+        private readonly IOrganisateurService _serviceOrganisateur;
+        private readonly Organisateur _organisateurConnecte;
         public FormMain(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            organisateurConnecte = unOrganisateurConnecte;
-            _organisateurService = new OrganisateurService(new ApplicationDbContext());
+            _organisateurConnecte = unOrganisateurConnecte;
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Consultation") != "true")
+            {
+                btnTournois.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Consultation") != "true")
+            {
+                btnOrganisateur.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Consultation") != "true")
+            {
+                btnEspaces.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Consultation") != "true")
+            {
+                btnPlateformes.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Consultation") != "true")
+            {
+                btnPostes.Visible = false;
+            }
         }
 
 
@@ -50,18 +70,13 @@ namespace ApplicationUi
         // ===============================
         // Actions Associées au Menu
         // ===============================
-        private void btnTournois_Click(object sender, EventArgs e)
-        {
-
-            if (_organisateurService.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Consultation") == "true")
-            {
-                LoadUserControl(new UcTournois(), "Gestion des tournois");
-            }
-        }
-
         private void btnQuitter_Click(object? sender, EventArgs e)
         {
             Application.Exit();
+        }
+        private void btnTournois_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcTournois(), "Gestion des tournois");
         }
 
         private void btnEspaces_Click(object sender, EventArgs e)
@@ -81,10 +96,7 @@ namespace ApplicationUi
 
         private void btnOrganisateur_Click(object sender, EventArgs e)
         {
-            if (_organisateurService.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Consultation") == "true")
-            {
-                LoadUserControl(new UcOrganisateur(), "Gestion des Organisateurs");
-            }
+            LoadUserControl(new UcOrganisateur(), "Gestion des Organisateurs");
         }
     }
 }

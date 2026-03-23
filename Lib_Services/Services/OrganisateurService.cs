@@ -85,8 +85,10 @@ namespace Lib_Services.Services
             // Recherche de l'entité (utilise le cache si possible).
             var organisateur = _context.Organisateur.Find(Login);
             if (organisateur != null)
+            {
                 _context.Organisateur.Remove(organisateur);
                 _context.SaveChanges();
+            }
         }
 
         /// <summary>

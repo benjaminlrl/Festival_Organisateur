@@ -1,5 +1,6 @@
 using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Interfaces;
 using Lib_Services.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,8 +18,15 @@ namespace ApplicationUi
             // Initialise la base si elle n'existe pas
             using var context = new ApplicationDbContext();
 
+
             // Applique toutes les migrations en attente
-                context.Database.Migrate();
+            context.Database.Migrate();
+
+            // Création des services
+            var tournoiService = new TournoiService(context);
+            var espaceService = new EspaceService(context);
+            var organisateurService = new OrganisateurService(context);
+            var roleService = new RoleService(context);
 
             if (!context.Espaces.Any())
             {
@@ -71,15 +79,9 @@ namespace ApplicationUi
                 context.SaveChanges();
             }
 
-
-            // Création des services
-            var tournoiService = new TournoiService(context);
-            var espaceService = new EspaceService(context);
-
             // Créé les rôles si pas déjà fait
             if (!context.Role.Any())
             {
-                var roleService = new RoleService(context);
                 roleService.Creer(new Role
                 {
                     Libelle = "Administrateur"
@@ -97,19 +99,21 @@ namespace ApplicationUi
                     Libelle = "Gestionnaire des tournois"
                 });
             }
-
+            organisateurService.Supprimer("admin");
             // Créé un utilisateur si y'a rien dedans
+            var roleAdmin = roleService.Obtenir("Administrateur");
+            System.Diagnostics.Debug.WriteLine($"Role trouvé : {roleAdmin?.Libelle ?? "NULL"}");
+            System.Diagnostics.Debug.WriteLine($"Nb rôles en base : {context.Role.Count()}");
             if (!context.Organisateur.Any())
             {
-                var roleService = new RoleService(context);
-                var organisateurService = new OrganisateurService(context);
                 organisateurService.Creer(new Organisateur
                 {
                     Login = "admin",
                     motPasse = "SIO2026+",
                     Mail = "mailSio2026@gmail.com",
-                    Role = roleService.Obtenir("Administrateur")!
+                    Role = roleService.Obtenir("Administrateur")
                 });
+                context.SaveChanges();
             }
 
             // lancement du formulaire principal
