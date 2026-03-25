@@ -19,6 +19,7 @@ namespace ApplicationUi
     {
         private readonly ITournoiService _serviceTournoi;
         private readonly IEspaceService _serviceEspace;
+        private readonly IOrganisateurService _serviceOrganisateur;
         private String statutSelectionne = "Planifié";
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
@@ -29,6 +30,7 @@ namespace ApplicationUi
         public UcTournois(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _serviceTournoi = new TournoiService(new ApplicationDbContext());
             _serviceEspace = new EspaceService(new ApplicationDbContext());
             ChargerTournois();
@@ -39,9 +41,21 @@ namespace ApplicationUi
             buttonEffacer.Text = " 🧽  Effacer";
             filtre = "";
             ordreChamp = "ASC";
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
+            {
+                buttonAjouter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Modifier") == false)
+            {
+                buttonModifier.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Supprimer") == false)
+            {
+                buttonSupprimer.Visible = false;
+            }
         }
 
-        #region Evènements
+        #region Chargements
         private void ChargerTournois()
         {
             dataGridTournois.DataSource = null;
@@ -206,7 +220,6 @@ namespace ApplicationUi
         }
 
         #endregion
-
 
         #region Validations
         private bool ValiderHoraire(DateTime dateHeure)

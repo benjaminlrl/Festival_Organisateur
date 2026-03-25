@@ -17,6 +17,7 @@ namespace ApplicationUi
     public partial class UcEspaces : UserControl
     {
         private readonly IEspaceService _serviceEspace;
+        private readonly IOrganisateurService _serviceOrganisateur;
         private Espace? _espaceSelectionee = null;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
         private string filtre;
@@ -26,6 +27,7 @@ namespace ApplicationUi
         public UcEspaces(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _serviceEspace = new EspaceService(new ApplicationDbContext());
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
@@ -34,7 +36,20 @@ namespace ApplicationUi
             filtre = "";
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerEspaces();
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
+            {
+                buttonAjouter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Modifier") == false)
+            {
+                buttonModifier.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Supprimer") == false)
+            {
+                buttonSupprimer.Visible = false;
+            }
         }
+
         #region Evènements
         /// <summary>
         /// Charge les espaces depuis la base de données et les affiche dans le DataGridView.
@@ -167,6 +182,7 @@ namespace ApplicationUi
                                 // pour les afficher dans le DataGridView correspondante
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Vérifie que les champs obligatoires pour un espace sont valides avant de poursuivre l'opération.
@@ -206,6 +222,7 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Boutons
         /// <summary>
         /// Gère l'événement de clic sur le bouton d'ajout pour créer un nouvel espace à partir des informations saisies

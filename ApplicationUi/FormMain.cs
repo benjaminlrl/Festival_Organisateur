@@ -23,23 +23,23 @@ namespace ApplicationUi
             InitializeComponent();
             _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _organisateurConnecte = unOrganisateurConnecte;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Consultation") != "true")
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Consulter") == false)
             {
                 btnTournois.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Consultation") != "true")
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Consulter") == false)
             {
                 btnOrganisateur.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Consultation") != "true")
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Consulter") == false)
             {
                 btnEspaces.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Consultation") != "true")
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Consulter") == false)
             {
                 btnPlateformes.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Consultation") != "true")
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Consulter") == false)
             {
                 btnPostes.Visible = false;
             }

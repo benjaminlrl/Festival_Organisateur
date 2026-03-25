@@ -108,20 +108,19 @@ namespace Lib_Services.Services
             return BCrypt.Net.BCrypt.Verify(motDePasse, organisateur.motPasse);
         }
         /// <summary>
-        /// Retourne si l'organisateur a accès au UserController (unUC) demandée avec telle action
-        /// Consulter - Modifier - Supprimer
+        /// Retourne si l'organisateur peut faire une action en rapport avec un userController
+        /// Consulter - Modifier - Supprimer - Ajouter
         /// </summary>
-        /// <returns>"true" (en string) si il a l'autorisation, sinon un msg d'erreur.</returns>
-        public string estAutoriser(Organisateur unOrganisateur, Organisateur.LesUC unUC, string action)
+        /// <returns>true si il a l'autorisation, sinon false.</returns>
+        public bool estAutoriser(Organisateur unOrganisateur, Organisateur.LesUC unUC, string action)
         {
             Role role = unOrganisateur.Role;
             // Les administrateurs ont le droit à tout
-            System.Diagnostics.Debug.WriteLine($"ESTAUTORISER : {role.Libelle} {unUC} {action}");
             if (role.Libelle == "Administrateur")
             {
-                return "true";
+                return true;
             }
-
+            //System.Diagnostics.Debug.WriteLine($"ESTAUTORISER : {role.Libelle} {action} {unUC}");
             // Role Gestionnaire de stock
             if (role.Libelle == "Gestionnaire du stock")
             {
@@ -130,14 +129,14 @@ namespace Lib_Services.Services
                     if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcPostesDeJeu 
                         || unUC == Organisateur.LesUC.UcEspaces || unUC == Organisateur.LesUC.UcPlateformes) //Rajouter interface Lot & LotComposant
                     {
-                        return "true";
+                        return true;
                     }
                 }
-                else if (action == "Modifier" || action == "Supprimer")
+                else if (action == "Modifier" || action == "Supprimer" || action == "Ajouter")
                 {
                     if (unUC == Organisateur.LesUC.UcTournois) //Modifier en Lot & LotComposant
                     {
-                        return "true";
+                        return true;
                     }
                 }
             }
@@ -151,15 +150,15 @@ namespace Lib_Services.Services
                         || unUC == Organisateur.LesUC.UcPostesDeJeu || unUC == Organisateur.LesUC.UcPlateformes 
                         || unUC == Organisateur.LesUC.UcEspaces) //Ajouter ,Jeu,Participer
                     {
-                        return "true";
+                        return true;
                     }
                 }
-                else if (action == "Modifier" || action == "Supprimer")
+                else if (action == "Modifier" || action == "Supprimer" || action == "Ajouter")
                 {
                     if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcEspaces 
                         || unUC == Organisateur.LesUC.UcPostesDeJeu)
                     {
-                        return "true";
+                        return true;
                     }
                 }
             }
@@ -172,18 +171,18 @@ namespace Lib_Services.Services
                     if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcEspaces 
                         || unUC == Organisateur.LesUC.UcPostesDeJeu || unUC == Organisateur.LesUC.UcPlateformes) //Ajouter Jeu, Lot, Votre, SoumisVote
                     {
-                        return "true";
+                        return true;
                     }
                 }
-                else if (action == "Modifier" || action == "Supprimer")
+                else if (action == "Modifier" || action == "Supprimer" || action == "Ajouter")
                 {
                     if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Participer, SoumisVote
                     {
-                        return "true";
+                        return true;
                     }
                 }
             }
-            return "error|Vous n'avez pas les droits d'accès.";
+            return false;
         }
     }
 
