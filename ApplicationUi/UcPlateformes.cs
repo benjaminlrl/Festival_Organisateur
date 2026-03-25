@@ -15,6 +15,7 @@ namespace ApplicationUi
     public partial class UcPlateformes : UserControl
     {
         private readonly IPlateformeService _servicePlateforme;
+        private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IEspaceService _serviceEspace;
         private Plateforme? _plateformeSelectionee = null;
         private string filtre;
@@ -23,6 +24,7 @@ namespace ApplicationUi
         public UcPlateformes(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _servicePlateforme = new PlateformeService(new ApplicationDbContext());
             buttonModifier.Enabled = _plateformeSelectionee != null;
             buttonSupprimer.Enabled = _plateformeSelectionee != null;
@@ -31,7 +33,20 @@ namespace ApplicationUi
             ordreChamp = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerPlateformes();
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
+            {
+                buttonAjouter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Modifier") == false)
+            {
+                buttonModifier.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Supprimer") == false)
+            {
+                buttonSupprimer.Visible = false;
+            }
         }
+
         #region Evènements
         private void ChargerPlateformes()
         {
@@ -118,6 +133,7 @@ namespace ApplicationUi
             ChargerPostesJeu();
         }
         #endregion
+
         #region Validations
         private bool ValiderPLateforme()
         {
@@ -137,6 +153,7 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
         {

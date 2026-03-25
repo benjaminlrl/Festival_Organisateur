@@ -25,47 +25,7 @@ namespace ApplicationUi
 
         }
 
-        // Boutton Connexion
-        private async void btnLogin_ClickAsync(object sender, EventArgs e)
-        {
-            if(string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
-            {
-                labelError.Text = "Veuillez remplir tous les champs.";
-                await Task.Delay(5000);
-                labelError.Text = "";
-                return;
-            }
-
-            if (_organisateurService.EstIdentique(txtPassword.Text, txtUsername.Text.Trim()))
-            {
-                this.Hide();
-                organisateurConnecte = _organisateurService.Obtenir(txtUsername.Text);
-                if (organisateurConnecte != null)
-                    new FormMain(organisateurConnecte).Show();
-            }else
-            {
-                labelError.Text = "Login ou mot de passe incorrect.";
-                await Task.Delay(5000);
-                labelError.Text = "";
-            }
-        }
-
-        // Validation par touche Entrée
-        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                btnLogin.PerformClick();
-                e.Handled = true;
-            }
-        }
-
-        // Boutton Quitter
-        private void btnQuitter_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
+        #region Chargements
         // Effet de focus sur les champs (fait par IA)
         private void txt_Enter(object sender, EventArgs e)
         {
@@ -92,5 +52,48 @@ namespace ApplicationUi
             path.CloseAllFigures();
             ctrl.Region = new Region(path);
         }
+        #endregion
+
+        #region Évènements 
+        // Boutton Connexion
+        private async void btnLogin_ClickAsync(object sender, EventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show("Veuillez remplir tous les champs.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                await Task.Delay(5000);
+                return;
+            }
+
+            if (_organisateurService.EstIdentique(txtPassword.Text, txtUsername.Text.Trim()))
+            {
+                this.Hide();
+                organisateurConnecte = _organisateurService.Obtenir(txtUsername.Text);
+                if (organisateurConnecte != null)
+                    new FormMain(organisateurConnecte).Show();
+            }else
+            {
+                MessageBox.Show("Login ou mot de passe incorrect.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                await Task.Delay(5000);
+            }
+        }
+
+        // Validation par touche Entrée
+        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnLogin.PerformClick();
+                e.Handled = true;
+            }
+        }
+
+        // Boutton Quitter
+        private void btnQuitter_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        #endregion
     }
 }

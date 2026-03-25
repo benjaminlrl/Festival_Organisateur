@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ApplicationUi
 {
@@ -30,11 +31,15 @@ namespace ApplicationUi
             ChargerRoles();
             buttonModifier.Enabled = _organisateurSelectionne != null;
             buttonSupprimer.Enabled = _organisateurSelectionne != null;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Modifier") != "true")
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Ajouter") == false)
+            {
+                buttonAjouter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Supprimer") != "true")
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
             }
@@ -96,26 +101,82 @@ namespace ApplicationUi
 
         #endregion
 
+        #region Validations
+        /// <summary>
+        /// Permet de voir si un mot de passe est conformes aux règles de sécurité suivantes 
+        /// </summary>
+        /// <param name="motDePasse"></param>
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public static bool MdpValide(string motDePasse)
+        {
+            if (motDePasse.Length < 12)
+            {
+                MessageBox.Show("Le mot de passe doit contenir plus de 12 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (motDePasse.Any(char.IsUpper) == false)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 1 majuscule.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (motDePasse.Any(char.IsDigit) == false)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 1 chiffre.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (motDePasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 1 caractère spéciale.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Permet de voir si un identifaint est conformes aux règles de sécurité suivantes
+        /// </summary>
+        /// <param name="identifiant"></param>
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public static bool IdentifiantValide(string identifiant)
+        {
+            if (identifiant.Length < 3 || identifiant.Length > 12)
+            {
+                MessageBox.Show("Le login doit contenir entre 3 et 12 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
+
         #region Evènements
 
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
             // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel organisateur
-            if (Validations.IdentifiantValide(textBoxLogin.Text) == false)
+            if (IdentifiantValide(textBoxLogin.Text) == false)
             {
-                labelError.Text = "Le login doit contenir entre 3 et 12 caractères.";
                 return;
             }
-            if (Validations.MdpValide(textBoxMotDePasse.Text) != "true")
-                labelError.Text = Validations.MdpValide(textBoxMotDePasse.Text);
-
-            _serviceOrganisateur.Creer(new Organisateur
+            if (MdpValide(textBoxMotDePasse.Text) == true)
             {
-                Login = textBoxLogin.Text,
-                Mail = textBoxMail.Text,
-                motPasse = textBoxMotDePasse.Text,
-                IdRole = (int)comboBoxRole.SelectedValue
-            });
+                return;
+            }
+
+            try
+            {
+                _serviceOrganisateur.Creer(new Organisateur
+                {
+                    Login = textBoxLogin.Text,
+                    Mail = textBoxMail.Text,
+                    motPasse = textBoxMotDePasse.Text,
+                    IdRole = (int)comboBoxRole.SelectedValue
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             ChargerOrganisateurs();
             Raz_Zones();
         }
@@ -123,14 +184,13 @@ namespace ApplicationUi
         private void buttonModifier_Click(object sender, EventArgs e)
         {
             // On check si l'identifiant & le mot de passe sont valides, puis on modifie l'organisateur selectionné
-            if (Validations.IdentifiantValide(textBoxLogin.Text) == false)
+            if (IdentifiantValide(textBoxLogin.Text) == false)
             {
-                labelError.Text = "Le login doit contenir entre 3 et 12 caractères.";
                 return;
             }
-            if(textBoxMotDePasse.Text != "")
-                if (Validations.MdpValide(textBoxMotDePasse.Text) != "true")
-                    labelError.Text = Validations.MdpValide(textBoxMotDePasse.Text);
+            if (textBoxMotDePasse.Text != "")
+                if (MdpValide(textBoxMotDePasse.Text) == false)
+                    return;
 
             // Modifiée seulement les valeurs qui ont été modifiées
             if (textBoxLogin.Text != "" || _organisateurSelectionne.Login != textBoxLogin.Text)
@@ -150,11 +210,11 @@ namespace ApplicationUi
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
-            //Ne pas pouvoir suppr l'organisateur connecté
-            //Ne pas pouvoir suppr "admin"
+            // Ne pas pouvoir suppr l'organisateur connecté
+            // Ne pas pouvoir suppr "admin"
             if (_organisateurSelectionne == null)
             {
-                labelError.Text = "Aucun organisateur sélectionné.";
+                MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login);
@@ -183,5 +243,6 @@ namespace ApplicationUi
         }
 
         #endregion
+
     }
 }

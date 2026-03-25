@@ -17,6 +17,7 @@ namespace ApplicationUi
     public partial class UcPostesDeJeu : UserControl
     {
         private readonly ITournoiService _serviceTournoi;
+        private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IEspaceService _serviceEspace;
         private readonly IPosteJeuService _servicePosteJeu;
         private readonly IPlateformeService _servicePlateforme;
@@ -30,6 +31,7 @@ namespace ApplicationUi
         {
             InitializeComponent();
             _serviceTournoi = new TournoiService(new ApplicationDbContext());
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _serviceEspace = new EspaceService(new ApplicationDbContext());
             _servicePosteJeu = new PosteJeuService(new ApplicationDbContext());
             _servicePlateforme = new PlateformeService(new ApplicationDbContext());
@@ -44,11 +46,24 @@ namespace ApplicationUi
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
+            {
+                buttonAjouter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
+            {
+                buttonModifier.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Supprimer") == false)
+            {
+                buttonSupprimer.Visible = false;
+            }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
             // TODO: Ajouter un graphique pour indiquer le nombre de postes de jeu
             // fonctionnels vs non fonctionnels
             // TODO: ajouter une option de filtrage croissant décroissant sur la référence du poste de jeu
         }
+
         #region Evènements
         private void ChargerPostesDeJeu()
         {
@@ -222,6 +237,7 @@ namespace ApplicationUi
             ChargerPostesDeJeu();
         }
         #endregion
+
         #region Validations
         private bool ValiderPosteJeu()
         {
@@ -251,6 +267,7 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
