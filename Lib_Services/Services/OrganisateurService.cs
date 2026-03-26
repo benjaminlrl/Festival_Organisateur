@@ -59,8 +59,6 @@ namespace Lib_Services.Services
             // Regarde si le login n'existe pas déjà
             if(Obtenir(organisateur.Login) != null)
                 throw new InvalidOperationException("Ce login est déjà pris.");
-            if (organisateur.Role != null)
-                _context.Entry(organisateur.Role).State = EntityState.Unchanged;
             // Ajout de l'entité au contexte puis persistance immédiate.
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);

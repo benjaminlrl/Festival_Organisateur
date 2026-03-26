@@ -1,6 +1,7 @@
 ﻿using Lib_Entities.Entities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Lib_Services.Interfaces
@@ -11,7 +12,6 @@ namespace Lib_Services.Interfaces
         void Modifier(Role role);
         void Supprimer(Role role);
         Role? Obtenir(string Libelle);
-
-        List<Role> Lister();
+        List<Role> Lister(string filtre);
     }
 }

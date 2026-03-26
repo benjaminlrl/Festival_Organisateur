@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace Lib_Services.Services
 {
@@ -40,6 +41,27 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
+        /// Retourne tout les roles présents dans la base de données.
+        /// Si un filtre est fourni, retourne uniquement 
+        /// les roles dont le libellé correspond au filtre.
+        /// </summary>
+        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
+        /// <returns>Liste de <see cref="Role"/>.</returns>
+        public List<Role> Lister(string filtre = "")
+        {
+            // Utilise le DbSet Plateformes pour matérialiser la collection en mémoire.
+            if (string.IsNullOrWhiteSpace(filtre))
+                return _context.Role
+                     .Include(r => r.Organisateurs)
+                     .ToList();
+            return
+                _context.Role
+                .Include(r => r.Organisateurs)
+                .Where(r => r.Libelle.Contains(filtre))
+                .ToList();
+        }
+
+        /// <summary>
         /// Récupère un role par son libelle.
         /// </summary>
         /// <param name="Libelle">Le libelle du rôle cherché.</param>
@@ -58,9 +80,6 @@ namespace Lib_Services.Services
         /// <param name="role">Instance de <see cref="Role"/> à créer.</param>
         public void Creer(Role role)
         {
-            // Regarde si le login n'existe pas déjà
-            if(Obtenir(role.Libelle) != null)
-                throw new InvalidOperationException("Ce nom de rôle est déjà pris");
             // Ajout de l'entité au contexte puis persistance immédiate.
             _context.Role.Add(role);
             _context.SaveChanges();
@@ -90,14 +109,6 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
         }
 
-        /// <summary>
-        /// Retourne la liste complète des rôles
-        /// </summary>
-        /// <returns>Liste des tournois.</returns>
-        public List<Role> Lister()
-        {
-            return _context.Role.ToList();
-        }
 
     }
 

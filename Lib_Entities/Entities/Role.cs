@@ -11,6 +11,11 @@ namespace Lib_Entities.Entities
     public class Role
     {
         /// <summary>
+        /// id du Rôle.
+        /// </summary>
+        public int IdRole { get; set; }
+
+        /// <summary>
         /// Libelle du rôle.
         /// </summary>
         public string Libelle { get; set; }
@@ -18,12 +23,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Ensemble des Organisateurs possédant le rôle.
         /// </summary>
-        public ICollection<Organisateur> Organisateurs { get; set; }
-
-        /// <summary>
-        /// id du Rôle.
-        /// </summary>
-        public int IdRole { get; set; }
+        public ICollection<Organisateur> Organisateurs { get; set; } = new List<Organisateur>();
 
     }
 }
