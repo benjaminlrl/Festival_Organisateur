@@ -15,7 +15,7 @@ namespace Lib_Metier.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
 
             modelBuilder.Entity("Lib_Entities.Entities.Espace", b =>
                 {
@@ -38,8 +38,8 @@ namespace Lib_Metier.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("nom");
 
-                    b.Property<double>("Superficie")
-                        .HasColumnType("REAL")
+                    b.Property<int>("Superficie")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("superficie");
 
                     b.HasKey("IdEspace");
@@ -47,19 +47,103 @@ namespace Lib_Metier.Migrations
                     b.ToTable("Espace", (string)null);
                 });
 
-            modelBuilder.Entity("Lib_Entities.Entities.Plateforme", b =>
+            modelBuilder.Entity("Lib_Entities.Entities.Lot", b =>
                 {
-                    b.Property<int>("IdPlateform")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Numero")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EstAttribue")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("id_plateform");
+                        .HasColumnName("estAttribue");
 
                     b.Property<string>("Libelle")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("libelle");
 
-                    b.HasKey("IdPlateform");
+                    b.Property<int>("NumeroTournoi")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("numeroTournoi");
+
+                    b.Property<int>("RangAttribution")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("rangAttribution");
+
+                    b.Property<float>("ValeurTotale")
+                        .HasColumnType("REAL")
+                        .HasColumnName("valeurTotale");
+
+                    b.HasKey("Numero");
+
+                    b.ToTable("Lot", (string)null);
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.LotComposant", b =>
+                {
+                    b.Property<int>("Numero")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Description")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("description");
+
+                    b.Property<int>("Libelle")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("libelle");
+
+                    b.Property<int>("NumeroLot")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("numero_lot");
+
+                    b.Property<int>("Valeur")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("valeur");
+
+                    b.HasKey("Numero");
+
+                    b.ToTable("LotComposant", (string)null);
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Organisateur", b =>
+                {
+                    b.Property<string>("Login")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("login");
+
+                    b.Property<int>("IdRole")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id_role");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("mail");
+
+                    b.Property<string>("motPasse")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("motPasse");
+
+                    b.HasKey("Login");
+
+                    b.HasIndex("IdRole");
+
+                    b.ToTable("Organisateur", (string)null);
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Plateforme", b =>
+                {
+                    b.Property<int>("IdPlateforme")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id_plateforme");
+
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("libelle");
+
+                    b.HasKey("IdPlateforme");
 
                     b.ToTable("Plateforme", (string)null);
                 });
@@ -80,9 +164,9 @@ namespace Lib_Metier.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("id_espace");
 
-                    b.Property<int>("IdPlateform")
+                    b.Property<int>("IdPlateforme")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("id_plateform");
+                        .HasColumnName("id_plateforme");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -93,9 +177,25 @@ namespace Lib_Metier.Migrations
 
                     b.HasIndex("IdEspace");
 
-                    b.HasIndex("IdPlateform");
+                    b.HasIndex("IdPlateforme");
 
                     b.ToTable("Poste_Jeu", (string)null);
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Role", b =>
+                {
+                    b.Property<int>("IdRole")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id_role");
+
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("IdRole");
+
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("Lib_Entities.Entities.Tournoi", b =>
@@ -138,6 +238,39 @@ namespace Lib_Metier.Migrations
                     b.ToTable("Tournoi", (string)null);
                 });
 
+            modelBuilder.Entity("Lib_Entities.Entities.Lot", b =>
+                {
+                    b.HasOne("Lib_Entities.Entities.Tournoi", "Tournoi")
+                        .WithMany("Lot")
+                        .HasForeignKey("Numero")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tournoi");
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.LotComposant", b =>
+                {
+                    b.HasOne("Lib_Entities.Entities.Lot", "Lot")
+                        .WithMany("LotComposant")
+                        .HasForeignKey("Numero")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lot");
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Organisateur", b =>
+                {
+                    b.HasOne("Lib_Entities.Entities.Role", "Role")
+                        .WithMany("Organisateurs")
+                        .HasForeignKey("IdRole")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Lib_Entities.Entities.PosteJeu", b =>
                 {
                     b.HasOne("Lib_Entities.Entities.Espace", "Espace")
@@ -148,7 +281,7 @@ namespace Lib_Metier.Migrations
 
                     b.HasOne("Lib_Entities.Entities.Plateforme", "Plateforme")
                         .WithMany("PostesJeu")
-                        .HasForeignKey("IdPlateform")
+                        .HasForeignKey("IdPlateforme")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -175,9 +308,24 @@ namespace Lib_Metier.Migrations
                     b.Navigation("Tournois");
                 });
 
+            modelBuilder.Entity("Lib_Entities.Entities.Lot", b =>
+                {
+                    b.Navigation("LotComposant");
+                });
+
             modelBuilder.Entity("Lib_Entities.Entities.Plateforme", b =>
                 {
                     b.Navigation("PostesJeu");
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Role", b =>
+                {
+                    b.Navigation("Organisateurs");
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Tournoi", b =>
+                {
+                    b.Navigation("Lot");
                 });
 #pragma warning restore 612, 618
         }

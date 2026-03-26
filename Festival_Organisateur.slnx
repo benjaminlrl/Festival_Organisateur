@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="ApplicationUI.TestUnits/ApplicationUI.TestUnits.csproj" Id="d0ceb64e-972d-4453-8e9f-bfa98a8b4894" />
   <Project Path="ApplicationUi/ApplicationUi.csproj" />
   <Project Path="Lib_Entities/Lib_Entities.csproj" />
   <Project Path="Lib_Metier/Lib_Metier.csproj" />

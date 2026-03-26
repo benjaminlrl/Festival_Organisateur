@@ -30,7 +30,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Lien vers l'id de la plateforme contenant ce poste. 
         /// </summary>
-        public int IdPlateform { get; set; }
+        public int IdPlateforme { get; set; }
 
         /// <summary>
         /// Propriété de navigation vers la `Plateforme` associée.
@@ -46,6 +46,19 @@ namespace Lib_Entities.Entities
         /// Propriété de navigation vers l'`Espace` contenant le poste.
         /// </summary>
         public Espace Espace { get; set; }
+        /// <summary>
+        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
+        /// Renvoie le nom de l'espace de façon null-safe ;
+        /// retourne chaîne vide si l'espace est null.
+        /// </summary>
+        public string NomEspace => Espace?.Nom ?? string.Empty;
+
+        /// <summary>
+        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
+        /// Renvoie le libellé de la plateforme de façon null-safe ;
+        /// retourne chaîne vide si l'espace est null.
+        /// </summary>
+        public string NomPlateforme => Plateforme?.Libelle ?? string.Empty;
     }
 
 }

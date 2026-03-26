@@ -11,10 +11,10 @@ namespace Lib_Metier.Data.Configurations
     public class ApplicationDbContext : DbContext
     {
         /// <summary>
-        /// Ensemble des espaces (table `Espace`).
+        /// Ensemble des organisateurs (table `Organisateur`).
         /// Utilise `Set<T>()` pour rester compatible avec le pattern DbContext minimal.
         /// </summary>
-        public DbSet<Espace> Espaces => Set<Espace>();
+        public DbSet<Organisateur> Organisateur => Set<Organisateur>();
 
         /// <summary>
         /// Ensemble des plateformes (table `Plateforme`).
@@ -30,6 +30,27 @@ namespace Lib_Metier.Data.Configurations
         /// Ensemble des tournois (table `Tournoi`).
         /// </summary>
         public DbSet<Tournoi> Tournois => Set<Tournoi>();
+
+        /// <summary>
+        /// Ensemble des Lot (table `Lot`).
+        /// </summary>
+        public DbSet<Lot> Lot => Set<Lot>();
+
+        /// <summary>
+        /// Ensemble des LotComposant (table `LotComposantrnoi`).
+        /// </summary>
+        public DbSet<LotComposant> LotComposant => Set<LotComposant>();
+
+        /// <summary>
+        /// Ensemble des Espaces (table `Espace`).
+        /// </summary>
+        public DbSet<Espace> Espaces => Set<Espace>();
+
+        /// <summary>
+        /// Ensemble des Role (table `Role`).
+        /// </summary>
+        public DbSet<Role> Role => Set<Role>();
+
 
         /// <summary>
         /// Configure la source de données : ici une base SQLite locale : `gestionTournois.db`

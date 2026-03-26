@@ -10,7 +10,7 @@ namespace Lib_Services.Interfaces
         void Creer(Tournoi tournoi);
         void Modifier(Tournoi tournoi);
         void Supprimer(int numeroTournoi);
-        List<Tournoi> Lister();
+        List<Tournoi> Lister(string filtre);
         Tournoi? Obtenir(int numeroTournoi);
     }
 }

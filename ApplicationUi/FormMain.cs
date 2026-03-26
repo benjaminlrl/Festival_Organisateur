@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Lib_Entities.Entities;
+using Lib_Metier.Data.Configurations;
+using Lib_Services.Interfaces;
+using Lib_Services.Services;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,9 +15,34 @@ namespace ApplicationUi
 {
     public partial class FormMain : Form
     {
-        public FormMain()
+        private readonly IOrganisateurService _serviceOrganisateur;
+        private readonly Organisateur _organisateurConnecte;
+        public FormMain(Organisateur unOrganisateurConnecte)
         {
+
             InitializeComponent();
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
+            _organisateurConnecte = unOrganisateurConnecte;
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Consulter") == false)
+            {
+                btnTournois.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Consulter") == false)
+            {
+                btnOrganisateur.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Consulter") == false)
+            {
+                btnEspaces.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Consulter") == false)
+            {
+                btnPlateformes.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Consulter") == false)
+            {
+                btnPostes.Visible = false;
+            }
         }
 
 
@@ -42,14 +72,33 @@ namespace ApplicationUi
         // ===============================
         // Actions Associées au Menu
         // ===============================
-        private void btnTournois_Click(object sender, EventArgs e)
-        {
-            LoadUserControl(new UcTournois(), "Gestion des tournois");
-        }
-
         private void btnQuitter_Click(object? sender, EventArgs e)
         {
             Application.Exit();
+        }
+        private void btnTournois_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcTournois(_organisateurConnecte), "Gestion des tournois");
+        }
+
+        private void btnEspaces_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcEspaces(_organisateurConnecte), "Gestion des espaces");
+        }
+
+        private void btnPostes_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcPostesDeJeu(_organisateurConnecte), "Gestion des postes de jeu");
+        }
+
+        private void btnPlateformes_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcPlateformes(_organisateurConnecte), "Gestion des plateformes");
+        }
+
+        private void btnOrganisateur_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcOrganisateur(_organisateurConnecte), "Gestion des Organisateurs");
         }
     }
 }

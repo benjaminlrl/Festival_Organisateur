@@ -1,6 +1,7 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,23 +28,46 @@ namespace Lib_Services.Services
 
         /// <summary>
         /// Récupère l'ensemble des postes de jeu depuis la base de données.
+        /// Si un filtre est fourni, ne retourne que 
+        /// les postes de jeu dont la référence correspond au filtre.
         /// </summary>
+        /// <param name="filtre">Optionnel : référence à filtrer.</param>
         /// <returns>Liste de <see cref="PosteJeu"/>.</returns>
-        public List<PosteJeu> Lister()
+        public List<PosteJeu> Lister(string filtre = "")
         {
             // ToList matérialise la requête et ramène les entités en mémoire.
-            return _context.PostesJeu.ToList();
+            if (string.IsNullOrWhiteSpace(filtre)) 
+                return _context.PostesJeu
+                    .Include(p => p.Espace)
+                    .Include(p => p.Plateforme)
+                    .ToList();
+            return _context.PostesJeu
+                .Where(p => p.Reference.Contains(filtre)
+                    || p.Espace.Nom.Contains(filtre)
+                    || p.Plateforme.Libelle.Contains(filtre))
+                .ToList();
         }
 
         /// <summary>
         /// Récupère un poste de jeu par son identifiant.
         /// </summary>
-        /// <param name="idposteJeu">Identifiant du poste de jeu recherché.</param>
+        /// <param name="idPosteJeu">Identifiant du poste de jeu recherché.</param>
         /// <returns>L'entité <see cref="PosteJeu"/> si trouvée ; sinon null.</returns>
-        public PosteJeu? Obtenir(int idposteJeu)
+        public PosteJeu? Obtenir(int idPosteJeu)
         {
             // Find retourne null si l'entité n'existe pas dans le contexte/la base.
-            return _context.PostesJeu.Find(idposteJeu);
+            return _context.PostesJeu.Find(idPosteJeu);
+        }
+
+        /// <summary>
+        /// Récupère un poste de jeu par sa référence.
+        /// </summary>
+        /// <param name="reference">Référence du poste de jeu recherché.</param>
+        /// <returns>L'entité <see cref="PosteJeu"/> si trouvée ; sinon null.</returns>
+        public PosteJeu? ReferenceExiste(string reference)
+        {
+            // Find retourne null si l'entité n'existe pas dans le contexte/la base.
+            return _context.PostesJeu.FirstOrDefault(p => p.Reference == reference);
         }
 
         /// <summary>
@@ -71,18 +95,17 @@ namespace Lib_Services.Services
         /// <summary>
         /// Supprime un poste de jeu identifié par son identifiant si présent.
         /// </summary>
-        /// <param name="idposteJeu">Identifiant du poste de jeu à supprimer.</param>
-        public void Supprimer(int idposteJeu)
+        /// <param name="idPosteJeu">Identifiant du poste de jeu à supprimer.</param>
+        public void Supprimer(int idPosteJeu)
         {
             // Récupération en lecture puis suppression conditionnelle pour éviter les exceptions.
-            var posteJeu = _context.PostesJeu.Find(idposteJeu);
+            var posteJeu = _context.PostesJeu.Find(idPosteJeu);
             if (posteJeu != null)
             {
                 _context.PostesJeu.Remove(posteJeu);
                 _context.SaveChanges();
             }
         }
-
     }
 
 }

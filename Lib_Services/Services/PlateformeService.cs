@@ -1,6 +1,7 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,12 +27,23 @@ namespace Lib_Services.Services
 
         /// <summary>
         /// Retourne toutes les plateformes présentes dans la base de données.
+        /// Si un filtre est fourni, retourne uniquement 
+        /// les plateformes dont le libellé correspond au filtre.
         /// </summary>
+        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
         /// <returns>Liste de <see cref="Plateforme"/>.</returns>
-        public List<Plateforme> Lister()
+        public List<Plateforme> Lister(string filtre = "")
         {
             // Utilise le DbSet Plateformes pour matérialiser la collection en mémoire.
-            return _context.Plateformes.ToList();
+            if (string.IsNullOrWhiteSpace(filtre))
+                return _context.Plateformes
+                     .Include(e => e.PostesJeu)
+                     .ToList();
+            return
+                _context.Plateformes
+                .Include(e => e.PostesJeu)
+                .Where(p => p.Libelle.Contains(filtre))
+                .ToList();
         }
 
         /// <summary>
@@ -77,6 +89,9 @@ namespace Lib_Services.Services
             if (plateforme != null)
             {
                 _context.Plateformes.Remove(plateforme);
+                // Suppression en cascade des postes de jeu associés à la plateforme. 
+                // Puisqu'un poste de jeu a obligatoirmeent une plateforme.
+                _context.PostesJeu.RemoveRange(_context.PostesJeu.Where(p => p.IdPlateforme == idPlateforme));
                 _context.SaveChanges();
             }
         }
