@@ -20,6 +20,7 @@ namespace ApplicationUi
         private readonly IRoleService _serviceRole;
         private Organisateur? _organisateurSelectionne = null;
         private readonly Organisateur _organisateurConnecte;
+        string filtre;
 
         public UcOrganisateur(Organisateur unOrganisateurConnecte)
         {
@@ -27,6 +28,7 @@ namespace ApplicationUi
             _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _serviceRole = new RoleService(new ApplicationDbContext());
             _organisateurConnecte = unOrganisateurConnecte;
+            filtre = "";
             ChargerOrganisateurs();
             ChargerRoles();
             buttonModifier.Enabled = _organisateurSelectionne != null;
@@ -73,7 +75,7 @@ namespace ApplicationUi
         {
             // On charge les rôles dans la comboBox
             comboBoxRole.DataSource = null;
-            comboBoxRole.DataSource = _serviceRole.Lister();
+            comboBoxRole.DataSource = _serviceRole.Lister(filtre);
             comboBoxRole.DisplayMember = "Libelle";
             comboBoxRole.ValueMember = "IdRole";
         }
