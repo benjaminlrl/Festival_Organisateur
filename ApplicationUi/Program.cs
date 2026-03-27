@@ -27,6 +27,7 @@ namespace ApplicationUi
             var espaceService = new EspaceService(context);
             var organisateurService = new OrganisateurService(context);
             var roleService = new RoleService(context);
+            var lotComposantService = new LotComposantService(context);
 
             if (!context.Espaces.Any())
             {

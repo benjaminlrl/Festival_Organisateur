@@ -31,7 +31,7 @@ namespace Lib_Services.Services
         /// <returns>Liste d'objets <see cref="Organisateur"/>.</returns>
         public List<Organisateur> Lister()
         {
-            // Include(e => e.Espace) pour éviter le chargement paresseux lors de l'affichage.
+            // Include(t => t.Role) pour éviter le chargement paresseux lors de l'affichage.
             return _context.Organisateur
                            .Include(t => t.Role)
                            .ToList();

@@ -37,7 +37,7 @@ namespace Lib_Metier.Data.Configurations
         public DbSet<Lot> Lot => Set<Lot>();
 
         /// <summary>
-        /// Ensemble des LotComposant (table `LotComposantrnoi`).
+        /// Ensemble des LotComposant (table `LotComposant`).
         /// </summary>
         public DbSet<LotComposant> LotComposant => Set<LotComposant>();
 
