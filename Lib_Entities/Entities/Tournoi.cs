@@ -62,6 +62,24 @@ namespace Lib_Entities.Entities
         public string NomEspace => Espace?.Nom ?? string.Empty;
 
         /// <summary>
+        /// L'id du associé à ce tournoi ( id utile pour la gestion du formulaire et 
+        /// accès)
+        /// </summary>
+        public int IdJeu { get; set; }
+
+        /// <summary>
+        /// Espace associé.
+        /// </summary>
+        public Jeu Jeu { get; set; }
+
+        /// <summary>
+        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
+        /// Renvoie le nom de l'espace de façon null-safe ;
+        /// retourne chaîne vide si l'espace est null.
+        /// </summary>
+        public string TitreJeu => Jeu?.Titre ?? string.Empty;
+
+        /// <summary>
         /// Lot concerné pour le Tournoi
         /// </summary>
         public ICollection<Lot> Lot { get; set; }
