@@ -108,7 +108,7 @@ namespace ApplicationUi
                     Login = "admin",
                     motPasse = "SIO2026+",
                     Mail = "mailSio2026@gmail.com",
-                    Role = roleService.Obtenir("Administrateur")
+                    IdRole = context.Role.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
                 });
             }
 
