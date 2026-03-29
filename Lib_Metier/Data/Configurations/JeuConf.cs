@@ -7,10 +7,10 @@ using System.Text;
 
 namespace Lib_Metier.Data.Configurations
 {
-    public class JeuConf
+    public class JeuConConf : IEntityTypeConfiguration<Jeu>
     {
         /// <summary>
-        /// Configure le mapping EF Core pour l'entité Plateforme>.
+        /// Configure le mapping EF Core pour l'entité Jeu>.
         /// Appelé par le DbContext lors de la construction du modèle.
         /// </summary>
         /// <param name="builder">Builder utilisé pour configurer l'entité.</param>
@@ -44,6 +44,10 @@ namespace Lib_Metier.Data.Configurations
 
             builder.Property(j => j.DateSortie)
                    .HasColumnName("dateSortie");
+
+            // Relation vers Plateforme : une plateforme peut posséder des jeux, un jeu possède au moins plateforme
+            builder.HasMany(j => j.Plateformes)
+                   .WithMany(pl => pl.Jeux);
         }
     }
 }
