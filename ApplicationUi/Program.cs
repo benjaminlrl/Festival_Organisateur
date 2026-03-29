@@ -112,6 +112,29 @@ namespace ApplicationUi
                 });
             }
 
+            if (!context.Jeux.Any())
+            {
+                context.Jeux.Add(new Jeu
+                {
+                    Titre = "Mariokart 8",
+                    Description = "Terminer les courses en première position en utilisant des objets pour ralentir les adversaires ou se protéger",
+                    Editeur = "Nintendo",
+                    AnneeSortie = "2025",
+                    Pegi = 7,
+                    DateSortie = new DateTime(2025, 10, 10)
+                });
+
+                context.Jeux.Add(new Jeu
+                {
+                    Titre = "Schedule 1",
+                    Description = "From small-time dope pusher to kingpin - manufacture and distribute a range of drugs throughout the grungy city of Hyland Point. Expand your empire with properties, businesses, employees and more",
+                    Editeur = "TVGS",
+                    AnneeSortie = "2025",
+                    Pegi = 18,
+                    DateSortie = new DateTime(2025, 04, 24)
+                });
+            }
+
             // lancement du formulaire principal
             ApplicationConfiguration.Initialize();
             Application.Run(new FormAuthentification());
