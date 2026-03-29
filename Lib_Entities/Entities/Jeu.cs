@@ -34,7 +34,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Pegi, date minimum légale .
         /// </summary>
-        public string Pegi { get; set; }
+        public int Pegi { get; set; }
 
         /// <summary>
         /// Date de sortie
