@@ -66,6 +66,7 @@ namespace Lib_Services.Services
         /// <param name="jeu">Objet <see cref="Jeu"/> à ajouter.</param>
         public void Creer(Jeu jeu)
         {
+            jeu.AnneeSortie = jeu.DateSortie.Year.ToString();// année de sortie calculée
             _context.Jeux.Add(jeu);
             _context.SaveChanges();
         }
@@ -77,6 +78,7 @@ namespace Lib_Services.Services
         public void Modifier(Jeu jeu)
         {
             // Marque l'entité comme modifiée puis sauvegarde.
+            jeu.AnneeSortie = jeu.DateSortie.Year.ToString(); // année de sortie calculée
             _context.Jeux.Update(jeu);
             _context.SaveChanges();
         }

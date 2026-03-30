@@ -37,9 +37,9 @@ namespace Lib_Entities.Entities
         public DateTime DateSortie { get; set; }
 
         /// <summary>
-        /// Année de sortie calculée depuis DateSortie.
+        /// Année de sortie
         /// </summary>
-        public string AnneeSortie => DateSortie.Year.ToString();
+        public string AnneeSortie { get; set; }
 
         /// <summary>
         /// Ensemble des plateformes associés à ce jeu.
