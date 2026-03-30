@@ -55,6 +55,7 @@ namespace Lib_Entities.Entities
             UcEspaces,
             UcPlateformes,
             UcPostesDeJeu,
+            UcLotComposant,
         }
     }
 }

@@ -30,11 +30,12 @@ namespace ApplicationUi
         public UcPostesDeJeu(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            _serviceTournoi = new TournoiService(new ApplicationDbContext());
-            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
-            _serviceEspace = new EspaceService(new ApplicationDbContext());
-            _servicePosteJeu = new PosteJeuService(new ApplicationDbContext());
-            _servicePlateforme = new PlateformeService(new ApplicationDbContext());
+            var context = new ApplicationDbContext();
+            _serviceTournoi = new TournoiService(context);
+            _serviceOrganisateur = new OrganisateurService(context);
+            _serviceEspace = new EspaceService(context);
+            _servicePosteJeu = new PosteJeuService(context);
+            _servicePlateforme = new PlateformeService(context);
             _posteJeuSelectionne = null;
             fonctionnelSelectionne = false;
             filtre = "";

@@ -24,6 +24,8 @@ namespace ApplicationUi
             btnPostes = new Button();
             btnEspaces = new Button();
             btnTournois = new Button();
+            btnLotComposant = new Button();
+            buttonJeux = new Button();
             btnOrganisateur = new Button();
             btnQuitter = new Button();
             panelHeader = new Panel();
@@ -40,14 +42,15 @@ namespace ApplicationUi
             panelMenu.Controls.Add(btnPostes);
             panelMenu.Controls.Add(btnEspaces);
             panelMenu.Controls.Add(btnTournois);
+            panelMenu.Controls.Add(btnLotComposant);
+            panelMenu.Controls.Add(buttonJeux);
             panelMenu.Controls.Add(btnOrganisateur);
             panelMenu.Controls.Add(btnQuitter);
             panelMenu.Dock = DockStyle.Left;
             panelMenu.FlowDirection = FlowDirection.TopDown;
             panelMenu.Location = new Point(0, 0);
-            panelMenu.Margin = new Padding(3, 4, 3, 4);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(229, 934);
+            panelMenu.Size = new Size(200, 661);
             panelMenu.TabIndex = 2;
             panelMenu.WrapContents = false;
             // 
@@ -60,10 +63,10 @@ namespace ApplicationUi
             btnPlateformes.ForeColor = Color.White;
             btnPlateformes.Image = Properties.Resources.plateforme;
             btnPlateformes.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPlateformes.Location = new Point(0, 66);
-            btnPlateformes.Margin = new Padding(0, 66, 0, 6);
+            btnPlateformes.Location = new Point(0, 49);
+            btnPlateformes.Margin = new Padding(0, 49, 0, 5);
             btnPlateformes.Name = "btnPlateformes";
-            btnPlateformes.Size = new Size(229, 66);
+            btnPlateformes.Size = new Size(200, 49);
             btnPlateformes.TabIndex = 0;
             btnPlateformes.Text = "      Plateformes";
             btnPlateformes.UseVisualStyleBackColor = false;
@@ -78,10 +81,10 @@ namespace ApplicationUi
             btnPostes.ForeColor = Color.White;
             btnPostes.Image = Properties.Resources.postes;
             btnPostes.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPostes.Location = new Point(0, 148);
-            btnPostes.Margin = new Padding(0, 10, 0, 6);
+            btnPostes.Location = new Point(0, 110);
+            btnPostes.Margin = new Padding(0, 7, 0, 5);
             btnPostes.Name = "btnPostes";
-            btnPostes.Size = new Size(238, 67);
+            btnPostes.Size = new Size(209, 50);
             btnPostes.TabIndex = 1;
             btnPostes.Text = "        Postes de jeu";
             btnPostes.UseVisualStyleBackColor = false;
@@ -97,10 +100,10 @@ namespace ApplicationUi
             btnEspaces.ForeColor = Color.White;
             btnEspaces.Image = Properties.Resources.espace;
             btnEspaces.ImageAlign = ContentAlignment.MiddleLeft;
-            btnEspaces.Location = new Point(0, 231);
-            btnEspaces.Margin = new Padding(0, 10, 0, 6);
+            btnEspaces.Location = new Point(0, 172);
+            btnEspaces.Margin = new Padding(0, 7, 0, 5);
             btnEspaces.Name = "btnEspaces";
-            btnEspaces.Size = new Size(229, 66);
+            btnEspaces.Size = new Size(200, 49);
             btnEspaces.TabIndex = 2;
             btnEspaces.Text = "Espaces";
             btnEspaces.UseVisualStyleBackColor = false;
@@ -116,14 +119,52 @@ namespace ApplicationUi
             btnTournois.ForeColor = Color.White;
             btnTournois.Image = Properties.Resources.tournoi;
             btnTournois.ImageAlign = ContentAlignment.MiddleLeft;
-            btnTournois.Location = new Point(0, 313);
-            btnTournois.Margin = new Padding(0, 10, 0, 6);
+            btnTournois.Location = new Point(0, 233);
+            btnTournois.Margin = new Padding(0, 7, 0, 5);
             btnTournois.Name = "btnTournois";
-            btnTournois.Size = new Size(229, 66);
+            btnTournois.Size = new Size(200, 49);
             btnTournois.TabIndex = 3;
             btnTournois.Text = "Tournois";
             btnTournois.UseVisualStyleBackColor = false;
             btnTournois.Click += btnTournois_Click;
+            // 
+            // btnLotComposant
+            // 
+            btnLotComposant.BackColor = Color.Blue;
+            btnLotComposant.BackgroundImageLayout = ImageLayout.None;
+            btnLotComposant.FlatAppearance.BorderSize = 0;
+            btnLotComposant.FlatStyle = FlatStyle.Flat;
+            btnLotComposant.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            btnLotComposant.ForeColor = Color.White;
+            btnLotComposant.Image = Properties.Resources.tournoi;
+            btnLotComposant.ImageAlign = ContentAlignment.MiddleLeft;
+            btnLotComposant.Location = new Point(0, 294);
+            btnLotComposant.Margin = new Padding(0, 7, 0, 3);
+            btnLotComposant.Name = "btnLotComposant";
+            btnLotComposant.Size = new Size(197, 68);
+            btnLotComposant.TabIndex = 6;
+            btnLotComposant.Text = "      Composant des lots";
+            btnLotComposant.UseVisualStyleBackColor = false;
+            btnLotComposant.Click += btnLotComposant_Click;
+            // 
+            // buttonJeux
+            // 
+            buttonJeux.BackColor = Color.FromArgb(255, 128, 0);
+            buttonJeux.BackgroundImageLayout = ImageLayout.None;
+            buttonJeux.FlatAppearance.BorderSize = 0;
+            buttonJeux.FlatStyle = FlatStyle.Flat;
+            buttonJeux.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            buttonJeux.ForeColor = Color.White;
+            buttonJeux.Image = Properties.Resources.espace;
+            buttonJeux.ImageAlign = ContentAlignment.MiddleLeft;
+            buttonJeux.Location = new Point(0, 372);
+            buttonJeux.Margin = new Padding(0, 7, 0, 5);
+            buttonJeux.Name = "buttonJeux";
+            buttonJeux.Size = new Size(200, 49);
+            buttonJeux.TabIndex = 4;
+            buttonJeux.Text = "Jeux";
+            buttonJeux.UseVisualStyleBackColor = false;
+            buttonJeux.Click += buttonJeux_Click;
             // 
             // btnOrganisateur
             // 
@@ -135,12 +176,12 @@ namespace ApplicationUi
             btnOrganisateur.ForeColor = Color.White;
             btnOrganisateur.Image = Properties.Resources.tournoi;
             btnOrganisateur.ImageAlign = ContentAlignment.MiddleLeft;
-            btnOrganisateur.Location = new Point(0, 395);
-            btnOrganisateur.Margin = new Padding(0, 10, 0, 6);
+            btnOrganisateur.Location = new Point(0, 433);
+            btnOrganisateur.Margin = new Padding(0, 7, 0, 5);
             btnOrganisateur.Name = "btnOrganisateur";
-            btnOrganisateur.Size = new Size(229, 66);
+            btnOrganisateur.Size = new Size(200, 49);
             btnOrganisateur.TabIndex = 5;
-            btnOrganisateur.Text = "      Organisateur";
+            btnOrganisateur.Text = "      Organisateurs";
             btnOrganisateur.UseVisualStyleBackColor = false;
             btnOrganisateur.Click += btnOrganisateur_Click;
             // 
@@ -153,11 +194,10 @@ namespace ApplicationUi
             btnQuitter.ForeColor = Color.White;
             btnQuitter.Image = Properties.Resources.deconnecter;
             btnQuitter.ImageAlign = ContentAlignment.MiddleLeft;
-            btnQuitter.Location = new Point(3, 471);
-            btnQuitter.Margin = new Padding(3, 4, 3, 4);
+            btnQuitter.Location = new Point(3, 490);
             btnQuitter.Name = "btnQuitter";
-            btnQuitter.Size = new Size(229, 66);
-            btnQuitter.TabIndex = 4;
+            btnQuitter.Size = new Size(200, 49);
+            btnQuitter.TabIndex = 6;
             btnQuitter.Text = "  Quitter";
             btnQuitter.UseVisualStyleBackColor = false;
             btnQuitter.Click += btnQuitter_Click;
@@ -169,19 +209,18 @@ namespace ApplicationUi
             panelHeader.Dock = DockStyle.Top;
             panelHeader.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
             panelHeader.ForeColor = SystemColors.ControlLightLight;
-            panelHeader.Location = new Point(229, 0);
-            panelHeader.Margin = new Padding(3, 4, 3, 4);
+            panelHeader.Location = new Point(200, 0);
             panelHeader.Name = "panelHeader";
-            panelHeader.Size = new Size(996, 66);
+            panelHeader.Size = new Size(872, 49);
             panelHeader.TabIndex = 1;
             // 
             // lblTitre
             // 
             lblTitre.AutoSize = true;
             lblTitre.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            lblTitre.Location = new Point(23, 16);
+            lblTitre.Location = new Point(20, 12);
             lblTitre.Name = "lblTitre";
-            lblTitre.Size = new Size(349, 32);
+            lblTitre.Size = new Size(270, 25);
             lblTitre.TabIndex = 0;
             lblTitre.Text = "Espace de Gestion du Festival";
             // 
@@ -189,24 +228,22 @@ namespace ApplicationUi
             // 
             panelContent.BackColor = Color.FromArgb(245, 246, 248);
             panelContent.Dock = DockStyle.Fill;
-            panelContent.Location = new Point(229, 66);
-            panelContent.Margin = new Padding(3, 4, 3, 4);
+            panelContent.Location = new Point(200, 49);
             panelContent.Name = "panelContent";
-            panelContent.Size = new Size(996, 868);
+            panelContent.Size = new Size(872, 612);
             panelContent.TabIndex = 0;
             // 
             // FormMain
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1225, 934);
+            ClientSize = new Size(1072, 661);
             ControlBox = false;
             Controls.Add(panelContent);
             Controls.Add(panelHeader);
             Controls.Add(panelMenu);
             FormBorderStyle = FormBorderStyle.None;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "FormMain";
             Text = "Back-office organisateur";
             WindowState = FormWindowState.Maximized;
@@ -229,5 +266,7 @@ namespace ApplicationUi
 
         private Panel panelContent;
         private Button btnOrganisateur;
+        private Button btnLotComposant;
+        private Button buttonJeux;
     }
 }

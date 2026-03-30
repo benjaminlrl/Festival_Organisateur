@@ -1,0 +1,174 @@
+﻿using Lib_Entities.Entities;
+using Lib_Metier.Data.Configurations;
+using Lib_Services.Interfaces;
+using Lib_Services.Services;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace ApplicationUi
+{
+    public partial class UcLotComposant : UserControl
+    {
+        private readonly IOrganisateurService _serviceOrganisateur;
+        private readonly IRoleService _serviceRole;
+        private readonly ILotComposantService _serviceLotComposant;
+        private LotComposant? _lotComposantSelectionne = null;
+        private readonly Organisateur _organisateurConnecte;
+        string filtre;
+
+        public UcLotComposant(Organisateur unOrganisateurConnecte)
+        {
+            InitializeComponent();
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
+            _serviceRole = new RoleService(new ApplicationDbContext());
+            _serviceLotComposant = new LotComposantService(new ApplicationDbContext());
+            _organisateurConnecte = unOrganisateurConnecte;
+            filtre = "";
+            ChargerLotComposants();
+            ChargerRoles();
+            buttonModifier.Enabled = _lotComposantSelectionne != null;
+            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Ajouter") == false)
+            {
+                buttonAjouter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Modifier") == false)
+            {
+                buttonModifier.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Supprimer") == false)
+            {
+                buttonSupprimer.Visible = false;
+            }
+        }
+
+        #region Chargement
+
+        private void ChargerLotComposants()
+        {
+            // On charge la liste des lots composants dans le dataGrid
+            dataGridLotComposants.DataSource = null;
+            var listeLotComposants = _serviceLotComposant.Lister()
+                .ToList();
+            dataGridLotComposants.DataSource = listeLotComposants;
+            MEP_DataGrid();
+        }
+
+        private void MEP_DataGrid()
+        {
+            // On affiche et modifie l'affichage des colonnes du dataGrid
+            dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
+            dataGridLotComposants.Columns["Lot"].Visible = false;
+        }
+
+        private void ChargerRoles() //A FINIR UNE FOIS LES LOTS FAIT !!
+        {
+            // On charge les lots dans la comboBox
+            comboBoxLot.DataSource = null;
+            //comboBoxLot.DataSource = _serviceLot.Lister(filtre);
+            comboBoxLot.DisplayMember = "Libelle";
+            comboBoxLot.ValueMember = "NumeroLot";
+        }
+
+        private void Raz_Zones()
+        {
+            // On remet tous les champs à vide
+            textBoxLibelle.Clear();
+            textBoxDescription.Clear();
+            textBoxValeur.Clear();
+            comboBoxLot.SelectedItem = null;
+            _lotComposantSelectionne = null;
+            buttonModifier.Enabled = _lotComposantSelectionne != null;
+            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+        }
+
+        private void RemplirFormulaire(LotComposant lotComposant)
+        {
+            // On remplie les champs avec les données de l'organisateur sélectionné
+            textBoxLibelle.Text = lotComposant.Libelle;
+            textBoxDescription.Text = lotComposant.Valeur.ToString();
+            textBoxValeur.Clear();
+            comboBoxLot.SelectedValue = lotComposant.NumeroLot;
+        }
+
+        #endregion
+
+        #region Evènements
+
+        private void buttonAjouter_Click(object sender, EventArgs e)
+        {
+            // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel lotcomposant
+            _serviceLotComposant.Creer(new LotComposant
+            {
+                Libelle = textBoxLibelle.Text,
+                Description = textBoxDescription.Text,
+                Valeur = int.Parse(textBoxValeur.Text),
+                NumeroLot = (int)comboBoxLot.SelectedValue
+            });
+            ChargerLotComposants();
+            Raz_Zones();
+        }
+
+        private void buttonModifier_Click(object sender, EventArgs e)
+        {
+            // Modifiée seulement les valeurs qui ont été modifiées
+            if (textBoxLibelle.Text != "" || _lotComposantSelectionne.Libelle != textBoxLibelle.Text)
+                _lotComposantSelectionne.Libelle = textBoxLibelle.Text;
+            if (textBoxDescription.Text != "" || _lotComposantSelectionne.Description != textBoxDescription.Text)
+                _lotComposantSelectionne.Description = textBoxDescription.Text;
+            if (textBoxValeur.Text.ToString() != "" || _lotComposantSelectionne.Valeur != int.Parse(textBoxValeur.Text))
+                _lotComposantSelectionne.Valeur = int.Parse(textBoxValeur.Text);
+            if ((int)comboBoxLot.SelectedValue != _lotComposantSelectionne.NumeroLot)
+                _lotComposantSelectionne.NumeroLot = (int)comboBoxLot.SelectedValue;
+
+            _serviceLotComposant.Modifier(_lotComposantSelectionne);
+            ChargerLotComposants();
+            Raz_Zones();
+        }
+
+        private void buttonSupprimer_Click(object sender, EventArgs e)
+        {
+            // On check si un orgnisateur est sélectionné, puis on le supprime
+            // Ne pas pouvoir suppr l'organisateur connecté
+            // Ne pas pouvoir suppr "admin"
+            if (_lotComposantSelectionne == null)
+            {
+                MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero);
+            ChargerLotComposants();
+            Raz_Zones();
+        }
+
+        private void buttonEffacer_Click(object sender, EventArgs e)
+        {
+            Raz_Zones();
+        }
+
+        private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // On récupére le lot composant cliqué et on appelle RemplirFormulaire(...)
+            if (e.RowIndex < 0)
+                return;
+
+            _lotComposantSelectionne = dataGridLotComposants.Rows[e.RowIndex].DataBoundItem as LotComposant;
+
+            if (_lotComposantSelectionne != null)
+                RemplirFormulaire(_lotComposantSelectionne);
+
+            buttonModifier.Enabled = _lotComposantSelectionne != null;
+            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+        }
+
+        #endregion
+
+    }
+}

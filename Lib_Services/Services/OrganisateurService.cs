@@ -31,8 +31,8 @@ namespace Lib_Services.Services
         /// <returns>Liste d'objets <see cref="Organisateur"/>.</returns>
         public List<Organisateur> Lister()
         {
-            // Include(e => e.Espace) pour éviter le chargement paresseux lors de l'affichage.
-            return _context.Organisateur
+            // Include(t => t.Role) pour éviter le chargement paresseux lors de l'affichage.
+            return _context.Organisateurs
                            .Include(t => t.Role)
                            .ToList();
         }
@@ -44,7 +44,7 @@ namespace Lib_Services.Services
         /// <returns>L'entité <see cref="Organisateur"/> si trouvée, sinon null.</returns>
         public Organisateur? Obtenir(string Login)
         {
-            return _context.Organisateur
+            return _context.Organisateurs
                            .Include(o => o.Role)
                            .FirstOrDefault(o => o.Login == Login);
         }
@@ -62,7 +62,7 @@ namespace Lib_Services.Services
             // Ajout de l'entité au contexte puis persistance immédiate.
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);
-            _context.Organisateur.Add(organisateur);
+            _context.Organisateurs.Add(organisateur);
             _context.SaveChanges();
         }
 
@@ -73,7 +73,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Organisateur"/>.</param>
         public void Modifier(Organisateur organisateur)
         {
-            _context.Organisateur.Update(organisateur);
+            _context.Organisateurs.Update(organisateur);
             _context.SaveChanges();
         }
 
@@ -84,10 +84,10 @@ namespace Lib_Services.Services
         public void Supprimer(string Login)
         {
             // Recherche de l'entité (utilise le cache si possible).
-            var organisateur = _context.Organisateur.Find(Login);
+            var organisateur = _context.Organisateurs.Find(Login);
             if (organisateur != null)
             {
-                _context.Organisateur.Remove(organisateur);
+                _context.Organisateurs.Remove(organisateur);
                 _context.SaveChanges();
             }
         }
@@ -100,7 +100,7 @@ namespace Lib_Services.Services
         /// <returns>True si il est identique, false si non</returns>
         public bool EstIdentique(string motDePasse, string identifiant)
         {
-            var organisateur = _context.Organisateur.Find(identifiant);
+            var organisateur = _context.Organisateurs.Find(identifiant);
             if (organisateur == null)
                 return false;
             return BCrypt.Net.BCrypt.Verify(motDePasse, organisateur.motPasse);
@@ -181,6 +181,52 @@ namespace Lib_Services.Services
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Permet de voir si un mot de passe est conformes aux règles de sécurité suivantes 
+        /// </summary>
+        /// <param name="motDePasse"></param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        public List<string> MdpValide(string motDePasse)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (motDePasse.Length < 12)
+            {
+                erreurs.Add("Le mot de passe doit contenir plus de 12 caractères.");
+            }
+            if (motDePasse.Any(char.IsUpper) == false)
+            {
+                erreurs.Add("Le mot de passe doit contenir au moins 1 majuscule.");
+            }
+            if (motDePasse.Any(char.IsDigit) == false)
+            {
+                erreurs.Add("Le mot de passe doit contenir au moins 1 chiffre.");
+            }
+            if (motDePasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
+            {
+                erreurs.Add("Le mot de passe doit contenir au moins 1 caractère spéciale.");
+            }
+            return erreurs;
+        }
+
+        /// <summary>
+        /// Permet de voir si un identifiant est conformes aux règles de sécurité suivantes
+        /// </summary>
+        /// <param name="identifiant"></param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        public List<string> IdentifiantValide(string identifiant)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (identifiant.Length < 3 || identifiant.Length > 12)
+            {
+                erreurs.Add("Le login doit contenir entre 3 et 12 caractères.");
+            }
+            return erreurs;
         }
     }
 
