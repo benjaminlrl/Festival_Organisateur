@@ -3,6 +3,7 @@ using System;
 using Lib_Metier.Data.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lib_Metier.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260330155357_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -138,17 +141,15 @@ namespace Lib_Metier.Migrations
                     b.Property<int>("Numero")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
+                    b.Property<int>("Description")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("description");
 
-                    b.Property<string>("Libelle")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
+                    b.Property<int>("Libelle")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("libelle");
 
-                    b.Property<int?>("NumeroLot")
+                    b.Property<int>("NumeroLot")
                         .HasColumnType("INTEGER")
                         .HasColumnName("numero_lot");
 

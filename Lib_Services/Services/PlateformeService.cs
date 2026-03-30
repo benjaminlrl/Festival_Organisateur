@@ -37,11 +37,13 @@ namespace Lib_Services.Services
             // Utilise le DbSet Plateformes pour matérialiser la collection en mémoire.
             if (string.IsNullOrWhiteSpace(filtre))
                 return _context.Plateformes
-                     .Include(e => e.PostesJeu)
+                     .Include(p => p.PostesJeu)
+                     .Include(p => p.Jeux)
                      .ToList();
             return
                 _context.Plateformes
-                .Include(e => e.PostesJeu)
+                .Include(p => p.PostesJeu)
+                .Include(p => p.Jeux)
                 .Where(p => p.Libelle.Contains(filtre))
                 .ToList();
         }

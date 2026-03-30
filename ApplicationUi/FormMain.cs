@@ -109,5 +109,10 @@ namespace ApplicationUi
         {
             LoadUserControl(new UcLotComposant(_organisateurConnecte), "Gestion des Lots Composants");
         }
+        
+        private void buttonJeux_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcJeux(_organisateurConnecte), "Gestion des jeux");
+        }
     }
 }

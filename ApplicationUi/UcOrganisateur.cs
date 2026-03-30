@@ -25,8 +25,9 @@ namespace ApplicationUi
         public UcOrganisateur(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
-            _serviceRole = new RoleService(new ApplicationDbContext());
+            var context = new ApplicationDbContext();
+            _serviceOrganisateur = new OrganisateurService(context);
+            _serviceRole = new RoleService(context);
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
             ChargerOrganisateurs();
