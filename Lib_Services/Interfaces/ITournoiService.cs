@@ -12,5 +12,7 @@ namespace Lib_Services.Interfaces
         void Supprimer(int numeroTournoi);
         List<Tournoi> Lister(string filtre);
         Tournoi? Obtenir(int numeroTournoi);
+
+        List<string> ValiderTournoi(Tournoi tournoi);
     }
 }

@@ -24,8 +24,9 @@ namespace ApplicationUi
             dataGridTournois = new DataGridView();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
+            comboBoxJeu = new ComboBox();
+            label3 = new Label();
             labelDuree = new Label();
-            labelStatut = new Label();
             labelDateHeure = new Label();
             numericUpDownNbParticip = new NumericUpDown();
             comboBoxEspace = new ComboBox();
@@ -39,6 +40,7 @@ namespace ApplicationUi
             radioButtonPlanifié = new RadioButton();
             radioButtonEnCours = new RadioButton();
             radioButtonTermine = new RadioButton();
+            labelStatut = new Label();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
@@ -65,14 +67,13 @@ namespace ApplicationUi
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(dataGridTournois, 0, 2);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 86.44068F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 13.5593224F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 424F));
-            tableLayoutPanel1.Size = new Size(949, 720);
+            tableLayoutPanel1.Size = new Size(1401, 720);
             tableLayoutPanel1.TabIndex = 3;
             // 
             // tableLayoutPanel2
@@ -87,7 +88,7 @@ namespace ApplicationUi
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(943, 30);
+            tableLayoutPanel2.Size = new Size(1395, 30);
             tableLayoutPanel2.TabIndex = 9;
             // 
             // label2
@@ -102,7 +103,7 @@ namespace ApplicationUi
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(179, 3);
+            textBoxRecherche.Location = new Point(264, 3);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(717, 31);
             textBoxRecherche.TabIndex = 0;
@@ -121,7 +122,7 @@ namespace ApplicationUi
             dataGridTournois.ReadOnly = true;
             dataGridTournois.RowHeadersWidth = 62;
             dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridTournois.Size = new Size(941, 383);
+            dataGridTournois.Size = new Size(1393, 383);
             dataGridTournois.TabIndex = 2;
             dataGridTournois.VirtualMode = true;
             dataGridTournois.CellClick += dataGridTournois_CellClick;
@@ -135,17 +136,19 @@ namespace ApplicationUi
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(941, 247);
+            panelForm.Size = new Size(1393, 247);
             panelForm.TabIndex = 2;
             // 
             // tableLayoutPanel
             // 
-            tableLayoutPanel.ColumnCount = 3;
+            tableLayoutPanel.ColumnCount = 4;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.11111F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.88889F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 417F));
+            tableLayoutPanel.Controls.Add(comboBoxJeu, 2, 1);
+            tableLayoutPanel.Controls.Add(label3, 2, 0);
             tableLayoutPanel.Controls.Add(labelDuree, 1, 2);
-            tableLayoutPanel.Controls.Add(labelStatut, 2, 0);
             tableLayoutPanel.Controls.Add(labelDateHeure, 1, 0);
             tableLayoutPanel.Controls.Add(numericUpDownNbParticip, 0, 3);
             tableLayoutPanel.Controls.Add(comboBoxEspace, 2, 3);
@@ -155,7 +158,8 @@ namespace ApplicationUi
             tableLayoutPanel.Controls.Add(labelEspace, 2, 2);
             tableLayoutPanel.Controls.Add(dateTimePickerDateTournoi, 1, 1);
             tableLayoutPanel.Controls.Add(numericUpDownDuree, 1, 3);
-            tableLayoutPanel.Controls.Add(flowLayoutPanel1, 2, 1);
+            tableLayoutPanel.Controls.Add(flowLayoutPanel1, 3, 1);
+            tableLayoutPanel.Controls.Add(labelStatut, 3, 0);
             tableLayoutPanel.Dock = DockStyle.Top;
             tableLayoutPanel.Location = new Point(0, 0);
             tableLayoutPanel.Margin = new Padding(4);
@@ -166,36 +170,45 @@ namespace ApplicationUi
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(941, 143);
+            tableLayoutPanel.Size = new Size(1393, 143);
             tableLayoutPanel.TabIndex = 0;
+            // 
+            // comboBoxJeu
+            // 
+            comboBoxJeu.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxJeu.Location = new Point(561, 39);
+            comboBoxJeu.Margin = new Padding(4);
+            comboBoxJeu.Name = "comboBoxJeu";
+            comboBoxJeu.Size = new Size(291, 34);
+            comboBoxJeu.TabIndex = 18;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            label3.Location = new Point(561, 0);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(70, 28);
+            label3.TabIndex = 17;
+            label3.Text = "Jeu * :";
             // 
             // labelDuree
             // 
             labelDuree.AutoSize = true;
             labelDuree.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDuree.Location = new Point(314, 79);
+            labelDuree.Location = new Point(326, 79);
             labelDuree.Margin = new Padding(4, 0, 4, 0);
             labelDuree.Name = "labelDuree";
             labelDuree.Size = new Size(151, 26);
             labelDuree.TabIndex = 14;
             labelDuree.Text = "Durée prévue :";
             // 
-            // labelStatut
-            // 
-            labelStatut.AutoSize = true;
-            labelStatut.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelStatut.Location = new Point(624, 0);
-            labelStatut.Margin = new Padding(4, 0, 4, 0);
-            labelStatut.Name = "labelStatut";
-            labelStatut.Size = new Size(81, 28);
-            labelStatut.TabIndex = 11;
-            labelStatut.Text = "Statut :";
-            // 
             // labelDateHeure
             // 
             labelDateHeure.AutoSize = true;
             labelDateHeure.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDateHeure.Location = new Point(314, 0);
+            labelDateHeure.Location = new Point(326, 0);
             labelDateHeure.Margin = new Padding(4, 0, 4, 0);
             labelDateHeure.Name = "labelDateHeure";
             labelDateHeure.Size = new Size(153, 28);
@@ -215,7 +228,7 @@ namespace ApplicationUi
             // comboBoxEspace
             // 
             comboBoxEspace.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxEspace.Location = new Point(624, 109);
+            comboBoxEspace.Location = new Point(561, 109);
             comboBoxEspace.Margin = new Padding(4);
             comboBoxEspace.Name = "comboBoxEspace";
             comboBoxEspace.Size = new Size(291, 34);
@@ -256,7 +269,7 @@ namespace ApplicationUi
             // 
             labelEspace.AutoSize = true;
             labelEspace.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelEspace.Location = new Point(624, 79);
+            labelEspace.Location = new Point(561, 79);
             labelEspace.Margin = new Padding(4, 0, 4, 0);
             labelEspace.Name = "labelEspace";
             labelEspace.Size = new Size(147, 26);
@@ -267,7 +280,7 @@ namespace ApplicationUi
             // 
             dateTimePickerDateTournoi.CustomFormat = "dd/MM/yyyy HH:mm";
             dateTimePickerDateTournoi.Format = DateTimePickerFormat.Custom;
-            dateTimePickerDateTournoi.Location = new Point(314, 39);
+            dateTimePickerDateTournoi.Location = new Point(326, 39);
             dateTimePickerDateTournoi.Margin = new Padding(4);
             dateTimePickerDateTournoi.MaxDate = new DateTime(2026, 5, 25, 17, 0, 0, 0);
             dateTimePickerDateTournoi.MinDate = new DateTime(2026, 5, 23, 9, 0, 0, 0);
@@ -280,7 +293,7 @@ namespace ApplicationUi
             // numericUpDownDuree
             // 
             numericUpDownDuree.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownDuree.Location = new Point(314, 109);
+            numericUpDownDuree.Location = new Point(326, 109);
             numericUpDownDuree.Margin = new Padding(4);
             numericUpDownDuree.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownDuree.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
@@ -295,9 +308,9 @@ namespace ApplicationUi
             flowLayoutPanel1.Controls.Add(radioButtonEnCours);
             flowLayoutPanel1.Controls.Add(radioButtonTermine);
             flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(623, 38);
+            flowLayoutPanel1.Location = new Point(978, 38);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(315, 38);
+            flowLayoutPanel1.Size = new Size(412, 38);
             flowLayoutPanel1.TabIndex = 16;
             // 
             // radioButtonPlanifié
@@ -327,7 +340,7 @@ namespace ApplicationUi
             // radioButtonTermine
             // 
             radioButtonTermine.AutoSize = true;
-            radioButtonTermine.Location = new Point(5, 39);
+            radioButtonTermine.Location = new Point(251, 3);
             radioButtonTermine.Margin = new Padding(5, 3, 3, 3);
             radioButtonTermine.Name = "radioButtonTermine";
             radioButtonTermine.Size = new Size(111, 30);
@@ -335,6 +348,17 @@ namespace ApplicationUi
             radioButtonTermine.TabStop = true;
             radioButtonTermine.Text = "Terminé";
             radioButtonTermine.UseVisualStyleBackColor = true;
+            // 
+            // labelStatut
+            // 
+            labelStatut.AutoSize = true;
+            labelStatut.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelStatut.Location = new Point(979, 0);
+            labelStatut.Margin = new Padding(4, 0, 4, 0);
+            labelStatut.Name = "labelStatut";
+            labelStatut.Size = new Size(81, 28);
+            labelStatut.TabIndex = 11;
+            labelStatut.Text = "Statut :";
             // 
             // panelButtons
             // 
@@ -442,7 +466,7 @@ namespace ApplicationUi
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
             Name = "UcTournois";
-            Size = new Size(949, 720);
+            Size = new Size(1666, 1004);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
@@ -462,7 +486,6 @@ namespace ApplicationUi
 
         #endregion
         private TableLayoutPanel tableLayoutPanel1;
-        private DataGridView dataGridTournois;
         private Panel panelForm;
         private TableLayoutPanel tableLayoutPanel;
         private Label labelDuree;
@@ -490,6 +513,9 @@ namespace ApplicationUi
         private TableLayoutPanel tableLayoutPanel2;
         private Label label2;
         private TextBox textBoxRecherche;
+        private Label label3;
+        private ComboBox comboBoxJeu;
+        private DataGridView dataGridTournois;
     }
     }
 

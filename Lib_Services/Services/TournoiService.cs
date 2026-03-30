@@ -2,6 +2,7 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using static Lib_Entities.Entities.Jeu;
 
 namespace Lib_Services.Services
 {
@@ -101,6 +102,67 @@ namespace Lib_Services.Services
             return _context.Tournois
                            .Include(t => t.Espace)
                            .FirstOrDefault(t => t.NumeroTournoi == numeroTournoi);
+        }
+
+        private bool ValiderHoraire(DateTime dateHeure)
+        {
+            var jour = dateHeure.DayOfWeek; // Lundi, Mardi...
+            TimeSpan horaire = dateHeure.TimeOfDay;
+
+            // Horaires variables selon le jour
+            if (jour == DayOfWeek.Saturday)
+            {
+                if (horaire < TimeSpan.FromHours(10) || horaire > TimeSpan.FromHours(20))
+                    return false;
+            }
+            else if (jour == DayOfWeek.Sunday)
+            {
+                if (horaire < TimeSpan.FromHours(10) || horaire > TimeSpan.FromHours(18))
+                    return false;
+            }
+
+            return true;
+        }
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a un tournoi.
+        /// </summary>
+        /// <param name="jeu">Le jeu à valider</param>
+        /// <returns>La liste contenant toutes les erreurs</returns>
+        public List<string> ValiderTournoi(Tournoi tournoi)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(tournoi.Nom))
+                erreurs.Add("Le nom est requis.");
+
+            if (tournoi.IdJeu <= 0)
+                erreurs.Add("Un jeu est requis.");
+
+            if (tournoi.IdEspace <= 0)
+                erreurs.Add("Un espace est requis.");
+
+            if (tournoi.NbParticipants < 0)
+                erreurs.Add("Le nombre de participants ne doit pas être inférieur à zéro.");
+
+            if (tournoi.Statut == null)
+                erreurs.Add("Le tournoi dois avoir un statut défini.");
+
+            // Deux tournois sont en cours en même temps si :
+            // - Leurs date et heure de début sont égales
+            // - La date et heure de début d'un tournoi est comprise entre le début et la fin d'un autre tournoi
+            if (Lister("").Any(t => t.NumeroTournoi != tournoi.NumeroTournoi
+                                && (t.DateHeure == tournoi.DateHeure 
+                                || (tournoi.DateHeure >= t.DateHeure 
+                                    && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue))
+                                    )))
+                erreurs.Add("Un autre tournoi est déjà en cours à cette période.");
+
+            if (!ValiderHoraire(tournoi.DateHeure))
+                erreurs.Add("Les horraires ne sont pas valides. \nSamedi : 10h - 20h\nDimanche : 10h - 18h");
+
+
+            return erreurs;
         }
     }
 }
