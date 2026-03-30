@@ -124,10 +124,10 @@ namespace Lib_Services.Services
             return true;
         }
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un jeu.
+        /// Permet de vérifier les propriétés associés a un tournoi.
         /// </summary>
         /// <param name="jeu">Le jeu à valider</param>
-        /// <returns></returns>
+        /// <returns>La liste contenant toutes les erreurs</returns>
         public List<string> ValiderTournoi(Tournoi tournoi)
         {
             // liste des erreurs
