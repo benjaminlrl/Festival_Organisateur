@@ -28,24 +28,6 @@ namespace Lib_Metier.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Jeu",
-                columns: table => new
-                {
-                    id_jeu = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    titre = table.Column<string>(type: "TEXT", nullable: false),
-                    editeur = table.Column<string>(type: "TEXT", nullable: false),
-                    description = table.Column<string>(type: "TEXT", nullable: false),
-                    pegi = table.Column<int>(type: "INTEGER", nullable: false),
-                    dateSortie = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    anneeSortie = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jeu", x => x.id_jeu);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Plateforme",
                 columns: table => new
                 {
@@ -82,8 +64,7 @@ namespace Lib_Metier.Migrations
                     dureePrevue = table.Column<int>(type: "INTEGER", nullable: false),
                     nom = table.Column<string>(type: "TEXT", nullable: false),
                     statut = table.Column<string>(type: "TEXT", nullable: false),
-                    id_espace = table.Column<int>(type: "INTEGER", nullable: false),
-                    id_jeu = table.Column<int>(type: "INTEGER", nullable: false)
+                    id_espace = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,36 +74,6 @@ namespace Lib_Metier.Migrations
                         column: x => x.id_espace,
                         principalTable: "Espace",
                         principalColumn: "id_espace",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Tournoi_Jeu_id_jeu",
-                        column: x => x.id_jeu,
-                        principalTable: "Jeu",
-                        principalColumn: "id_jeu",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "JeuPlateforme",
-                columns: table => new
-                {
-                    JeuxIdJeu = table.Column<int>(type: "INTEGER", nullable: false),
-                    PlateformesIdPlateforme = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JeuPlateforme", x => new { x.JeuxIdJeu, x.PlateformesIdPlateforme });
-                    table.ForeignKey(
-                        name: "FK_JeuPlateforme_Jeu_JeuxIdJeu",
-                        column: x => x.JeuxIdJeu,
-                        principalTable: "Jeu",
-                        principalColumn: "id_jeu",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_JeuPlateforme_Plateforme_PlateformesIdPlateforme",
-                        column: x => x.PlateformesIdPlateforme,
-                        principalTable: "Plateforme",
-                        principalColumn: "id_plateforme",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -218,11 +169,6 @@ namespace Lib_Metier.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_JeuPlateforme_PlateformesIdPlateforme",
-                table: "JeuPlateforme",
-                column: "PlateformesIdPlateforme");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Organisateur_id_role",
                 table: "Organisateur",
                 column: "id_role");
@@ -241,19 +187,11 @@ namespace Lib_Metier.Migrations
                 name: "IX_Tournoi_id_espace",
                 table: "Tournoi",
                 column: "id_espace");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tournoi_id_jeu",
-                table: "Tournoi",
-                column: "id_jeu");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "JeuPlateforme");
-
             migrationBuilder.DropTable(
                 name: "LotComposant");
 
@@ -277,9 +215,6 @@ namespace Lib_Metier.Migrations
 
             migrationBuilder.DropTable(
                 name: "Espace");
-
-            migrationBuilder.DropTable(
-                name: "Jeu");
         }
     }
 }

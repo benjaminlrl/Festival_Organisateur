@@ -30,10 +30,9 @@ namespace ApplicationUi
         public UcTournois(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            var context = new ApplicationDbContext();
-            _serviceOrganisateur = new OrganisateurService(context);
-            _serviceTournoi = new TournoiService(context);
-            _serviceEspace = new EspaceService(context);
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
+            _serviceTournoi = new TournoiService(new ApplicationDbContext());
+            _serviceEspace = new EspaceService(new ApplicationDbContext());
             ChargerTournois();
             ChargerEspaces();
             buttonModifier.Enabled = _tournoiSelectionne != null;

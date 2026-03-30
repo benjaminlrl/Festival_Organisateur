@@ -22,21 +22,19 @@ namespace ApplicationUi
             // Applique toutes les migrations en attente
             context.Database.Migrate();
 
-            // CrÃ©ation des services
+            // Création des services
             var tournoiService = new TournoiService(context);
             var espaceService = new EspaceService(context);
             var organisateurService = new OrganisateurService(context);
             var roleService = new RoleService(context);
-            var lotComposantService = new LotComposantService(context);
-            var jeuService = new JeuService(context);
 
             if (!context.Espaces.Any())
             {
                 context.Espaces.Add(new Espace 
-                { Nom = "Nintendo", Description = "Espace dÃ©diÃ© aux jeux de switch",
+                { Nom = "Nintendo", Description = "Espace dédié aux jeux de switch",
                     Superficie = 30, CapaciteMaxi = 30 });
                 context.Espaces.Add(new Espace
-                { Nom = "X Box", Description = "Espace dÃ©diÃ© aux jeux sur support Xbox One et Xbox",
+                { Nom = "X Box", Description = "Espace dédié aux jeux sur support Xbox One et Xbox",
                     Superficie = 50, CapaciteMaxi = 40 });
 
                 context.SaveChanges();
@@ -81,8 +79,8 @@ namespace ApplicationUi
                 context.SaveChanges();
             }
 
-            // CrÃ©Ã© les rÃ´les si pas dÃ©jÃ  fait
-            if (!context.Roles.Any())
+            // Créé les rôles si pas déjà fait
+            if (!context.Role.Any())
             {
                 roleService.Creer(new Role
                 {
@@ -102,38 +100,15 @@ namespace ApplicationUi
                 });
             }
 
-            // CrÃ©Ã© un utilisateur admin si pas dÃ©jÃ  fait
-            if (!context.Organisateurs.Any())
+            // Créé un utilisateur admin si pas déjà fait
+            if (!context.Organisateur.Any())
             {
                 organisateurService.Creer(new Organisateur
                 {
                     Login = "admin",
                     motPasse = "SIO2026+",
                     Mail = "mailSio2026@gmail.com",
-                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
-                });
-            }
-
-            if (!context.Jeux.Any())
-            {
-                jeuService.Creer(new Jeu
-                {
-                    Titre = "Mariokart 8",
-                    Description = "Terminer les courses en premiÃ¨re position en utilisant des objets pour ralentir les adversaires ou se protÃ©ger",
-                    Editeur = "Nintendo",
-                    AnneeSortie = "2025",
-                    Pegi = 7,
-                    DateSortie = new DateTime(2025, 10, 10)
-                });
-
-                jeuService.Creer(new Jeu
-                {
-                    Titre = "Schedule 1",
-                    Description = "From small-time dope pusher to kingpin - manufacture and distribute a range of drugs throughout the grungy city of Hyland Point. Expand your empire with properties, businesses, employees and more",
-                    Editeur = "TVGS",
-                    AnneeSortie = "2025",
-                    Pegi = 7,
-                    DateSortie = new DateTime(2025, 04, 24)
+                    IdRole = context.Role.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
                 });
             }
 

@@ -43,10 +43,6 @@ namespace ApplicationUi
             {
                 btnPostes.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Consulter") == false)
-            {
-                btnLotComposant.Visible = false;
-            }
         }
 
 
@@ -103,16 +99,6 @@ namespace ApplicationUi
         private void btnOrganisateur_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcOrganisateur(_organisateurConnecte), "Gestion des Organisateurs");
-        }
-
-        private void btnLotComposant_Click(object sender, EventArgs e)
-        {
-            LoadUserControl(new UcLotComposant(_organisateurConnecte), "Gestion des Lots Composants");
-        }
-        
-        private void buttonJeux_Click(object sender, EventArgs e)
-        {
-            LoadUserControl(new UcJeux(_organisateurConnecte), "Gestion des jeux");
         }
     }
 }

@@ -25,9 +25,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="UcLotComposant.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="UcOrganisateur.cs">
       <SubType>UserControl</SubType>
     </Compile>

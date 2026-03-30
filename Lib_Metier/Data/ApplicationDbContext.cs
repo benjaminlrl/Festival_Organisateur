@@ -14,7 +14,7 @@ namespace Lib_Metier.Data.Configurations
         /// Ensemble des organisateurs (table `Organisateur`).
         /// Utilise `Set<T>()` pour rester compatible avec le pattern DbContext minimal.
         /// </summary>
-        public DbSet<Organisateur> Organisateurs => Set<Organisateur>();
+        public DbSet<Organisateur> Organisateur => Set<Organisateur>();
 
         /// <summary>
         /// Ensemble des plateformes (table `Plateforme`).
@@ -34,12 +34,12 @@ namespace Lib_Metier.Data.Configurations
         /// <summary>
         /// Ensemble des Lot (table `Lot`).
         /// </summary>
-        public DbSet<Lot> Lots => Set<Lot>();
+        public DbSet<Lot> Lot => Set<Lot>();
 
         /// <summary>
-        /// Ensemble des LotComposant (table `LotComposant`).
+        /// Ensemble des LotComposant (table `LotComposantrnoi`).
         /// </summary>
-        public DbSet<LotComposant> LotComposants => Set<LotComposant>();
+        public DbSet<LotComposant> LotComposant => Set<LotComposant>();
 
         /// <summary>
         /// Ensemble des Espaces (table `Espace`).
@@ -49,12 +49,7 @@ namespace Lib_Metier.Data.Configurations
         /// <summary>
         /// Ensemble des Role (table `Role`).
         /// </summary>
-        public DbSet<Role> Roles => Set<Role>();
-
-        /// <summary>
-        /// Ensemble des Jeux (table `Jeux`).
-        /// </summary>
-        public DbSet<Jeu> Jeux => Set<Jeu>();
+        public DbSet<Role> Role => Set<Role>();
 
 
         /// <summary>

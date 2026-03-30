@@ -22,7 +22,7 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Retourne la liste complète des tournois avec l'espace et le jeu associé chargé.
+        /// Retourne la liste complète des tournois avec l'espace associé chargé.
         /// </summary>
         /// <returns>Liste des tournois.</returns>
         /// <param name="filtre">Optionnel : filtre .</param>
@@ -32,7 +32,6 @@ namespace Lib_Services.Services
             if (string.IsNullOrWhiteSpace(filtre))
                 return _context.Tournois
                     .Include(t => t.Espace)
-                    .Include(t => t.Jeu)
                     .ToList();
             return _context.Tournois
                     .Where(t => t.Nom.Contains(filtre)
@@ -40,10 +39,8 @@ namespace Lib_Services.Services
                         || t.DureePrevue.ToString().Contains(filtre)
                         || t.DateHeure.ToString().Contains(filtre)
                         || t.Statut.Contains(filtre)
-                        || t.Espace.Nom.Contains(filtre)
-                        || t.Jeu.Titre.Contains(filtre))
+                        || t.Espace.Nom.Contains(filtre))
                     .Include(t => t.Espace)
-                    .Include(t => t.Jeu)
                     .ToList();
         }
 

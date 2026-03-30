@@ -27,9 +27,8 @@ namespace ApplicationUi
         public UcEspaces(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            var context = new ApplicationDbContext();
-            _serviceOrganisateur = new OrganisateurService(context);
-            _serviceEspace = new EspaceService(context);
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
+            _serviceEspace = new EspaceService(new ApplicationDbContext());
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
             buttonEffacer.Text = "🧽  Effacer";

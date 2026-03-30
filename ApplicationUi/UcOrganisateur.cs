@@ -25,9 +25,8 @@ namespace ApplicationUi
         public UcOrganisateur(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            var context = new ApplicationDbContext();
-            _serviceOrganisateur = new OrganisateurService(context);
-            _serviceRole = new RoleService(context);
+            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
+            _serviceRole = new RoleService(new ApplicationDbContext());
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
             ChargerOrganisateurs();
@@ -110,12 +109,26 @@ namespace ApplicationUi
         /// </summary>
         /// <param name="motDePasse"></param>
         /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool MdpValide(string motDePasse)
+        public static bool MdpValide(string motDePasse)
         {
-            var erreurs = _serviceOrganisateur.MdpValide(motDePasse);
-            if (erreurs.Any())
+            if (motDePasse.Length < 12)
             {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Le mot de passe doit contenir plus de 12 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (motDePasse.Any(char.IsUpper) == false)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 1 majuscule.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (motDePasse.Any(char.IsDigit) == false)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 1 chiffre.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (motDePasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 1 caractère spéciale.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
             return true;
@@ -126,12 +139,11 @@ namespace ApplicationUi
         /// </summary>
         /// <param name="identifiant"></param>
         /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool IdentifiantValide(string identifiant)
+        public static bool IdentifiantValide(string identifiant)
         {
-            var erreurs = _serviceOrganisateur.IdentifiantValide(identifiant);
-            if (erreurs.Any())
+            if (identifiant.Length < 3 || identifiant.Length > 12)
             {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Le login doit contenir entre 3 et 12 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
             return true;
