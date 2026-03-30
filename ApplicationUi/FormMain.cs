@@ -100,5 +100,10 @@ namespace ApplicationUi
         {
             LoadUserControl(new UcOrganisateur(_organisateurConnecte), "Gestion des Organisateurs");
         }
+
+        private void buttonJeux_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcJeux(_organisateurConnecte), "Gestion des jeux");
+        }
     }
 }

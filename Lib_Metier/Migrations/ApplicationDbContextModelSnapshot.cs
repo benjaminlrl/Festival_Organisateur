@@ -17,6 +17,21 @@ namespace Lib_Metier.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
 
+            modelBuilder.Entity("JeuPlateforme", b =>
+                {
+                    b.Property<int>("JeuxIdJeu")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlateformesIdPlateforme")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("JeuxIdJeu", "PlateformesIdPlateforme");
+
+                    b.HasIndex("PlateformesIdPlateforme");
+
+                    b.ToTable("JeuPlateforme");
+                });
+
             modelBuilder.Entity("Lib_Entities.Entities.Espace", b =>
                 {
                     b.Property<int>("IdEspace")
@@ -45,6 +60,46 @@ namespace Lib_Metier.Migrations
                     b.HasKey("IdEspace");
 
                     b.ToTable("Espace", (string)null);
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Jeu", b =>
+                {
+                    b.Property<int>("IdJeu")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id_jeu");
+
+                    b.Property<string>("AnneeSortie")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("anneeSortie");
+
+                    b.Property<DateTime>("DateSortie")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("dateSortie");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Editeur")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("editeur");
+
+                    b.Property<int>("Pegi")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("pegi");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("titre");
+
+                    b.HasKey("IdJeu");
+
+                    b.ToTable("Jeu", (string)null);
                 });
 
             modelBuilder.Entity("Lib_Entities.Entities.Lot", b =>
@@ -217,6 +272,10 @@ namespace Lib_Metier.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("id_espace");
 
+                    b.Property<int>("IdJeu")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id_jeu");
+
                     b.Property<int>("NbParticipants")
                         .HasColumnType("INTEGER")
                         .HasColumnName("nbParticipants");
@@ -235,7 +294,24 @@ namespace Lib_Metier.Migrations
 
                     b.HasIndex("IdEspace");
 
+                    b.HasIndex("IdJeu");
+
                     b.ToTable("Tournoi", (string)null);
+                });
+
+            modelBuilder.Entity("JeuPlateforme", b =>
+                {
+                    b.HasOne("Lib_Entities.Entities.Jeu", null)
+                        .WithMany()
+                        .HasForeignKey("JeuxIdJeu")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lib_Entities.Entities.Plateforme", null)
+                        .WithMany()
+                        .HasForeignKey("PlateformesIdPlateforme")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lib_Entities.Entities.Lot", b =>
@@ -298,13 +374,26 @@ namespace Lib_Metier.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Lib_Entities.Entities.Jeu", "Jeu")
+                        .WithMany("Tournois")
+                        .HasForeignKey("IdJeu")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Espace");
+
+                    b.Navigation("Jeu");
                 });
 
             modelBuilder.Entity("Lib_Entities.Entities.Espace", b =>
                 {
                     b.Navigation("PostesJeu");
 
+                    b.Navigation("Tournois");
+                });
+
+            modelBuilder.Entity("Lib_Entities.Entities.Jeu", b =>
+                {
                     b.Navigation("Tournois");
                 });
 

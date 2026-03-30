@@ -51,6 +51,11 @@ namespace Lib_Metier.Data.Configurations
         /// </summary>
         public DbSet<Role> Role => Set<Role>();
 
+        /// <summary>
+        /// Ensemble des Jeux (table `Jeux`).
+        /// </summary>
+        public DbSet<Jeu> Jeux => Set<Jeu>();
+
 
         /// <summary>
         /// Configure la source de données : ici une base SQLite locale : `gestionTournois.db`
