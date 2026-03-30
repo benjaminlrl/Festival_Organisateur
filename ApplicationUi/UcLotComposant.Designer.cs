@@ -87,9 +87,9 @@ namespace ApplicationUi
             labelLibelle.Location = new Point(4, 0);
             labelLibelle.Margin = new Padding(4, 0, 4, 0);
             labelLibelle.Name = "labelLibelle";
-            labelLibelle.Size = new Size(78, 23);
+            labelLibelle.Size = new Size(86, 23);
             labelLibelle.TabIndex = 0;
-            labelLibelle.Text = "Login * :";
+            labelLibelle.Text = "Libelle * :";
             // 
             // labelDescription
             // 
