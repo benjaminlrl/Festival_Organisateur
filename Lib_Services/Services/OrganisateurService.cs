@@ -182,6 +182,52 @@ namespace Lib_Services.Services
             }
             return false;
         }
+
+        /// <summary>
+        /// Permet de voir si un mot de passe est conformes aux règles de sécurité suivantes 
+        /// </summary>
+        /// <param name="motDePasse"></param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        public List<string> MdpValide(string motDePasse)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (motDePasse.Length < 12)
+            {
+                erreurs.Add("Le mot de passe doit contenir plus de 12 caractères.");
+            }
+            if (motDePasse.Any(char.IsUpper) == false)
+            {
+                erreurs.Add("Le mot de passe doit contenir au moins 1 majuscule.");
+            }
+            if (motDePasse.Any(char.IsDigit) == false)
+            {
+                erreurs.Add("Le mot de passe doit contenir au moins 1 chiffre.");
+            }
+            if (motDePasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
+            {
+                erreurs.Add("Le mot de passe doit contenir au moins 1 caractère spéciale.");
+            }
+            return erreurs;
+        }
+
+        /// <summary>
+        /// Permet de voir si un identifiant est conformes aux règles de sécurité suivantes
+        /// </summary>
+        /// <param name="identifiant"></param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        public List<string> IdentifiantValide(string identifiant)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (identifiant.Length < 3 || identifiant.Length > 12)
+            {
+                erreurs.Add("Le login doit contenir entre 3 et 12 caractères.");
+            }
+            return erreurs;
+        }
     }
 
 }

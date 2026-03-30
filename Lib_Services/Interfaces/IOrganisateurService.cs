@@ -12,7 +12,9 @@ namespace Lib_Services.Interfaces
         void Supprimer(string Login);
         List<Organisateur> Lister();
         Organisateur? Obtenir(string Login);
-        bool EstIdentique(string motPasse, string Login);
+        bool EstIdentique(string motDePasse, string Login);
         bool estAutoriser(Organisateur organisateur, Organisateur.LesUC unUC, string action);
+        List<string> MdpValide(string motDePasse);
+        List<string> IdentifiantValide(string identifiant);
     }
 }
