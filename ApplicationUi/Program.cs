@@ -22,20 +22,21 @@ namespace ApplicationUi
             // Applique toutes les migrations en attente
             context.Database.Migrate();
 
-            // CrÈation des services
+            // Cr√©ation des services
             var tournoiService = new TournoiService(context);
             var espaceService = new EspaceService(context);
             var organisateurService = new OrganisateurService(context);
             var roleService = new RoleService(context);
+            var lotComposantService = new LotComposantService(context);
             var jeuService = new JeuService(context);
 
             if (!context.Espaces.Any())
             {
                 context.Espaces.Add(new Espace 
-                { Nom = "Nintendo", Description = "Espace dÈdiÈ aux jeux de switch",
+                { Nom = "Nintendo", Description = "Espace d√©di√© aux jeux de switch",
                     Superficie = 30, CapaciteMaxi = 30 });
                 context.Espaces.Add(new Espace
-                { Nom = "X Box", Description = "Espace dÈdiÈ aux jeux sur support Xbox One et Xbox",
+                { Nom = "X Box", Description = "Espace d√©di√© aux jeux sur support Xbox One et Xbox",
                     Superficie = 50, CapaciteMaxi = 40 });
 
                 context.SaveChanges();
@@ -80,8 +81,8 @@ namespace ApplicationUi
                 context.SaveChanges();
             }
 
-            // CrÈÈ les rÙles si pas dÈj‡ fait
-            if (!context.Role.Any())
+            // Cr√©√© les r√¥les si pas d√©j√† fait
+            if (!context.Roles.Any())
             {
                 roleService.Creer(new Role
                 {
@@ -101,8 +102,8 @@ namespace ApplicationUi
                 });
             }
 
-            // CrÈÈ un utilisateur admin si pas dÈj‡ fait
-            if (!context.Organisateur.Any())
+            // Cr√©√© un utilisateur admin si pas d√©j√† fait
+            if (!context.Organisateurs.Any())
             {
                 organisateurService.Creer(new Organisateur
                 {
@@ -118,7 +119,7 @@ namespace ApplicationUi
                 jeuService.Creer(new Jeu
                 {
                     Titre = "Mariokart 8",
-                    Description = "Terminer les courses en premiËre position en utilisant des objets pour ralentir les adversaires ou se protÈger",
+                    Description = "Terminer les courses en premi√®re position en utilisant des objets pour ralentir les adversaires ou se prot√©ger",
                     Editeur = "Nintendo",
                     AnneeSortie = "2025",
                     Pegi = 7,

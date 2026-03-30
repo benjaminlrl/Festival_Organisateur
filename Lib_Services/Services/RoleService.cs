@@ -51,11 +51,11 @@ namespace Lib_Services.Services
         {
             // Utilise le DbSet Plateformes pour matérialiser la collection en mémoire.
             if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Role
+                return _context.Roles
                      .Include(r => r.Organisateurs)
                      .ToList();
             return
-                _context.Role
+                _context.Roles
                 .Include(r => r.Organisateurs)
                 .Where(r => r.Libelle.Contains(filtre))
                 .ToList();
@@ -68,7 +68,7 @@ namespace Lib_Services.Services
         /// <returns>L'entité <see cref="Role"/> si trouvée, sinon null.</returns>
         public Role? Obtenir(string Libelle)
         {
-            return _context.Role
+            return _context.Roles
                            .AsNoTracking()  // ← ajout
                            .FirstOrDefault(r => r.Libelle == Libelle);
         }
@@ -81,7 +81,7 @@ namespace Lib_Services.Services
         public void Creer(Role role)
         {
             // Ajout de l'entité au contexte puis persistance immédiate.
-            _context.Role.Add(role);
+            _context.Roles.Add(role);
             _context.SaveChanges();
         }
 
@@ -92,7 +92,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Role"/>.</param>
         public void Modifier(Role role)
         {
-            _context.Role.Update(role);
+            _context.Roles.Update(role);
             _context.SaveChanges();
         }
 
@@ -103,9 +103,9 @@ namespace Lib_Services.Services
         public void Supprimer(Role role)
         {
             // Recherche de l'entité (utilise le cache si possible).
-            var roleChercher = _context.Role.Find(role);
+            var roleChercher = _context.Roles.Find(role);
             if (roleChercher != null)
-                _context.Role.Remove(roleChercher);
+                _context.Roles.Remove(roleChercher);
                 _context.SaveChanges();
         }
 

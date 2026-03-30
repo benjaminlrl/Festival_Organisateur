@@ -24,6 +24,7 @@ namespace ApplicationUi
             btnPostes = new Button();
             btnEspaces = new Button();
             btnTournois = new Button();
+            btnLotComposant = new Button();
             buttonJeux = new Button();
             btnOrganisateur = new Button();
             btnQuitter = new Button();
@@ -41,6 +42,7 @@ namespace ApplicationUi
             panelMenu.Controls.Add(btnPostes);
             panelMenu.Controls.Add(btnEspaces);
             panelMenu.Controls.Add(btnTournois);
+            panelMenu.Controls.Add(btnLotComposant);
             panelMenu.Controls.Add(buttonJeux);
             panelMenu.Controls.Add(btnOrganisateur);
             panelMenu.Controls.Add(btnQuitter);
@@ -127,6 +129,24 @@ namespace ApplicationUi
             btnTournois.UseVisualStyleBackColor = false;
             btnTournois.Click += btnTournois_Click;
             // 
+            // btnLotComposant
+            // 
+            btnLotComposant.BackColor = Color.Blue;
+            btnLotComposant.BackgroundImageLayout = ImageLayout.None;
+            btnLotComposant.FlatAppearance.BorderSize = 0;
+            btnLotComposant.FlatStyle = FlatStyle.Flat;
+            btnLotComposant.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            btnLotComposant.ForeColor = Color.White;
+            btnLotComposant.Image = Properties.Resources.tournoi;
+            btnLotComposant.ImageAlign = ContentAlignment.MiddleLeft;
+            btnLotComposant.Location = new Point(0, 399);
+            btnLotComposant.Margin = new Padding(0, 11, 0, 5);
+            btnLotComposant.Name = "btnLotComposant";
+            btnLotComposant.Size = new Size(229, 91);
+            btnLotComposant.TabIndex = 6;
+            btnLotComposant.Text = "      Composant des lots";
+            btnLotComposant.UseVisualStyleBackColor = false;
+            btnLotComposant.Click += btnLotComposant_Click;
             // buttonJeux
             // 
             buttonJeux.BackColor = Color.FromArgb(255, 128, 0);
@@ -161,7 +181,7 @@ namespace ApplicationUi
             btnOrganisateur.Name = "btnOrganisateur";
             btnOrganisateur.Size = new Size(286, 82);
             btnOrganisateur.TabIndex = 5;
-            btnOrganisateur.Text = "      Organisateur";
+            btnOrganisateur.Text = "      Organisateurs";
             btnOrganisateur.UseVisualStyleBackColor = false;
             btnOrganisateur.Click += btnOrganisateur_Click;
             // 
@@ -251,6 +271,7 @@ namespace ApplicationUi
 
         private Panel panelContent;
         private Button btnOrganisateur;
+        private Button btnLotComposant;
         private Button buttonJeux;
     }
 }
