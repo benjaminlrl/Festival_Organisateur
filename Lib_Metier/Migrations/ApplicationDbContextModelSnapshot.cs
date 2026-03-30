@@ -83,15 +83,17 @@ namespace Lib_Metier.Migrations
                     b.Property<int>("Numero")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Description")
-                        .HasColumnType("INTEGER")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasColumnName("description");
 
-                    b.Property<int>("Libelle")
-                        .HasColumnType("INTEGER")
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasColumnName("libelle");
 
-                    b.Property<int>("NumeroLot")
+                    b.Property<int?>("NumeroLot")
                         .HasColumnType("INTEGER")
                         .HasColumnName("numero_lot");
 

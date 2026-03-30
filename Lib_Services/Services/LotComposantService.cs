@@ -31,17 +31,17 @@ namespace Lib_Services.Services
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
         public List<LotComposant> Lister()
         {
-            return _context.LotComposant.ToList();
+            return _context.LotComposants.ToList();
         }
 
         /// <summary>
-        /// Récupère un organisateur par son login.
+        /// Récupère un lotcomposant par son numero.
         /// </summary>
         /// <param name="numero">numero du lotcomposant cherché.</param>
-        /// <returns>L'entité <see cref="Organisateur"/> si trouvée, sinon null.</returns>
+        /// <returns>L'entité <see cref="LotComposant"/> si trouvée, sinon null.</returns>
         public LotComposant? Obtenir(int numero)
         {
-            return _context.LotComposant
+            return _context.LotComposants
                            .FirstOrDefault(o => o.Numero == numero);
         }
 
@@ -53,7 +53,7 @@ namespace Lib_Services.Services
         public void Creer(LotComposant lotComposant)
         {
             // Ajout de l'entité au contexte puis persistance immédiate.
-            _context.LotComposant.Add(lotComposant);
+            _context.LotComposants.Add(lotComposant);
             _context.SaveChanges();
         }
 
@@ -64,21 +64,21 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="LotComposant"/>.</param>
         public void Modifier(LotComposant lotComposant)
         {
-            _context.LotComposant.Update(lotComposant);
+            _context.LotComposants.Update(lotComposant);
             _context.SaveChanges();
         }
 
         /// <summary>
-        /// Supprime un organisateur identifié par son login s'il existe.
+        /// Supprime un lotcomposant identifié par son login s'il existe.
         /// </summary>
         /// <param name="numero">numero du lotcomposant à supprimer.</param>
         public void Supprimer(int numero)
         {
             // Recherche de l'entité (utilise le cache si possible).
-            var lotComposant = _context.LotComposant.Find(numero);
+            var lotComposant = _context.LotComposants.Find(numero);
             if (lotComposant != null)
             {
-                _context.LotComposant.Remove(lotComposant);
+                _context.LotComposants.Remove(lotComposant);
                 _context.SaveChanges();
             }
         }

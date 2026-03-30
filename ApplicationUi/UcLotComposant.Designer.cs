@@ -35,6 +35,8 @@ namespace ApplicationUi
             buttonSupprimer = new Button();
             label1 = new Label();
             dataGridLotComposants = new DataGridView();
+            label2 = new Label();
+            textBoxRecherche = new TextBox();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
@@ -47,7 +49,7 @@ namespace ApplicationUi
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(20, 120);
+            panelForm.Location = new Point(19, 36);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
             panelForm.Size = new Size(900, 210);
@@ -85,7 +87,7 @@ namespace ApplicationUi
             labelLibelle.Location = new Point(4, 0);
             labelLibelle.Margin = new Padding(4, 0, 4, 0);
             labelLibelle.Name = "labelLibelle";
-            labelLibelle.Size = new Size(61, 17);
+            labelLibelle.Size = new Size(78, 23);
             labelLibelle.TabIndex = 0;
             labelLibelle.Text = "Login * :";
             // 
@@ -96,7 +98,7 @@ namespace ApplicationUi
             labelDescription.Location = new Point(223, 0);
             labelDescription.Margin = new Padding(4, 0, 4, 0);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(97, 17);
+            labelDescription.Size = new Size(125, 23);
             labelDescription.TabIndex = 1;
             labelDescription.Text = "Description * :";
             // 
@@ -107,7 +109,7 @@ namespace ApplicationUi
             labelValeur.Location = new Point(442, 0);
             labelValeur.Margin = new Padding(4, 0, 4, 0);
             labelValeur.Name = "labelValeur";
-            labelValeur.Size = new Size(132, 17);
+            labelValeur.Size = new Size(167, 23);
             labelValeur.TabIndex = 2;
             labelValeur.Text = "Valeur (en euros) * :";
             // 
@@ -118,7 +120,7 @@ namespace ApplicationUi
             labelLot.Location = new Point(661, 0);
             labelLot.Margin = new Padding(4, 0, 4, 0);
             labelLot.Name = "labelLot";
-            labelLot.Size = new Size(94, 17);
+            labelLot.Size = new Size(119, 23);
             labelLot.TabIndex = 3;
             labelLot.Text = "Lot associé * :";
             // 
@@ -128,7 +130,7 @@ namespace ApplicationUi
             textBoxLibelle.Margin = new Padding(4);
             textBoxLibelle.Name = "textBoxLibelle";
             textBoxLibelle.PlaceholderText = "Ex: Playstation 5";
-            textBoxLibelle.Size = new Size(210, 23);
+            textBoxLibelle.Size = new Size(210, 27);
             textBoxLibelle.TabIndex = 0;
             // 
             // textBoxDescription
@@ -137,7 +139,7 @@ namespace ApplicationUi
             textBoxDescription.Margin = new Padding(4);
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Console de jeu de type Playstation";
-            textBoxDescription.Size = new Size(210, 23);
+            textBoxDescription.Size = new Size(210, 27);
             textBoxDescription.TabIndex = 1;
             // 
             // textBoxValeur
@@ -147,7 +149,7 @@ namespace ApplicationUi
             textBoxValeur.Name = "textBoxValeur";
             textBoxValeur.PasswordChar = '●';
             textBoxValeur.PlaceholderText = "300";
-            textBoxValeur.Size = new Size(210, 23);
+            textBoxValeur.Size = new Size(210, 27);
             textBoxValeur.TabIndex = 2;
             // 
             // comboBoxLot
@@ -156,7 +158,7 @@ namespace ApplicationUi
             comboBoxLot.Location = new Point(661, 39);
             comboBoxLot.Margin = new Padding(4);
             comboBoxLot.Name = "comboBoxLot";
-            comboBoxLot.Size = new Size(210, 26);
+            comboBoxLot.Size = new Size(210, 31);
             comboBoxLot.TabIndex = 3;
             // 
             // panelButtons
@@ -253,7 +255,7 @@ namespace ApplicationUi
             label1.Location = new Point(0, 0);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 18);
+            label1.Size = new Size(0, 23);
             label1.TabIndex = 6;
             // 
             // dataGridLotComposants
@@ -262,7 +264,7 @@ namespace ApplicationUi
             dataGridLotComposants.BackgroundColor = Color.White;
             dataGridLotComposants.BorderStyle = BorderStyle.None;
             dataGridLotComposants.ColumnHeadersHeight = 34;
-            dataGridLotComposants.Location = new Point(20, 361);
+            dataGridLotComposants.Location = new Point(19, 320);
             dataGridLotComposants.Margin = new Padding(4);
             dataGridLotComposants.Name = "dataGridLotComposants";
             dataGridLotComposants.ReadOnly = true;
@@ -272,11 +274,32 @@ namespace ApplicationUi
             dataGridLotComposants.TabIndex = 2;
             dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(119, 275);
+            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(112, 25);
+            label2.TabIndex = 4;
+            label2.Text = "Recherche :";
+            // 
+            // textBoxRecherche
+            // 
+            textBoxRecherche.Location = new Point(252, 275);
+            textBoxRecherche.Margin = new Padding(2);
+            textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.Size = new Size(574, 27);
+            textBoxRecherche.TabIndex = 5;
+            // 
             // UcLotComposant
             // 
-            AutoScaleDimensions = new SizeF(7F, 18F);
+            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 253);
+            Controls.Add(textBoxRecherche);
+            Controls.Add(label2);
             Controls.Add(panelForm);
             Controls.Add(dataGridLotComposants);
             Font = new Font("Trebuchet MS", 10F);
@@ -291,6 +314,7 @@ namespace ApplicationUi
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridLotComposants).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -313,5 +337,7 @@ namespace ApplicationUi
         private Button buttonSupprimer;
         private Label label1;
         private DataGridView dataGridLotComposants;
+        private Label label2;
+        private TextBox textBoxRecherche;
     }
 }

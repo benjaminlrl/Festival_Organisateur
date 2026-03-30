@@ -55,7 +55,7 @@ namespace ApplicationUi
         {
             // On charge la liste des lots composants dans le dataGrid
             dataGridLotComposants.DataSource = null;
-            var listeLotComposants = _serviceOrganisateur.Lister()
+            var listeLotComposants = _serviceLotComposant.Lister()
                 .ToList();
             dataGridLotComposants.DataSource = listeLotComposants;
             MEP_DataGrid();
@@ -64,8 +64,8 @@ namespace ApplicationUi
         private void MEP_DataGrid()
         {
             // On affiche et modifie l'affichage des colonnes du dataGrid
-            //dataGridLotComposants.Columns["Login"].DisplayIndex = 0;
-            dataGridLotComposants.Columns["numeroLot"].Visible = false;
+            dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
+            dataGridLotComposants.Columns["Lot"].Visible = false;
         }
 
         private void ChargerRoles() //A FINIR UNE FOIS LES LOTS FAIT !!
@@ -74,7 +74,7 @@ namespace ApplicationUi
             comboBoxLot.DataSource = null;
             //comboBoxLot.DataSource = _serviceLot.Lister(filtre);
             comboBoxLot.DisplayMember = "Libelle";
-            comboBoxLot.ValueMember = "numeroLot";
+            comboBoxLot.ValueMember = "NumeroLot";
         }
 
         private void Raz_Zones()

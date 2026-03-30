@@ -81,7 +81,7 @@ namespace ApplicationUi
             }
 
             // Créé les rôles si pas déjà fait
-            if (!context.Role.Any())
+            if (!context.Roles.Any())
             {
                 roleService.Creer(new Role
                 {
@@ -102,7 +102,7 @@ namespace ApplicationUi
             }
 
             // Créé un utilisateur admin si pas déjà fait
-            if (!context.Organisateur.Any())
+            if (!context.Organisateurs.Any())
             {
                 organisateurService.Creer(new Organisateur
                 {

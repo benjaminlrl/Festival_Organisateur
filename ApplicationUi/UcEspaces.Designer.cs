@@ -75,9 +75,11 @@
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Location = new Point(3, 195);
+            groupBox1.Location = new Point(2, 155);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(881, 101);
+            groupBox1.Padding = new Padding(2);
+            groupBox1.Size = new Size(706, 82);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
@@ -90,10 +92,9 @@
             buttonAjouter.FlatStyle = FlatStyle.Flat;
             buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(255, 25);
-            buttonAjouter.Margin = new Padding(4);
+            buttonAjouter.Location = new Point(204, 20);
             buttonAjouter.Name = "buttonAjouter";
-            buttonAjouter.Size = new Size(150, 45);
+            buttonAjouter.Size = new Size(120, 36);
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
@@ -106,10 +107,9 @@
             buttonEffacer.FlatStyle = FlatStyle.Flat;
             buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonEffacer.ForeColor = Color.White;
-            buttonEffacer.Location = new Point(70, 25);
-            buttonEffacer.Margin = new Padding(4);
+            buttonEffacer.Location = new Point(56, 20);
             buttonEffacer.Name = "buttonEffacer";
-            buttonEffacer.Size = new Size(150, 45);
+            buttonEffacer.Size = new Size(120, 36);
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
@@ -121,10 +121,9 @@
             buttonModifier.FlatStyle = FlatStyle.Flat;
             buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(443, 25);
-            buttonModifier.Margin = new Padding(4);
+            buttonModifier.Location = new Point(354, 20);
             buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(192, 45);
+            buttonModifier.Size = new Size(154, 36);
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
@@ -136,10 +135,9 @@
             buttonSupprimer.FlatStyle = FlatStyle.Flat;
             buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(670, 25);
-            buttonSupprimer.Margin = new Padding(4);
+            buttonSupprimer.Location = new Point(536, 20);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(196, 45);
+            buttonSupprimer.Size = new Size(157, 36);
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
@@ -148,42 +146,38 @@
             // 
             labelSuperficie.AutoSize = true;
             labelSuperficie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelSuperficie.Location = new Point(4, 105);
-            labelSuperficie.Margin = new Padding(4, 0, 4, 0);
+            labelSuperficie.Location = new Point(3, 84);
             labelSuperficie.Name = "labelSuperficie";
-            labelSuperficie.Size = new Size(179, 28);
+            labelSuperficie.Size = new Size(153, 23);
             labelSuperficie.TabIndex = 14;
             labelSuperficie.Text = "Superficie en m² :";
             // 
             // numericUpDownCapaciteMaxi
             // 
             numericUpDownCapaciteMaxi.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownCapaciteMaxi.Location = new Point(294, 150);
-            numericUpDownCapaciteMaxi.Margin = new Padding(4);
+            numericUpDownCapaciteMaxi.Location = new Point(235, 120);
             numericUpDownCapaciteMaxi.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericUpDownCapaciteMaxi.Name = "numericUpDownCapaciteMaxi";
-            numericUpDownCapaciteMaxi.Size = new Size(88, 31);
+            numericUpDownCapaciteMaxi.Size = new Size(70, 27);
             numericUpDownCapaciteMaxi.TabIndex = 3;
             // 
             // textBoxNom
             // 
             tableLayoutPanel.SetColumnSpan(textBoxNom, 2);
-            textBoxNom.Location = new Point(4, 39);
-            textBoxNom.Margin = new Padding(4);
+            textBoxNom.Location = new Point(3, 31);
             textBoxNom.Multiline = true;
             textBoxNom.Name = "textBoxNom";
             textBoxNom.PlaceholderText = "Ex: Espace playstation";
-            textBoxNom.Size = new Size(400, 31);
+            textBoxNom.Size = new Size(321, 26);
             textBoxNom.TabIndex = 0;
             // 
             // labelNom
             // 
             labelNom.AutoSize = true;
             labelNom.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelNom.Location = new Point(4, 0);
-            labelNom.Margin = new Padding(4, 0, 4, 0);
+            labelNom.Location = new Point(3, 0);
             labelNom.Name = "labelNom";
-            labelNom.Size = new Size(195, 28);
+            labelNom.Size = new Size(165, 23);
             labelNom.TabIndex = 6;
             labelNom.Text = "Nom de l'espace * :";
             // 
@@ -191,10 +185,9 @@
             // 
             labelCapaciteMaxi.AutoSize = true;
             labelCapaciteMaxi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelCapaciteMaxi.Location = new Point(294, 105);
-            labelCapaciteMaxi.Margin = new Padding(4, 0, 4, 0);
+            labelCapaciteMaxi.Location = new Point(235, 84);
             labelCapaciteMaxi.Name = "labelCapaciteMaxi";
-            labelCapaciteMaxi.Size = new Size(205, 28);
+            labelCapaciteMaxi.Size = new Size(175, 23);
             labelCapaciteMaxi.TabIndex = 8;
             labelCapaciteMaxi.Text = "Capacité maximale*:";
             // 
@@ -205,25 +198,23 @@
             dataGridEspaces.BorderStyle = BorderStyle.None;
             dataGridEspaces.ColumnHeadersHeight = 34;
             dataGridEspaces.Dock = DockStyle.Fill;
-            dataGridEspaces.Location = new Point(4, 387);
-            dataGridEspaces.Margin = new Padding(4);
+            dataGridEspaces.Location = new Point(3, 310);
             dataGridEspaces.Name = "dataGridEspaces";
             dataGridEspaces.ReadOnly = true;
             dataGridEspaces.RowHeadersWidth = 62;
             dataGridEspaces.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridEspaces.Size = new Size(888, 351);
+            dataGridEspaces.Size = new Size(710, 281);
             dataGridEspaces.TabIndex = 4;
             dataGridEspaces.CellClick += dataGridEspaces_CellClick;
             // 
             // numericUpDownSuperficie
             // 
             numericUpDownSuperficie.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownSuperficie.Location = new Point(4, 150);
-            numericUpDownSuperficie.Margin = new Padding(4);
+            numericUpDownSuperficie.Location = new Point(3, 120);
             numericUpDownSuperficie.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownSuperficie.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
             numericUpDownSuperficie.Name = "numericUpDownSuperficie";
-            numericUpDownSuperficie.Size = new Size(88, 31);
+            numericUpDownSuperficie.Size = new Size(70, 27);
             numericUpDownSuperficie.TabIndex = 15;
             numericUpDownSuperficie.Value = new decimal(new int[] { 12, 0, 0, 0 });
             // 
@@ -242,48 +233,44 @@
             tableLayoutPanel.Controls.Add(labelCapaciteMaxi, 1, 3);
             tableLayoutPanel.Controls.Add(labelSuperficie, 0, 3);
             tableLayoutPanel.Controls.Add(numericUpDownSuperficie, 0, 4);
-            tableLayoutPanel.Location = new Point(4, 4);
-            tableLayoutPanel.Margin = new Padding(4);
+            tableLayoutPanel.Location = new Point(3, 3);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 5;
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(879, 184);
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 16F));
+            tableLayoutPanel.Size = new Size(704, 147);
             tableLayoutPanel.TabIndex = 0;
             // 
             // labelDescription
             // 
             labelDescription.AutoSize = true;
             labelDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDescription.Location = new Point(584, 0);
-            labelDescription.Margin = new Padding(4, 0, 4, 0);
+            labelDescription.Location = new Point(467, 0);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(252, 28);
+            labelDescription.Size = new Size(213, 23);
             labelDescription.TabIndex = 16;
             labelDescription.Text = "Description de l'espace *:";
             // 
             // textBoxDescription
             // 
-            textBoxDescription.Location = new Point(584, 39);
-            textBoxDescription.Margin = new Padding(4);
+            textBoxDescription.Location = new Point(467, 31);
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Description de l'espace";
             tableLayoutPanel.SetRowSpan(textBoxDescription, 4);
-            textBoxDescription.Size = new Size(281, 141);
+            textBoxDescription.Size = new Size(226, 113);
             textBoxDescription.TabIndex = 17;
             // 
             // panelForm
             // 
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanelCRUD);
-            panelForm.Location = new Point(4, 4);
-            panelForm.Margin = new Padding(4);
+            panelForm.Location = new Point(3, 3);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(887, 299);
+            panelForm.Size = new Size(710, 239);
             panelForm.TabIndex = 3;
             // 
             // tableLayoutPanelCRUD
@@ -295,11 +282,12 @@
             tableLayoutPanelCRUD.Controls.Add(groupBox1, 0, 1);
             tableLayoutPanelCRUD.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
             tableLayoutPanelCRUD.Location = new Point(0, 0);
+            tableLayoutPanelCRUD.Margin = new Padding(2);
             tableLayoutPanelCRUD.Name = "tableLayoutPanelCRUD";
             tableLayoutPanelCRUD.RowCount = 2;
             tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 64.22288F));
             tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 35.7771263F));
-            tableLayoutPanelCRUD.Size = new Size(887, 299);
+            tableLayoutPanelCRUD.Size = new Size(710, 239);
             tableLayoutPanelCRUD.TabIndex = 8;
             // 
             // tableLayoutPanel1
@@ -314,12 +302,13 @@
             tableLayoutPanel1.Controls.Add(groupBoxStatsEspaces, 1, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Margin = new Padding(2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 80.15717F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 19.8428288F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 358F));
-            tableLayoutPanel1.Size = new Size(1370, 742);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 286F));
+            tableLayoutPanel1.Size = new Size(1096, 594);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // tableLayoutPanel2
@@ -330,11 +319,12 @@
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 332);
+            tableLayoutPanel2.Location = new Point(2, 267);
+            tableLayoutPanel2.Margin = new Padding(2);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(890, 48);
+            tableLayoutPanel2.Size = new Size(712, 38);
             tableLayoutPanel2.TabIndex = 6;
             tableLayoutPanel2.Paint += tableLayoutPanel2_Paint;
             // 
@@ -342,17 +332,19 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(3, 0);
+            label1.Location = new Point(2, 0);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(131, 30);
+            label1.Size = new Size(112, 25);
             label1.TabIndex = 1;
             label1.Text = "Recherche :";
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(170, 3);
+            textBoxRecherche.Location = new Point(135, 2);
+            textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(717, 31);
+            textBoxRecherche.Size = new Size(574, 27);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -364,11 +356,12 @@
             dataGridPostesJeu.BackgroundColor = Color.White;
             dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridPostesJeu.Dock = DockStyle.Top;
-            dataGridPostesJeu.Location = new Point(899, 3);
+            dataGridPostesJeu.Location = new Point(718, 2);
+            dataGridPostesJeu.Margin = new Padding(2);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
             dataGridPostesJeu.ReadOnly = true;
             dataGridPostesJeu.RowHeadersWidth = 62;
-            dataGridPostesJeu.Size = new Size(468, 301);
+            dataGridPostesJeu.Size = new Size(376, 241);
             dataGridPostesJeu.TabIndex = 5;
             // 
             // groupBoxStatsEspaces
@@ -378,21 +371,20 @@
             groupBoxStatsEspaces.Controls.Add(labelStatEspacesTotal);
             groupBoxStatsEspaces.Controls.Add(labelTitreEspaces);
             groupBoxStatsEspaces.Dock = DockStyle.Top;
-            groupBoxStatsEspaces.Location = new Point(900, 388);
-            groupBoxStatsEspaces.Margin = new Padding(4, 5, 4, 5);
+            groupBoxStatsEspaces.Location = new Point(719, 311);
+            groupBoxStatsEspaces.Margin = new Padding(3, 4, 3, 4);
             groupBoxStatsEspaces.Name = "groupBoxStatsEspaces";
-            groupBoxStatsEspaces.Padding = new Padding(4, 5, 4, 5);
-            groupBoxStatsEspaces.Size = new Size(466, 200);
+            groupBoxStatsEspaces.Padding = new Padding(3, 4, 3, 4);
+            groupBoxStatsEspaces.Size = new Size(374, 160);
             groupBoxStatsEspaces.TabIndex = 7;
             groupBoxStatsEspaces.TabStop = false;
             // 
             // labelStatEspacesLibres
             // 
             labelStatEspacesLibres.Font = new Font("Segoe UI", 9.75F);
-            labelStatEspacesLibres.Location = new Point(29, 142);
-            labelStatEspacesLibres.Margin = new Padding(4, 0, 4, 0);
+            labelStatEspacesLibres.Location = new Point(23, 114);
             labelStatEspacesLibres.Name = "labelStatEspacesLibres";
-            labelStatEspacesLibres.Size = new Size(400, 33);
+            labelStatEspacesLibres.Size = new Size(320, 26);
             labelStatEspacesLibres.TabIndex = 2;
             labelStatEspacesLibres.Text = "Disponibles : 8";
             labelStatEspacesLibres.TextAlign = ContentAlignment.MiddleCenter;
@@ -401,10 +393,9 @@
             // 
             labelStatEspacesTotal.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
             labelStatEspacesTotal.ForeColor = Color.FromArgb(255, 152, 0);
-            labelStatEspacesTotal.Location = new Point(29, 58);
-            labelStatEspacesTotal.Margin = new Padding(4, 0, 4, 0);
+            labelStatEspacesTotal.Location = new Point(23, 46);
             labelStatEspacesTotal.Name = "labelStatEspacesTotal";
-            labelStatEspacesTotal.Size = new Size(400, 75);
+            labelStatEspacesTotal.Size = new Size(320, 60);
             labelStatEspacesTotal.TabIndex = 1;
             labelStatEspacesTotal.Text = "12";
             labelStatEspacesTotal.TextAlign = ContentAlignment.MiddleCenter;
@@ -413,10 +404,9 @@
             // 
             labelTitreEspaces.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             labelTitreEspaces.ForeColor = Color.FromArgb(100, 100, 100);
-            labelTitreEspaces.Location = new Point(29, 25);
-            labelTitreEspaces.Margin = new Padding(4, 0, 4, 0);
+            labelTitreEspaces.Location = new Point(23, 20);
             labelTitreEspaces.Name = "labelTitreEspaces";
-            labelTitreEspaces.Size = new Size(400, 33);
+            labelTitreEspaces.Size = new Size(320, 26);
             labelTitreEspaces.TabIndex = 0;
             labelTitreEspaces.Text = "🏢 ESPACES";
             labelTitreEspaces.TextAlign = ContentAlignment.MiddleCenter;
@@ -436,12 +426,13 @@
             // 
             // UcEspaces
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 255);
             Controls.Add(tableLayoutPanel1);
+            Margin = new Padding(2);
             Name = "UcEspaces";
-            Size = new Size(1370, 742);
+            Size = new Size(1096, 594);
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericUpDownCapaciteMaxi).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridEspaces).EndInit();

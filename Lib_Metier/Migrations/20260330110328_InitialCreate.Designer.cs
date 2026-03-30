@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lib_Metier.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260322204312_InitialCreate")]
+    [Migration("20260330110328_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,15 +86,17 @@ namespace Lib_Metier.Migrations
                     b.Property<int>("Numero")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Description")
-                        .HasColumnType("INTEGER")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasColumnName("description");
 
-                    b.Property<int>("Libelle")
-                        .HasColumnType("INTEGER")
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasColumnName("libelle");
 
-                    b.Property<int>("NumeroLot")
+                    b.Property<int?>("NumeroLot")
                         .HasColumnType("INTEGER")
                         .HasColumnName("numero_lot");
 
