@@ -75,9 +75,9 @@
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(248, 3);
+            textBoxRecherche.Location = new Point(218, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(713, 31);
+            textBoxRecherche.Size = new Size(930, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -89,11 +89,11 @@
             tableLayoutPanel2.Controls.Add(label2, 0, 0);
             tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 271);
+            tableLayoutPanel2.Location = new Point(3, 277);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1307, 31);
+            tableLayoutPanel2.Size = new Size(1151, 31);
             tableLayoutPanel2.TabIndex = 9;
             // 
             // tableLayoutPanel1
@@ -103,13 +103,13 @@
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
             tableLayoutPanel1.Controls.Add(dataGridJeux, 0, 2);
-            tableLayoutPanel1.Location = new Point(15, 17);
+            tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 87.8866F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 12.1134024F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 232F));
-            tableLayoutPanel1.Size = new Size(1313, 538);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 83.80567F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1943321F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 310F));
+            tableLayoutPanel1.Size = new Size(1157, 622);
             tableLayoutPanel1.TabIndex = 8;
             // 
             // panelForm
@@ -120,7 +120,7 @@
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(1274, 253);
+            panelForm.Size = new Size(1149, 253);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel
@@ -376,13 +376,14 @@
             dataGridJeux.BackgroundColor = Color.White;
             dataGridJeux.BorderStyle = BorderStyle.None;
             dataGridJeux.ColumnHeadersHeight = 34;
-            dataGridJeux.Location = new Point(4, 309);
+            dataGridJeux.Dock = DockStyle.Fill;
+            dataGridJeux.Location = new Point(4, 315);
             dataGridJeux.Margin = new Padding(4);
             dataGridJeux.Name = "dataGridJeux";
             dataGridJeux.ReadOnly = true;
             dataGridJeux.RowHeadersWidth = 62;
             dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridJeux.Size = new Size(882, 225);
+            dataGridJeux.Size = new Size(1149, 303);
             dataGridJeux.TabIndex = 6;
             dataGridJeux.CellClick += dataGridJeux_CellClick;
             // 
@@ -390,6 +391,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(255, 192, 128);
             Controls.Add(tableLayoutPanel1);
             Name = "UcJeux";
             Size = new Size(1431, 622);
@@ -425,7 +427,6 @@
         private Button buttonModifier;
         private Button buttonSupprimer;
         private Label label1;
-        private DataGridView dataGridJeux;
         private TextBox textBoxEditeur;
         private DateTimePicker dateTimePickerDateSortie;
         private Label labelDescription;
@@ -433,5 +434,6 @@
         private Label labelPegi;
         private ComboBox comboBoxPegi;
         private CheckedListBox checkedListBoxPlateforme;
+        private DataGridView dataGridJeux;
     }
 }
