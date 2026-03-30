@@ -39,7 +39,7 @@ namespace Lib_Metier.Data.Configurations
             // Configuration de la relation entre LotComposant et Lot
             builder.HasOne(t => t.Lot)
                    .WithMany(e => e.LotComposant)
-                   .HasForeignKey(t => t.Numero);
+                   .HasForeignKey(t => t.NumeroLot); 
         }
     }
 }

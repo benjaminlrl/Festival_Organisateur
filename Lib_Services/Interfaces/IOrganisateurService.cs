@@ -10,7 +10,7 @@ namespace Lib_Services.Interfaces
         void Creer(Organisateur organisateur);
         void Modifier(Organisateur organisateur);
         void Supprimer(string Login);
-        List<Organisateur> Lister();
+        List<Organisateur> Lister(string filtre);
         Organisateur? Obtenir(string Login);
         bool EstIdentique(string motDePasse, string Login);
         bool estAutoriser(Organisateur organisateur, Organisateur.LesUC unUC, string action);

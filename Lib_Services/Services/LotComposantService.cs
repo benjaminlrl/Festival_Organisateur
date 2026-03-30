@@ -28,10 +28,17 @@ namespace Lib_Services.Services
         /// Retourne la liste complète des lots composants présents en base.
         /// Exécute immédiatement la requête via <c>ToList()</c>.
         /// </summary>
+        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        public List<LotComposant> Lister()
+        public List<LotComposant> Lister(string filtre = "")
         {
-            return _context.LotComposants.ToList();
+            if (string.IsNullOrWhiteSpace(filtre))
+                return _context.LotComposants
+                     .ToList();
+            return
+                _context.LotComposants
+                .Where(r => r.Libelle.Contains(filtre))
+                .ToList();
         }
 
         /// <summary>

@@ -54,7 +54,7 @@ namespace ApplicationUi
         {
             // On charge la liste des organisateurs dans le dataGrid (sans les logins contenant admin)
             dataGridOrganisateurs.DataSource = null;
-            var listeOrganisateur = _serviceOrganisateur.Lister()
+            var listeOrganisateur = _serviceOrganisateur.Lister(filtre)
                 .Where(o => !o.Login.Contains("admin"))
                 .ToList();
             dataGridOrganisateurs.DataSource = listeOrganisateur;
@@ -148,7 +148,7 @@ namespace ApplicationUi
             {
                 return;
             }
-            if (MdpValide(textBoxMotDePasse.Text) == true)
+            if (MdpValide(textBoxMotDePasse.Text) == false)
             {
                 return;
             }
@@ -232,7 +232,20 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _organisateurSelectionne != null;
         }
 
-        #endregion
+        /// <summary>
+        /// Gère l'événement déclenché lorsque le texte de la zone de recherche est modifié.
+        /// </summary>
+        /// <remarks>Utilisez cet événement pour mettre à jour dynamiquement les résultats de recherche en
+        /// fonction de la saisie de l'utilisateur.</remarks>
+        /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
+        /// <param name="e">Les données associées à l'événement de modification du texte.</param>
+        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            filtre = textBoxRecherche.Text;
+            ChargerOrganisateurs();
 
+        }
+
+        #endregion
     }
 }

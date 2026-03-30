@@ -18,6 +18,7 @@ namespace ApplicationUi
     {
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IRoleService _serviceRole;
+        private readonly ILotService _serviceLot;
         private readonly ILotComposantService _serviceLotComposant;
         private LotComposant? _lotComposantSelectionne = null;
         private readonly Organisateur _organisateurConnecte;
@@ -28,11 +29,12 @@ namespace ApplicationUi
             InitializeComponent();
             _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _serviceRole = new RoleService(new ApplicationDbContext());
+            _serviceLot = new LotService(new ApplicationDbContext());
             _serviceLotComposant = new LotComposantService(new ApplicationDbContext());
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
             ChargerLotComposants();
-            ChargerRoles();
+            ChargerLots();
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Ajouter") == false)
@@ -55,7 +57,7 @@ namespace ApplicationUi
         {
             // On charge la liste des lots composants dans le dataGrid
             dataGridLotComposants.DataSource = null;
-            var listeLotComposants = _serviceLotComposant.Lister()
+            var listeLotComposants = _serviceLotComposant.Lister(filtre)
                 .ToList();
             dataGridLotComposants.DataSource = listeLotComposants;
             MEP_DataGrid();
@@ -68,13 +70,13 @@ namespace ApplicationUi
             dataGridLotComposants.Columns["Lot"].Visible = false;
         }
 
-        private void ChargerRoles() //A FINIR UNE FOIS LES LOTS FAIT !!
+        private void ChargerLots()
         {
             // On charge les lots dans la comboBox
             comboBoxLot.DataSource = null;
-            //comboBoxLot.DataSource = _serviceLot.Lister(filtre);
             comboBoxLot.DisplayMember = "Libelle";
             comboBoxLot.ValueMember = "NumeroLot";
+            comboBoxLot.DataSource = _serviceLot.Lister(filtre);
         }
 
         private void Raz_Zones()
@@ -104,13 +106,12 @@ namespace ApplicationUi
 
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
-            // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel lotcomposant
             _serviceLotComposant.Creer(new LotComposant
             {
                 Libelle = textBoxLibelle.Text,
                 Description = textBoxDescription.Text,
                 Valeur = int.Parse(textBoxValeur.Text),
-                NumeroLot = (int)comboBoxLot.SelectedValue
+                NumeroLot = comboBoxLot.SelectedValue != null ? (int)comboBoxLot.SelectedValue : null
             });
             ChargerLotComposants();
             Raz_Zones();
@@ -166,6 +167,19 @@ namespace ApplicationUi
 
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+        }
+
+        /// <summary>
+        /// Gère l'événement déclenché lorsque le texte de la zone de recherche est modifié.
+        /// </summary>
+        /// <remarks>Utilisez cet événement pour mettre à jour dynamiquement les résultats de recherche en
+        /// fonction de la saisie de l'utilisateur.</remarks>
+        /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
+        /// <param name="e">Les données associées à l'événement de modification du texte.</param>
+        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            filtre = textBoxRecherche.Text;
+            ChargerLotComposants();
         }
 
         #endregion
