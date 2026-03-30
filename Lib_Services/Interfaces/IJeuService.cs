@@ -12,5 +12,7 @@ namespace Lib_Services.Interfaces
         void Supprimer(int idJeu);
         List<Jeu> Lister(string filtre);
         Jeu? Obtenir(int idJeu);
+
+        List<string> ValiderJeu(Jeu jeu);
     }
 }

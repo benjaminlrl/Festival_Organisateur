@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Lib_Entities.Entities.Jeu;
 
 namespace Lib_Services.Services
 {
     public class JeuService : IJeuService
     {
         private readonly ApplicationDbContext _context;
-
         /// <summary>
         /// Constructeur avec injection du contexte de données.
         /// </summary>
@@ -99,6 +99,40 @@ namespace Lib_Services.Services
                 _context.Tournois.RemoveRange(_context.Tournois.Where(t => t.IdJeu == idJeu));
                 _context.SaveChanges();
             }
+        }
+
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a un jeu.
+        /// </summary>
+        /// <param name="jeu">Le jeu à valider</param>
+        /// <returns></returns>
+        public List<string> ValiderJeu(Jeu jeu)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(jeu.Titre))
+                erreurs.Add("Le titre est requis.");
+
+            if (string.IsNullOrWhiteSpace(jeu.Description))
+                erreurs.Add("La description est requise.");
+
+            if (string.IsNullOrWhiteSpace(jeu.Editeur))
+                erreurs.Add("L'éditeur est requis.");
+
+            if (string.IsNullOrWhiteSpace(jeu.DateSortie.ToString()))
+                erreurs.Add("La date de sortie est requise.");
+
+            if (jeu.Description.Length > 500)
+                erreurs.Add("La description ne peut pas dépasser 500 caractères.");
+
+            if (!Enum.IsDefined(typeof(PEGI), jeu.Pegi))
+                erreurs.Add("Le PEGI sélectionné est invalide.");
+
+            if (Lister(jeu.Titre).Any(j => j.Titre == jeu.Titre && j.IdJeu != jeu.IdJeu))
+                erreurs.Add("Un autre jeu avec ce titre existe déjà.");
+           
+            return erreurs;
         }
     }
 }

@@ -78,7 +78,9 @@ namespace ApplicationUi
 
         private void ChargerPegi()
         {
-            comboBoxPegi.DataSource = new List<int> { 3, 7, 12, 16, 18 };
+            comboBoxPegi.DataSource = Enum.GetValues(typeof(Jeu.PEGI))
+                                  .Cast<int>()
+                                  .ToList();
         }
 
         /// <summary>
@@ -188,41 +190,12 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        private bool ValiderJeu()
+        private bool ValiderJeu(Jeu jeu)
         {
-            if (string.IsNullOrWhiteSpace(textBoxTitre.Text))
+            var erreurs = _serviceJeu.ValiderJeu(jeu);
+            if (erreurs.Any())
             {
-                MessageBox.Show("Le titre du jeu est requis.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
-            {
-                MessageBox.Show("La description du jeu est requise.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (textBoxDescription.Text.Length > 500)
-            {
-                MessageBox.Show("La description ne peut pas dépasser 500 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(dateTimePickerDateSortie.Value.ToString()))
-            {
-                MessageBox.Show("La date de sortie est requise.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (comboBoxPegi.Items.Contains(comboBoxPegi.SelectedValue))
-            {
-                MessageBox.Show("Le PEGI séléctionner n'appartient à la liste des pegis existants", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxEditeur.Text))
-            {
-                MessageBox.Show("L'editeur du jeu est requis", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (_serviceJeu.Lister("").Any(e => e.Titre == textBoxTitre.Text))
-            {
-                MessageBox.Show("Un autre jeu avec ce titre existe déjà.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(string.Join("\n", erreurs));
                 return false;
             }
             return true;
@@ -232,19 +205,19 @@ namespace ApplicationUi
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderJeu())
+            var jeu = new Jeu
             {
-                var jeu = new Jeu
-                {
-                    Titre = textBoxTitre.Text,
-                    Description = textBoxDescription.Text,
-                    Editeur = textBoxEditeur.Text,
-                    Pegi = (int)comboBoxPegi.SelectedValue,
-                    Plateformes = checkedListBoxPlateforme.CheckedItems
+                Titre = textBoxTitre.Text,
+                Description = textBoxDescription.Text,
+                Editeur = textBoxEditeur.Text,
+                Pegi = (int)comboBoxPegi.SelectedValue,
+                Plateformes = checkedListBoxPlateforme.CheckedItems
                                   .Cast<Plateforme>()
                                   .ToList(),
-                    DateSortie = dateTimePickerDateSortie.Value
-                };
+                DateSortie = dateTimePickerDateSortie.Value
+            };
+            if (ValiderJeu(jeu))
+            { 
                 _serviceJeu.Creer(jeu);
                 ChargerJeux();
                 Raz_Zones();
@@ -270,9 +243,13 @@ namespace ApplicationUi
                           .ToList();
             _jeuSelectionne.DateSortie = dateTimePickerDateSortie.Value;
 
-            _serviceJeu.Modifier(_jeuSelectionne);
-            ChargerJeux();
-            Raz_Zones();
+            if (ValiderJeu(_jeuSelectionne))
+            {
+                _serviceJeu.Modifier(_jeuSelectionne);
+                ChargerJeux();
+                Raz_Zones();
+            }
+
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
