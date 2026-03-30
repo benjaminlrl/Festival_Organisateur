@@ -1,5 +1,6 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace Lib_Services.Services
 {
-    public class JeuService
+    public class JeuService : IJeuService
     {
         private readonly ApplicationDbContext _context;
 
