@@ -26,10 +26,11 @@ namespace ApplicationUi
         public UcJeux(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            _serviceTournoi = new TournoiService(new ApplicationDbContext());
-            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
-            _serviceJeu = new JeuService(new ApplicationDbContext());
-            _servicePlateforme = new PlateformeService(new ApplicationDbContext());
+            var context = new ApplicationDbContext();
+            _serviceTournoi = new TournoiService(context);
+            _serviceOrganisateur = new OrganisateurService(context);
+            _serviceJeu = new JeuService(context);
+            _servicePlateforme = new PlateformeService(context);
             _jeuSelectionne = null;
             fonctionnelSelectionne = false;
             filtre = "";
