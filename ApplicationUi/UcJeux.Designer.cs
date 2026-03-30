@@ -79,6 +79,7 @@
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(713, 31);
             textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // tableLayoutPanel2
             // 
@@ -310,6 +311,7 @@
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
+            buttonAjouter.Click += buttonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -325,6 +327,7 @@
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
+            buttonEffacer.Click += buttonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -340,6 +343,7 @@
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
+            buttonModifier.Click += buttonModifier_Click;
             // 
             // buttonSupprimer
             // 
@@ -355,6 +359,7 @@
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
+            buttonSupprimer.Click += buttonSupprimer_Click;
             // 
             // label1
             // 
@@ -379,6 +384,7 @@
             dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridJeux.Size = new Size(882, 225);
             dataGridJeux.TabIndex = 6;
+            dataGridJeux.CellClick += dataGridJeux_CellClick;
             // 
             // UcJeux
             // 

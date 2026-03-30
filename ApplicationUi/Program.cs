@@ -27,6 +27,7 @@ namespace ApplicationUi
             var espaceService = new EspaceService(context);
             var organisateurService = new OrganisateurService(context);
             var roleService = new RoleService(context);
+            var jeuService = new JeuService(context);
 
             if (!context.Espaces.Any())
             {
@@ -114,7 +115,7 @@ namespace ApplicationUi
 
             if (!context.Jeux.Any())
             {
-                context.Jeux.Add(new Jeu
+                jeuService.Creer(new Jeu
                 {
                     Titre = "Mariokart 8",
                     Description = "Terminer les courses en première position en utilisant des objets pour ralentir les adversaires ou se protéger",
@@ -124,7 +125,7 @@ namespace ApplicationUi
                     DateSortie = new DateTime(2025, 10, 10)
                 });
 
-                context.Jeux.Add(new Jeu
+                jeuService.Creer(new Jeu
                 {
                     Titre = "Schedule 1",
                     Description = "From small-time dope pusher to kingpin - manufacture and distribute a range of drugs throughout the grungy city of Hyland Point. Expand your empire with properties, businesses, employees and more",

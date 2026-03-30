@@ -11,7 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace ApplicationUi
-{    
+{
     public partial class UcJeux : UserControl
     {
         private readonly ITournoiService _serviceTournoi;
@@ -35,8 +35,9 @@ namespace ApplicationUi
             filtre = "";
             ordreChamp = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
-            ChargerPlateformes();
             ChargerJeux();
+            ChargerPlateformes();
+            ChargerPegi();
             buttonModifier.Enabled = _jeuSelectionne != null;
             buttonSupprimer.Enabled = _jeuSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
@@ -99,6 +100,9 @@ namespace ApplicationUi
         private void MEP_DataGrid()
         {
             dataGridJeux.Columns["Titre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeux.Columns["IdJeu"].Visible = false;
+            dataGridJeux.Columns["Tournois"].Visible = false;
+            dataGridJeux.Columns["Plateformes"].Visible = false;
         }
 
         private void dataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -108,6 +112,10 @@ namespace ApplicationUi
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
             {
+                // on né gère pas les cliques sur la première colonne
+                if (e.ColumnIndex < 1)
+                    return;
+
                 var donnees = _serviceJeu.Lister(filtre);
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
@@ -128,7 +136,7 @@ namespace ApplicationUi
                 dataGridJeux.DataSource = ordreChamp == "ASC"
                     ? donnees.OrderByDescending(keySelector).ToList()
                     : donnees.OrderBy(keySelector).ToList();
-
+                // permute l'ordre du champ
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 MEP_DataGrid();
@@ -149,17 +157,20 @@ namespace ApplicationUi
         {
             textBoxTitre.Text = jeu.Titre;
             textBoxDescription.Text = jeu.Description;
+            textBoxEditeur.Text = jeu.Editeur;
 
             // ComboBox Pegi
-            comboBoxPegi.SelectedValue = jeu.Pegi;
+            comboBoxPegi.SelectedItem = jeu.Pegi;
 
-            // CheckBox plateforme
-            foreach (Plateforme p in checkedListBoxPlateforme.Items)
-                // récupère les checkbox checks
+            // CheckBox plateforme, on dit explicitement "ces object sont des Plateforme"
+            foreach (Plateforme p in checkedListBoxPlateforme.Items.Cast<Plateforme>().ToList())
+            {
                 checkedListBoxPlateforme.SetItemChecked(
                     checkedListBoxPlateforme.Items.IndexOf(p),
                     jeu.Plateformes.Any(jp => jp.IdPlateforme == p.IdPlateforme)
                 );
+            }
+            dateTimePickerDateSortie.Value = jeu.DateSortie;
 
         }
 
@@ -247,6 +258,7 @@ namespace ApplicationUi
             Raz_Zones();
 
         }
+
         #endregion
     }
 }
