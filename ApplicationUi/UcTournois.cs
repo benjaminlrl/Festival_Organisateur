@@ -12,6 +12,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ApplicationUi
 {
@@ -21,7 +22,7 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IJeuService _serviceJeu;
-        private String statutSelectionne = "Planifié";
+        private string statutSelectionne = "Planifié";
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
         private string ordreChamp;
@@ -138,31 +139,43 @@ namespace ApplicationUi
         #region Evènements
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderTournoi())
+            List<string> errors = new List<string>();
+
+            var tournoi = new Tournoi
             {
-                var tournoi = new Tournoi
-                {
-                    Nom = textBoxNom.Text,
-                    DateHeure = dateTimePickerDateTournoi.Value,
-                    NbParticipants = (int)numericUpDownNbParticip.Value,
-                    DureePrevue = (int)numericUpDownDuree.Value,
-                    Statut = statutSelectionne,
-                    IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace,
-                    IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
-                };
-                _serviceTournoi.Creer(tournoi);
+                Nom = textBoxNom.Text,
+                DateHeure = dateTimePickerDateTournoi.Value,
+                NbParticipants = (int)numericUpDownNbParticip.Value,
+                DureePrevue = (int)numericUpDownDuree.Value,
+                Statut = statutSelectionne,
+                IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace,
+                IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
+            };
+
+            errors = _serviceTournoi.ValiderTournoi(_tournoiSelectionne);
+
+            if (errors.Count == 0)
+            {
+                _serviceTournoi.Creer(_tournoiSelectionne);
                 ChargerTournois();
                 Raz_Zones();
+            }
+            else
+            {
+                MessageBox.Show(string.Join("\n", errors), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         private void buttonModifier_Click(object sender, EventArgs e)
         {
+            List<string> errors = new List<string>();
+
             if (dataGridTournois.CurrentRow == null)
                 return;
 
             if (_tournoiSelectionne == null)
                 return;
-            //var tournoi = (Tournoi)dataGridTournois.CurrentRow.DataBoundItem;
+
+            var tournoi = (Tournoi)dataGridTournois.CurrentRow.DataBoundItem;
 
             _tournoiSelectionne.Nom = textBoxNom.Text;
             _tournoiSelectionne.DateHeure = dateTimePickerDateTournoi.Value;
@@ -172,9 +185,17 @@ namespace ApplicationUi
             _tournoiSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
             _tournoiSelectionne.IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu;
 
-            _serviceTournoi.Modifier(_tournoiSelectionne);
-            ChargerTournois();
-            Raz_Zones();
+            errors = _serviceTournoi.ValiderTournoi(_tournoiSelectionne);
+
+            if (errors.Count == 0)
+            {
+                _serviceTournoi.Modifier(_tournoiSelectionne);
+                ChargerTournois();
+                Raz_Zones();
+            } else
+            {
+                MessageBox.Show(string.Join("\n", errors), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
@@ -212,7 +233,7 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {   // ordonner sur les champs descriptions, superficie, capaciteMaxi
                 var donnees = _serviceTournoi.Lister(filtre);
-                
+
                 // Utiliser un dictionnaire
                 var map = new Dictionary<int, Func<Tournoi, object>>
                 {
@@ -244,40 +265,6 @@ namespace ApplicationUi
 
             buttonModifier.Enabled = _tournoiSelectionne != null;
             buttonSupprimer.Enabled = _tournoiSelectionne != null;
-        }
-
-        #endregion
-
-        #region Validations
-        private bool ValiderHoraire(DateTime dateHeure)
-        {
-            var jour = dateHeure.DayOfWeek; // Lundi, Mardi...
-            TimeSpan horaire = dateHeure.TimeOfDay;
-
-            // Horaires variables selon le jour
-            if (jour == DayOfWeek.Saturday)
-            {
-                if (horaire < TimeSpan.FromHours(10) || horaire > TimeSpan.FromHours(20))
-                    return false;
-            }
-            else if (jour == DayOfWeek.Sunday)
-            {
-                if (horaire < TimeSpan.FromHours(10) || horaire > TimeSpan.FromHours(18))
-                    return false;
-            }
-
-            return true;
-        }
-        private bool ValiderTournoi()
-        {
-            DateTime dateHeureChoisie = dateTimePickerDateTournoi.Value;
-            bool retour = true;
-            if (!ValiderHoraire(dateHeureChoisie))
-            {
-                MessageBox.Show("Horaire invalide pour le jour sélectionné !");
-                retour = false;
-            }
-            return retour;
         }
 
         #endregion
