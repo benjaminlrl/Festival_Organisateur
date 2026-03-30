@@ -58,8 +58,7 @@ namespace Lib_Metier.Data.Configurations
         /// <param name="options">Builder des options de DbContext.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // Configuration par défaut utilisée en l'absence d'injection.
-            options.UseSqlite("Data Source=gestionTournois.db");
+            options.UseSqlite(@"Data Source=C:\Users\Lucien\Desktop\Reste\Skript Github\Festival_Organisateur\ApplicationUi\gestionTournois.db");
         }
 
         /// <summary>
