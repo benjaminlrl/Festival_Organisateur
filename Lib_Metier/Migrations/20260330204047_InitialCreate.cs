@@ -200,27 +200,32 @@ namespace Lib_Metier.Migrations
                 name: "LotComposant",
                 columns: table => new
                 {
-                    Numero = table.Column<int>(type: "INTEGER", nullable: false),
-                    libelle = table.Column<int>(type: "INTEGER", nullable: false),
-                    description = table.Column<int>(type: "INTEGER", nullable: false),
+                    Numero = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    libelle = table.Column<string>(type: "TEXT", nullable: false),
+                    description = table.Column<string>(type: "TEXT", nullable: false),
                     valeur = table.Column<int>(type: "INTEGER", nullable: false),
-                    numero_lot = table.Column<int>(type: "INTEGER", nullable: false)
+                    numero_lot = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LotComposant", x => x.Numero);
                     table.ForeignKey(
-                        name: "FK_LotComposant_Lot_Numero",
-                        column: x => x.Numero,
+                        name: "FK_LotComposant_Lot_numero_lot",
+                        column: x => x.numero_lot,
                         principalTable: "Lot",
-                        principalColumn: "Numero",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Numero");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_JeuPlateforme_PlateformesIdPlateforme",
                 table: "JeuPlateforme",
                 column: "PlateformesIdPlateforme");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LotComposant_numero_lot",
+                table: "LotComposant",
+                column: "numero_lot");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Organisateur_id_role",

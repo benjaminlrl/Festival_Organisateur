@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lib_Metier.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260330155357_InitialCreate")]
+    [Migration("20260330204047_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -139,17 +139,20 @@ namespace Lib_Metier.Migrations
             modelBuilder.Entity("Lib_Entities.Entities.LotComposant", b =>
                 {
                     b.Property<int>("Numero")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Description")
-                        .HasColumnType("INTEGER")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasColumnName("description");
 
-                    b.Property<int>("Libelle")
-                        .HasColumnType("INTEGER")
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasColumnName("libelle");
 
-                    b.Property<int>("NumeroLot")
+                    b.Property<int?>("NumeroLot")
                         .HasColumnType("INTEGER")
                         .HasColumnName("numero_lot");
 
@@ -158,6 +161,8 @@ namespace Lib_Metier.Migrations
                         .HasColumnName("valeur");
 
                     b.HasKey("Numero");
+
+                    b.HasIndex("NumeroLot");
 
                     b.ToTable("LotComposant", (string)null);
                 });
@@ -332,9 +337,7 @@ namespace Lib_Metier.Migrations
                 {
                     b.HasOne("Lib_Entities.Entities.Lot", "Lot")
                         .WithMany("LotComposant")
-                        .HasForeignKey("Numero")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NumeroLot");
 
                     b.Navigation("Lot");
                 });

@@ -28,13 +28,20 @@ namespace Lib_Services.Services
         /// Retourne la liste complète des organisateur présents en base.
         /// Exécute immédiatement la requête via <c>ToList()</c>.
         /// </summary>
+        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
         /// <returns>Liste d'objets <see cref="Organisateur"/>.</returns>
-        public List<Organisateur> Lister()
+        public List<Organisateur> Lister(string filtre = "")
         {
             // Include(t => t.Role) pour éviter le chargement paresseux lors de l'affichage.
-            return _context.Organisateurs
-                           .Include(t => t.Role)
-                           .ToList();
+            if (string.IsNullOrWhiteSpace(filtre))
+                return _context.Organisateurs
+                     .Include(r => r.Role)
+                     .ToList();
+            return
+                _context.Organisateurs
+                .Include(r => r.Role)
+                .Where(r => r.Login.Contains(filtre))
+                .ToList();
         }
 
         /// <summary>

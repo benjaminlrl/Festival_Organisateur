@@ -10,7 +10,7 @@ namespace Lib_Services.Interfaces
         void Creer(LotComposant lotComposant);
         void Modifier(LotComposant lotComposant);
         void Supprimer(int numero);
-        List<LotComposant> Lister();
+        List<LotComposant> Lister(string filtre);
         LotComposant? Obtenir(int numero);
     }
 }
