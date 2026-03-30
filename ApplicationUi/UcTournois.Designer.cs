@@ -21,10 +21,12 @@ namespace ApplicationUi
             tableLayoutPanel2 = new TableLayoutPanel();
             label2 = new Label();
             textBoxRecherche = new TextBox();
+            dataGridTournois = new DataGridView();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
+            comboBoxJeu = new ComboBox();
+            label3 = new Label();
             labelDuree = new Label();
-            labelStatut = new Label();
             labelDateHeure = new Label();
             numericUpDownNbParticip = new NumericUpDown();
             comboBoxEspace = new ComboBox();
@@ -38,6 +40,7 @@ namespace ApplicationUi
             radioButtonPlanifié = new RadioButton();
             radioButtonEnCours = new RadioButton();
             radioButtonTermine = new RadioButton();
+            labelStatut = new Label();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
@@ -45,11 +48,9 @@ namespace ApplicationUi
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             label1 = new Label();
-            label3 = new Label();
-            comboBoxJeu = new ComboBox();
-            dataGridTournois = new DataGridView();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownNbParticip).BeginInit();
@@ -57,7 +58,6 @@ namespace ApplicationUi
             flowLayoutPanel1.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -109,6 +109,24 @@ namespace ApplicationUi
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
+            // dataGridTournois
+            // 
+            dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridTournois.BackgroundColor = Color.White;
+            dataGridTournois.BorderStyle = BorderStyle.None;
+            dataGridTournois.ColumnHeadersHeight = 34;
+            dataGridTournois.Dock = DockStyle.Bottom;
+            dataGridTournois.Location = new Point(4, 333);
+            dataGridTournois.Margin = new Padding(4);
+            dataGridTournois.Name = "dataGridTournois";
+            dataGridTournois.ReadOnly = true;
+            dataGridTournois.RowHeadersWidth = 62;
+            dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridTournois.Size = new Size(1393, 383);
+            dataGridTournois.TabIndex = 2;
+            dataGridTournois.VirtualMode = true;
+            dataGridTournois.CellClick += dataGridTournois_CellClick;
+            // 
             // panelForm
             // 
             panelForm.BackColor = Color.White;
@@ -155,6 +173,26 @@ namespace ApplicationUi
             tableLayoutPanel.Size = new Size(1393, 143);
             tableLayoutPanel.TabIndex = 0;
             // 
+            // comboBoxJeu
+            // 
+            comboBoxJeu.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxJeu.Location = new Point(561, 39);
+            comboBoxJeu.Margin = new Padding(4);
+            comboBoxJeu.Name = "comboBoxJeu";
+            comboBoxJeu.Size = new Size(291, 34);
+            comboBoxJeu.TabIndex = 18;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            label3.Location = new Point(561, 0);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(70, 28);
+            label3.TabIndex = 17;
+            label3.Text = "Jeu * :";
+            // 
             // labelDuree
             // 
             labelDuree.AutoSize = true;
@@ -165,17 +203,6 @@ namespace ApplicationUi
             labelDuree.Size = new Size(151, 26);
             labelDuree.TabIndex = 14;
             labelDuree.Text = "Durée prévue :";
-            // 
-            // labelStatut
-            // 
-            labelStatut.AutoSize = true;
-            labelStatut.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelStatut.Location = new Point(979, 0);
-            labelStatut.Margin = new Padding(4, 0, 4, 0);
-            labelStatut.Name = "labelStatut";
-            labelStatut.Size = new Size(81, 28);
-            labelStatut.TabIndex = 11;
-            labelStatut.Text = "Statut :";
             // 
             // labelDateHeure
             // 
@@ -322,6 +349,17 @@ namespace ApplicationUi
             radioButtonTermine.Text = "Terminé";
             radioButtonTermine.UseVisualStyleBackColor = true;
             // 
+            // labelStatut
+            // 
+            labelStatut.AutoSize = true;
+            labelStatut.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelStatut.Location = new Point(979, 0);
+            labelStatut.Margin = new Padding(4, 0, 4, 0);
+            labelStatut.Name = "labelStatut";
+            labelStatut.Size = new Size(81, 28);
+            labelStatut.TabIndex = 11;
+            labelStatut.Text = "Statut :";
+            // 
             // panelButtons
             // 
             panelButtons.Controls.Add(groupBox1);
@@ -419,44 +457,6 @@ namespace ApplicationUi
             label1.Size = new Size(0, 26);
             label1.TabIndex = 6;
             // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            label3.Location = new Point(561, 0);
-            label3.Margin = new Padding(4, 0, 4, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(70, 28);
-            label3.TabIndex = 17;
-            label3.Text = "Jeu * :";
-            // 
-            // comboBoxJeu
-            // 
-            comboBoxJeu.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxJeu.Location = new Point(561, 39);
-            comboBoxJeu.Margin = new Padding(4);
-            comboBoxJeu.Name = "comboBoxJeu";
-            comboBoxJeu.Size = new Size(291, 34);
-            comboBoxJeu.TabIndex = 18;
-            // 
-            // dataGridTournois
-            // 
-            dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridTournois.BackgroundColor = Color.White;
-            dataGridTournois.BorderStyle = BorderStyle.None;
-            dataGridTournois.ColumnHeadersHeight = 34;
-            dataGridTournois.Dock = DockStyle.Bottom;
-            dataGridTournois.Location = new Point(4, 333);
-            dataGridTournois.Margin = new Padding(4);
-            dataGridTournois.Name = "dataGridTournois";
-            dataGridTournois.ReadOnly = true;
-            dataGridTournois.RowHeadersWidth = 62;
-            dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridTournois.Size = new Size(1393, 383);
-            dataGridTournois.TabIndex = 2;
-            dataGridTournois.VirtualMode = true;
-            dataGridTournois.CellClick += dataGridTournois_CellClick;
-            // 
             // UcTournois
             // 
             AutoScaleDimensions = new SizeF(11F, 26F);
@@ -470,6 +470,7 @@ namespace ApplicationUi
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
@@ -480,7 +481,6 @@ namespace ApplicationUi
             panelButtons.ResumeLayout(false);
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
             ResumeLayout(false);
         }
 

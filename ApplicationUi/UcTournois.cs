@@ -20,6 +20,7 @@ namespace ApplicationUi
         private readonly ITournoiService _serviceTournoi;
         private readonly IEspaceService _serviceEspace;
         private readonly IOrganisateurService _serviceOrganisateur;
+        private readonly IJeuService _serviceJeu;
         private String statutSelectionne = "Planifié";
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
@@ -34,8 +35,12 @@ namespace ApplicationUi
             _serviceOrganisateur = new OrganisateurService(context);
             _serviceTournoi = new TournoiService(context);
             _serviceEspace = new EspaceService(context);
+            _serviceJeu = new JeuService(context);
+
             ChargerTournois();
             ChargerEspaces();
+            ChargerJeux();
+
             buttonModifier.Enabled = _tournoiSelectionne != null;
             buttonSupprimer.Enabled = _tournoiSelectionne != null;
             _organisateurConnecte = unOrganisateurConnecte;
@@ -63,12 +68,24 @@ namespace ApplicationUi
             dataGridTournois.DataSource = _serviceTournoi.Lister(filtre);
             MEP_DataGrid();
         }
+
+        private void ChargerJeux()
+        {
+            comboBoxJeu.DataSource = null;
+            comboBoxJeu.DataSource = _serviceJeu.Lister("");
+            // charge les jeux dans le comboBox et affiche le titre tout en conservant l'id en valeur
+            comboBoxJeu.DisplayMember = "Titre";
+            comboBoxJeu.ValueMember = "IdJeu";
+        }
         private void MEP_DataGrid()
         {
             dataGridTournois.Columns["NumeroTournoi"].Visible = false;
             dataGridTournois.Columns["IdEspace"].Visible = false;
             dataGridTournois.Columns["Espace"].Visible = false;
+            dataGridTournois.Columns["IdJeu"].Visible = false;
+            dataGridTournois.Columns["Jeu"].Visible = false;
             dataGridTournois.Columns["NomEspace"].HeaderText = "Espace";
+            dataGridTournois.Columns["TitreJeu"].HeaderText = "Jeu";
             dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
         private void ChargerEspaces()
@@ -81,6 +98,7 @@ namespace ApplicationUi
         private void Raz_Zones()
         {
             comboBoxEspace.SelectedItem = null;
+            comboBoxJeu.SelectedItem = null;
             textBoxNom.Clear();
             dateTimePickerDateTournoi.Value = dateTimePickerDateTournoi.MinDate;
             numericUpDownNbParticip.Value = numericUpDownNbParticip.Minimum;
@@ -103,10 +121,16 @@ namespace ApplicationUi
             comboBoxEspace.SelectedItem = tournoi.Espace;
             comboBoxEspace.SelectedValue = tournoi.IdEspace;
 
+            // ComboBox Jeu
+            comboBoxJeu.SelectedItem = tournoi.Jeu;
+            comboBoxJeu.SelectedValue = tournoi.IdJeu;
+
             // Statut (RadioButtons)
             radioButtonPlanifié.Checked = tournoi.Statut == "Planifié";
             radioButtonEnCours.Checked = tournoi.Statut == "En cours";
             radioButtonTermine.Checked = tournoi.Statut == "Terminé";
+
+
         }
 
         #endregion
@@ -123,7 +147,8 @@ namespace ApplicationUi
                     NbParticipants = (int)numericUpDownNbParticip.Value,
                     DureePrevue = (int)numericUpDownDuree.Value,
                     Statut = statutSelectionne,
-                    IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace
+                    IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace,
+                    IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
                 };
                 _serviceTournoi.Creer(tournoi);
                 ChargerTournois();
@@ -145,6 +170,7 @@ namespace ApplicationUi
             _tournoiSelectionne.DureePrevue = (int)numericUpDownDuree.Value;
             _tournoiSelectionne.Statut = statutSelectionne;
             _tournoiSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
+            _tournoiSelectionne.IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu;
 
             _serviceTournoi.Modifier(_tournoiSelectionne);
             ChargerTournois();
