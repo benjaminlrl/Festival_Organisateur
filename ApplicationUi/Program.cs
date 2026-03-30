@@ -110,7 +110,7 @@ namespace ApplicationUi
                     Login = "admin",
                     motPasse = "SIO2026+",
                     Mail = "mailSio2026@gmail.com",
-                    IdRole = context.Role.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
+                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
                 });
             }
 
