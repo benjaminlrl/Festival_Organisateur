@@ -22,11 +22,6 @@ namespace Lib_Entities.Entities
         public string Editeur { get; set; }
 
         /// <summary>
-        /// Année de sortie
-        /// </summary>
-        public string AnneeSortie { get; set; }
-
-        /// <summary>
         /// Description .
         /// </summary>
         public string Description { get; set; }
@@ -40,6 +35,11 @@ namespace Lib_Entities.Entities
         /// Date de sortie
         /// </summary>
         public DateTime DateSortie { get; set; }
+
+        /// <summary>
+        /// Année de sortie calculée depuis DateSortie.
+        /// </summary>
+        public string AnneeSortie => DateSortie.Year.ToString();
 
         /// <summary>
         /// Ensemble des plateformes associés à ce jeu.
