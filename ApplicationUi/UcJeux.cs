@@ -188,8 +188,43 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        private bool ValiderPosteJeu()
+        private bool ValiderJeu()
         {
+            if (string.IsNullOrWhiteSpace(textBoxTitre.Text))
+            {
+                MessageBox.Show("Le titre du jeu est requis.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
+            {
+                MessageBox.Show("La description du jeu est requise.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (textBoxDescription.Text.Length > 500)
+            {
+                MessageBox.Show("La description ne peut pas dépasser 500 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(dateTimePickerDateSortie.Value.ToString()))
+            {
+                MessageBox.Show("La date de sortie est requise.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (comboBoxPegi.Items.Contains(comboBoxPegi.SelectedValue))
+            {
+                MessageBox.Show("Le PEGI séléctionner n'appartient à la liste des pegis existants", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxEditeur.Text))
+            {
+                MessageBox.Show("L'editeur du jeu est requis", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (_serviceJeu.Lister("").Any(e => e.Titre == textBoxTitre.Text))
+            {
+                MessageBox.Show("Un autre jeu avec ce titre existe déjà.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
             return true;
         }
         #endregion
@@ -197,7 +232,7 @@ namespace ApplicationUi
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderPosteJeu())
+            if (ValiderJeu())
             {
                 var jeu = new Jeu
                 {
