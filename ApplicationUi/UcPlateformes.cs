@@ -24,8 +24,9 @@ namespace ApplicationUi
         public UcPlateformes(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
-            _servicePlateforme = new PlateformeService(new ApplicationDbContext());
+            var context = new ApplicationDbContext();
+            _serviceOrganisateur = new OrganisateurService(context);
+            _servicePlateforme = new PlateformeService(context);
             buttonModifier.Enabled = _plateformeSelectionee != null;
             buttonSupprimer.Enabled = _plateformeSelectionee != null;
             filtre = "";
