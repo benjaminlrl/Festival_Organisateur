@@ -27,16 +27,17 @@ namespace ApplicationUi
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
+        private readonly ApplicationDbContext _context;
 
 
         public UcTournois(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            var context = new ApplicationDbContext();
-            _serviceOrganisateur = new OrganisateurService(context);
-            _serviceTournoi = new TournoiService(context);
-            _serviceEspace = new EspaceService(context);
-            _serviceJeu = new JeuService(context);
+            var _context = new ApplicationDbContext();
+            _serviceOrganisateur = new OrganisateurService(_context);
+            _serviceTournoi = new TournoiService(_context);
+            _serviceEspace = new EspaceService(_context);
+            _serviceJeu = new JeuService(_context);
 
             ChargerTournois();
             ChargerEspaces();
