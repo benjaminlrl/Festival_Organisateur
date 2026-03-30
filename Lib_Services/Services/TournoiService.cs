@@ -136,10 +136,10 @@ namespace Lib_Services.Services
             if (string.IsNullOrWhiteSpace(tournoi.Nom))
                 erreurs.Add("Le nom est requis.");
 
-            if (string.IsNullOrWhiteSpace(tournoi.TitreJeu))
+            if (tournoi.IdJeu <= 0)
                 erreurs.Add("Un jeu est requis.");
 
-            if (string.IsNullOrWhiteSpace(tournoi.NomEspace))
+            if (tournoi.IdEspace <= 0)
                 erreurs.Add("Un espace est requis.");
 
             if (tournoi.NbParticipants < 0)
@@ -151,9 +151,11 @@ namespace Lib_Services.Services
             // Deux tournois sont en cours en même temps si :
             // - Leurs date et heure de début sont égales
             // - La date et heure de début d'un tournoi est comprise entre le début et la fin d'un autre tournoi
-            if (Lister("").Any(t => t.DateHeure == tournoi.DateHeure 
-                            || (tournoi.DateHeure >= t.DateHeure 
-                                && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue))))
+            if (Lister("").Any(t => t.NumeroTournoi != tournoi.NumeroTournoi
+                                && (t.DateHeure == tournoi.DateHeure 
+                                || (tournoi.DateHeure >= t.DateHeure 
+                                    && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue))
+                                    )))
                 erreurs.Add("Un autre tournoi est déjà en cours à cette période.");
 
             if (!ValiderHoraire(tournoi.DateHeure))

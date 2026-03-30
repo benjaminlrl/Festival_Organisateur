@@ -152,11 +152,11 @@ namespace ApplicationUi
                 IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
             };
 
-            errors = _serviceTournoi.ValiderTournoi(_tournoiSelectionne);
+            errors = _serviceTournoi.ValiderTournoi(tournoi);
 
             if (errors.Count == 0)
             {
-                _serviceTournoi.Creer(_tournoiSelectionne);
+                _serviceTournoi.Creer(tournoi);
                 ChargerTournois();
                 Raz_Zones();
             }
