@@ -32,9 +32,10 @@ namespace ApplicationUi
             _serviceEspace = new EspaceService(context);
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
+            labelStatutTournoi.Visible = false;
             buttonEffacer.Text = "🧽  Effacer";
             ordreChamp = "ASC";
-            filtre = "";
+            filtre = "";            
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerEspaces();
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
@@ -72,6 +73,28 @@ namespace ApplicationUi
             dataGridPostesJeu.DataSource = null;
             dataGridPostesJeu.DataSource = _espaceSelectionee.PostesJeu.ToList();
             MEP_DataGridPostesJeu();
+        }
+
+        /// <summary>
+        /// Retourne vraie si un tournoi est en cours dans l'espace sélectionné, sinon retourne faux.
+        /// </summary>
+        private void TounoiEnCours()
+        {
+            DateTime current = DateTime.Now;
+            labelStatutTournoi.Visible = true;
+            if (_espaceSelectionee.Tournois != null
+                && _espaceSelectionee.Tournois.Any(t => t.DateHeure == current))
+            {
+                labelStatutTournoi.Text = "Tournoi en cours";
+                labelStatutTournoi.ForeColor = Color.Maroon;
+                labelStatutTournoi.BackColor = Color.FromArgb(255, 128, 128);
+            }
+            else
+            {
+                labelStatutTournoi.Text = "Espace libre";
+                labelStatutTournoi.ForeColor = Color.DarkGreen;
+                labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
+            }
         }
 
         /// <summary>
@@ -179,8 +202,8 @@ namespace ApplicationUi
             textBoxDescription.Text = espace.Description;
             numericUpDownCapaciteMaxi.Value = espace.CapaciteMaxi;
             numericUpDownSuperficie.Value = espace.Superficie;
-            ChargerPostesJeu(); // Charge les postes de jeu associés à l'espace sélectionné
-                                // pour les afficher dans le DataGridView correspondante
+            ChargerPostesJeu();
+            TounoiEnCours();
         }
         #endregion
 
