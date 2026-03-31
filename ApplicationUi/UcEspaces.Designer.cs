@@ -78,9 +78,9 @@
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Location = new Point(3, 220);
+            groupBox1.Location = new Point(3, 208);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1232, 105);
+            groupBox1.Size = new Size(1232, 100);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
@@ -154,10 +154,10 @@
             // 
             labelSuperficie.AutoSize = true;
             labelSuperficie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelSuperficie.Location = new Point(265, 0);
+            labelSuperficie.Location = new Point(277, 0);
             labelSuperficie.Margin = new Padding(4, 0, 4, 0);
             labelSuperficie.Name = "labelSuperficie";
-            labelSuperficie.Size = new Size(168, 35);
+            labelSuperficie.Size = new Size(179, 28);
             labelSuperficie.TabIndex = 14;
             labelSuperficie.Text = "Superficie en m² :";
             // 
@@ -187,7 +187,7 @@
             // 
             labelCapaciteMaxi.AutoSize = true;
             labelCapaciteMaxi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelCapaciteMaxi.Location = new Point(444, 0);
+            labelCapaciteMaxi.Location = new Point(503, 0);
             labelCapaciteMaxi.Margin = new Padding(4, 0, 4, 0);
             labelCapaciteMaxi.Name = "labelCapaciteMaxi";
             labelCapaciteMaxi.Size = new Size(205, 28);
@@ -201,21 +201,21 @@
             dataGridEspaces.BorderStyle = BorderStyle.None;
             dataGridEspaces.ColumnHeadersHeight = 34;
             dataGridEspaces.Dock = DockStyle.Fill;
-            dataGridEspaces.Location = new Point(4, 450);
+            dataGridEspaces.Location = new Point(4, 371);
             dataGridEspaces.Margin = new Padding(4, 3, 4, 3);
             dataGridEspaces.Name = "dataGridEspaces";
             dataGridEspaces.ReadOnly = true;
             dataGridEspaces.RowHeadersWidth = 62;
             tableLayoutPanel1.SetRowSpan(dataGridEspaces, 2);
             dataGridEspaces.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridEspaces.Size = new Size(1238, 372);
+            dataGridEspaces.Size = new Size(1238, 451);
             dataGridEspaces.TabIndex = 4;
             dataGridEspaces.CellClick += dataGridEspaces_CellClick;
             // 
             // numericUpDownSuperficie
             // 
             numericUpDownSuperficie.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownSuperficie.Location = new Point(265, 38);
+            numericUpDownSuperficie.Location = new Point(277, 38);
             numericUpDownSuperficie.Margin = new Padding(4, 3, 4, 3);
             numericUpDownSuperficie.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownSuperficie.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
@@ -229,10 +229,10 @@
             tableLayoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel.ColumnCount = 5;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.2975769F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40.65744F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 236F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 552F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.6432858F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45.29058F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 269F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 461F));
             tableLayoutPanel.Controls.Add(dataGridTournois, 4, 1);
             tableLayoutPanel.Controls.Add(textBoxNom, 0, 1);
             tableLayoutPanel.Controls.Add(labelNom, 0, 0);
@@ -253,7 +253,7 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 66F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(1230, 211);
+            tableLayoutPanel.Size = new Size(1230, 199);
             tableLayoutPanel.TabIndex = 0;
             // 
             // dataGridTournois
@@ -264,12 +264,12 @@
             dataGridTournois.BackgroundColor = Color.White;
             dataGridTournois.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridTournois.Dock = DockStyle.Fill;
-            dataGridTournois.Location = new Point(679, 38);
+            dataGridTournois.Location = new Point(771, 38);
             dataGridTournois.Name = "dataGridTournois";
             dataGridTournois.ReadOnly = true;
             dataGridTournois.RowHeadersWidth = 62;
             tableLayoutPanel.SetRowSpan(dataGridTournois, 3);
-            dataGridTournois.Size = new Size(548, 170);
+            dataGridTournois.Size = new Size(456, 158);
             dataGridTournois.TabIndex = 19;
             // 
             // textBoxDescription
@@ -280,7 +280,7 @@
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Description de l'espace";
-            textBoxDescription.Size = new Size(668, 60);
+            textBoxDescription.Size = new Size(704, 65);
             textBoxDescription.TabIndex = 17;
             // 
             // labelDescription
@@ -298,7 +298,7 @@
             // numericUpDownCapaciteMaxi
             // 
             numericUpDownCapaciteMaxi.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownCapaciteMaxi.Location = new Point(444, 38);
+            numericUpDownCapaciteMaxi.Location = new Point(503, 38);
             numericUpDownCapaciteMaxi.Margin = new Padding(4, 3, 4, 3);
             numericUpDownCapaciteMaxi.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericUpDownCapaciteMaxi.Name = "numericUpDownCapaciteMaxi";
@@ -311,10 +311,10 @@
             labelStatutTournoi.Dock = DockStyle.Fill;
             labelStatutTournoi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelStatutTournoi.ForeColor = Color.Chocolate;
-            labelStatutTournoi.Location = new Point(680, 0);
+            labelStatutTournoi.Location = new Point(772, 0);
             labelStatutTournoi.Margin = new Padding(4, 0, 4, 0);
             labelStatutTournoi.Name = "labelStatutTournoi";
-            labelStatutTournoi.Size = new Size(546, 35);
+            labelStatutTournoi.Size = new Size(454, 35);
             labelStatutTournoi.TabIndex = 18;
             labelStatutTournoi.Text = "•Tournoi en cours";
             labelStatutTournoi.TextAlign = ContentAlignment.MiddleCenter;
@@ -327,7 +327,7 @@
             panelForm.Location = new Point(4, 3);
             panelForm.Margin = new Padding(4, 3, 4, 3);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(1238, 328);
+            panelForm.Size = new Size(1238, 311);
             panelForm.TabIndex = 3;
             // 
             // tableLayoutPanelCRUD
@@ -343,7 +343,7 @@
             tableLayoutPanelCRUD.RowCount = 2;
             tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 66.1721039F));
             tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 33.8278923F));
-            tableLayoutPanelCRUD.Size = new Size(1238, 328);
+            tableLayoutPanelCRUD.Size = new Size(1238, 311);
             tableLayoutPanelCRUD.TabIndex = 8;
             // 
             // tableLayoutPanel1
@@ -359,10 +359,10 @@
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 74.5652161F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25.434782F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 144F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 233F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 86.141304F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 13.858696F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 234F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 222F));
             tableLayoutPanel1.Size = new Size(1664, 825);
             tableLayoutPanel1.TabIndex = 5;
             // 
@@ -371,14 +371,14 @@
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.7640457F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.2359543F));
-            tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
+            tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 397);
+            tableLayoutPanel2.Location = new Point(3, 330);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1240, 47);
+            tableLayoutPanel2.Size = new Size(1240, 35);
             tableLayoutPanel2.TabIndex = 6;
             tableLayoutPanel2.Paint += tableLayoutPanel2_Paint;
             // 
@@ -396,7 +396,7 @@
             // 
             textBoxRecherche.Location = new Point(235, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(717, 31);
+            textBoxRecherche.Size = new Size(1001, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -407,12 +407,12 @@
             dataGridPostesJeu.AllowUserToOrderColumns = true;
             dataGridPostesJeu.BackgroundColor = Color.White;
             dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridPostesJeu.Dock = DockStyle.Top;
+            dataGridPostesJeu.Dock = DockStyle.Fill;
             dataGridPostesJeu.Location = new Point(1249, 3);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
             dataGridPostesJeu.ReadOnly = true;
             dataGridPostesJeu.RowHeadersWidth = 62;
-            dataGridPostesJeu.Size = new Size(412, 322);
+            dataGridPostesJeu.Size = new Size(412, 311);
             dataGridPostesJeu.TabIndex = 5;
             // 
             // groupBoxStatsEspaces
@@ -422,21 +422,21 @@
             groupBoxStatsEspaces.Controls.Add(labelStatEspacesTotal);
             groupBoxStatsEspaces.Controls.Add(labelTitreEspaces);
             groupBoxStatsEspaces.Dock = DockStyle.Top;
-            groupBoxStatsEspaces.Location = new Point(1250, 596);
+            groupBoxStatsEspaces.Location = new Point(1250, 607);
             groupBoxStatsEspaces.Margin = new Padding(4, 5, 4, 5);
             groupBoxStatsEspaces.Name = "groupBoxStatsEspaces";
             groupBoxStatsEspaces.Padding = new Padding(4, 5, 4, 5);
-            groupBoxStatsEspaces.Size = new Size(410, 211);
+            groupBoxStatsEspaces.Size = new Size(410, 213);
             groupBoxStatsEspaces.TabIndex = 7;
             groupBoxStatsEspaces.TabStop = false;
             // 
             // labelStatEspacesLibres
             // 
             labelStatEspacesLibres.Font = new Font("Segoe UI", 9.75F);
-            labelStatEspacesLibres.Location = new Point(29, 143);
+            labelStatEspacesLibres.Location = new Point(-1, 143);
             labelStatEspacesLibres.Margin = new Padding(4, 0, 4, 0);
             labelStatEspacesLibres.Name = "labelStatEspacesLibres";
-            labelStatEspacesLibres.Size = new Size(400, 33);
+            labelStatEspacesLibres.Size = new Size(411, 33);
             labelStatEspacesLibres.TabIndex = 2;
             labelStatEspacesLibres.Text = "Disponibles : 8";
             labelStatEspacesLibres.TextAlign = ContentAlignment.MiddleCenter;
@@ -445,10 +445,10 @@
             // 
             labelStatEspacesTotal.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
             labelStatEspacesTotal.ForeColor = Color.FromArgb(255, 152, 0);
-            labelStatEspacesTotal.Location = new Point(29, 57);
+            labelStatEspacesTotal.Location = new Point(0, 57);
             labelStatEspacesTotal.Margin = new Padding(4, 0, 4, 0);
             labelStatEspacesTotal.Name = "labelStatEspacesTotal";
-            labelStatEspacesTotal.Size = new Size(400, 75);
+            labelStatEspacesTotal.Size = new Size(408, 75);
             labelStatEspacesTotal.TabIndex = 1;
             labelStatEspacesTotal.Text = "12";
             labelStatEspacesTotal.TextAlign = ContentAlignment.MiddleCenter;
