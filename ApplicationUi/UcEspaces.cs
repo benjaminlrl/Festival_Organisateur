@@ -74,27 +74,67 @@ namespace ApplicationUi
             dataGridPostesJeu.DataSource = _espaceSelectionee.PostesJeu.ToList();
             MEP_DataGridPostesJeu();
         }
+        private void ChargerTournois(ICollection<Tournoi> tournoisEspace)
+        {
+            dataGridTournois.DataSource = null;
+            dataGridTournois.DataSource = tournoisEspace?.ToList();
+            if (tournoisEspace != null)
+            {
+
+                MEP_DataGridTournois();
+            }
+            else
+            {
+                dataGridTournois.Visible = false;
+            }
+        }
 
         /// <summary>
-        /// Retourne vraie si un tournoi est en cours dans l'espace sélectionné, sinon retourne faux.
+        /// Permet de déterminer d'afficher une indication visuelle sur les tournois associés à l'espace sélectionné, en fonction de leur statut (en cours, planifié ou aucun tournoi).
         /// </summary>
-        private void TounoiEnCours()
+        private void StatutTounois()
         {
-            DateTime current = DateTime.Now;
-            labelStatutTournoi.Visible = true;
-            if (_espaceSelectionee.Tournois != null
-                && _espaceSelectionee.Tournois.Any(t => t.DateHeure == current))
+            var tournois = _espaceSelectionee.Tournois ?? new List<Tournoi>();
+
+            var enCours = tournois
+                .Where(t => t.Statut == "EnCours")
+                .ToList();
+
+            if (enCours.Any())
             {
                 labelStatutTournoi.Text = "Tournoi en cours";
                 labelStatutTournoi.ForeColor = Color.Maroon;
                 labelStatutTournoi.BackColor = Color.FromArgb(255, 128, 128);
+
+                ChargerTournois(enCours);
             }
             else
             {
-                labelStatutTournoi.Text = "Espace libre";
-                labelStatutTournoi.ForeColor = Color.DarkGreen;
-                labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
+                var futurs = tournois
+                    .Where(t => t.Statut == "Planifié")
+                    .ToList();
+
+                if (futurs.Any())
+                {
+                    labelStatutTournoi.Text = futurs.Count > 1
+                        ? "Tournois programmés"
+                        : "Tournoi programmé";
+
+                    labelStatutTournoi.ForeColor = Color.Chocolate;
+                    labelStatutTournoi.BackColor = Color.FromArgb(255, 224, 192);
+
+                    ChargerTournois(futurs);
+                }
+                else
+                {
+                    labelStatutTournoi.Text = "Espace libre";
+                    labelStatutTournoi.ForeColor = Color.DarkGreen;
+                    labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
+                    ChargerTournois(null);
+                }
             }
+
+            labelStatutTournoi.Visible = true;
         }
 
         /// <summary>
@@ -107,10 +147,16 @@ namespace ApplicationUi
         /// </summary>
         private void ChargerStatistiques()
         {
-            // Un espace libre est un espae qui n'a pas de tournoi associé
-            int nbEspacesLibres = _serviceEspace.Lister(filtre).Count(e => e.Tournois == null);
+            DateTime current = DateTime.Now;
+            // Un espace libre est un espace qui n'a pas de tournoi futur associé ou dont tous les tournois sont terminés
+            int nbEspacesLibres = _serviceEspace.Lister(filtre)
+                                                .Count(e =>
+                                                    e.Tournois == null ||
+                                                    !e.Tournois.Any(t => 
+                                                        t.Statut == "Planifié" 
+                                                        || t.Statut == "EnCours"));
 
-            labelStatEspacesTotal.Text = $"{_serviceEspace.Lister("").Count()}";
+            labelStatEspacesTotal.Text = $"{_serviceEspace.Lister(filtre).Count()}";
 
             if (nbEspacesLibres == 0)
             {
@@ -138,6 +184,7 @@ namespace ApplicationUi
             numericUpDownCapaciteMaxi.Value = numericUpDownCapaciteMaxi.Minimum;
             numericUpDownSuperficie.Value = numericUpDownSuperficie.Minimum;
             filtre = "";
+            labelStatutTournoi.Visible = false;
         }
         private void MEP_DataGrid()
         {
@@ -150,6 +197,26 @@ namespace ApplicationUi
         private void MEP_DataGridPostesJeu()
         {
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        }
+
+        private void MEP_DataGridTournois()
+        {
+            dataGridTournois.Visible = true;
+            dataGridTournois.Columns["NumeroTournoi"].Visible = false;
+            dataGridTournois.Columns["IdEspace"].Visible = false;
+            dataGridTournois.Columns["Espace"].Visible = false;
+            dataGridTournois.Columns["IdJeu"].Visible = false;
+            dataGridTournois.Columns["Jeu"].Visible = false;
+            dataGridTournois.Columns["DateHeure"].Visible = false;
+            dataGridTournois.Columns["NbParticipants"].Visible = false;
+            dataGridTournois.Columns["NomEspace"].Visible = false;
+            dataGridTournois.Columns["TitreJeu"].Visible = false;
+            dataGridTournois.Columns["Statut"].Visible = false;
+            dataGridTournois.Columns["Statut"].Visible = false;
+            dataGridTournois.Columns["Lot"].Visible = false;
+            dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["DureePrevue"].HeaderText = "Durée prévue";
+            dataGridTournois.Columns["Nom"].DisplayIndex = 1;
         }
 
         private void dataGridEspaces_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -203,7 +270,7 @@ namespace ApplicationUi
             numericUpDownCapaciteMaxi.Value = espace.CapaciteMaxi;
             numericUpDownSuperficie.Value = espace.Superficie;
             ChargerPostesJeu();
-            TounoiEnCours();
+            StatutTounois();
         }
         #endregion
 
