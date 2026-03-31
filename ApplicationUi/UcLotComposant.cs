@@ -97,7 +97,14 @@ namespace ApplicationUi
             textBoxLibelle.Text = lotComposant.Libelle;
             textBoxDescription.Text = lotComposant.Valeur.ToString();
             textBoxValeur.Clear();
-            comboBoxLot.SelectedValue = lotComposant.NumeroLot;
+            if(lotComposant.NumeroLot == null)
+            {
+                comboBoxLot.SelectedValue = "Aucun";
+            }
+            else
+            {
+                comboBoxLot.SelectedValue = lotComposant.NumeroLot;
+            }
         }
 
         #endregion
