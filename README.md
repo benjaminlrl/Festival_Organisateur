@@ -16,7 +16,7 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 
 ### Acceuil
 
-![Acceuil](Documentation/App/acceuil.png)
+![Acceuil](Documentation/App/acceuilJeux.png)
 
 ### Gestion des espaces
 
@@ -37,3 +37,8 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 ### Gestion des organisateurs
 
 ![Gestion des organisateurs](Documentation/App/gestionOrganisateurs.png)
+
+
+### Gestion des jeux
+
+![Gestion des organisateurs](Documentation/App/gestionJeux.png)
