@@ -63,9 +63,6 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance de <see cref="Organisateur"/> à créer.</param>
         public void Creer(Organisateur organisateur)
         {
-            // Regarde si le login n'existe pas déjà
-            if(Obtenir(organisateur.Login) != null)
-                throw new InvalidOperationException("Ce login est déjà pris.");
             // Ajout de l'entité au contexte puis persistance immédiate.
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);
@@ -200,6 +197,14 @@ namespace Lib_Services.Services
             // liste des erreurs
             var erreurs = new List<string>();
 
+            if(string.IsNullOrWhiteSpace(motDePasse))
+            {
+                erreurs.Add("Le mot de passe ne peut pas être vide.");
+            }
+            if (motDePasse.Contains(" "))
+            {
+                erreurs.Add("Le mot de passe ne peut pas contenir d'espace.");
+            }
             if (motDePasse.Length < 12)
             {
                 erreurs.Add("Le mot de passe doit contenir plus de 12 caractères.");
@@ -229,6 +234,14 @@ namespace Lib_Services.Services
             // liste des erreurs
             var erreurs = new List<string>();
 
+            if (Obtenir(identifiant) != null)
+            {
+                erreurs.Add("Ce login est déjà utilisé.");
+            }
+            if(string.IsNullOrWhiteSpace(identifiant))
+            {
+                erreurs.Add("Le login ne peut pas être vide.");
+            }
             if (identifiant.Length < 3 || identifiant.Length > 12)
             {
                 erreurs.Add("Le login doit contenir entre 3 et 12 caractères.");
