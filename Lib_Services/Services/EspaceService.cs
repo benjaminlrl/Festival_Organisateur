@@ -38,10 +38,12 @@ namespace Lib_Services.Services
             if (string.IsNullOrWhiteSpace(filtre))
                 return _context.Espaces
                 .Include(e => e.PostesJeu)
+                .Include(e => e.Tournois)
                 .ToList();
             return
                 _context.Espaces
                 .Include(e => e.PostesJeu)
+                .Include(e => e.Tournois)
                 .Where(e => e.Nom.Contains(filtre)
                     || e.Description.Contains(filtre))
                 .ToList();
