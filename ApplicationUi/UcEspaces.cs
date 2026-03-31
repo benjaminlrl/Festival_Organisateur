@@ -287,47 +287,18 @@ namespace ApplicationUi
             StatutTounois();
         }
         #endregion
-
-        #region Validations
-        /// <summary>
-        /// Vérifie que les champs obligatoires pour un espace sont valides avant de poursuivre l'opération.
-        /// </summary>
-        /// <remarks>Affiche une boîte de dialogue d'avertissement pour chaque validation échouée afin
-        /// d'informer l'utilisateur de la correction à apporter. Cette méthode doit être appelée avant d'enregistrer ou
-        /// de modifier un espace pour garantir l'intégrité des données saisies.</remarks>
-        /// <returns>true si tous les champs requis sont valides et respectent les contraintes ; sinon, false.</returns>
-        private bool ValiderEspace()
+        #region validations
+        private bool ValiderEspace(Espace espace)
         {
-
-            if (string.IsNullOrWhiteSpace(textBoxNom.Text))
+            var erreurs = _serviceEspace.ValiderEspace(espace);
+            if (erreurs.Any())
             {
-                MessageBox.Show("Le nom de l'espace est requis.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (numericUpDownCapaciteMaxi.Value <= 0)
-            {
-                MessageBox.Show("La capacité maximale doit être supérieure à zéro.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (numericUpDownSuperficie.Value <= 0)
-            {
-                MessageBox.Show("La superficie doit être supérieure à zéro.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (textBoxDescription.Text.Length > 500)
-            {
-                MessageBox.Show("La description ne peut pas dépasser 500 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (_serviceEspace.Lister("").Any(e => e.Nom == textBoxNom.Text))
-            {
-                MessageBox.Show("Un autre espace avec ce nom existe déjà.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(string.Join("\n", erreurs));
                 return false;
             }
             return true;
         }
         #endregion
-
         #region Boutons
         /// <summary>
         /// Gère l'événement de clic sur le bouton d'ajout pour créer un nouvel espace à partir des informations saisies
@@ -339,15 +310,16 @@ namespace ApplicationUi
         /// <param name="e">Les données d'événement associées au clic du bouton.</param>
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderEspace())
+            var espace = new Espace
             {
-                var espace = new Espace
-                {
-                    Nom = textBoxNom.Text,
-                    Description = textBoxDescription.Text,
-                    CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value,
-                    Superficie = (int)numericUpDownSuperficie.Value,
-                };
+                Nom = textBoxNom.Text,
+                Description = textBoxDescription.Text,
+                CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value,
+                Superficie = (int)numericUpDownSuperficie.Value,
+            };
+
+            if (ValiderEspace(espace))
+            {                
                 _serviceEspace.Creer(espace);
                 ChargerEspaces();
                 Raz_Zones();
@@ -377,9 +349,13 @@ namespace ApplicationUi
             _espaceSelectionee.CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value;
             _espaceSelectionee.Superficie = (int)numericUpDownSuperficie.Value;
 
-            _serviceEspace.Modifier(_espaceSelectionee);
-            ChargerEspaces();
-            Raz_Zones();
+            if (ValiderEspace(_espaceSelectionee))
+            {
+                _serviceEspace.Modifier(_espaceSelectionee);
+                ChargerEspaces();
+                Raz_Zones();
+            }
+           
         }
         /// <summary>
         /// Gère l'événement de clic sur le bouton Effacer et réinitialise les zones de saisie du formulaire.
