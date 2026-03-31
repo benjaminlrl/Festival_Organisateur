@@ -152,6 +152,7 @@ namespace Lib_Services.Services
             // - Leurs date et heure de début sont égales
             // - La date et heure de début d'un tournoi est comprise entre le début et la fin d'un autre tournoi
             if (Lister("").Any(t => t.NumeroTournoi != tournoi.NumeroTournoi
+                                && t.IdEspace == tournoi.IdEspace
                                 && (t.DateHeure == tournoi.DateHeure 
                                 || (tournoi.DateHeure >= t.DateHeure 
                                     && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue))
