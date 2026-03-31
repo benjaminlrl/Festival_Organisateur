@@ -49,8 +49,8 @@
             tableLayoutPanelCRUD = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
-            label1 = new Label();
             textBoxRecherche = new TextBox();
+            label1 = new Label();
             dataGridPostesJeu = new DataGridView();
             groupBoxStatsEspaces = new GroupBox();
             labelStatEspacesLibres = new Label();
@@ -382,6 +382,14 @@
             tableLayoutPanel2.TabIndex = 6;
             tableLayoutPanel2.Paint += tableLayoutPanel2_Paint;
             // 
+            // textBoxRecherche
+            // 
+            textBoxRecherche.Location = new Point(235, 3);
+            textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.Size = new Size(1001, 31);
+            textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -391,14 +399,6 @@
             label1.Size = new Size(131, 30);
             label1.TabIndex = 1;
             label1.Text = "Recherche :";
-            // 
-            // textBoxRecherche
-            // 
-            textBoxRecherche.Location = new Point(235, 3);
-            textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(1001, 31);
-            textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // dataGridPostesJeu
             // 

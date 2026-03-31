@@ -35,7 +35,7 @@ namespace ApplicationUi
             labelStatutTournoi.Visible = false;
             buttonEffacer.Text = "🧽  Effacer";
             ordreChamp = "ASC";
-            filtre = "";            
+            filtre = "";
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerEspaces();
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
@@ -98,6 +98,7 @@ namespace ApplicationUi
 
             var enCours = tournois
                 .Where(t => t.Statut == "EnCours")
+                .OrderBy(t => t.DateHeure)
                 .ToList();
 
             if (enCours.Any())
@@ -112,6 +113,7 @@ namespace ApplicationUi
             {
                 var futurs = tournois
                     .Where(t => t.Statut == "Planifié")
+                    .OrderBy(t => t.DateHeure)
                     .ToList();
 
                 if (futurs.Any())
@@ -152,8 +154,8 @@ namespace ApplicationUi
             int nbEspacesLibres = _serviceEspace.Lister(filtre)
                                                 .Count(e =>
                                                     e.Tournois == null ||
-                                                    !e.Tournois.Any(t => 
-                                                        t.Statut == "Planifié" 
+                                                    !e.Tournois.Any(t =>
+                                                        t.Statut == "Planifié"
                                                         || t.Statut == "EnCours"));
 
             labelStatEspacesTotal.Text = $"{_serviceEspace.Lister(filtre).Count()}";
@@ -197,6 +199,14 @@ namespace ApplicationUi
         private void MEP_DataGridPostesJeu()
         {
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Fonctionnel"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
+            dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
+            dataGridPostesJeu.Columns["Espace"].Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"].Visible = false;
         }
 
         private void MEP_DataGridTournois()
@@ -207,15 +217,19 @@ namespace ApplicationUi
             dataGridTournois.Columns["Espace"].Visible = false;
             dataGridTournois.Columns["IdJeu"].Visible = false;
             dataGridTournois.Columns["Jeu"].Visible = false;
-            dataGridTournois.Columns["DateHeure"].Visible = false;
             dataGridTournois.Columns["NbParticipants"].Visible = false;
             dataGridTournois.Columns["NomEspace"].Visible = false;
             dataGridTournois.Columns["TitreJeu"].Visible = false;
             dataGridTournois.Columns["Statut"].Visible = false;
             dataGridTournois.Columns["Statut"].Visible = false;
+            dataGridTournois.Columns["DureePrevue"].Visible = false;
             dataGridTournois.Columns["Lot"].Visible = false;
+
+            dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridTournois.Columns["DureePrevue"].HeaderText = "Durée prévue";
+
+            dataGridTournois.Columns["DateHeure"].HeaderText = "Début";
+
             dataGridTournois.Columns["Nom"].DisplayIndex = 1;
         }
 
