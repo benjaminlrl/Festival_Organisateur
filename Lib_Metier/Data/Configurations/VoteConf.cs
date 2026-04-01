@@ -12,7 +12,7 @@ namespace Lib_Metier.Data.Configurations
         public void Configure(EntityTypeBuilder<Vote> builder)
         {
             // Nom de la table en base de données
-            builder.ToTable("Vote");
+            builder.ToTable("Voter");
 
             // Définition de la clé primaire
             builder.HasKey(v =>
