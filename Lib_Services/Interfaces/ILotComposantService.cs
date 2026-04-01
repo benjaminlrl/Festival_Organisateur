@@ -11,6 +11,7 @@ namespace Lib_Services.Interfaces
         void Modifier(LotComposant lotComposant);
         void Supprimer(int numero);
         List<LotComposant> Lister(string filtre);
+        List<LotComposant> ListerParNumeroDunLot(int numero);
         LotComposant? Obtenir(int numero);
         List<string> LotComposantValide(LotComposant lotComposant);
     }
