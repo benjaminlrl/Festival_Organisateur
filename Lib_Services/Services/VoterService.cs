@@ -11,6 +11,7 @@ namespace Lib_Services.Services
     public class VoterService : IVoterService
     {
         private readonly ApplicationDbContext _context;
+        const int NB_VOTES_MAX = 15;
 
         /// <summary>
         /// Constructeur avec injection du contexte de données.
@@ -32,12 +33,12 @@ namespace Lib_Services.Services
         {
             // Utilise le DbSet Votes pour matérialiser la collection en mémoire.
             if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Votes
+                return _context.Voter
                      .Include(v => v.Plateforme)
                      .Include(v => v.Jeu)
                      .ToList();
             return
-                _context.Votes
+                _context.Voter
                 .Include(v => v.Plateforme)
                 .Include(v => v.Jeu)
                 .Where(v => v.DateVote.ToString().Contains(filtre))
@@ -56,7 +57,7 @@ namespace Lib_Services.Services
         public Voter? Obtenir(int idUser, int idJeu, int idPlateforme)
         {
             // Find retourne null si l'entité n'existe pas.
-            return _context.Votes.Find(new { idUser, idJeu, idPlateforme });
+            return _context.Voter.Find(new { idUser, idJeu, idPlateforme });
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace Lib_Services.Services
         /// <param name="Vote">Objet <see cref="Voter"/> à ajouter.</param>
         public void Creer(Voter vote)
         {
-            _context.Votes.Add(vote);
+            _context.Voter.Add(vote);
             _context.SaveChanges();
         }
 
@@ -76,7 +77,7 @@ namespace Lib_Services.Services
         public void Modifier(Voter vote)
         {
             // Marque l'entité comme modifiée puis sauvegarde.
-            _context.Votes.Update(vote);
+            _context.Voter.Update(vote);
             _context.SaveChanges();
         }
 
@@ -91,10 +92,10 @@ namespace Lib_Services.Services
         public void Supprimer(int idUser, int idJeu, int idPlateforme)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var vote = _context.Votes.Find(new {idUser, idJeu, idPlateforme });
+            var vote = _context.Voter.Find(new {idUser, idJeu, idPlateforme });
             if (vote != null)
             {
-                _context.Votes.Remove(vote);
+                _context.Voter.Remove(vote);
                 // Suppression en cascade des postes de jeu associés à la Vote. 
                 // Puisqu'un poste de jeu a obligatoirmeent une Vote.
                 _context.SaveChanges();
@@ -111,14 +112,19 @@ namespace Lib_Services.Services
             // liste des erreurs
             var erreurs = new List<string>();
 
-            //if (string.IsNullOrWhiteSpace(Vote.Libelle))
-            //    erreurs.Add("Le libellé est requis.");
+            if (vote.IdUser <= 0)
+                erreurs.Add("L'identifiant de l'utilisateur doit être supérieur à zéro.");
 
-            //if (Vote.IdVote <= 0)
-            //    erreurs.Add("Une Vote est requise.");
+            // L'utilisateur ne peut pas voter plus de NB_VOTES_MAX fois pour un même jeu sur une même plateforme.
+            if (_context.Voter.Count(v => v.IdUser == vote.IdUser) >= NB_VOTES_MAX)
+                erreurs.Add($"Vous ne pouvez pas voter plus de {NB_VOTES_MAX} fois");
 
-            //if (Lister(Vote.Libelle).Any(v => v.Libelle == Vote.Libelle && p.IdVote != Vote.IdVote))
-            //    erreurs.Add("Une autre Vote avec ce libellé existe déjà.");
+            // Si l'utilisateur a déjà voté pour ce jeu sur cette plateforme, il ne peut pas voter à nouveau.
+            if (_context.Voter.Count(v =>
+                                   v.IdJeu == vote.IdJeu 
+                                   && v.IdPlateforme == vote.IdPlateforme
+                                   && v.IdUser == vote.IdUser) > 1)
+                erreurs.Add($"Vous avez déjà voter pour ce mot !");
 
             return erreurs;
         }

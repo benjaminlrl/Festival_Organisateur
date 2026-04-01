@@ -129,9 +129,9 @@
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 239F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 279F));
-            tableLayoutPanel.Controls.Add(textBoxPegi, 1, 3);
+            tableLayoutPanel.Controls.Add(textBoxPegi, 2, 3);
             tableLayoutPanel.Controls.Add(comboBoxPlateforme, 2, 1);
-            tableLayoutPanel.Controls.Add(labelPegi, 1, 2);
+            tableLayoutPanel.Controls.Add(labelPegi, 2, 2);
             tableLayoutPanel.Controls.Add(textBoxTitre, 0, 1);
             tableLayoutPanel.Controls.Add(labelPlateforme, 2, 0);
             tableLayoutPanel.Controls.Add(textBoxEditeur, 0, 3);
@@ -157,10 +157,10 @@
             // 
             textBoxPegi.Dock = DockStyle.Fill;
             textBoxPegi.Enabled = false;
-            textBoxPegi.Location = new Point(308, 108);
+            textBoxPegi.Location = new Point(613, 108);
             textBoxPegi.Name = "textBoxPegi";
             textBoxPegi.PlaceholderText = "3";
-            textBoxPegi.Size = new Size(299, 31);
+            textBoxPegi.Size = new Size(233, 31);
             textBoxPegi.TabIndex = 30;
             // 
             // comboBoxPlateforme
@@ -170,7 +170,6 @@
             comboBoxPlateforme.Location = new Point(614, 39);
             comboBoxPlateforme.Margin = new Padding(4);
             comboBoxPlateforme.Name = "comboBoxPlateforme";
-            tableLayoutPanel.SetRowSpan(comboBoxPlateforme, 3);
             comboBoxPlateforme.Size = new Size(231, 33);
             comboBoxPlateforme.TabIndex = 29;
             // 
@@ -178,7 +177,7 @@
             // 
             labelPegi.AutoSize = true;
             labelPegi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelPegi.Location = new Point(309, 78);
+            labelPegi.Location = new Point(614, 78);
             labelPegi.Margin = new Padding(4, 0, 4, 0);
             labelPegi.Name = "labelPegi";
             labelPegi.Size = new Size(63, 27);
@@ -256,9 +255,11 @@
             textBoxDescription.Enabled = false;
             textBoxDescription.Location = new Point(309, 38);
             textBoxDescription.Margin = new Padding(4, 3, 4, 3);
+            textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Mariokart 8 est un jeu de courses";
-            textBoxDescription.Size = new Size(297, 31);
+            tableLayoutPanel.SetRowSpan(textBoxDescription, 3);
+            textBoxDescription.Size = new Size(297, 106);
             textBoxDescription.TabIndex = 25;
             // 
             // labelDateSortie
@@ -386,7 +387,7 @@
             BackColor = Color.MintCream;
             Controls.Add(tableLayoutPanel1);
             Name = "UcVoter";
-            Size = new Size(1186, 644);
+            Size = new Size(1494, 735);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

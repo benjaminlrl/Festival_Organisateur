@@ -167,9 +167,9 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        private bool ValiderJeu(Jeu jeu)
+        private bool ValiderVote(Voter vote)
         {
-            var erreurs = _serviceJeu.ValiderJeu(jeu);
+            var erreurs = _serviceVoter.ValiderVote(vote);
             if (erreurs.Any())
             {
                 MessageBox.Show(string.Join("\n", erreurs));
@@ -192,6 +192,11 @@ namespace ApplicationUi
                 DateVote = DateTime.Now
 
             };
+            if (ValiderVote(voter))
+            {
+                _serviceVoter.Creer(voter);
+                MessageBox.Show("Vote enregistré avec succès !");
+            }
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
@@ -205,8 +210,8 @@ namespace ApplicationUi
             if (_jeuSelectionne == null || _voterSelectionne == null)
                 return;
             var jeu = (Jeu)dataGridJeux.CurrentRow.DataBoundItem;
-
-            _serviceJeu.Supprimer(_jeuSelectionne.IdJeu);
+            
+            _serviceVoter.Supprimer(_voterSelectionne.IdUser, _voterSelectionne.IdJeu, _voterSelectionne.IdPlateforme);
             _jeuSelectionne = null;
             ChargerJeux();
             Raz_Zones();
