@@ -201,6 +201,7 @@
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
+            buttonEffacer.Click += buttonModifier_Click;
             // 
             // buttonModifier
             // 
@@ -217,6 +218,7 @@
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
+            buttonModifier.Click += buttonAjouter_Click;
             // 
             // buttonSupprimer
             // 
@@ -233,6 +235,7 @@
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
+            buttonSupprimer.Click += buttonSupprimer_Click;
             // 
             // label1
             // 
