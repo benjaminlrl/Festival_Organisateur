@@ -17,6 +17,18 @@ namespace Lib_Entities.Entities
         public DateTime DateVote { get; set; }
 
         public Plateforme Plateforme { get; set; }
+        /// <summary>
+        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
+        /// Renvoie le libellé de la plateforme de façon null-safe ;
+        /// retourne chaîne vide si l'espace est null.
+        /// </summary>
+        public string LibellePlateforme => Plateforme?.Libelle ?? string.Empty;
         public Jeu Jeu { get; set; }
+        /// <summary>
+        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
+        /// Renvoie le titre du jeu de façon null-safe ;
+        /// retourne chaîne vide si l'espace est null.
+        /// </summary>
+        public string TitreJeu => Jeu?.Titre ?? string.Empty;
     }
 }
