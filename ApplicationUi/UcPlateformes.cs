@@ -9,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ApplicationUi
 {
@@ -158,20 +159,29 @@ namespace ApplicationUi
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderPLateforme())
+            List<string> erreurs = new List<string>();
+            var plateforme = new Plateforme
             {
-                var plateforme = new Plateforme
-                {
-                    Libelle = textBoxNom.Text
-                };
+                Libelle = textBoxNom.Text
+            };
+
+            erreurs = _servicePlateforme.ValiderPlateforme(plateforme);
+
+            if (erreurs.Count == 0)
+            {
                 _servicePlateforme.Creer(plateforme);
                 ChargerPlateformes();
                 Raz_Zones();
+            }
+            else
+            {
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
         private void buttonModifier_Click(object sender, EventArgs e)
         {
+            List<string> erreurs = new List<string>();
             if (dataGridPlateformes.CurrentRow == null)
                 return;
 
@@ -180,10 +190,18 @@ namespace ApplicationUi
             var plateforme = (Plateforme)dataGridPlateformes.CurrentRow.DataBoundItem;
 
             _plateformeSelectionee.Libelle = textBoxNom.Text;
+            erreurs = _servicePlateforme.ValiderPlateforme(_plateformeSelectionee);
+            if (erreurs.Count == 0)
+            {
+                _servicePlateforme.Modifier(_plateformeSelectionee);
+                ChargerPlateformes();
+                Raz_Zones();
+            }
+            else
+            {
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
 
-            _servicePlateforme.Modifier(_plateformeSelectionee);
-            ChargerPlateformes();
-            Raz_Zones();
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
         {

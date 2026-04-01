@@ -98,5 +98,27 @@ namespace Lib_Services.Services
             }
         }
 
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a une plateforme.
+        /// </summary>
+        /// <param name="plateforme">La plateforme à valider</param>
+        /// <returns>La liste contenant toutes les erreurs</returns>
+        public List<string> ValiderPlateforme(Plateforme plateforme)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(plateforme.Libelle))
+                erreurs.Add("Le libellé est requis.");
+
+            if (plateforme.IdPlateforme <= 0)
+                erreurs.Add("Une plateforme est requise.");
+
+            if (Lister(plateforme.Libelle).Any(p => p.Libelle == plateforme.Libelle && p.IdPlateforme != plateforme.IdPlateforme))
+                erreurs.Add("Une autre plateforme avec ce libellé existe déjà.");
+
+            return erreurs;
+        }
+
     }
 }
