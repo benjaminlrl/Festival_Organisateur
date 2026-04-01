@@ -14,15 +14,16 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ApplicationUi
 {
-    public partial class UcOrganisateur : UserControl
+    public partial class UcOrganisateurs : UserControl
     {
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IRoleService _serviceRole;
         private Organisateur? _organisateurSelectionne = null;
+        private Organisateur? _unNouveauOrganisateur = null;
         private readonly Organisateur _organisateurConnecte;
         string filtre;
 
-        public UcOrganisateur(Organisateur unOrganisateurConnecte)
+        public UcOrganisateurs(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
@@ -52,7 +53,7 @@ namespace ApplicationUi
 
         private void ChargerOrganisateurs()
         {
-            // On charge la liste des organisateurs dans le dataGrid (sans les logins contenant admin)
+            // On charge la liste des organisateurs dans le dataGrid (sans les logins contenant "admin")
             dataGridOrganisateurs.DataSource = null;
             var listeOrganisateur = _serviceOrganisateur.Lister(filtre)
                 .Where(o => !o.Login.Contains("admin"))
@@ -143,6 +144,15 @@ namespace ApplicationUi
 
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
+            // On crée un nouveau organisateur avec les données des champs
+            _unNouveauOrganisateur = new Organisateur
+            {
+                Login = textBoxLogin.Text,
+                Mail = textBoxMail.Text,
+                motPasse = textBoxMotDePasse.Text,
+                IdRole = (int)comboBoxRole.SelectedValue
+            };
+
             // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel organisateur
             if (IdentifiantValide(textBoxLogin.Text) == false)
             {
@@ -153,26 +163,20 @@ namespace ApplicationUi
                 return;
             }
 
-            try
-            {
-                _serviceOrganisateur.Creer(new Organisateur
-                {
-                    Login = textBoxLogin.Text,
-                    Mail = textBoxMail.Text,
-                    motPasse = textBoxMotDePasse.Text,
-                    IdRole = (int)comboBoxRole.SelectedValue
-                });
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            // On créé l'organisateur en bdd
+            _serviceOrganisateur.Creer(_unNouveauOrganisateur);
             ChargerOrganisateurs();
             Raz_Zones();
         }
 
         private void buttonModifier_Click(object sender, EventArgs e)
         {
+            // On check s'il a bien selectionné un organisateur à modifier
+            if (_organisateurSelectionne == null)
+            {
+                MessageBox.Show("Aucun Organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             // On check si l'identifiant & le mot de passe sont valides, puis on modifie l'organisateur selectionné
             if (IdentifiantValide(textBoxLogin.Text) == false)
             {
@@ -199,12 +203,16 @@ namespace ApplicationUi
 
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
-            // On check si un orgnisateur est sélectionné, puis on le supprime
-            // Ne pas pouvoir suppr l'organisateur connecté
-            // Ne pas pouvoir suppr "admin"
+            // On check s'il a bien selectionné un organisateur à supprimé
+            // On check s'il essaye pas de supprimer l'organisateur connecté
             if (_organisateurSelectionne == null)
             {
                 MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_organisateurSelectionne == _organisateurConnecte)
+            {
+                MessageBox.Show("Vous ne pouvez pas supprimer votre propre compte.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login);

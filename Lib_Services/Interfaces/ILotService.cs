@@ -12,5 +12,6 @@ namespace Lib_Services.Interfaces
         void Supprimer(int numero);
         List<Lot> Lister(string filtre);
         Lot? Obtenir(int numero);
+        List<string> LotValide(Lot lot);
     }
 }

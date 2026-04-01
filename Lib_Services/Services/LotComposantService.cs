@@ -56,7 +56,7 @@ namespace Lib_Services.Services
         /// Crée un nouvel lotcomposant en base
         /// Appelle immédiatement <c>SaveChanges()</c> pour persister l'entité.
         /// </summary>
-        /// <param name="espace">Instance de <see cref="LotComposant"/> à créer.</param>
+        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
         public void Creer(LotComposant lotComposant)
         {
             // Ajout de l'entité au contexte puis persistance immédiate.
@@ -88,6 +88,35 @@ namespace Lib_Services.Services
                 _context.LotComposants.Remove(lotComposant);
                 _context.SaveChanges();
             }
+        }
+
+        /// <summary>
+        /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes
+        /// </summary>
+        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        public List<string> LotComposantValide(LotComposant lotComposant)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(lotComposant.Libelle))
+            {
+                erreurs.Add("Le libelle ne peut pas être vide.");
+            }
+            if(lotComposant.Libelle.Length > 50)
+            {
+                erreurs.Add("Le libelle ne peut pas faire plus de 20 charactères.");
+            }
+            if (lotComposant.Valeur < 0)
+            {
+                erreurs.Add("La valeur doit être positive.");
+            }
+            if (lotComposant.Description.Length > 150)
+            {
+                erreurs.Add("La description ne peut pas faire plus de 150 charactères.");
+            }
+            return erreurs;
         }
     }
 }
