@@ -79,9 +79,9 @@
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(220, 3);
+            textBoxRecherche.Location = new Point(218, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(928, 31);
+            textBoxRecherche.Size = new Size(926, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -97,25 +97,26 @@
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1159, 32);
+            tableLayoutPanel2.Size = new Size(1147, 32);
             tableLayoutPanel2.TabIndex = 9;
             // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.49249F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 310F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 576F));
             tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 1, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
             tableLayoutPanel1.Controls.Add(dataGridJeux, 0, 2);
+            tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 83.80567F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1943321F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 310F));
-            tableLayoutPanel1.Size = new Size(1475, 622);
+            tableLayoutPanel1.Size = new Size(1729, 622);
             tableLayoutPanel1.TabIndex = 8;
             // 
             // tableLayoutPanel3
@@ -125,12 +126,12 @@
             tableLayoutPanel3.Controls.Add(labelVotes, 0, 0);
             tableLayoutPanel3.Controls.Add(dataGridJeuxVotes, 0, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(1168, 3);
+            tableLayoutPanel3.Location = new Point(1156, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 14.6788988F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 85.3211F));
-            tableLayoutPanel3.Size = new Size(304, 255);
+            tableLayoutPanel3.Size = new Size(570, 255);
             tableLayoutPanel3.TabIndex = 10;
             // 
             // labelVotes
@@ -142,7 +143,7 @@
             labelVotes.ForeColor = Color.FromArgb(0, 0, 64);
             labelVotes.Location = new Point(3, 0);
             labelVotes.Name = "labelVotes";
-            labelVotes.Size = new Size(298, 37);
+            labelVotes.Size = new Size(564, 37);
             labelVotes.TabIndex = 11;
             labelVotes.Text = "Jeux votés";
             labelVotes.TextAlign = ContentAlignment.MiddleCenter;
@@ -159,7 +160,7 @@
             dataGridJeuxVotes.Name = "dataGridJeuxVotes";
             dataGridJeuxVotes.ReadOnly = true;
             dataGridJeuxVotes.RowHeadersWidth = 62;
-            dataGridJeuxVotes.Size = new Size(298, 212);
+            dataGridJeuxVotes.Size = new Size(564, 212);
             dataGridJeuxVotes.TabIndex = 7;
             // 
             // panelForm
@@ -167,10 +168,11 @@
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
+            panelForm.Dock = DockStyle.Fill;
             panelForm.Location = new Point(4, 3);
             panelForm.Margin = new Padding(4, 3, 4, 3);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(1149, 253);
+            panelForm.Size = new Size(1145, 255);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel
@@ -427,7 +429,7 @@
             dataGridJeux.ReadOnly = true;
             dataGridJeux.RowHeadersWidth = 62;
             dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridJeux.Size = new Size(1157, 305);
+            dataGridJeux.Size = new Size(1145, 305);
             dataGridJeux.TabIndex = 6;
             dataGridJeux.CellClick += dataGridJeux_CellClick;
             // 
@@ -438,7 +440,7 @@
             BackColor = Color.MintCream;
             Controls.Add(tableLayoutPanel1);
             Name = "UcVoter";
-            Size = new Size(1494, 735);
+            Size = new Size(1729, 780);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

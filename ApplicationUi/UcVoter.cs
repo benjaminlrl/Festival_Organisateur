@@ -40,6 +40,7 @@ namespace ApplicationUi
             ordreChamp = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerJeux();
+            ChargerJeuxVotes();
             buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
             buttonVoter.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
@@ -70,9 +71,8 @@ namespace ApplicationUi
         private void ChargerJeuxVotes()
         {
             dataGridJeuxVotes.DataSource = null;
-            dataGridJeuxVotes.DataSource = _serviceVoter.Lister("").Any(v =>
-                                    v.IdUser == 1); // TODO: Récupérer l'ID de l'utilisateur connecté
-            if(dataGridJeuxVotes.DataSource != null)
+            dataGridJeuxVotes.DataSource = _serviceVoter.ListerPourUnUtilisateur(1); // TODO: Récupérer l'ID de l'utilisateur connecté
+            if (dataGridJeuxVotes.DataSource != null)
                 MEP_DataGridJeuxVotes();
         }
         private void ChargerPlateforme()
@@ -111,9 +111,22 @@ namespace ApplicationUi
 
         private void MEP_DataGridJeuxVotes()
         {
+            dataGridJeuxVotes.Columns["IdUser"].Visible = false;
+            dataGridJeuxVotes.Columns["IdPlateforme"].Visible = false;
+            dataGridJeuxVotes.Columns["IdJeu"].Visible = false;
+            dataGridJeuxVotes.Columns["Plateforme"].Visible = false;
+            dataGridJeuxVotes.Columns["Jeu"].Visible = false;
+
+            dataGridJeuxVotes.Columns["TitreJeu"].HeaderText = "Jeu";
+            dataGridJeuxVotes.Columns["LibellePlateforme"].HeaderText = "Plateforme";
+
+            dataGridJeuxVotes.Columns["TitreJeu"].DisplayIndex = 1;
+            dataGridJeuxVotes.Columns["LibellePlateforme"].DisplayIndex = 2;
+
+
+            dataGridJeuxVotes.Columns["TitreJeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeuxVotes.Columns["LibellePlateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridJeuxVotes.Columns["DateVote"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridJeuxVotes.Columns["Jeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridJeuxVotes.Columns["Plateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void dataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -171,7 +184,6 @@ namespace ApplicationUi
             textBoxEditeur.Text = jeu.Editeur;
             textBoxPegi.Text = jeu.Pegi.ToString();
             ChargerPlateforme();
-            ChargerJeuxVotes();
             dateTimePickerDateSortie.Value = jeu.DateSortie;
         }
 
@@ -222,6 +234,7 @@ namespace ApplicationUi
                 buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
                 buttonVoter.Enabled = _jeuSelectionne != null;
                 ChargerJeux();
+                ChargerJeuxVotes();
             }
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
@@ -242,6 +255,7 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
             buttonVoter.Enabled = _jeuSelectionne != null;
             ChargerJeux();
+            ChargerJeuxVotes();
             Raz_Zones();
 
         }
