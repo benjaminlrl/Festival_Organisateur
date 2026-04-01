@@ -34,10 +34,16 @@ namespace Lib_Services.Services
         {
             if (string.IsNullOrWhiteSpace(filtre))
                 return _context.LotComposants
+                     .Include(t => t.Lot)
                      .ToList();
             return
                 _context.LotComposants
-                .Where(r => r.Libelle.Contains(filtre))
+                .Where(t => t.Libelle.Contains(filtre)
+                        || t.Description.Contains(filtre)
+                        || t.Valeur.ToString().Contains(filtre)
+                        || t.Numero.ToString().Contains(filtre)
+                        || t.Lot.Libelle.Contains(filtre))
+                .Include(t => t.Lot)
                 .ToList();
         }
 

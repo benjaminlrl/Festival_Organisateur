@@ -21,25 +21,41 @@ namespace ApplicationUi
             tableLayoutPanel = new TableLayoutPanel();
             labelLibelle = new Label();
             labelRang = new Label();
-            labelTournoi = new Label();
             textBoxLibelle = new TextBox();
-            comboBoxTournoi = new ComboBox();
             textBoxRang = new TextBox();
+            labelTournoi = new Label();
+            comboBoxTournoi = new ComboBox();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
-            buttonAjouter = new Button();
+            buttonAjouterLot = new Button();
             buttonEffacer = new Button();
             buttonModifier = new Button();
-            buttonSupprimer = new Button();
+            buttonSupprimerLot = new Button();
             label1 = new Label();
             dataGridLots = new DataGridView();
             label2 = new Label();
             textBoxRecherche = new TextBox();
+            dataGridLotComposants = new DataGridView();
+            dataGridView2 = new DataGridView();
+            panel1 = new Panel();
+            groupBox2 = new GroupBox();
+            buttonAjouterLotComposant = new Button();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            comboBoxLotComposant = new ComboBox();
+            labelComposant = new Label();
+            panel2 = new Panel();
+            label6 = new Label();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridLots).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridLotComposants).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            panel1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // panelForm
@@ -98,6 +114,24 @@ namespace ApplicationUi
             labelRang.TabIndex = 1;
             labelRang.Text = "Rang * :";
             // 
+            // textBoxLibelle
+            // 
+            textBoxLibelle.Location = new Point(4, 39);
+            textBoxLibelle.Margin = new Padding(4);
+            textBoxLibelle.Name = "textBoxLibelle";
+            textBoxLibelle.PlaceholderText = "Ex: 1er Prix";
+            textBoxLibelle.Size = new Size(210, 27);
+            textBoxLibelle.TabIndex = 0;
+            // 
+            // textBoxRang
+            // 
+            textBoxRang.Location = new Point(297, 39);
+            textBoxRang.Margin = new Padding(4);
+            textBoxRang.Name = "textBoxRang";
+            textBoxRang.PlaceholderText = "1";
+            textBoxRang.Size = new Size(210, 27);
+            textBoxRang.TabIndex = 4;
+            // 
             // labelTournoi
             // 
             labelTournoi.AutoSize = true;
@@ -109,15 +143,6 @@ namespace ApplicationUi
             labelTournoi.TabIndex = 3;
             labelTournoi.Text = "Tournoi associé * :";
             // 
-            // textBoxLibelle
-            // 
-            textBoxLibelle.Location = new Point(4, 39);
-            textBoxLibelle.Margin = new Padding(4);
-            textBoxLibelle.Name = "textBoxLibelle";
-            textBoxLibelle.PlaceholderText = "Ex: 1er Prix";
-            textBoxLibelle.Size = new Size(210, 27);
-            textBoxLibelle.TabIndex = 0;
-            // 
             // comboBoxTournoi
             // 
             comboBoxTournoi.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -126,15 +151,6 @@ namespace ApplicationUi
             comboBoxTournoi.Name = "comboBoxTournoi";
             comboBoxTournoi.Size = new Size(210, 31);
             comboBoxTournoi.TabIndex = 3;
-            // 
-            // textBoxRang
-            // 
-            textBoxRang.Location = new Point(297, 39);
-            textBoxRang.Margin = new Padding(4);
-            textBoxRang.Name = "textBoxRang";
-            textBoxRang.PlaceholderText = "1";
-            textBoxRang.Size = new Size(210, 27);
-            textBoxRang.TabIndex = 4;
             // 
             // panelButtons
             // 
@@ -148,10 +164,10 @@ namespace ApplicationUi
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(buttonAjouter);
+            groupBox1.Controls.Add(buttonAjouterLot);
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
-            groupBox1.Controls.Add(buttonSupprimer);
+            groupBox1.Controls.Add(buttonSupprimerLot);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
@@ -160,21 +176,21 @@ namespace ApplicationUi
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
             // 
-            // buttonAjouter
+            // buttonAjouterLot
             // 
-            buttonAjouter.BackColor = Color.FromArgb(76, 175, 80);
-            buttonAjouter.FlatAppearance.BorderSize = 0;
-            buttonAjouter.FlatStyle = FlatStyle.Flat;
-            buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(270, 25);
-            buttonAjouter.Margin = new Padding(4);
-            buttonAjouter.Name = "buttonAjouter";
-            buttonAjouter.Size = new Size(150, 45);
-            buttonAjouter.TabIndex = 6;
-            buttonAjouter.Text = "➕  Ajouter";
-            buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += buttonAjouter_Click;
+            buttonAjouterLot.BackColor = Color.FromArgb(76, 175, 80);
+            buttonAjouterLot.FlatAppearance.BorderSize = 0;
+            buttonAjouterLot.FlatStyle = FlatStyle.Flat;
+            buttonAjouterLot.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonAjouterLot.ForeColor = Color.White;
+            buttonAjouterLot.Location = new Point(270, 25);
+            buttonAjouterLot.Margin = new Padding(4);
+            buttonAjouterLot.Name = "buttonAjouterLot";
+            buttonAjouterLot.Size = new Size(150, 45);
+            buttonAjouterLot.TabIndex = 6;
+            buttonAjouterLot.Text = "➕  Ajouter";
+            buttonAjouterLot.UseVisualStyleBackColor = false;
+            buttonAjouterLot.Click += buttonAjouterLot_Click;
             // 
             // buttonEffacer
             // 
@@ -208,21 +224,21 @@ namespace ApplicationUi
             buttonModifier.UseVisualStyleBackColor = false;
             buttonModifier.Click += buttonModifier_Click;
             // 
-            // buttonSupprimer
+            // buttonSupprimerLot
             // 
-            buttonSupprimer.BackColor = Color.FromArgb(244, 67, 54);
-            buttonSupprimer.FlatAppearance.BorderSize = 0;
-            buttonSupprimer.FlatStyle = FlatStyle.Flat;
-            buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(670, 25);
-            buttonSupprimer.Margin = new Padding(4);
-            buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(162, 45);
-            buttonSupprimer.TabIndex = 5;
-            buttonSupprimer.Text = "🗑️    Supprimer";
-            buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += buttonSupprimer_Click;
+            buttonSupprimerLot.BackColor = Color.FromArgb(244, 67, 54);
+            buttonSupprimerLot.FlatAppearance.BorderSize = 0;
+            buttonSupprimerLot.FlatStyle = FlatStyle.Flat;
+            buttonSupprimerLot.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonSupprimerLot.ForeColor = Color.White;
+            buttonSupprimerLot.Location = new Point(670, 25);
+            buttonSupprimerLot.Margin = new Padding(4);
+            buttonSupprimerLot.Name = "buttonSupprimerLot";
+            buttonSupprimerLot.Size = new Size(162, 45);
+            buttonSupprimerLot.TabIndex = 5;
+            buttonSupprimerLot.Text = "🗑️    Supprimer";
+            buttonSupprimerLot.UseVisualStyleBackColor = false;
+            buttonSupprimerLot.Click += buttonSupprimerLot_Click;
             // 
             // label1
             // 
@@ -247,7 +263,7 @@ namespace ApplicationUi
             dataGridLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridLots.Size = new Size(900, 434);
             dataGridLots.TabIndex = 2;
-            dataGridLots.CellClick += dataGridLotComposants_CellClick;
+            dataGridLots.CellClick += dataGridLots_CellClick;
             // 
             // label2
             // 
@@ -269,11 +285,139 @@ namespace ApplicationUi
             textBoxRecherche.TabIndex = 5;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
+            // dataGridLotComposants
+            // 
+            dataGridLotComposants.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridLotComposants.BackgroundColor = Color.White;
+            dataGridLotComposants.BorderStyle = BorderStyle.None;
+            dataGridLotComposants.ColumnHeadersHeight = 34;
+            dataGridLotComposants.Location = new Point(955, 320);
+            dataGridLotComposants.Margin = new Padding(4);
+            dataGridLotComposants.Name = "dataGridLotComposants";
+            dataGridLotComposants.ReadOnly = true;
+            dataGridLotComposants.RowHeadersWidth = 62;
+            dataGridLotComposants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridLotComposants.Size = new Size(246, 434);
+            dataGridLotComposants.TabIndex = 6;
+            dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
+            // 
+            // dataGridView2
+            // 
+            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView2.BackgroundColor = Color.White;
+            dataGridView2.BorderStyle = BorderStyle.None;
+            dataGridView2.ColumnHeadersHeight = 34;
+            dataGridView2.Location = new Point(1222, 320);
+            dataGridView2.Margin = new Padding(4);
+            dataGridView2.Name = "dataGridView2";
+            dataGridView2.ReadOnly = true;
+            dataGridView2.RowHeadersWidth = 62;
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.Size = new Size(246, 434);
+            dataGridView2.TabIndex = 7;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.White;
+            panel1.Controls.Add(groupBox2);
+            panel1.Controls.Add(tableLayoutPanel1);
+            panel1.Controls.Add(panel2);
+            panel1.Location = new Point(952, 36);
+            panel1.Margin = new Padding(4);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(249, 210);
+            panel1.TabIndex = 2;
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(buttonAjouterLotComposant);
+            groupBox2.Location = new Point(10, 125);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(229, 82);
+            groupBox2.TabIndex = 7;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "⚡ Actions";
+            // 
+            // buttonAjouterLotComposant
+            // 
+            buttonAjouterLotComposant.BackColor = Color.FromArgb(76, 175, 80);
+            buttonAjouterLotComposant.FlatAppearance.BorderSize = 0;
+            buttonAjouterLotComposant.FlatStyle = FlatStyle.Flat;
+            buttonAjouterLotComposant.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonAjouterLotComposant.ForeColor = Color.White;
+            buttonAjouterLotComposant.Location = new Point(28, 25);
+            buttonAjouterLotComposant.Margin = new Padding(4);
+            buttonAjouterLotComposant.Name = "buttonAjouterLotComposant";
+            buttonAjouterLotComposant.Size = new Size(186, 45);
+            buttonAjouterLotComposant.TabIndex = 6;
+            buttonAjouterLotComposant.Text = "➕  Ajouter au lot";
+            buttonAjouterLotComposant.UseVisualStyleBackColor = false;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.Controls.Add(comboBoxLotComposant, 0, 1);
+            tableLayoutPanel1.Controls.Add(labelComposant, 0, 0);
+            tableLayoutPanel1.Location = new Point(10, 12);
+            tableLayoutPanel1.Margin = new Padding(4);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(229, 110);
+            tableLayoutPanel1.TabIndex = 0;
+            // 
+            // comboBoxLotComposant
+            // 
+            comboBoxLotComposant.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxLotComposant.Location = new Point(4, 39);
+            comboBoxLotComposant.Margin = new Padding(4);
+            comboBoxLotComposant.Name = "comboBoxLotComposant";
+            comboBoxLotComposant.Size = new Size(210, 31);
+            comboBoxLotComposant.TabIndex = 4;
+            // 
+            // labelComposant
+            // 
+            labelComposant.AutoSize = true;
+            labelComposant.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelComposant.Location = new Point(4, 0);
+            labelComposant.Margin = new Padding(4, 0, 4, 0);
+            labelComposant.Name = "labelComposant";
+            labelComposant.Size = new Size(180, 23);
+            labelComposant.TabIndex = 0;
+            labelComposant.Text = "Composant de Lot * :";
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(label6);
+            panel2.Location = new Point(10, 125);
+            panel2.Margin = new Padding(4);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(229, 82);
+            panel2.TabIndex = 1;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(0, 0);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(0, 23);
+            label6.TabIndex = 6;
+            // 
             // UcLots
             // 
             AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 253);
+            Controls.Add(panel1);
+            Controls.Add(dataGridView2);
+            Controls.Add(dataGridLotComposants);
             Controls.Add(textBoxRecherche);
             Controls.Add(label2);
             Controls.Add(panelForm);
@@ -281,7 +425,7 @@ namespace ApplicationUi
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
             Name = "UcLots";
-            Size = new Size(950, 809);
+            Size = new Size(1482, 809);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
@@ -289,6 +433,14 @@ namespace ApplicationUi
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridLots).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridLotComposants).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            panel1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -304,14 +456,24 @@ namespace ApplicationUi
         private Label labelTournoi;
         private Panel panelButtons;
         private GroupBox groupBox1;
-        private Button buttonAjouter;
+        private Button buttonAjouterLot;
         private Button buttonEffacer;
         private Button buttonModifier;
-        private Button buttonSupprimer;
+        private Button buttonSupprimerLot;
         private Label label1;
         private DataGridView dataGridLots;
         private Label label2;
         private TextBox textBoxRecherche;
         private TextBox textBoxRang;
+        private DataGridView dataGridLotComposants;
+        private DataGridView dataGridView2;
+        private Panel panel1;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label labelComposant;
+        private GroupBox groupBox2;
+        private Button buttonAjouterLotComposant;
+        private Panel panel2;
+        private Label label6;
+        private ComboBox comboBoxLotComposant;
     }
 }

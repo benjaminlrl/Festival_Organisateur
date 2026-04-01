@@ -30,7 +30,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Numero du composant
         /// </summary>
-        public int Numero { get; set; }
+        public int? Numero { get; set; }
 
         /// <summary>
         /// Numéro du lot auquel il est associé (nullable)
