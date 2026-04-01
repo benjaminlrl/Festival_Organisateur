@@ -12,5 +12,6 @@ namespace Lib_Services.Interfaces
         void Supprimer(int idplateforme);
         List<Plateforme> Lister(string filtre);
         Plateforme? Obtenir(int idplateforme);
+        List<string> ValiderPlateforme(Plateforme plateforme);
     }
 }
