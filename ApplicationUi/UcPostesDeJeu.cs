@@ -198,6 +198,7 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             radioButtonFonctionnelTrue.Checked = false;
             radioButtonFonctionnelFalse.Checked = false;
+            dataGridTournois.Visible = false;
         }
         private void MEP_DataGrid()
         // TODO: Modifier les données de la grille pour afficher le nom de l'espace
