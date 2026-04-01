@@ -38,10 +38,12 @@ namespace Lib_Services.Services
             if (string.IsNullOrWhiteSpace(filtre))
                 return _context.Espaces
                 .Include(e => e.PostesJeu)
+                .Include(e => e.Tournois)
                 .ToList();
             return
                 _context.Espaces
                 .Include(e => e.PostesJeu)
+                .Include(e => e.Tournois)
                 .Where(e => e.Nom.Contains(filtre)
                     || e.Description.Contains(filtre))
                 .ToList();
@@ -94,6 +96,37 @@ namespace Lib_Services.Services
                 _context.Espaces.Remove(espace);
                 _context.SaveChanges();
             }
+        }
+
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a un espace.
+        /// </summary>
+        /// <param name="espace">L'esapce à valider</param>
+        /// <returns>La liste contenant toutes les erreurs</returns>
+        public List<string> ValiderEspace(Espace espace)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(espace.Nom))
+                erreurs.Add("Le nom est requis.");
+
+            if (string.IsNullOrWhiteSpace(espace.Description))
+                erreurs.Add("La description est requise.");
+
+            if (espace.Superficie < 9)
+                erreurs.Add("La superficie ne peut pas être inférieur à 9.");
+
+            if (espace.Superficie > 60)
+                erreurs.Add("La superficie ne peut pas être supérieur à 60.");
+
+            if (espace.CapaciteMaxi < 0)
+                erreurs.Add("La capacité maximale doit être positive.");
+
+            if (espace.CapaciteMaxi > 50)
+                erreurs.Add("La superficie ne peut pas être supérieur à 50.");
+
+            return erreurs;
         }
     }
 

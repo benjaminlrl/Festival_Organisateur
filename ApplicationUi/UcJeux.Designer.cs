@@ -67,19 +67,17 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(2, 0);
-            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Location = new Point(3, 0);
             label2.Name = "label2";
-            label2.Size = new Size(89, 19);
+            label2.Size = new Size(131, 30);
             label2.TabIndex = 1;
             label2.Text = "Recherche :";
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(153, 2);
-            textBoxRecherche.Margin = new Padding(2, 2, 2, 2);
+            textBoxRecherche.Location = new Point(218, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(651, 23);
+            textBoxRecherche.Size = new Size(928, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -91,12 +89,11 @@
             tableLayoutPanel2.Controls.Add(label2, 0, 0);
             tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(2, 165);
-            tableLayoutPanel2.Margin = new Padding(2, 2, 2, 2);
+            tableLayoutPanel2.Location = new Point(3, 276);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(806, 19);
+            tableLayoutPanel2.Size = new Size(1151, 32);
             tableLayoutPanel2.TabIndex = 9;
             // 
             // tableLayoutPanel1
@@ -107,13 +104,12 @@
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
             tableLayoutPanel1.Controls.Add(dataGridJeux, 0, 2);
             tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Margin = new Padding(2, 2, 2, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 83.80567F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1943321F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 186F));
-            tableLayoutPanel1.Size = new Size(810, 373);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 310F));
+            tableLayoutPanel1.Size = new Size(1157, 622);
             tableLayoutPanel1.TabIndex = 8;
             // 
             // panelForm
@@ -121,10 +117,10 @@
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(3, 2);
-            panelForm.Margin = new Padding(3, 2, 3, 2);
+            panelForm.Location = new Point(4, 3);
+            panelForm.Margin = new Padding(4, 3, 4, 3);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(804, 152);
+            panelForm.Size = new Size(1149, 253);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel
@@ -132,8 +128,8 @@
             tableLayoutPanel.ColumnCount = 4;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 167F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 195F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 239F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 279F));
             tableLayoutPanel.Controls.Add(comboBoxPegi, 1, 3);
             tableLayoutPanel.Controls.Add(labelPegi, 1, 2);
             tableLayoutPanel.Controls.Add(textBoxTitre, 0, 1);
@@ -146,73 +142,75 @@
             tableLayoutPanel.Controls.Add(labelDateSortie, 3, 0);
             tableLayoutPanel.Controls.Add(dateTimePickerDateSortie, 3, 1);
             tableLayoutPanel.Controls.Add(checkedListBoxPlateforme, 2, 1);
-            tableLayoutPanel.Location = new Point(7, 7);
-            tableLayoutPanel.Margin = new Padding(3, 2, 3, 2);
+            tableLayoutPanel.Location = new Point(10, 12);
+            tableLayoutPanel.Margin = new Padding(4, 3, 4, 3);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 5;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 16F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 12F));
-            tableLayoutPanel.Size = new Size(790, 86);
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 43F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 42F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.Size = new Size(1129, 143);
             tableLayoutPanel.TabIndex = 0;
             // 
             // comboBoxPegi
             // 
             comboBoxPegi.DisplayMember = "3,7,";
             comboBoxPegi.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPegi.Location = new Point(217, 65);
-            comboBoxPegi.Margin = new Padding(3, 2, 3, 2);
+            comboBoxPegi.Location = new Point(309, 108);
+            comboBoxPegi.Margin = new Padding(4, 3, 4, 3);
             comboBoxPegi.Name = "comboBoxPegi";
-            comboBoxPegi.Size = new Size(153, 23);
+            comboBoxPegi.Size = new Size(217, 33);
             comboBoxPegi.TabIndex = 28;
             // 
             // labelPegi
             // 
             labelPegi.AutoSize = true;
             labelPegi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelPegi.Location = new Point(217, 47);
+            labelPegi.Location = new Point(309, 78);
+            labelPegi.Margin = new Padding(4, 0, 4, 0);
             labelPegi.Name = "labelPegi";
-            labelPegi.Size = new Size(35, 16);
+            labelPegi.Size = new Size(52, 27);
             labelPegi.TabIndex = 27;
             labelPegi.Text = "Pegi";
             // 
             // textBoxTitre
             // 
-            textBoxTitre.Location = new Point(3, 23);
-            textBoxTitre.Margin = new Padding(3, 2, 3, 2);
+            textBoxTitre.Location = new Point(4, 38);
+            textBoxTitre.Margin = new Padding(4, 3, 4, 3);
             textBoxTitre.Name = "textBoxTitre";
             textBoxTitre.PlaceholderText = "Ex: Mariokart 8";
-            textBoxTitre.Size = new Size(198, 23);
+            textBoxTitre.Size = new Size(281, 31);
             textBoxTitre.TabIndex = 0;
             // 
             // labelPlateforme
             // 
             labelPlateforme.AutoSize = true;
             labelPlateforme.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelPlateforme.Location = new Point(431, 0);
+            labelPlateforme.Location = new Point(614, 0);
+            labelPlateforme.Margin = new Padding(4, 0, 4, 0);
             labelPlateforme.Name = "labelPlateforme";
-            labelPlateforme.Size = new Size(84, 17);
+            labelPlateforme.Size = new Size(128, 28);
             labelPlateforme.TabIndex = 21;
             labelPlateforme.Text = "Plateforme :";
             // 
             // textBoxEditeur
             // 
-            textBoxEditeur.Location = new Point(2, 65);
-            textBoxEditeur.Margin = new Padding(2, 2, 2, 2);
+            textBoxEditeur.Location = new Point(3, 108);
             textBoxEditeur.Name = "textBoxEditeur";
             textBoxEditeur.PlaceholderText = "Editeur";
-            textBoxEditeur.Size = new Size(106, 23);
+            textBoxEditeur.Size = new Size(150, 31);
             textBoxEditeur.TabIndex = 23;
             // 
             // labelEditeur
             // 
             labelEditeur.AutoSize = true;
             labelEditeur.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelEditeur.Location = new Point(3, 47);
+            labelEditeur.Location = new Point(4, 78);
+            labelEditeur.Margin = new Padding(4, 0, 4, 0);
             labelEditeur.Name = "labelEditeur";
-            labelEditeur.Size = new Size(52, 16);
+            labelEditeur.Size = new Size(80, 27);
             labelEditeur.TabIndex = 8;
             labelEditeur.Text = "Editeur";
             // 
@@ -220,9 +218,10 @@
             // 
             labelTitre.AutoSize = true;
             labelTitre.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelTitre.Location = new Point(3, 0);
+            labelTitre.Location = new Point(4, 0);
+            labelTitre.Margin = new Padding(4, 0, 4, 0);
             labelTitre.Name = "labelTitre";
-            labelTitre.Size = new Size(45, 17);
+            labelTitre.Size = new Size(68, 28);
             labelTitre.TabIndex = 6;
             labelTitre.Text = "Titre :";
             // 
@@ -230,58 +229,58 @@
             // 
             labelDescription.AutoSize = true;
             labelDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDescription.Location = new Point(217, 0);
+            labelDescription.Location = new Point(309, 0);
+            labelDescription.Margin = new Padding(4, 0, 4, 0);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(87, 17);
+            labelDescription.Size = new Size(132, 28);
             labelDescription.TabIndex = 26;
             labelDescription.Text = "Description :";
             // 
             // textBoxDescription
             // 
-            textBoxDescription.Location = new Point(217, 23);
-            textBoxDescription.Margin = new Padding(3, 2, 3, 2);
+            textBoxDescription.Location = new Point(309, 38);
+            textBoxDescription.Margin = new Padding(4, 3, 4, 3);
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Mariokart 8 est un jeu de courses";
-            textBoxDescription.Size = new Size(198, 23);
+            textBoxDescription.Size = new Size(281, 31);
             textBoxDescription.TabIndex = 25;
             // 
             // labelDateSortie
             // 
             labelDateSortie.AutoSize = true;
             labelDateSortie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDateSortie.Location = new Point(598, 0);
+            labelDateSortie.Location = new Point(853, 0);
+            labelDateSortie.Margin = new Padding(4, 0, 4, 0);
             labelDateSortie.Name = "labelDateSortie";
-            labelDateSortie.Size = new Size(103, 17);
+            labelDateSortie.Size = new Size(158, 28);
             labelDateSortie.TabIndex = 19;
             labelDateSortie.Text = "Date de sortie :";
             // 
             // dateTimePickerDateSortie
             // 
             dateTimePickerDateSortie.Format = DateTimePickerFormat.Short;
-            dateTimePickerDateSortie.Location = new Point(597, 23);
-            dateTimePickerDateSortie.Margin = new Padding(2, 2, 2, 2);
+            dateTimePickerDateSortie.Location = new Point(852, 38);
             dateTimePickerDateSortie.Name = "dateTimePickerDateSortie";
-            dateTimePickerDateSortie.Size = new Size(157, 23);
+            dateTimePickerDateSortie.Size = new Size(223, 31);
             dateTimePickerDateSortie.TabIndex = 24;
             // 
             // checkedListBoxPlateforme
             // 
             checkedListBoxPlateforme.FormattingEnabled = true;
-            checkedListBoxPlateforme.Location = new Point(430, 23);
-            checkedListBoxPlateforme.Margin = new Padding(2, 2, 2, 2);
+            checkedListBoxPlateforme.Location = new Point(613, 38);
             checkedListBoxPlateforme.Name = "checkedListBoxPlateforme";
             tableLayoutPanel.SetRowSpan(checkedListBoxPlateforme, 3);
-            checkedListBoxPlateforme.Size = new Size(163, 40);
+            checkedListBoxPlateforme.Size = new Size(231, 60);
             checkedListBoxPlateforme.TabIndex = 29;
             // 
             // panelButtons
             // 
             panelButtons.Controls.Add(groupBox1);
             panelButtons.Controls.Add(label1);
-            panelButtons.Location = new Point(7, 93);
-            panelButtons.Margin = new Padding(3, 2, 3, 2);
+            panelButtons.Location = new Point(10, 155);
+            panelButtons.Margin = new Padding(4, 3, 4, 3);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(615, 49);
+            panelButtons.Size = new Size(879, 82);
             panelButtons.TabIndex = 1;
             // 
             // groupBox1
@@ -292,10 +291,8 @@
             groupBox1.Controls.Add(buttonSupprimer);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
-            groupBox1.Size = new Size(615, 49);
+            groupBox1.Size = new Size(879, 82);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
@@ -307,10 +304,10 @@
             buttonAjouter.FlatStyle = FlatStyle.Flat;
             buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(189, 15);
-            buttonAjouter.Margin = new Padding(3, 2, 3, 2);
+            buttonAjouter.Location = new Point(270, 25);
+            buttonAjouter.Margin = new Padding(4, 3, 4, 3);
             buttonAjouter.Name = "buttonAjouter";
-            buttonAjouter.Size = new Size(105, 27);
+            buttonAjouter.Size = new Size(150, 45);
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
@@ -323,10 +320,10 @@
             buttonEffacer.FlatStyle = FlatStyle.Flat;
             buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonEffacer.ForeColor = Color.White;
-            buttonEffacer.Location = new Point(49, 15);
-            buttonEffacer.Margin = new Padding(3, 2, 3, 2);
+            buttonEffacer.Location = new Point(70, 25);
+            buttonEffacer.Margin = new Padding(4, 3, 4, 3);
             buttonEffacer.Name = "buttonEffacer";
-            buttonEffacer.Size = new Size(105, 27);
+            buttonEffacer.Size = new Size(150, 45);
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
@@ -339,10 +336,10 @@
             buttonModifier.FlatStyle = FlatStyle.Flat;
             buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(310, 15);
-            buttonModifier.Margin = new Padding(3, 2, 3, 2);
+            buttonModifier.Location = new Point(443, 25);
+            buttonModifier.Margin = new Padding(4, 3, 4, 3);
             buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(124, 27);
+            buttonModifier.Size = new Size(177, 45);
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
@@ -355,10 +352,10 @@
             buttonSupprimer.FlatStyle = FlatStyle.Flat;
             buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(440, 15);
-            buttonSupprimer.Margin = new Padding(3, 2, 3, 2);
+            buttonSupprimer.Location = new Point(629, 25);
+            buttonSupprimer.Margin = new Padding(4, 3, 4, 3);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(134, 27);
+            buttonSupprimer.Size = new Size(191, 45);
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
@@ -368,8 +365,9 @@
             // 
             label1.AutoSize = true;
             label1.Location = new Point(0, 0);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 15);
+            label1.Size = new Size(0, 25);
             label1.TabIndex = 6;
             // 
             // dataGridJeux
@@ -379,25 +377,24 @@
             dataGridJeux.BorderStyle = BorderStyle.None;
             dataGridJeux.ColumnHeadersHeight = 34;
             dataGridJeux.Dock = DockStyle.Fill;
-            dataGridJeux.Location = new Point(3, 188);
-            dataGridJeux.Margin = new Padding(3, 2, 3, 2);
+            dataGridJeux.Location = new Point(4, 314);
+            dataGridJeux.Margin = new Padding(4, 3, 4, 3);
             dataGridJeux.Name = "dataGridJeux";
             dataGridJeux.ReadOnly = true;
             dataGridJeux.RowHeadersWidth = 62;
             dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridJeux.Size = new Size(804, 183);
+            dataGridJeux.Size = new Size(1149, 305);
             dataGridJeux.TabIndex = 6;
             dataGridJeux.CellClick += dataGridJeux_CellClick;
             // 
             // UcJeux
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 192, 128);
             Controls.Add(tableLayoutPanel1);
-            Margin = new Padding(2, 2, 2, 2);
             Name = "UcJeux";
-            Size = new Size(1002, 373);
+            Size = new Size(1431, 622);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

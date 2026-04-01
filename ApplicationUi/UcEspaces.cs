@@ -32,6 +32,8 @@ namespace ApplicationUi
             _serviceEspace = new EspaceService(context);
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
+            labelStatutTournoi.Visible = false;
+            dataGridTournois.Visible = false;
             buttonEffacer.Text = "🧽  Effacer";
             ordreChamp = "ASC";
             filtre = "";
@@ -73,6 +75,70 @@ namespace ApplicationUi
             dataGridPostesJeu.DataSource = _espaceSelectionee.PostesJeu.ToList();
             MEP_DataGridPostesJeu();
         }
+        private void ChargerTournois(ICollection<Tournoi> tournoisEspace)
+        {
+            dataGridTournois.DataSource = null;
+            dataGridTournois.DataSource = tournoisEspace?.ToList();
+            if (tournoisEspace != null)
+            {
+
+                MEP_DataGridTournois();
+            }
+            else
+            {
+                dataGridTournois.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Permet de déterminer d'afficher une indication visuelle sur les tournois associés à l'espace sélectionné, en fonction de leur statut (en cours, planifié ou aucun tournoi).
+        /// </summary>
+        private void StatutTounois()
+        {
+            var tournois = _espaceSelectionee.Tournois ?? new List<Tournoi>();
+
+            var enCours = tournois
+                .Where(t => t.Statut == "EnCours")
+                .OrderBy(t => t.DateHeure)
+                .ToList();
+
+            if (enCours.Any())
+            {
+                labelStatutTournoi.Text = "Tournoi en cours";
+                labelStatutTournoi.ForeColor = Color.Maroon;
+                labelStatutTournoi.BackColor = Color.FromArgb(255, 128, 128);
+
+                ChargerTournois(enCours);
+            }
+            else
+            {
+                var futurs = tournois
+                    .Where(t => t.Statut == "Planifié")
+                    .OrderBy(t => t.DateHeure)
+                    .ToList();
+
+                if (futurs.Any())
+                {
+                    labelStatutTournoi.Text = futurs.Count > 1
+                        ? "Tournois programmés"
+                        : "Tournoi programmé";
+
+                    labelStatutTournoi.ForeColor = Color.Chocolate;
+                    labelStatutTournoi.BackColor = Color.FromArgb(255, 224, 192);
+
+                    ChargerTournois(futurs);
+                }
+                else
+                {
+                    labelStatutTournoi.Text = "Espace libre";
+                    labelStatutTournoi.ForeColor = Color.DarkGreen;
+                    labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
+                    ChargerTournois(null);
+                }
+            }
+
+            labelStatutTournoi.Visible = true;
+        }
 
         /// <summary>
         /// Permet de charger les statistiques liées aux espaces, notamment le nombre total d'espaces 
@@ -84,10 +150,16 @@ namespace ApplicationUi
         /// </summary>
         private void ChargerStatistiques()
         {
-            // Un espace libre est un espae qui n'a pas de tournoi associé
-            int nbEspacesLibres = _serviceEspace.Lister(filtre).Count(e => e.Tournois == null);
+            DateTime current = DateTime.Now;
+            // Un espace libre est un espace qui n'a pas de tournoi futur associé ou dont tous les tournois sont terminés
+            int nbEspacesLibres = _serviceEspace.Lister(filtre)
+                                                .Count(e =>
+                                                    e.Tournois == null ||
+                                                    !e.Tournois.Any(t =>
+                                                        t.Statut == "Planifié"
+                                                        || t.Statut == "EnCours"));
 
-            labelStatEspacesTotal.Text = $"{_serviceEspace.Lister("").Count()}";
+            labelStatEspacesTotal.Text = $"{_serviceEspace.Lister(filtre).Count()}";
 
             if (nbEspacesLibres == 0)
             {
@@ -115,6 +187,7 @@ namespace ApplicationUi
             numericUpDownCapaciteMaxi.Value = numericUpDownCapaciteMaxi.Minimum;
             numericUpDownSuperficie.Value = numericUpDownSuperficie.Minimum;
             filtre = "";
+            labelStatutTournoi.Visible = false;
         }
         private void MEP_DataGrid()
         {
@@ -127,6 +200,38 @@ namespace ApplicationUi
         private void MEP_DataGridPostesJeu()
         {
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Fonctionnel"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
+            dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
+            dataGridPostesJeu.Columns["Espace"].Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"].Visible = false;
+        }
+
+        private void MEP_DataGridTournois()
+        {
+            dataGridTournois.Visible = true;
+            dataGridTournois.Columns["NumeroTournoi"].Visible = false;
+            dataGridTournois.Columns["IdEspace"].Visible = false;
+            dataGridTournois.Columns["Espace"].Visible = false;
+            dataGridTournois.Columns["IdJeu"].Visible = false;
+            dataGridTournois.Columns["Jeu"].Visible = false;
+            dataGridTournois.Columns["NbParticipants"].Visible = false;
+            dataGridTournois.Columns["NomEspace"].Visible = false;
+            dataGridTournois.Columns["TitreJeu"].Visible = false;
+            dataGridTournois.Columns["Statut"].Visible = false;
+            dataGridTournois.Columns["Statut"].Visible = false;
+            dataGridTournois.Columns["DureePrevue"].Visible = false;
+            dataGridTournois.Columns["Lot"].Visible = false;
+
+            dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            dataGridTournois.Columns["DateHeure"].HeaderText = "Début";
+
+            dataGridTournois.Columns["Nom"].DisplayIndex = 1;
         }
 
         private void dataGridEspaces_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -179,51 +284,22 @@ namespace ApplicationUi
             textBoxDescription.Text = espace.Description;
             numericUpDownCapaciteMaxi.Value = espace.CapaciteMaxi;
             numericUpDownSuperficie.Value = espace.Superficie;
-            ChargerPostesJeu(); // Charge les postes de jeu associés à l'espace sélectionné
-                                // pour les afficher dans le DataGridView correspondante
+            ChargerPostesJeu();
+            StatutTounois();
         }
         #endregion
-
-        #region Validations
-        /// <summary>
-        /// Vérifie que les champs obligatoires pour un espace sont valides avant de poursuivre l'opération.
-        /// </summary>
-        /// <remarks>Affiche une boîte de dialogue d'avertissement pour chaque validation échouée afin
-        /// d'informer l'utilisateur de la correction à apporter. Cette méthode doit être appelée avant d'enregistrer ou
-        /// de modifier un espace pour garantir l'intégrité des données saisies.</remarks>
-        /// <returns>true si tous les champs requis sont valides et respectent les contraintes ; sinon, false.</returns>
-        private bool ValiderEspace()
+        #region validations
+        private bool ValiderEspace(Espace espace)
         {
-
-            if (string.IsNullOrWhiteSpace(textBoxNom.Text))
+            var erreurs = _serviceEspace.ValiderEspace(espace);
+            if (erreurs.Any())
             {
-                MessageBox.Show("Le nom de l'espace est requis.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (numericUpDownCapaciteMaxi.Value <= 0)
-            {
-                MessageBox.Show("La capacité maximale doit être supérieure à zéro.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (numericUpDownSuperficie.Value <= 0)
-            {
-                MessageBox.Show("La superficie doit être supérieure à zéro.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (textBoxDescription.Text.Length > 500)
-            {
-                MessageBox.Show("La description ne peut pas dépasser 500 caractères.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (_serviceEspace.Lister("").Any(e => e.Nom == textBoxNom.Text))
-            {
-                MessageBox.Show("Un autre espace avec ce nom existe déjà.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(string.Join("\n", erreurs));
                 return false;
             }
             return true;
         }
         #endregion
-
         #region Boutons
         /// <summary>
         /// Gère l'événement de clic sur le bouton d'ajout pour créer un nouvel espace à partir des informations saisies
@@ -235,15 +311,16 @@ namespace ApplicationUi
         /// <param name="e">Les données d'événement associées au clic du bouton.</param>
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderEspace())
+            var espace = new Espace
             {
-                var espace = new Espace
-                {
-                    Nom = textBoxNom.Text,
-                    Description = textBoxDescription.Text,
-                    CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value,
-                    Superficie = (int)numericUpDownSuperficie.Value,
-                };
+                Nom = textBoxNom.Text,
+                Description = textBoxDescription.Text,
+                CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value,
+                Superficie = (int)numericUpDownSuperficie.Value,
+            };
+
+            if (ValiderEspace(espace))
+            {                
                 _serviceEspace.Creer(espace);
                 ChargerEspaces();
                 Raz_Zones();
@@ -273,9 +350,13 @@ namespace ApplicationUi
             _espaceSelectionee.CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value;
             _espaceSelectionee.Superficie = (int)numericUpDownSuperficie.Value;
 
-            _serviceEspace.Modifier(_espaceSelectionee);
-            ChargerEspaces();
-            Raz_Zones();
+            if (ValiderEspace(_espaceSelectionee))
+            {
+                _serviceEspace.Modifier(_espaceSelectionee);
+                ChargerEspaces();
+                Raz_Zones();
+            }
+           
         }
         /// <summary>
         /// Gère l'événement de clic sur le bouton Effacer et réinitialise les zones de saisie du formulaire.
