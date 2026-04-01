@@ -34,10 +34,18 @@ namespace Lib_Services.Services
         {
             if (string.IsNullOrWhiteSpace(filtre))
                 return _context.Lots
+                     .Include(t => t.LotComposant)
+                     .Include(t => t.Tournoi)
                      .ToList();
-            return
-                _context.Lots
-                .Where(r => r.Libelle.Contains(filtre))
+            return _context.Lots
+                .Where(t => t.Libelle.Contains(filtre)
+                        || t.ValeurTotale.ToString().Contains(filtre)
+                        || t.RangAttribution.ToString().Contains(filtre)
+                        || t.Numero.ToString().Contains(filtre)
+                        || t.Tournoi.Nom.Contains(filtre)
+                        || t.LotComposant.Any(lc => lc.Libelle.Contains(filtre)))
+                .Include(t => t.LotComposant)
+                .Include(t => t.Tournoi)
                 .ToList();
         }
 

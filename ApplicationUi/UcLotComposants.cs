@@ -22,6 +22,7 @@ namespace ApplicationUi
         private LotComposant? _lotComposantSelectionne = null;
         private LotComposant? unNouveauLotComposant;
         private readonly Organisateur _organisateurConnecte;
+        int? nouveauNumeroLot;
         string filtre;
 
         public UcLotComposants(Organisateur unOrganisateurConnecte)
@@ -51,6 +52,12 @@ namespace ApplicationUi
         }
 
         #region Chargement
+        private void MEP_DataGrid()
+        {
+            // On affiche et modifie l'affichage des colonnes du dataGrid
+            dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
+            dataGridLotComposants.Columns["Lot"].Visible = false;
+        }
 
         private void ChargerLotComposants()
         {
@@ -62,20 +69,22 @@ namespace ApplicationUi
             MEP_DataGrid();
         }
 
-        private void MEP_DataGrid()
-        {
-            // On affiche et modifie l'affichage des colonnes du dataGrid
-            dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
-            dataGridLotComposants.Columns["Lot"].Visible = false;
-        }
-
         private void ChargerLots()
         {
             // On charge les lots dans la comboBox
-            comboBoxLot.DataSource = null;
+            var lots = _serviceLot.Lister("");
+
+            // On ajoute un élément "Aucun" en tête de liste
             comboBoxLot.DisplayMember = "Libelle";
-            comboBoxLot.ValueMember = "NumeroLot";
-            comboBoxLot.DataSource = _serviceLot.Lister(filtre);
+            comboBoxLot.ValueMember = "Numero";
+            comboBoxLot.DataSource = null;
+
+            var liste = new List<Lot>();
+            liste.Add(new Lot { Numero = null, Libelle = "Aucun" });
+            liste.AddRange(lots);
+
+            comboBoxLot.DataSource = liste;
+            comboBoxLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         private void Raz_Zones()
@@ -92,10 +101,10 @@ namespace ApplicationUi
 
         private void RemplirFormulaire(LotComposant lotComposant)
         {
-            // On remplie les champs avec les données de l'organisateur sélectionné
+            // On remplie les champs avec les données du lot composant sélectionné
             textBoxLibelle.Text = lotComposant.Libelle;
-            textBoxDescription.Text = lotComposant.Valeur.ToString();
-            textBoxValeur.Clear();
+            textBoxDescription.Text = lotComposant.Description;
+            textBoxValeur.Text = lotComposant.Valeur.ToString();
             if(lotComposant.NumeroLot == null)
             {
                 comboBoxLot.SelectedValue = "Aucun";
@@ -171,10 +180,12 @@ namespace ApplicationUi
                 _lotComposantSelectionne.Libelle = textBoxLibelle.Text;
             if (textBoxDescription.Text != "" || _lotComposantSelectionne.Description != textBoxDescription.Text)
                 _lotComposantSelectionne.Description = textBoxDescription.Text;
-            if (textBoxValeur.Text.ToString() != "" || _lotComposantSelectionne.Valeur != int.Parse(textBoxValeur.Text))
+            if (textBoxValeur.Text != "" || _lotComposantSelectionne.Valeur != int.Parse(textBoxValeur.Text))
                 _lotComposantSelectionne.Valeur = int.Parse(textBoxValeur.Text);
-            if ((int)comboBoxLot.SelectedValue != _lotComposantSelectionne.NumeroLot)
-                _lotComposantSelectionne.NumeroLot = (int)comboBoxLot.SelectedValue;
+            // Gestion du lot nullable
+            nouveauNumeroLot = comboBoxLot.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
+            if (nouveauNumeroLot != _lotComposantSelectionne.NumeroLot)
+                _lotComposantSelectionne.NumeroLot = nouveauNumeroLot;
 
             _serviceLotComposant.Modifier(_lotComposantSelectionne);
             ChargerLotComposants();
@@ -190,7 +201,7 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero);
+            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero.Value);
             ChargerLotComposants();
             Raz_Zones();
         }

@@ -42,7 +42,7 @@ namespace Lib_Metier.Data.Configurations
             // Configuration de la relation entre Lot et Tournoi
             builder.HasOne(t => t.Tournoi)
                    .WithMany(e => e.Lot)
-                   .HasForeignKey(t => t.Numero);
+                   .HasForeignKey(t => t.NumeroTournoi);
         }
     }
 }

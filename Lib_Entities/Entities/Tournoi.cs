@@ -16,7 +16,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Numéro du tournoi .
         /// </summary>
-        public int NumeroTournoi { get; set; }
+        public int? NumeroTournoi { get; set; }
 
         /// <summary>
         /// Date et heure de début du tournoi.

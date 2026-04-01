@@ -105,6 +105,7 @@ namespace Lib_Metier.Migrations
             modelBuilder.Entity("Lib_Entities.Entities.Lot", b =>
                 {
                     b.Property<int>("Numero")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("EstAttribue")
@@ -129,6 +130,8 @@ namespace Lib_Metier.Migrations
                         .HasColumnName("valeurTotale");
 
                     b.HasKey("Numero");
+
+                    b.HasIndex("NumeroTournoi");
 
                     b.ToTable("Lot", (string)null);
                 });
@@ -323,9 +326,7 @@ namespace Lib_Metier.Migrations
                 {
                     b.HasOne("Lib_Entities.Entities.Tournoi", "Tournoi")
                         .WithMany("Lot")
-                        .HasForeignKey("Numero")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NumeroTournoi");
 
                     b.Navigation("Tournoi");
                 });
