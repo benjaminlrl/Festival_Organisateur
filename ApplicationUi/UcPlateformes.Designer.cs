@@ -249,6 +249,8 @@
             // dataGridPlateformes
             // 
             dataGridPlateformes.AccessibleDescription = "Toutes les plateformes enregistrées dans la base de données";
+            dataGridPlateformes.AllowUserToAddRows = false;
+            dataGridPlateformes.AllowUserToDeleteRows = false;
             dataGridPlateformes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridPlateformes.BackgroundColor = Color.White;
             dataGridPlateformes.BorderStyle = BorderStyle.None;
@@ -313,7 +315,7 @@
             // 
             textBoxRecherche.Location = new Point(173, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(717, 31);
+            textBoxRecherche.Size = new Size(730, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -349,11 +351,14 @@
             // dataGridPostesJeu
             // 
             dataGridPostesJeu.AccessibleDescription = "Postes de jeu liés à la plateforme séléctionnée";
+            dataGridPostesJeu.AllowUserToAddRows = false;
+            dataGridPostesJeu.AllowUserToDeleteRows = false;
             dataGridPostesJeu.BackgroundColor = Color.White;
             dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridPostesJeu.Dock = DockStyle.Fill;
             dataGridPostesJeu.Location = new Point(3, 51);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
+            dataGridPostesJeu.ReadOnly = true;
             dataGridPostesJeu.RowHeadersWidth = 62;
             dataGridPostesJeu.Size = new Size(393, 273);
             dataGridPostesJeu.TabIndex = 7;

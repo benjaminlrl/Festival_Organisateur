@@ -32,6 +32,8 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _plateformeSelectionee != null;
             labelJeux.Visible = false;
             dataGridJeux.Visible = false;
+            labelPostesJeu.Visible = false;
+            dataGridPostesJeu.Visible = false;
             filtre = "";
             buttonEffacer.Text = " 🧽  Effacer";
             ordreChamp = "ASC";
@@ -61,6 +63,8 @@ namespace ApplicationUi
 
         private void ChargerPostesJeu()
         {
+            labelPostesJeu.Visible = true;
+            dataGridPostesJeu.Visible = true;
             dataGridPostesJeu.DataSource = null;
             dataGridPostesJeu.DataSource = _plateformeSelectionee.PostesJeu.ToList();
             MEP_DataGridPostesJeu();
@@ -85,6 +89,8 @@ namespace ApplicationUi
         {
             labelJeux.Visible = false;
             dataGridJeux.Visible = false;
+            labelPostesJeu.Visible = false;
+            dataGridPostesJeu.Visible = false;
             textBoxNom.Clear();
         }
         private void MEP_DataGrid()
