@@ -57,9 +57,9 @@ namespace Lib_Metier.Data.Configurations
         public DbSet<Jeu> Jeux => Set<Jeu>();
 
         /// <summary>
-        /// Ensemble des Votes (table `Votes`).
+        /// Ensemble des Votes (table `Voter`).
         /// </summary>
-        public DbSet<Voter> Votes => Set<Voter>();
+        public DbSet<Voter> Voter => Set<Voter>();
 
         /// <summary>
         /// Ensemble des SoumisVotes (table `SoumisVotes`).
