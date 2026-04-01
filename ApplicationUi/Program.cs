@@ -215,61 +215,110 @@ namespace ApplicationUi
 
             if (!context.Jeux.Any())
             {
-                var jeux = new List<(string Titre, string Description, string Editeur, string Annee, int Pegi, DateTime Date)>
+                var plateformes = context.Plateformes.ToList();
+                Plateforme P(string lib) => plateformes.First(p => p.Libelle == lib);
+
+                var jeux = new List<Jeu>
                 {
                     // Nintendo
-                    ("Mario Kart 8 Deluxe",       "Terminer les courses en première position en utilisant des objets pour ralentir les adversaires ou se protéger",                                        "Nintendo",         "2017", 3,  new DateTime(2017, 04, 28)),
-                    ("The Legend of Zelda: BOTW",  "Explorez un vaste monde ouvert pour libérer le royaume d'Hyrule des griffes de Calamity Ganon",                                                      "Nintendo",         "2017", 12, new DateTime(2017, 03, 03)),
-                    ("The Legend of Zelda: TOTK",  "Continuez l'aventure dans un Hyrule transformé, avec de nouvelles îles célestes et des pouvoirs inédits",                                            "Nintendo",         "2023", 12, new DateTime(2023, 05, 12)),
-                    ("Super Smash Bros. Ultimate", "Affrontez des adversaires avec des personnages iconiques de nombreuses franchises dans des combats frénétiques",                                      "Nintendo",         "2018", 12, new DateTime(2018, 12, 07)),
-                    ("Splatoon 3",                 "Participez à des batailles de peinture colorées en équipe de quatre joueurs dans des arènes variées",                                                 "Nintendo",         "2022", 7,  new DateTime(2022, 09, 09)),
-                    ("Pokémon Écarlate",           "Devenez le meilleur dresseur dans une région ouverte en capturant et entraînant des centaines de Pokémon",                                           "Game Freak",       "2022", 7,  new DateTime(2022, 11, 18)),
-                    ("Animal Crossing: NH",        "Construisez et personnalisez votre île déserte en rencontrant des habitants animaux attachants",                                                      "Nintendo",         "2020", 3,  new DateTime(2020, 03, 20)),
-                    ("Super Mario Odyssey",        "Parcourez des royaumes colorés pour récupérer les Lunes de puissance et sauver la princesse Peach",                                                  "Nintendo",         "2017", 7,  new DateTime(2017, 10, 27)),
+                    new Jeu { Titre = "Mario Kart 8 Deluxe",       Description = "Terminer les courses en première position en utilisant des objets pour ralentir les adversaires ou se protéger",                          Editeur = "Nintendo",          AnneeSortie = "2017", Pegi = 3,  DateSortie = new DateTime(2017, 04, 28),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2"), P("Nintendo Wii U") } },
+
+                    new Jeu { Titre = "The Legend of Zelda: BOTW",  Description = "Explorez un vaste monde ouvert pour libérer le royaume d'Hyrule des griffes de Calamity Ganon",                                          Editeur = "Nintendo",          AnneeSortie = "2017", Pegi = 12, DateSortie = new DateTime(2017, 03, 03),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2"), P("Nintendo Wii U") } },
+
+                    new Jeu { Titre = "The Legend of Zelda: TOTK",  Description = "Continuez l'aventure dans un Hyrule transformé, avec de nouvelles îles célestes et des pouvoirs inédits",                                Editeur = "Nintendo",          AnneeSortie = "2023", Pegi = 12, DateSortie = new DateTime(2023, 05, 12),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2") } },
+
+                    new Jeu { Titre = "Super Smash Bros. Ultimate", Description = "Affrontez des adversaires avec des personnages iconiques de nombreuses franchises dans des combats frénétiques",                          Editeur = "Nintendo",          AnneeSortie = "2018", Pegi = 12, DateSortie = new DateTime(2018, 12, 07),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2") } },
+
+                    new Jeu { Titre = "Splatoon 3",                 Description = "Participez à des batailles de peinture colorées en équipe de quatre joueurs dans des arènes variées",                                    Editeur = "Nintendo",          AnneeSortie = "2022", Pegi = 7,  DateSortie = new DateTime(2022, 09, 09),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2") } },
+
+                    new Jeu { Titre = "Pokémon Écarlate",           Description = "Devenez le meilleur dresseur dans une région ouverte en capturant et entraînant des centaines de Pokémon",                              Editeur = "Game Freak",        AnneeSortie = "2022", Pegi = 7,  DateSortie = new DateTime(2022, 11, 18),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2") } },
+
+                    new Jeu { Titre = "Animal Crossing: NH",        Description = "Construisez et personnalisez votre île déserte en rencontrant des habitants animaux attachants",                                          Editeur = "Nintendo",          AnneeSortie = "2020", Pegi = 3,  DateSortie = new DateTime(2020, 03, 20),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2") } },
+
+                    new Jeu { Titre = "Super Mario Odyssey",        Description = "Parcourez des royaumes colorés pour récupérer les Lunes de puissance et sauver la princesse Peach",                                      Editeur = "Nintendo",          AnneeSortie = "2017", Pegi = 7,  DateSortie = new DateTime(2017, 10, 27),
+                        Plateformes = new List<Plateforme> { P("Nintendo Switch"), P("Nintendo Switch 2") } },
 
                     // PlayStation
-                    ("God of War Ragnarök",        "Incarnez Kratos et son fils Atreus dans une épopée nordique vers le crépuscule des dieux",                                                           "Sony Santa Monica", "2022", 18, new DateTime(2022, 11, 09)),
-                    ("Spider-Man 2",               "Incarnez Peter Parker et Miles Morales pour défendre New York contre de nouveaux ennemis redoutables",                                               "Insomniac Games",  "2023", 16, new DateTime(2023, 10, 20)),
-                    ("Horizon Forbidden West",     "Explorez des terres inconnues et affrontez des machines colossales pour percer les mystères d'une catastrophe imminente",                            "Guerrilla Games",  "2022", 16, new DateTime(2022, 02, 18)),
-                    ("The Last of Us Part I",      "Survivez dans un monde post-apocalyptique ravagé par une infection fongique en escortant une jeune fille à travers les États-Unis",                  "Naughty Dog",      "2022", 18, new DateTime(2022, 09, 02)),
-                    ("Gran Turismo 7",             "Vivez l'expérience de simulation automobile ultime avec des centaines de voitures et circuits authentiques",                                          "Polyphony Digital", "2022", 3, new DateTime(2022, 03, 04)),
+                    new Jeu { Titre = "God of War Ragnarök",        Description = "Incarnez Kratos et son fils Atreus dans une épopée nordique vers le crépuscule des dieux",                                               Editeur = "Sony Santa Monica", AnneeSortie = "2022", Pegi = 18, DateSortie = new DateTime(2022, 11, 09),
+                        Plateformes = new List<Plateforme> { P("PlayStation 4"), P("PlayStation 5"), P("PC (Windows)") } },
+
+                    new Jeu { Titre = "Spider-Man 2",               Description = "Incarnez Peter Parker et Miles Morales pour défendre New York contre de nouveaux ennemis redoutables",                                    Editeur = "Insomniac Games",   AnneeSortie = "2023", Pegi = 16, DateSortie = new DateTime(2023, 10, 20),
+                        Plateformes = new List<Plateforme> { P("PlayStation 5"), P("PC (Windows)") } },
+
+                    new Jeu { Titre = "Horizon Forbidden West",     Description = "Explorez des terres inconnues et affrontez des machines colossales pour percer les mystères d'une catastrophe imminente",                Editeur = "Guerrilla Games",   AnneeSortie = "2022", Pegi = 16, DateSortie = new DateTime(2022, 02, 18),
+                        Plateformes = new List<Plateforme> { P("PlayStation 4"), P("PlayStation 5"), P("PC (Windows)") } },
+
+                    new Jeu { Titre = "The Last of Us Part I",      Description = "Survivez dans un monde post-apocalyptique ravagé par une infection fongique en escortant une jeune fille à travers les États-Unis",      Editeur = "Naughty Dog",       AnneeSortie = "2022", Pegi = 18, DateSortie = new DateTime(2022, 09, 02),
+                        Plateformes = new List<Plateforme> { P("PlayStation 5"), P("PC (Windows)") } },
+
+                    new Jeu { Titre = "Gran Turismo 7",             Description = "Vivez l'expérience de simulation automobile ultime avec des centaines de voitures et circuits authentiques",                              Editeur = "Polyphony Digital", AnneeSortie = "2022", Pegi = 3,  DateSortie = new DateTime(2022, 03, 04),
+                        Plateformes = new List<Plateforme> { P("PlayStation 4"), P("PlayStation 5") } },
 
                     // Xbox / Microsoft
-                    ("Halo Infinite",              "Incarnez le Master Chief pour repousser une nouvelle menace alien dans un monde semi-ouvert",                                                        "343 Industries",   "2021", 16, new DateTime(2021, 12, 08)),
-                    ("Forza Horizon 5",            "Explorez un immense monde ouvert mexicain au volant de centaines de voitures de rêve",                                                               "Playground Games", "2021", 3,  new DateTime(2021, 11, 09)),
-                    ("Sea of Thieves",             "Devenez un pirate légendaire en explorant les mers, chassant des trésors et affrontant d'autres équipages",                                          "Rare",             "2018", 12, new DateTime(2018, 03, 20)),
+                    new Jeu { Titre = "Halo Infinite",              Description = "Incarnez le Master Chief pour repousser une nouvelle menace alien dans un monde semi-ouvert",                                             Editeur = "343 Industries",    AnneeSortie = "2021", Pegi = 16, DateSortie = new DateTime(2021, 12, 08),
+                        Plateformes = new List<Plateforme> { P("Xbox One"), P("Xbox Series X/S"), P("PC (Windows)") } },
+
+                    new Jeu { Titre = "Forza Horizon 5",            Description = "Explorez un immense monde ouvert mexicain au volant de centaines de voitures de rêve",                                                   Editeur = "Playground Games",  AnneeSortie = "2021", Pegi = 3,  DateSortie = new DateTime(2021, 11, 09),
+                        Plateformes = new List<Plateforme> { P("Xbox One"), P("Xbox Series X/S"), P("PC (Windows)") } },
+
+                    new Jeu { Titre = "Sea of Thieves",             Description = "Devenez un pirate légendaire en explorant les mers, chassant des trésors et affrontant d'autres équipages",                              Editeur = "Rare",              AnneeSortie = "2018", Pegi = 12, DateSortie = new DateTime(2018, 03, 20),
+                        Plateformes = new List<Plateforme> { P("Xbox One"), P("Xbox Series X/S"), P("PC (Windows)") } },
 
                     // PC / Multi
-                    ("Minecraft",                  "Construisez, explorez et survivez dans un monde infini généré aléatoirement en blocs",                                                               "Mojang",           "2011", 7,  new DateTime(2011, 11, 18)),
-                    ("Cyberpunk 2077",             "Incarnez V, un mercenaire dans la mégalopole Night City, dans un RPG d'action futuriste aux choix déterminants",                                     "CD Projekt Red",   "2020", 18, new DateTime(2020, 12, 10)),
-                    ("Elden Ring",                 "Explorez les Terres Intermédiaires dans un RPG d'action en monde ouvert d'une difficulté légendaire",                                                "FromSoftware",     "2022", 16, new DateTime(2022, 02, 25)),
-                    ("Baldur's Gate 3",            "Vivez une aventure RPG au tour par tour colossale dans l'univers de Donjons & Dragons avec une liberté de choix totale",                             "Larian Studios",   "2023", 18, new DateTime(2023, 08, 03)),
-                    ("Stardew Valley",             "Gérez votre ferme, cultivez, élevez des animaux et tissez des liens avec les habitants d'un charmant village",                                       "ConcernedApe",     "2016", 7,  new DateTime(2016, 02, 26)),
-                    ("Among Us",                   "Démasquez les imposteurs à bord d'un vaisseau spatial en accomplissant des tâches et en votant pour éliminer les suspects",                          "InnerSloth",       "2018", 7,  new DateTime(2018, 06, 15)),
-                    ("Valorant",                   "Affrontez des équipes adverses dans un FPS tactique 5v5 où chaque agent possède des capacités uniques",                                              "Riot Games",       "2020", 16, new DateTime(2020, 06, 02)),
-                    ("League of Legends",          "Défendez votre base et détruisez celle de l'ennemi dans des parties de MOBA stratégiques à 5 contre 5",                                             "Riot Games",       "2009", 12, new DateTime(2009, 10, 27)),
-                    ("Counter-Strike 2",           "Affrontez des terroristes ou défendez les otages dans le FPS tactique compétitif de référence",                                                      "Valve",            "2023", 18, new DateTime(2023, 09, 27)),
+                    new Jeu { Titre = "Minecraft",                  Description = "Construisez, explorez et survivez dans un monde infini généré aléatoirement en blocs",                                                   Editeur = "Mojang",            AnneeSortie = "2011", Pegi = 7,  DateSortie = new DateTime(2011, 11, 18),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PC (macOS)"), P("PC (Linux)"), P("Nintendo Switch"), P("Nintendo Switch 2"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S"), P("iOS"), P("Android") } },
+
+                    new Jeu { Titre = "Cyberpunk 2077",             Description = "Incarnez V, un mercenaire dans la mégalopole Night City, dans un RPG d'action futuriste aux choix déterminants",                         Editeur = "CD Projekt Red",    AnneeSortie = "2020", Pegi = 18, DateSortie = new DateTime(2020, 12, 10),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S") } },
+
+                    new Jeu { Titre = "Elden Ring",                 Description = "Explorez les Terres Intermédiaires dans un RPG d'action en monde ouvert d'une difficulté légendaire",                                    Editeur = "FromSoftware",      AnneeSortie = "2022", Pegi = 16, DateSortie = new DateTime(2022, 02, 25),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S") } },
+
+                    new Jeu { Titre = "Baldur's Gate 3",            Description = "Vivez une aventure RPG au tour par tour colossale dans l'univers de Donjons & Dragons avec une liberté de choix totale",                 Editeur = "Larian Studios",    AnneeSortie = "2023", Pegi = 18, DateSortie = new DateTime(2023, 08, 03),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PC (macOS)"), P("PlayStation 5"), P("Xbox Series X/S") } },
+
+                    new Jeu { Titre = "Stardew Valley",             Description = "Gérez votre ferme, cultivez, élevez des animaux et tissez des liens avec les habitants d'un charmant village",                           Editeur = "ConcernedApe",      AnneeSortie = "2016", Pegi = 7,  DateSortie = new DateTime(2016, 02, 26),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PC (macOS)"), P("PC (Linux)"), P("Nintendo Switch"), P("Nintendo Switch 2"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("iOS"), P("Android") } },
+
+                    new Jeu { Titre = "Among Us",                   Description = "Démasquez les imposteurs à bord d'un vaisseau spatial en accomplissant des tâches et en votant pour éliminer les suspects",               Editeur = "InnerSloth",        AnneeSortie = "2018", Pegi = 7,  DateSortie = new DateTime(2018, 06, 15),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("Nintendo Switch"), P("Nintendo Switch 2"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S"), P("iOS"), P("Android") } },
+
+                    new Jeu { Titre = "Valorant",                   Description = "Affrontez des équipes adverses dans un FPS tactique 5v5 où chaque agent possède des capacités uniques",                                   Editeur = "Riot Games",        AnneeSortie = "2020", Pegi = 16, DateSortie = new DateTime(2020, 06, 02),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 5"), P("Xbox Series X/S") } },
+
+                    new Jeu { Titre = "League of Legends",          Description = "Défendez votre base et détruisez celle de l'ennemi dans des parties de MOBA stratégiques à 5 contre 5",                                  Editeur = "Riot Games",        AnneeSortie = "2009", Pegi = 12, DateSortie = new DateTime(2009, 10, 27),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PC (macOS)"), P("iOS"), P("Android") } },
+
+                    new Jeu { Titre = "Counter-Strike 2",           Description = "Affrontez des terroristes ou défendez les otages dans le FPS tactique compétitif de référence",                                           Editeur = "Valve",             AnneeSortie = "2023", Pegi = 18, DateSortie = new DateTime(2023, 09, 27),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PC (Linux)") } },
 
                     // Multi-plateforme récents
-                    ("Schedule 1",                 "From small-time dope pusher to kingpin - manufacture and distribute a range of drugs throughout the grungy city of Hyland Point",                   "TVGS",             "2025", 18, new DateTime(2025, 04, 24)),
-                    ("Hogwarts Legacy",            "Vivez votre propre aventure de sorcier au XIXe siècle dans un Poudlard en monde ouvert regorgeant de secrets",                                       "Avalanche Software","2023", 12, new DateTime(2023, 02, 10)),
-                    ("EA Sports FC 25",            "Vivez l'expérience football ultime avec des licences officielles, des modes carrière enrichis et l'Ultimate Team",                                   "EA Sports",        "2024", 3,  new DateTime(2024, 09, 27)),
-                    ("Call of Duty: Black Ops 6",  "Plongez dans une campagne solo haletante et des modes multijoueurs intenses dans le dernier opus de la franchise emblématique",                      "Treyarch",         "2024", 18, new DateTime(2024, 10, 25)),
-                    ("Fortnite",                   "Survivez et soyez le dernier joueur debout dans un Battle Royale en constante évolution avec des collaborations pop culture",                        "Epic Games",       "2017", 12, new DateTime(2017, 07, 25)),
+                    new Jeu { Titre = "Schedule 1",                 Description = "From small-time dope pusher to kingpin - manufacture and distribute a range of drugs throughout the grungy city of Hyland Point",         Editeur = "TVGS",              AnneeSortie = "2025", Pegi = 18, DateSortie = new DateTime(2025, 04, 24),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)") } },
+
+                    new Jeu { Titre = "Hogwarts Legacy",            Description = "Vivez votre propre aventure de sorcier au XIXe siècle dans un Poudlard en monde ouvert regorgeant de secrets",                           Editeur = "Avalanche Software", AnneeSortie = "2023", Pegi = 12, DateSortie = new DateTime(2023, 02, 10),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S"), P("Nintendo Switch") } },
+
+                    new Jeu { Titre = "EA Sports FC 25",            Description = "Vivez l'expérience football ultime avec des licences officielles, des modes carrière enrichis et l'Ultimate Team",                        Editeur = "EA Sports",         AnneeSortie = "2024", Pegi = 3,  DateSortie = new DateTime(2024, 09, 27),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S"), P("Nintendo Switch"), P("Nintendo Switch 2") } },
+
+                    new Jeu { Titre = "Call of Duty: Black Ops 6",  Description = "Plongez dans une campagne solo haletante et des modes multijoueurs intenses dans le dernier opus de la franchise emblématique",           Editeur = "Treyarch",          AnneeSortie = "2024", Pegi = 18, DateSortie = new DateTime(2024, 10, 25),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S") } },
+
+                    new Jeu { Titre = "Fortnite",                   Description = "Survivez et soyez le dernier joueur debout dans un Battle Royale en constante évolution avec des collaborations pop culture",              Editeur = "Epic Games",        AnneeSortie = "2017", Pegi = 12, DateSortie = new DateTime(2017, 07, 25),
+                        Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S"), P("Nintendo Switch"), P("Nintendo Switch 2"), P("iOS"), P("Android") } },
                 };
 
-                foreach (var j in jeux)
-                {
-                    jeuService.Creer(new Jeu
-                    {
-                        Titre = j.Titre,
-                        Description = j.Description,
-                        Editeur = j.Editeur,
-                        AnneeSortie = j.Annee,
-                        Pegi = j.Pegi,
-                        DateSortie = j.Date
-                    });
-                }
+                context.Jeux.AddRange(jeux);
+                context.SaveChanges();
+
             }
 
             // lancement du formulaire principal
