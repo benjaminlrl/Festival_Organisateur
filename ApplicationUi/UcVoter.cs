@@ -262,7 +262,7 @@ namespace ApplicationUi
                 return;
             var jeu = (Jeu)dataGridJeux.CurrentRow.DataBoundItem;
 
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer votre vote ?", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning) != DialogResult.OK)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer votre vote ?", "Validation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
 
             _serviceVoter.Supprimer(_voterSelectionne.IdJeu, _voterSelectionne.IdPlateforme, _voterSelectionne.IdUser);
