@@ -33,6 +33,7 @@ namespace ApplicationUi
             buttonModifier.Enabled = _espaceSelectionee != null;
             buttonSupprimer.Enabled = _espaceSelectionee != null;
             labelStatutTournoi.Visible = false;
+            dataGridTournois.Visible = false;
             buttonEffacer.Text = "🧽  Effacer";
             ordreChamp = "ASC";
             filtre = "";
