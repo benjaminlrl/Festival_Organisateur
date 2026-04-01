@@ -35,15 +35,15 @@ namespace ApplicationUi
             ChargerRoles();
             buttonModifier.Enabled = _organisateurSelectionne != null;
             buttonSupprimer.Enabled = _organisateurSelectionne != null;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Ajouter") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Modifier") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Supprimer") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
             }

@@ -148,7 +148,7 @@ namespace ApplicationUi
             btnLotComposants.TabIndex = 6;
             btnLotComposants.Text = "      Composant des lots";
             btnLotComposants.UseVisualStyleBackColor = false;
-            btnLotComposants.Click += btnLotComposant_Click;
+            btnLotComposants.Click += btnLotComposants_Click;
             // 
             // buttonJeux
             // 
@@ -186,7 +186,7 @@ namespace ApplicationUi
             btnOrganisateurs.TabIndex = 5;
             btnOrganisateurs.Text = "      Organisateurs";
             btnOrganisateurs.UseVisualStyleBackColor = false;
-            btnOrganisateurs.Click += btnOrganisateur_Click;
+            btnOrganisateurs.Click += btnOrganisateurs_Click;
             // 
             // btnQuitter
             // 

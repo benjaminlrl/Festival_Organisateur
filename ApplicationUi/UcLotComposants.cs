@@ -36,15 +36,15 @@ namespace ApplicationUi
             ChargerLots();
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Ajouter") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Modifier") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Supprimer") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
             }
