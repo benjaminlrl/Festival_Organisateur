@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 Lib_Metier/Migrations/
+ApplicationUi/Bin/Debug/net10.0-windows/gestionTournois.db
