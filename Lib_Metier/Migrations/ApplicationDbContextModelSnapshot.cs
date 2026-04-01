@@ -116,7 +116,7 @@ namespace Lib_Metier.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("libelle");
 
-                    b.Property<int>("NumeroTournoi")
+                    b.Property<int?>("NumeroTournoi")
                         .HasColumnType("INTEGER")
                         .HasColumnName("numeroTournoi");
 

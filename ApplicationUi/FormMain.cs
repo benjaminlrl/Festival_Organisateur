@@ -27,9 +27,9 @@ namespace ApplicationUi
             {
                 btnTournois.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateur, "Consulter") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Consulter") == false)
             {
-                btnOrganisateur.Visible = false;
+                btnOrganisateurs.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Consulter") == false)
             {
@@ -43,9 +43,13 @@ namespace ApplicationUi
             {
                 btnPostes.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Consulter") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Consulter") == false)
             {
-                btnLotComposant.Visible = false;
+                btnLotComposants.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Consulter") == false)
+            {
+                btnLots.Visible = false;
             }
         }
 
@@ -100,16 +104,20 @@ namespace ApplicationUi
             LoadUserControl(new UcPlateformes(_organisateurConnecte), "Gestion des plateformes");
         }
 
-        private void btnOrganisateur_Click(object sender, EventArgs e)
+        private void btnOrganisateurs_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcOrganisateur(_organisateurConnecte), "Gestion des Organisateurs");
+            LoadUserControl(new UcOrganisateurs(_organisateurConnecte), "Gestion des Organisateurs");
         }
 
-        private void btnLotComposant_Click(object sender, EventArgs e)
+        private void btnLotComposants_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcLotComposant(_organisateurConnecte), "Gestion des Lots Composants");
+            LoadUserControl(new UcLotComposants(_organisateurConnecte), "Gestion des Lots Composants");
         }
-        
+        private void btnLots_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcLots(_organisateurConnecte), "Gestion des Lots");
+        }
+
         private void buttonJeux_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcJeux(_organisateurConnecte), "Gestion des jeux");

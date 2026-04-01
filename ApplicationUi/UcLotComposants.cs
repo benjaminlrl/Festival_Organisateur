@@ -14,21 +14,20 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ApplicationUi
 {
-    public partial class UcLotComposant : UserControl
+    public partial class UcLotComposants : UserControl
     {
         private readonly IOrganisateurService _serviceOrganisateur;
-        private readonly IRoleService _serviceRole;
         private readonly ILotService _serviceLot;
         private readonly ILotComposantService _serviceLotComposant;
         private LotComposant? _lotComposantSelectionne = null;
+        private LotComposant? unNouveauLotComposant;
         private readonly Organisateur _organisateurConnecte;
         string filtre;
 
-        public UcLotComposant(Organisateur unOrganisateurConnecte)
+        public UcLotComposants(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
-            _serviceRole = new RoleService(new ApplicationDbContext());
             _serviceLot = new LotService(new ApplicationDbContext());
             _serviceLotComposant = new LotComposantService(new ApplicationDbContext());
             _organisateurConnecte = unOrganisateurConnecte;
@@ -37,15 +36,15 @@ namespace ApplicationUi
             ChargerLots();
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Ajouter") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Modifier") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposant, "Supprimer") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
             }
@@ -97,7 +96,33 @@ namespace ApplicationUi
             textBoxLibelle.Text = lotComposant.Libelle;
             textBoxDescription.Text = lotComposant.Valeur.ToString();
             textBoxValeur.Clear();
-            comboBoxLot.SelectedValue = lotComposant.NumeroLot;
+            if(lotComposant.NumeroLot == null)
+            {
+                comboBoxLot.SelectedValue = "Aucun";
+            }
+            else
+            {
+                comboBoxLot.SelectedValue = lotComposant.NumeroLot;
+            }
+        }
+
+        #endregion
+
+        #region Validations
+        /// <summary>
+        /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes 
+        /// </summary>
+        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>>
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public bool LotComposantValide(LotComposant lotComposant)
+        {
+            var erreurs = _serviceLotComposant.LotComposantValide(lotComposant);
+            if (erreurs.Any())
+            {
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
         }
 
         #endregion
@@ -106,19 +131,41 @@ namespace ApplicationUi
 
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
-            _serviceLotComposant.Creer(new LotComposant
+            // On crée un nouveau lot composant avec les données des champs
+            unNouveauLotComposant = new LotComposant
             {
                 Libelle = textBoxLibelle.Text,
                 Description = textBoxDescription.Text,
                 Valeur = int.Parse(textBoxValeur.Text),
                 NumeroLot = comboBoxLot.SelectedValue != null ? (int)comboBoxLot.SelectedValue : null
-            });
+            };
+
+            // On check si le lot composant est valide
+            if (LotComposantValide(unNouveauLotComposant) == false)
+            {
+                return;
+            }
+            
+            // On crée le lot composant en bdd
+            _serviceLotComposant.Creer(unNouveauLotComposant);
             ChargerLotComposants();
             Raz_Zones();
         }
 
         private void buttonModifier_Click(object sender, EventArgs e)
         {
+            // On check s'il a bien selectionné un lot composant à modifier
+            if (_lotComposantSelectionne == null)
+            {
+                MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            // On check si le lot composant est valide
+            if (LotComposantValide(_lotComposantSelectionne) == false)
+            {
+                return;
+            }
+
             // Modifiée seulement les valeurs qui ont été modifiées
             if (textBoxLibelle.Text != "" || _lotComposantSelectionne.Libelle != textBoxLibelle.Text)
                 _lotComposantSelectionne.Libelle = textBoxLibelle.Text;
@@ -137,11 +184,10 @@ namespace ApplicationUi
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
-            // Ne pas pouvoir suppr l'organisateur connecté
-            // Ne pas pouvoir suppr "admin"
+            // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
             if (_lotComposantSelectionne == null)
             {
-                MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero);
@@ -183,6 +229,5 @@ namespace ApplicationUi
         }
 
         #endregion
-
     }
 }
