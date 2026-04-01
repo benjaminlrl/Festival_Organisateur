@@ -38,6 +38,7 @@ namespace ApplicationUi
             _servicePlateforme = new PlateformeService(context);
             _posteJeuSelectionne = null;
             fonctionnelSelectionne = false;
+            dataGridTournois.Visible = false;
             filtre = "";
             ordreChamp = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
