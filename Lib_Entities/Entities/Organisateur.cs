@@ -50,12 +50,13 @@ namespace Lib_Entities.Entities
         /// </summary>
         public enum LesUC
         {
-            UcOrganisateur,
+            UcOrganisateurs,
             UcTournois,
             UcEspaces,
             UcPlateformes,
             UcPostesDeJeu,
-            UcLotComposant,
+            UcLotComposants,
+            UcLots,
         }
     }
 }

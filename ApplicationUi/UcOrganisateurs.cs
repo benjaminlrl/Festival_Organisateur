@@ -14,7 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ApplicationUi
 {
-    public partial class UcOrganisateur : UserControl
+    public partial class UcOrganisateurs : UserControl
     {
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IRoleService _serviceRole;
@@ -23,7 +23,7 @@ namespace ApplicationUi
         private readonly Organisateur _organisateurConnecte;
         string filtre;
 
-        public UcOrganisateur(Organisateur unOrganisateurConnecte)
+        public UcOrganisateurs(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
