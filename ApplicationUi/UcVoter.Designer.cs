@@ -225,6 +225,7 @@
             comboBoxPlateforme.Name = "comboBoxPlateforme";
             comboBoxPlateforme.Size = new Size(231, 33);
             comboBoxPlateforme.TabIndex = 29;
+            comboBoxPlateforme.SelectedIndexChanged += comboBoxPlateforme_SelectedIndexChanged;
             // 
             // labelPegi
             // 

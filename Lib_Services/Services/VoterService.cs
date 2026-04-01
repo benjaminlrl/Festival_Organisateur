@@ -11,6 +11,8 @@ namespace Lib_Services.Services
     public class VoterService : IVoterService
     {
         private readonly ApplicationDbContext _context;
+
+        // Constante définissant le nombre maximum de votes autorisés par utilisateur.
         const int NB_VOTES_MAX = 15;
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Modifie un Vote identifié par l'id de l'utilisateur, 
+        /// Récupère un Vote identifié par l'id de l'utilisateur, 
         /// l'id du jeu et l'id de la plateforme, 
         /// puis persiste la modification.
         /// </summary>
@@ -71,10 +73,10 @@ namespace Lib_Services.Services
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
         /// <returns></returns>
-        public Voter? Obtenir(int idUser, int idJeu, int idPlateforme)
+        public Voter? Obtenir(int idJeu, int idPlateforme, int idUser)
         {
             // Find retourne null si l'entité n'existe pas.
-            return _context.Voter.Find(new { idUser, idJeu, idPlateforme });
+            return _context.Voter.Find(idJeu, idPlateforme, idUser);
         }
 
         /// <summary>
@@ -106,10 +108,10 @@ namespace Lib_Services.Services
         /// <param name="idUser">Id de l'utilisateur</param>
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
-        public void Supprimer(int idUser, int idJeu, int idPlateforme)
+        public void Supprimer(int idJeu, int idPlateforme, int idUser)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var vote = _context.Voter.Find(new {idUser, idJeu, idPlateforme });
+            var vote = _context.Voter.Find(idJeu, idPlateforme, idUser);
             if (vote != null)
             {
                 _context.Voter.Remove(vote);
@@ -137,10 +139,7 @@ namespace Lib_Services.Services
                 erreurs.Add($"Vous ne pouvez pas voter plus de {NB_VOTES_MAX} fois");
 
             // Si l'utilisateur a déjà voté pour ce jeu sur cette plateforme, il ne peut pas voter à nouveau.
-            if (_context.Voter.Any(v =>
-                                   v.IdJeu == vote.IdJeu 
-                                   && v.IdPlateforme == vote.IdPlateforme
-                                   && v.IdUser == vote.IdUser))
+            if (Obtenir(vote.IdJeu, vote.IdPlateforme, vote.IdUser) != null)
                 erreurs.Add($"Vous avez déjà voter pour ce mot !");
 
             return erreurs;

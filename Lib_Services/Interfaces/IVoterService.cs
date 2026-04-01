@@ -9,10 +9,10 @@ namespace Lib_Services.Interfaces
     {
         void Creer(Voter vote);
         void Modifier(Voter vote);
-        void Supprimer(int idUser, int idJeu, int idPlateforme);
+        void Supprimer(int idJeu, int idPlateforme, int idUser);
         List<Voter> Lister(string filtre);
         List<Voter> ListerPourUnUtilisateur(int idUser);
-        Voter? Obtenir(int idUser, int idJeu, int idPlateforme);
+        Voter? Obtenir(int idJeu, int idPlateforme, int idUser);
 
         List<string> ValiderVote(Voter vote);
     }

@@ -25,6 +25,8 @@ namespace ApplicationUi
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
+        // Constante de debug pour avoir un utilisateur fictif avec lequel tester les fonctionnalités de vote.
+        const int ID_USER_TEST = 1;
         public UcVoter(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
@@ -71,7 +73,7 @@ namespace ApplicationUi
         private void ChargerJeuxVotes()
         {
             dataGridJeuxVotes.DataSource = null;
-            dataGridJeuxVotes.DataSource = _serviceVoter.ListerPourUnUtilisateur(1); // TODO: Récupérer l'ID de l'utilisateur connecté
+            dataGridJeuxVotes.DataSource = _serviceVoter.ListerPourUnUtilisateur(ID_USER_TEST); // TODO: Récupérer l'ID de l'utilisateur connecté
             if (dataGridJeuxVotes.DataSource != null)
                 MEP_DataGridJeuxVotes();
         }
@@ -82,6 +84,16 @@ namespace ApplicationUi
             // charge les plateformes dans le comboBox et affiche le libellé tout en conservant l'id en valeur
             comboBoxPlateforme.DisplayMember = "Libelle";
             comboBoxPlateforme.ValueMember = "IdPlateforme";
+        }
+
+        private void AfficherBouttonSupprimer()
+        {
+            if ((Plateforme)comboBoxPlateforme.SelectedItem != null && _jeuSelectionne != null)
+            {
+                _voterSelectionne = _serviceVoter.Obtenir(_jeuSelectionne.IdJeu, ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme, ID_USER_TEST) ?? null;
+                buttonSupprimer.Enabled = _voterSelectionne != null;
+            }
+                
         }
 
         /// <summary>
@@ -98,8 +110,8 @@ namespace ApplicationUi
             textBoxPegi.Clear();
             _jeuSelectionne = null;
             dataGridJeuxVotes.DataSource = null;
-            buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
-            buttonVoter.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
+            buttonSupprimer.Enabled = false;
+            buttonVoter.Enabled = false;
         }
         private void MEP_DataGrid()
         {
@@ -162,7 +174,6 @@ namespace ApplicationUi
                     : donnees.OrderBy(keySelector).ToList();
                 // permute l'ordre du champ
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
-
                 MEP_DataGrid();
                 return;
             }
@@ -182,9 +193,10 @@ namespace ApplicationUi
             textBoxTitre.Text = jeu.Titre;
             textBoxDescription.Text = jeu.Description;
             textBoxEditeur.Text = jeu.Editeur;
-            textBoxPegi.Text = jeu.Pegi.ToString();
-            ChargerPlateforme();
+            textBoxPegi.Text = jeu.Pegi.ToString();           
             dateTimePickerDateSortie.Value = jeu.DateSortie;
+            ChargerPlateforme();
+            AfficherBouttonSupprimer();
         }
 
         /// <summary>
@@ -221,7 +233,7 @@ namespace ApplicationUi
             {
                 IdJeu = _jeuSelectionne.IdJeu,
                 IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
-                IdUser = 1,//TODO: Récupérer l'ID de l'utilisateur connecté
+                IdUser = ID_USER_TEST,//TODO: Récupérer l'ID de l'utilisateur connecté
                 Plateforme = ((Plateforme)comboBoxPlateforme.SelectedItem),
                 Jeu = _jeuSelectionne,
                 DateVote = DateTime.Now
@@ -249,10 +261,9 @@ namespace ApplicationUi
             if (_jeuSelectionne == null || _voterSelectionne == null)
                 return;
             var jeu = (Jeu)dataGridJeux.CurrentRow.DataBoundItem;
-            
-            _serviceVoter.Supprimer(_voterSelectionne.IdUser, _voterSelectionne.IdJeu, _voterSelectionne.IdPlateforme);
+
+            _serviceVoter.Supprimer(_voterSelectionne.IdJeu, _voterSelectionne.IdPlateforme, _voterSelectionne.IdUser);
             _voterSelectionne = null;
-            buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
             buttonVoter.Enabled = _jeuSelectionne != null;
             ChargerJeux();
             ChargerJeuxVotes();
@@ -261,5 +272,12 @@ namespace ApplicationUi
         }
 
         #endregion
+
+        private void comboBoxPlateforme_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxPlateforme.SelectedItem == null)
+                return;
+            AfficherBouttonSupprimer();
+        }
     }
 }
