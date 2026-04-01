@@ -46,6 +46,23 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
+        /// Pour un utilisateur donné par son id, retourne uniquement
+        /// les Votes présents dans la base de données.
+        /// </summary>
+        /// <param name="idUser">Id unique de l'utilisateur</param>
+        /// <returns>Liste de <see cref="Voter"/>.</returns>
+        public List<Voter> ListerPourUnUtilisateur(int idUser)
+        {
+            // Utilise le DbSet Votes pour matérialiser la collection en mémoire.
+            return
+                _context.Voter
+                    .Include(v => v.Plateforme)
+                    .Include(v => v.Jeu)
+                    .Where(v => v.IdUser == idUser)
+                    .ToList();
+        }
+
+        /// <summary>
         /// Modifie un Vote identifié par l'id de l'utilisateur, 
         /// l'id du jeu et l'id de la plateforme, 
         /// puis persiste la modification.

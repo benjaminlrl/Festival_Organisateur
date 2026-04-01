@@ -11,6 +11,7 @@ namespace Lib_Services.Interfaces
         void Modifier(Voter vote);
         void Supprimer(int idUser, int idJeu, int idPlateforme);
         List<Voter> Lister(string filtre);
+        List<Voter> ListerPourUnUtilisateur(int idUser);
         Voter? Obtenir(int idUser, int idJeu, int idPlateforme);
 
         List<string> ValiderVote(Voter vote);
