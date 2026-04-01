@@ -36,12 +36,12 @@ namespace ApplicationUi
             _serviceVoter = new VoterService(context);
             _jeuSelectionne = null;
             _voterSelectionne = null;
-            fonctionnelSelectionne = false;
             filtre = "";
             ordreChamp = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerJeux();
             buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
+            buttonVoter.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
@@ -64,7 +64,18 @@ namespace ApplicationUi
             dataGridJeux.DataSource = _serviceJeu.Lister(filtre);
             MEP_DataGrid();
         }
-        private void ChargerPlateformes()
+        /// <summary>
+        /// Permet de charger les jeux déjà votés par l'utilisateur en fonction de la recherche saisie
+        /// </summary>
+        private void ChargerJeuxVotes()
+        {
+            dataGridJeuxVotes.DataSource = null;
+            dataGridJeuxVotes.DataSource = _serviceVoter.Lister("").Any(v =>
+                                    v.IdUser == 1); // TODO: Récupérer l'ID de l'utilisateur connecté
+            if(dataGridJeuxVotes.DataSource != null)
+                MEP_DataGridJeuxVotes();
+        }
+        private void ChargerPlateforme()
         {
             comboBoxPlateforme.DataSource = null;
             comboBoxPlateforme.DataSource = _jeuSelectionne.Plateformes.ToList();
@@ -86,7 +97,9 @@ namespace ApplicationUi
             comboBoxPlateforme.SelectedItem = null;
             textBoxPegi.Clear();
             _jeuSelectionne = null;
-            buttonSupprimer.Enabled = _jeuSelectionne != null;
+            dataGridJeuxVotes.DataSource = null;
+            buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
+            buttonVoter.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
         }
         private void MEP_DataGrid()
         {
@@ -94,6 +107,13 @@ namespace ApplicationUi
             dataGridJeux.Columns["IdJeu"].Visible = false;
             dataGridJeux.Columns["Tournois"].Visible = false;
             dataGridJeux.Columns["Plateformes"].Visible = false;
+        }
+
+        private void MEP_DataGridJeuxVotes()
+        {
+            dataGridJeuxVotes.Columns["DateVote"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeuxVotes.Columns["Jeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeuxVotes.Columns["Plateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void dataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -139,7 +159,8 @@ namespace ApplicationUi
             if (_jeuSelectionne != null)
                 RemplirFormulaire(_jeuSelectionne);
 
-            buttonSupprimer.Enabled = _jeuSelectionne != null;
+            buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
+            buttonVoter.Enabled = _jeuSelectionne != null;
 
         }
 
@@ -149,7 +170,8 @@ namespace ApplicationUi
             textBoxDescription.Text = jeu.Description;
             textBoxEditeur.Text = jeu.Editeur;
             textBoxPegi.Text = jeu.Pegi.ToString();
-            ChargerPlateformes();
+            ChargerPlateforme();
+            ChargerJeuxVotes();
             dateTimePickerDateSortie.Value = jeu.DateSortie;
         }
 
@@ -172,7 +194,7 @@ namespace ApplicationUi
             var erreurs = _serviceVoter.ValiderVote(vote);
             if (erreurs.Any())
             {
-                MessageBox.Show(string.Join("\n", erreurs));
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
             return true;
@@ -182,12 +204,13 @@ namespace ApplicationUi
         #region Boutons
         public void buttonVoter_Click(object sender, EventArgs e)
         {
+
             var voter = new Voter
             {
                 IdJeu = _jeuSelectionne.IdJeu,
-                IdPlateforme = _voterSelectionne.Plateforme.IdPlateforme,
+                IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
                 IdUser = 1,//TODO: Récupérer l'ID de l'utilisateur connecté
-                Plateforme = _voterSelectionne.Plateforme,
+                Plateforme = ((Plateforme)comboBoxPlateforme.SelectedItem),
                 Jeu = _jeuSelectionne,
                 DateVote = DateTime.Now
 
@@ -195,7 +218,10 @@ namespace ApplicationUi
             if (ValiderVote(voter))
             {
                 _serviceVoter.Creer(voter);
-                MessageBox.Show("Vote enregistré avec succès !");
+                _voterSelectionne = voter;
+                buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
+                buttonVoter.Enabled = _jeuSelectionne != null;
+                ChargerJeux();
             }
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
@@ -212,7 +238,9 @@ namespace ApplicationUi
             var jeu = (Jeu)dataGridJeux.CurrentRow.DataBoundItem;
             
             _serviceVoter.Supprimer(_voterSelectionne.IdUser, _voterSelectionne.IdJeu, _voterSelectionne.IdPlateforme);
-            _jeuSelectionne = null;
+            _voterSelectionne = null;
+            buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
+            buttonVoter.Enabled = _jeuSelectionne != null;
             ChargerJeux();
             Raz_Zones();
 
