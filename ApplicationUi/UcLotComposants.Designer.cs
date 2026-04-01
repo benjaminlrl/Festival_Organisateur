@@ -2,7 +2,7 @@
 
 namespace ApplicationUi
 {
-    partial class UcOrganisateur
+    partial class UcLotComposants
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -19,14 +19,14 @@ namespace ApplicationUi
         {
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
-            labelLogin = new Label();
-            labelMail = new Label();
-            labelMotDePasse = new Label();
-            labelRole = new Label();
-            textBoxLogin = new TextBox();
-            textBoxMail = new TextBox();
-            textBoxMotDePasse = new TextBox();
-            comboBoxRole = new ComboBox();
+            labelLibelle = new Label();
+            labelDescription = new Label();
+            labelValeur = new Label();
+            labelLot = new Label();
+            textBoxLibelle = new TextBox();
+            textBoxDescription = new TextBox();
+            textBoxValeur = new TextBox();
+            comboBoxLot = new ComboBox();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
@@ -34,14 +34,14 @@ namespace ApplicationUi
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             label1 = new Label();
-            dataGridOrganisateurs = new DataGridView();
+            dataGridLotComposants = new DataGridView();
             label2 = new Label();
             textBoxRecherche = new TextBox();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridOrganisateurs).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridLotComposants).BeginInit();
             SuspendLayout();
             // 
             // panelForm
@@ -49,7 +49,7 @@ namespace ApplicationUi
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(20, 39);
+            panelForm.Location = new Point(19, 36);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
             panelForm.Size = new Size(900, 210);
@@ -62,14 +62,14 @@ namespace ApplicationUi
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel.Controls.Add(labelLogin, 0, 0);
-            tableLayoutPanel.Controls.Add(labelMail, 1, 0);
-            tableLayoutPanel.Controls.Add(labelMotDePasse, 2, 0);
-            tableLayoutPanel.Controls.Add(labelRole, 3, 0);
-            tableLayoutPanel.Controls.Add(textBoxLogin, 0, 1);
-            tableLayoutPanel.Controls.Add(textBoxMail, 1, 1);
-            tableLayoutPanel.Controls.Add(textBoxMotDePasse, 2, 1);
-            tableLayoutPanel.Controls.Add(comboBoxRole, 3, 1);
+            tableLayoutPanel.Controls.Add(labelLibelle, 0, 0);
+            tableLayoutPanel.Controls.Add(labelDescription, 1, 0);
+            tableLayoutPanel.Controls.Add(labelValeur, 2, 0);
+            tableLayoutPanel.Controls.Add(labelLot, 3, 0);
+            tableLayoutPanel.Controls.Add(textBoxLibelle, 0, 1);
+            tableLayoutPanel.Controls.Add(textBoxDescription, 1, 1);
+            tableLayoutPanel.Controls.Add(textBoxValeur, 2, 1);
+            tableLayoutPanel.Controls.Add(comboBoxLot, 3, 1);
             tableLayoutPanel.Location = new Point(10, 12);
             tableLayoutPanel.Margin = new Padding(4);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -80,86 +80,85 @@ namespace ApplicationUi
             tableLayoutPanel.Size = new Size(879, 110);
             tableLayoutPanel.TabIndex = 0;
             // 
-            // labelLogin
+            // labelLibelle
             // 
-            labelLogin.AutoSize = true;
-            labelLogin.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelLogin.Location = new Point(4, 0);
-            labelLogin.Margin = new Padding(4, 0, 4, 0);
-            labelLogin.Name = "labelLogin";
-            labelLogin.Size = new Size(61, 17);
-            labelLogin.TabIndex = 0;
-            labelLogin.Text = "Login * :";
+            labelLibelle.AutoSize = true;
+            labelLibelle.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelLibelle.Location = new Point(4, 0);
+            labelLibelle.Margin = new Padding(4, 0, 4, 0);
+            labelLibelle.Name = "labelLibelle";
+            labelLibelle.Size = new Size(67, 17);
+            labelLibelle.TabIndex = 0;
+            labelLibelle.Text = "Libelle * :";
             // 
-            // labelMail
+            // labelDescription
             // 
-            labelMail.AutoSize = true;
-            labelMail.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelMail.Location = new Point(223, 0);
-            labelMail.Margin = new Padding(4, 0, 4, 0);
-            labelMail.Name = "labelMail";
-            labelMail.Size = new Size(53, 17);
-            labelMail.TabIndex = 1;
-            labelMail.Text = "Mail * :";
+            labelDescription.AutoSize = true;
+            labelDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelDescription.Location = new Point(223, 0);
+            labelDescription.Margin = new Padding(4, 0, 4, 0);
+            labelDescription.Name = "labelDescription";
+            labelDescription.Size = new Size(97, 17);
+            labelDescription.TabIndex = 1;
+            labelDescription.Text = "Description * :";
             // 
-            // labelMotDePasse
+            // labelValeur
             // 
-            labelMotDePasse.AutoSize = true;
-            labelMotDePasse.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelMotDePasse.Location = new Point(442, 0);
-            labelMotDePasse.Margin = new Padding(4, 0, 4, 0);
-            labelMotDePasse.Name = "labelMotDePasse";
-            labelMotDePasse.Size = new Size(108, 17);
-            labelMotDePasse.TabIndex = 2;
-            labelMotDePasse.Text = "Mot de passe * :";
+            labelValeur.AutoSize = true;
+            labelValeur.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelValeur.Location = new Point(442, 0);
+            labelValeur.Margin = new Padding(4, 0, 4, 0);
+            labelValeur.Name = "labelValeur";
+            labelValeur.Size = new Size(132, 17);
+            labelValeur.TabIndex = 2;
+            labelValeur.Text = "Valeur (en euros) * :";
             // 
-            // labelRole
+            // labelLot
             // 
-            labelRole.AutoSize = true;
-            labelRole.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelRole.Location = new Point(661, 0);
-            labelRole.Margin = new Padding(4, 0, 4, 0);
-            labelRole.Name = "labelRole";
-            labelRole.Size = new Size(53, 17);
-            labelRole.TabIndex = 3;
-            labelRole.Text = "Rôle * :";
+            labelLot.AutoSize = true;
+            labelLot.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelLot.Location = new Point(661, 0);
+            labelLot.Margin = new Padding(4, 0, 4, 0);
+            labelLot.Name = "labelLot";
+            labelLot.Size = new Size(94, 17);
+            labelLot.TabIndex = 3;
+            labelLot.Text = "Lot associé * :";
             // 
-            // textBoxLogin
+            // textBoxLibelle
             // 
-            textBoxLogin.Location = new Point(4, 39);
-            textBoxLogin.Margin = new Padding(4);
-            textBoxLogin.Name = "textBoxLogin";
-            textBoxLogin.PlaceholderText = "Ex: jdupont";
-            textBoxLogin.Size = new Size(210, 23);
-            textBoxLogin.TabIndex = 0;
+            textBoxLibelle.Location = new Point(4, 39);
+            textBoxLibelle.Margin = new Padding(4);
+            textBoxLibelle.Name = "textBoxLibelle";
+            textBoxLibelle.PlaceholderText = "Ex: Playstation 5";
+            textBoxLibelle.Size = new Size(210, 23);
+            textBoxLibelle.TabIndex = 0;
             // 
-            // textBoxMail
+            // textBoxDescription
             // 
-            textBoxMail.Location = new Point(223, 39);
-            textBoxMail.Margin = new Padding(4);
-            textBoxMail.Name = "textBoxMail";
-            textBoxMail.PlaceholderText = "Ex: jean@mail.com";
-            textBoxMail.Size = new Size(210, 23);
-            textBoxMail.TabIndex = 1;
+            textBoxDescription.Location = new Point(223, 39);
+            textBoxDescription.Margin = new Padding(4);
+            textBoxDescription.Name = "textBoxDescription";
+            textBoxDescription.PlaceholderText = "Ex: Console de jeu de type Playstation";
+            textBoxDescription.Size = new Size(210, 23);
+            textBoxDescription.TabIndex = 1;
             // 
-            // textBoxMotDePasse
+            // textBoxValeur
             // 
-            textBoxMotDePasse.Location = new Point(442, 39);
-            textBoxMotDePasse.Margin = new Padding(4);
-            textBoxMotDePasse.Name = "textBoxMotDePasse";
-            textBoxMotDePasse.PasswordChar = '●';
-            textBoxMotDePasse.PlaceholderText = "Min. 12 caract., 1 maj., 1 spécial, 1 chiffre";
-            textBoxMotDePasse.Size = new Size(210, 23);
-            textBoxMotDePasse.TabIndex = 2;
+            textBoxValeur.Location = new Point(442, 39);
+            textBoxValeur.Margin = new Padding(4);
+            textBoxValeur.Name = "textBoxValeur";
+            textBoxValeur.PlaceholderText = "300";
+            textBoxValeur.Size = new Size(210, 23);
+            textBoxValeur.TabIndex = 2;
             // 
-            // comboBoxRole
+            // comboBoxLot
             // 
-            comboBoxRole.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxRole.Location = new Point(661, 39);
-            comboBoxRole.Margin = new Padding(4);
-            comboBoxRole.Name = "comboBoxRole";
-            comboBoxRole.Size = new Size(210, 26);
-            comboBoxRole.TabIndex = 3;
+            comboBoxLot.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxLot.Location = new Point(661, 39);
+            comboBoxLot.Margin = new Padding(4);
+            comboBoxLot.Name = "comboBoxLot";
+            comboBoxLot.Size = new Size(210, 26);
+            comboBoxLot.TabIndex = 3;
             // 
             // panelButtons
             // 
@@ -258,43 +257,43 @@ namespace ApplicationUi
             label1.Size = new Size(0, 18);
             label1.TabIndex = 6;
             // 
-            // dataGridOrganisateurs
+            // dataGridLotComposants
             // 
-            dataGridOrganisateurs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridOrganisateurs.BackgroundColor = Color.White;
-            dataGridOrganisateurs.BorderStyle = BorderStyle.None;
-            dataGridOrganisateurs.ColumnHeadersHeight = 34;
-            dataGridOrganisateurs.Location = new Point(20, 330);
-            dataGridOrganisateurs.Margin = new Padding(4);
-            dataGridOrganisateurs.Name = "dataGridOrganisateurs";
-            dataGridOrganisateurs.ReadOnly = true;
-            dataGridOrganisateurs.RowHeadersWidth = 62;
-            dataGridOrganisateurs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridOrganisateurs.Size = new Size(900, 434);
-            dataGridOrganisateurs.TabIndex = 2;
-            dataGridOrganisateurs.CellClick += dataGridOrganisateurs_CellClick;
+            dataGridLotComposants.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridLotComposants.BackgroundColor = Color.White;
+            dataGridLotComposants.BorderStyle = BorderStyle.None;
+            dataGridLotComposants.ColumnHeadersHeight = 34;
+            dataGridLotComposants.Location = new Point(19, 320);
+            dataGridLotComposants.Margin = new Padding(4);
+            dataGridLotComposants.Name = "dataGridLotComposants";
+            dataGridLotComposants.ReadOnly = true;
+            dataGridLotComposants.RowHeadersWidth = 62;
+            dataGridLotComposants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridLotComposants.Size = new Size(900, 434);
+            dataGridLotComposants.TabIndex = 2;
+            dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(116, 279);
+            label2.Location = new Point(119, 275);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new Size(89, 20);
-            label2.TabIndex = 3;
+            label2.TabIndex = 4;
             label2.Text = "Recherche :";
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(253, 279);
+            textBoxRecherche.Location = new Point(252, 275);
             textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(574, 23);
-            textBoxRecherche.TabIndex = 4;
+            textBoxRecherche.TabIndex = 5;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
-            // UcOrganisateur
+            // UcLotComposant
             // 
             AutoScaleDimensions = new SizeF(7F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -302,10 +301,10 @@ namespace ApplicationUi
             Controls.Add(textBoxRecherche);
             Controls.Add(label2);
             Controls.Add(panelForm);
-            Controls.Add(dataGridOrganisateurs);
+            Controls.Add(dataGridLotComposants);
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
-            Name = "UcOrganisateur";
+            Name = "UcLotComposant";
             Size = new Size(950, 809);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
@@ -313,7 +312,7 @@ namespace ApplicationUi
             panelButtons.ResumeLayout(false);
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridOrganisateurs).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridLotComposants).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -322,14 +321,14 @@ namespace ApplicationUi
 
         private Panel panelForm;
         private TableLayoutPanel tableLayoutPanel;
-        private TextBox textBoxLogin;
-        private TextBox textBoxMail;
-        private TextBox textBoxMotDePasse;
-        private ComboBox comboBoxRole;
-        private Label labelLogin;
-        private Label labelMail;
-        private Label labelMotDePasse;
-        private Label labelRole;
+        private TextBox textBoxLibelle;
+        private TextBox textBoxDescription;
+        private TextBox textBoxValeur;
+        private ComboBox comboBoxLot;
+        private Label labelLibelle;
+        private Label labelDescription;
+        private Label labelValeur;
+        private Label labelLot;
         private Panel panelButtons;
         private GroupBox groupBox1;
         private Button buttonAjouter;
@@ -337,7 +336,7 @@ namespace ApplicationUi
         private Button buttonModifier;
         private Button buttonSupprimer;
         private Label label1;
-        private DataGridView dataGridOrganisateurs;
+        private DataGridView dataGridLotComposants;
         private Label label2;
         private TextBox textBoxRecherche;
     }

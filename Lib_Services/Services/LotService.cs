@@ -89,5 +89,30 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// Permet de voir si un lot est conformes aux règles de sécurité suivantes
+        /// </summary>
+        /// <param name="lot">Instance de <see cref="Lot"/> à créer.</param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        public List<string> LotValide(Lot lot)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(lot.Libelle))
+            {
+                erreurs.Add("Le libelle ne peut pas être vide.");
+            }
+            if (lot.Libelle.Length > 50)
+            {
+                erreurs.Add("Le libelle ne peut pas faire plus de 20 charactères.");
+            }
+            if (lot.RangAttribution < 0)
+            {
+                erreurs.Add("Le rang ne peut pas être négatif");
+            }
+            return erreurs;
+        }
     }
 }

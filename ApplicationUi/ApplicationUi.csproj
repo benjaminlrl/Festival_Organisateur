@@ -25,10 +25,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="UcLotComposant.cs">
+    <Compile Update="UcLots.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="UcOrganisateur.cs">
+    <Compile Update="UcLotComposants.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="UcOrganisateurs.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>

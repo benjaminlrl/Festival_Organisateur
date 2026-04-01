@@ -36,17 +36,17 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// Tournoi associé au lot
         /// </summary>
-        public Tournoi Tournoi { get; set; }
+        public Tournoi? Tournoi { get; set; }
 
         /// <summary>
         /// Le numero du tournoi associé au lot
         /// </summary>
-        public int NumeroTournoi { get; set; }
+        public int? NumeroTournoi { get; set; }
 
         /// <summary>
         /// Ensemble des composants du lot
         /// </summary>
-        public ICollection<LotComposant> LotComposant { get; set; } = new List<LotComposant>();
+        public ICollection<LotComposant>? LotComposant { get; set; } = new List<LotComposant>();
 
         /// <summary>
         /// id du lot.
