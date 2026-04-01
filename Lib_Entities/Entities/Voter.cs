@@ -9,7 +9,7 @@ namespace Lib_Entities.Entities
     /// Un vote dispose d'un idUser, d'un idJeu, d'un idPlateforme et d'une date de vote.
     /// 
     /// </summary>
-    public class Vote
+    public class Voter
     {
         public int IdUser { get; set; }
         public int IdJeu { get; set; }

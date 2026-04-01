@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Lib_Metier.Data.Configurations
 {
-    internal class VoteConf : IEntityTypeConfiguration<Vote>
+    internal class VoterConf : IEntityTypeConfiguration<Voter>
     {
-        public void Configure(EntityTypeBuilder<Vote> builder)
+        public void Configure(EntityTypeBuilder<Voter> builder)
         {
             // Nom de la table en base de données
             builder.ToTable("Voter");

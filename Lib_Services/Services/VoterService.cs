@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Lib_Services.Services
 {
-    public class VoteService : IVoteService
+    public class VoterService : IVoterService
     {
         private readonly ApplicationDbContext _context;
 
@@ -16,7 +16,7 @@ namespace Lib_Services.Services
         /// Constructeur avec injection du contexte de données.
         /// </summary>
         /// <param name="context">Contexte EF <see cref="ApplicationDbContext"/>.</param>
-        public VoteService(ApplicationDbContext context)
+        public VoterService(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -27,8 +27,8 @@ namespace Lib_Services.Services
         /// les Votes dont le contenu correspond au filtre.
         /// </summary>
         /// <param name="filtre">Optionnel : contenu à filtrer.</param>
-        /// <returns>Liste de <see cref="Vote"/>.</returns>
-        public List<Vote> Lister(string filtre = "")
+        /// <returns>Liste de <see cref="Voter"/>.</returns>
+        public List<Voter> Lister(string filtre = "")
         {
             // Utilise le DbSet Votes pour matérialiser la collection en mémoire.
             if (string.IsNullOrWhiteSpace(filtre))
@@ -53,7 +53,7 @@ namespace Lib_Services.Services
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
         /// <returns></returns>
-        public Vote? Obtenir(int idUser, int idJeu, int idPlateforme)
+        public Voter? Obtenir(int idUser, int idJeu, int idPlateforme)
         {
             // Find retourne null si l'entité n'existe pas.
             return _context.Votes.Find(new { idUser, idJeu, idPlateforme });
@@ -62,21 +62,21 @@ namespace Lib_Services.Services
         /// <summary>
         /// Crée un nouveau Vote et persiste la modification.
         /// </summary>
-        /// <param name="Vote">Objet <see cref="Vote"/> à ajouter.</param>
-        public void Creer(Vote Vote)
+        /// <param name="Vote">Objet <see cref="Voter"/> à ajouter.</param>
+        public void Creer(Voter vote)
         {
-            _context.Votes.Add(Vote);
+            _context.Votes.Add(vote);
             _context.SaveChanges();
         }
 
         /// <summary>
         /// Met à jour un Vote existant et persiste la modification.
         /// </summary>
-        /// <param name="Vote">Objet <see cref="Vote"/> contenant les valeurs mises à jour.</param>
-        public void Modifier(Vote Vote)
+        /// <param name="Vote">Objet <see cref="Voter"/> contenant les valeurs mises à jour.</param>
+        public void Modifier(Voter vote)
         {
             // Marque l'entité comme modifiée puis sauvegarde.
-            _context.Votes.Update(Vote);
+            _context.Votes.Update(vote);
             _context.SaveChanges();
         }
 
@@ -91,10 +91,10 @@ namespace Lib_Services.Services
         public void Supprimer(int idUser, int idJeu, int idPlateforme)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var Vote = _context.Votes.Find(new {idUser, idJeu, idPlateforme });
-            if (Vote != null)
+            var vote = _context.Votes.Find(new {idUser, idJeu, idPlateforme });
+            if (vote != null)
             {
-                _context.Votes.Remove(Vote);
+                _context.Votes.Remove(vote);
                 // Suppression en cascade des postes de jeu associés à la Vote. 
                 // Puisqu'un poste de jeu a obligatoirmeent une Vote.
                 _context.SaveChanges();
@@ -104,9 +104,9 @@ namespace Lib_Services.Services
         /// <summary>
         /// Permet de vérifier les propriétés associés a une Vote.
         /// </summary>
-        /// <param name="Vote">La Vote à valider</param>
+        /// <param name="vote">La Vote à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderVote(Vote Vote)
+        public List<string> ValiderVote(Voter vote)
         {
             // liste des erreurs
             var erreurs = new List<string>();

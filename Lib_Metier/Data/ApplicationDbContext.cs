@@ -59,7 +59,7 @@ namespace Lib_Metier.Data.Configurations
         /// <summary>
         /// Ensemble des Votes (table `Votes`).
         /// </summary>
-        public DbSet<Vote> Votes => Set<Vote>();
+        public DbSet<Voter> Votes => Set<Voter>();
 
         /// <summary>
         /// Ensemble des SoumisVotes (table `SoumisVotes`).
