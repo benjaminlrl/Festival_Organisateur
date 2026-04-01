@@ -30,6 +30,8 @@ namespace ApplicationUi
             _servicePlateforme = new PlateformeService(context);
             buttonModifier.Enabled = _plateformeSelectionee != null;
             buttonSupprimer.Enabled = _plateformeSelectionee != null;
+            labelJeux.Visible = false;
+            dataGridJeux.Visible = false;
             filtre = "";
             buttonEffacer.Text = " 🧽  Effacer";
             ordreChamp = "ASC";
@@ -64,6 +66,15 @@ namespace ApplicationUi
             MEP_DataGridPostesJeu();
         }
 
+        private void ChargerJeux()
+        {
+            labelJeux.Visible = true;
+            dataGridJeux.Visible = true;
+            dataGridJeux.DataSource = null;
+            dataGridJeux.DataSource = _plateformeSelectionee.Jeux.ToList();
+            MEP_DataGridJeux();
+        }
+
         /// <summary>
         /// Resets all tournament-related input fields and controls to their default values.
         /// </summary>
@@ -72,6 +83,8 @@ namespace ApplicationUi
         /// controls are reset to indicate a planned tournament.</remarks>
         private void Raz_Zones()
         {
+            labelJeux.Visible = false;
+            dataGridJeux.Visible = false;
             textBoxNom.Clear();
         }
         private void MEP_DataGrid()
@@ -79,8 +92,20 @@ namespace ApplicationUi
         {
             dataGridPlateformes.Columns["idPlateforme"].Visible = false;
             dataGridPlateformes.Columns["PostesJeu"].Visible = false;
+            dataGridPlateformes.Columns["Jeux"].Visible = false;
         }
-
+        private void MEP_DataGridJeux()
+        {
+            dataGridJeux.Columns["Titre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeux.Columns["Editeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridJeux.Columns["Pegi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridJeux.Columns["AnneeSortie"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeux.Columns["IdJeu"].Visible = false;
+            dataGridJeux.Columns["DateSortie"].Visible = false;
+            dataGridJeux.Columns["Description"].Visible = false;
+            dataGridJeux.Columns["Tournois"].Visible = false;
+            dataGridJeux.Columns["Plateformes"].Visible = false;
+        }
         private void MEP_DataGridPostesJeu()
         {
             dataGridPostesJeu.Columns["Espace"].Visible = false;
@@ -90,7 +115,7 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
             dataGridPostesJeu.Columns["NomEspace"].Visible = false;
             dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void dataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -133,6 +158,7 @@ namespace ApplicationUi
         {
             textBoxNom.Text = plateforme.Libelle;
             ChargerPostesJeu();
+            ChargerJeux();
         }
         #endregion
 
