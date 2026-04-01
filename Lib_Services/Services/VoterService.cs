@@ -120,10 +120,10 @@ namespace Lib_Services.Services
                 erreurs.Add($"Vous ne pouvez pas voter plus de {NB_VOTES_MAX} fois");
 
             // Si l'utilisateur a déjà voté pour ce jeu sur cette plateforme, il ne peut pas voter à nouveau.
-            if (_context.Voter.Count(v =>
+            if (_context.Voter.Any(v =>
                                    v.IdJeu == vote.IdJeu 
                                    && v.IdPlateforme == vote.IdPlateforme
-                                   && v.IdUser == vote.IdUser) > 1)
+                                   && v.IdUser == vote.IdUser))
                 erreurs.Add($"Vous avez déjà voter pour ce mot !");
 
             return erreurs;
