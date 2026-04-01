@@ -6,8 +6,8 @@ namespace Lib_Entities.Entities
 {
     public class SoumisVote
     {
-        public DateTime dateDebutVote { get; set; }
-        public DateTime dateFinVote { get; set; }
+        public DateTime DateDebutVote { get; set; }
+        public DateTime DateFinVote { get; set; }
         public int IdJeu { get; set; }
         public int IdPlateforme { get; set; }
         public Plateforme Plateforme { get; set; }
