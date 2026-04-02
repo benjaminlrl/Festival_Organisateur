@@ -14,9 +14,9 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 
 ![Portail de connexion](Documentation/App/portailConnexion.png)
 
-### Acceuil
+### Accueil
 
-![Acceuil](Documentation/App/Acceuil.png)
+![Acceuil](Documentation/App/Accueil.png)
 
 ### Gestion des espaces
 
