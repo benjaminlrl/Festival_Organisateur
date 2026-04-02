@@ -48,14 +48,15 @@ namespace ApplicationUi
             panelMenu.Controls.Add(btnOrganisateurs);
             panelMenu.Controls.Add(btnLots);
             panelMenu.Controls.Add(btnLotComposants);
-            panelMenu.Controls.Add(buttonVoter);
+            panelMenu.Controls.Add(btnVoter);
+            panelMenu.Controls.Add(btnParticiper);
             panelMenu.Controls.Add(btnQuitter);
             panelMenu.Dock = DockStyle.Left;
             panelMenu.FlowDirection = FlowDirection.TopDown;
             panelMenu.Location = new Point(0, 0);
             panelMenu.Margin = new Padding(4, 5, 4, 5);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(286, 1101);
+            panelMenu.Size = new Size(286, 1269);
             panelMenu.TabIndex = 2;
             panelMenu.WrapContents = false;
             // 
@@ -185,7 +186,7 @@ namespace ApplicationUi
             btnLots.Margin = new Padding(0, 11, 0, 9);
             btnLots.Name = "btnLots";
             btnLots.Size = new Size(286, 81);
-            btnLots.TabIndex = 7;
+            btnLots.TabIndex = 6;
             btnLots.Text = "Lots";
             btnLots.UseVisualStyleBackColor = false;
             btnLots.Click += btnLots_Click;
@@ -204,7 +205,7 @@ namespace ApplicationUi
             btnLotComposants.Margin = new Padding(0, 11, 0, 5);
             btnLotComposants.Name = "btnLotComposants";
             btnLotComposants.Size = new Size(281, 114);
-            btnLotComposants.TabIndex = 6;
+            btnLotComposants.TabIndex = 7;
             btnLotComposants.Text = "      Composant des lots";
             btnLotComposants.UseVisualStyleBackColor = false;
             btnLotComposants.Click += btnLotComposants_Click;
@@ -237,11 +238,11 @@ namespace ApplicationUi
             btnQuitter.ForeColor = Color.White;
             btnQuitter.Image = Properties.Resources.deconnecter;
             btnQuitter.ImageAlign = ContentAlignment.MiddleLeft;
-            btnQuitter.Location = new Point(4, 1016);
+            btnQuitter.Location = new Point(4, 1117);
             btnQuitter.Margin = new Padding(4, 5, 4, 5);
             btnQuitter.Name = "btnQuitter";
             btnQuitter.Size = new Size(286, 81);
-            btnQuitter.TabIndex = 6;
+            btnQuitter.TabIndex = 10;
             btnQuitter.Text = "  Quitter";
             btnQuitter.UseVisualStyleBackColor = false;
             btnQuitter.Click += btnQuitter_Click;
@@ -277,15 +278,34 @@ namespace ApplicationUi
             panelContent.Location = new Point(286, 81);
             panelContent.Margin = new Padding(4, 5, 4, 5);
             panelContent.Name = "panelContent";
-            panelContent.Size = new Size(1245, 1020);
+            panelContent.Size = new Size(1245, 1188);
             panelContent.TabIndex = 0;
+            // 
+            // btnParticiper
+            // 
+            btnParticiper.BackColor = Color.YellowGreen;
+            btnParticiper.BackgroundImageLayout = ImageLayout.None;
+            btnParticiper.FlatAppearance.BorderSize = 0;
+            btnParticiper.FlatStyle = FlatStyle.Flat;
+            btnParticiper.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            btnParticiper.ForeColor = Color.White;
+            btnParticiper.Image = Properties.Resources.tournoi;
+            btnParticiper.ImageAlign = ContentAlignment.MiddleLeft;
+            btnParticiper.Location = new Point(0, 1022);
+            btnParticiper.Margin = new Padding(0, 11, 0, 9);
+            btnParticiper.Name = "btnParticiper";
+            btnParticiper.Size = new Size(286, 81);
+            btnParticiper.TabIndex = 9;
+            btnParticiper.Text = "Participations";
+            btnParticiper.UseVisualStyleBackColor = false;
+            btnParticiper.Click += btnParticiper_Click;
             // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1531, 1101);
+            ClientSize = new Size(1531, 1269);
             ControlBox = false;
             Controls.Add(panelContent);
             Controls.Add(panelHeader);
@@ -317,6 +337,7 @@ namespace ApplicationUi
         private Button btnLotComposants;
         private Button buttonJeux;
         private Button btnLots;
-        private Button buttonVoter;
+        private Button btnVoter;
+        private Button btnParticiper;
     }
 }
