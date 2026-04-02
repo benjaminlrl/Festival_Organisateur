@@ -122,5 +122,10 @@ namespace ApplicationUi
         {
             LoadUserControl(new UcJeux(_organisateurConnecte), "Gestion des jeux");
         }
+
+        private void buttonVoter_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcVoter(_organisateurConnecte), "Espace de votes");
+        }
     }
 }
