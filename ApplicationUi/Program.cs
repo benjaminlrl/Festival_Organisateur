@@ -353,6 +353,49 @@ namespace ApplicationUi
 
             }
 
+            if (!context.Tournois.Any())
+            {
+                // Récupération des IDs espaces et jeux créés
+                var espaceNintendo = context.Espaces.First(e => e.Nom == "Nintendo");
+                var espaceXbox = context.Espaces.First(e => e.Nom == "X Box");
+                var espacePS = context.Espaces.First(e => e.Nom == "PlayStation");
+                var espaceFPS = context.Espaces.First(e => e.Nom == "FPS Arena");
+                var espaceMOBA = context.Espaces.First(e => e.Nom == "MOBA Zone");
+                var espaceFighting = context.Espaces.First(e => e.Nom == "Fighting Games");
+                var espaceSports = context.Espaces.First(e => e.Nom == "Sports Games");
+                var espaceEsport = context.Espaces.First(e => e.Nom == "Esport Arena");
+
+                var jeuMK = context.Jeux.First(j => j.Titre == "Mario Kart 8 Deluxe");
+                var jeuFortnite = context.Jeux.First(j => j.Titre == "Fortnite");
+                var jeuHalo = context.Jeux.First(j => j.Titre == "Halo Infinite");
+                var jeuValorant = context.Jeux.First(j => j.Titre == "Valorant");
+                var jeuLoL = context.Jeux.First(j => j.Titre == "League of Legends");
+                var jeuCS2 = context.Jeux.First(j => j.Titre == "Counter-Strike 2");
+                var jeuFC25 = context.Jeux.First(j => j.Titre == "EA Sports FC 25");
+                var jeuElden = context.Jeux.First(j => j.Titre == "Elden Ring");
+                var jeuSmash = context.Jeux.First(j => j.Titre == "Super Smash Bros. Ultimate");
+                var jeuMinecraft = context.Jeux.First(j => j.Titre == "Minecraft");
+
+                context.Tournois.AddRange(new List<Tournoi>
+                {
+                    // Samedi 10h-20h — espaces différents, pas de chevauchement
+                    new Tournoi { Nom = "Tournoi Mario Kart",         DateHeure = new DateTime(2025, 4, 5, 10, 0, 0), NbParticipants = 16, DureePrevue = 120, Statut = "Terminé",  IdEspace = espaceNintendo.IdEspace, IdJeu = jeuMK.IdJeu },
+                    new Tournoi { Nom = "Tournoi Fortnite Saison 1",  DateHeure = new DateTime(2025, 4, 5, 10, 0, 0), NbParticipants = 20, DureePrevue = 180, Statut = "Terminé",  IdEspace = espaceXbox.IdEspace,    IdJeu = jeuFortnite.IdJeu },
+                    new Tournoi { Nom = "Tournoi Halo Open",          DateHeure = new DateTime(2025, 4, 5, 14, 0, 0), NbParticipants = 12, DureePrevue = 90,  Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuHalo.IdJeu },
+                    new Tournoi { Nom = "Tournoi FC 25 Ligue 1",      DateHeure = new DateTime(2025, 4, 5, 14, 0, 0), NbParticipants = 8,  DureePrevue = 120, Statut = "Terminé",  IdEspace = espaceSports.IdEspace,  IdJeu = jeuFC25.IdJeu },
+                    new Tournoi { Nom = "Tournoi Smash Bros Elite",   DateHeure = new DateTime(2025, 4, 5, 17, 0, 0), NbParticipants = 16, DureePrevue = 90,  Statut = "Terminé",  IdEspace = espaceFighting.IdEspace,IdJeu = jeuSmash.IdJeu },
+
+                    // Dimanche 10h-18h
+                    new Tournoi { Nom = "Tournoi LoL Printemps",      DateHeure = new DateTime(2025, 4, 6, 10, 0, 0), NbParticipants = 10, DureePrevue = 180, Statut = "Terminé",  IdEspace = espaceMOBA.IdEspace,    IdJeu = jeuLoL.IdJeu },
+                    new Tournoi { Nom = "Tournoi CS2 Qualif",         DateHeure = new DateTime(2025, 4, 6, 10, 0, 0), NbParticipants = 10, DureePrevue = 120, Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuCS2.IdJeu },
+                    new Tournoi { Nom = "Tournoi Valorant Invitatio", DateHeure = new DateTime(2025, 4, 6, 14, 0, 0), NbParticipants = 10, DureePrevue = 120, Statut = "En cours", IdEspace = espaceEsport.IdEspace,  IdJeu = jeuValorant.IdJeu },
+                    new Tournoi { Nom = "Tournoi Elden Ring No Hit",  DateHeure = new DateTime(2025, 4, 6, 14, 0, 0), NbParticipants = 8,  DureePrevue = 90,  Statut = "En cours", IdEspace = espacePS.IdEspace,      IdJeu = jeuElden.IdJeu },
+                    new Tournoi { Nom = "Tournoi Minecraft Build",    DateHeure = new DateTime(2025, 4, 6, 16, 30, 0),NbParticipants = 12, DureePrevue = 60,  Statut = "Planifié", IdEspace = espaceXbox.IdEspace,    IdJeu = jeuMinecraft.IdJeu },
+                });
+
+                context.SaveChanges();
+            }
+
             // lancement du formulaire principal
             ApplicationConfiguration.Initialize();
             Application.Run(new FormAuthentification());
