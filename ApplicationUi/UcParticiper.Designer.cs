@@ -42,21 +42,21 @@
             panelForm = new Panel();
             tableLayoutPanelCRUD = new TableLayoutPanel();
             tableLayoutPanel = new TableLayoutPanel();
+            numericUpDownRang = new NumericUpDown();
             comboBoxUtilisateur = new ComboBox();
             comboBoxTournoi = new ComboBox();
             comboBoxLotRemis = new ComboBox();
             labelStatutTournoi = new Label();
-            textBox1 = new TextBox();
+            textBoxCommentaire = new TextBox();
             labelEvaluation = new Label();
             trackBarEvaluation = new TrackBar();
             labelTournoi = new Label();
             labelDateHeureInscription = new Label();
             labelLot = new Label();
-            dateTimePickerDateTournoi = new DateTimePicker();
+            dateTimePickerDateHeureInscription = new DateTimePicker();
             labelRang = new Label();
-            textBox3 = new TextBox();
             label2 = new Label();
-            textBox2 = new TextBox();
+            numericUpDownScoreFinal = new NumericUpDown();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
             buttonEffacer = new Button();
@@ -70,7 +70,9 @@
             panelForm.SuspendLayout();
             tableLayoutPanelCRUD.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownRang).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarEvaluation).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownScoreFinal).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridParticipations).BeginInit();
             SuspendLayout();
@@ -254,22 +256,22 @@
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.4532356F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 238F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 461F));
+            tableLayoutPanel.Controls.Add(numericUpDownRang, 2, 1);
             tableLayoutPanel.Controls.Add(comboBoxUtilisateur, 1, 1);
             tableLayoutPanel.Controls.Add(comboBoxTournoi, 0, 1);
             tableLayoutPanel.Controls.Add(comboBoxLotRemis, 3, 3);
             tableLayoutPanel.Controls.Add(labelStatutTournoi, 4, 0);
-            tableLayoutPanel.Controls.Add(textBox1, 4, 1);
+            tableLayoutPanel.Controls.Add(textBoxCommentaire, 4, 1);
             tableLayoutPanel.Controls.Add(labelEvaluation, 3, 0);
             tableLayoutPanel.Controls.Add(trackBarEvaluation, 3, 1);
             tableLayoutPanel.Controls.Add(labelTournoi, 0, 0);
             tableLayoutPanel.Controls.Add(labelNom, 1, 0);
             tableLayoutPanel.Controls.Add(labelDateHeureInscription, 0, 2);
             tableLayoutPanel.Controls.Add(labelLot, 3, 2);
-            tableLayoutPanel.Controls.Add(dateTimePickerDateTournoi, 0, 3);
+            tableLayoutPanel.Controls.Add(dateTimePickerDateHeureInscription, 0, 3);
             tableLayoutPanel.Controls.Add(labelRang, 2, 0);
-            tableLayoutPanel.Controls.Add(textBox3, 2, 1);
             tableLayoutPanel.Controls.Add(label2, 2, 2);
-            tableLayoutPanel.Controls.Add(textBox2, 2, 3);
+            tableLayoutPanel.Controls.Add(numericUpDownScoreFinal, 2, 3);
             tableLayoutPanel.Location = new Point(4, 3);
             tableLayoutPanel.Margin = new Padding(4, 3, 4, 3);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -282,6 +284,18 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.Size = new Size(1256, 249);
             tableLayoutPanel.TabIndex = 0;
+            // 
+            // numericUpDownRang
+            // 
+            numericUpDownRang.Increment = new decimal(new int[] { 5, 0, 0, 0 });
+            numericUpDownRang.Location = new Point(374, 39);
+            numericUpDownRang.Margin = new Padding(4);
+            numericUpDownRang.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            numericUpDownRang.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericUpDownRang.Name = "numericUpDownRang";
+            numericUpDownRang.Size = new Size(144, 31);
+            numericUpDownRang.TabIndex = 37;
+            numericUpDownRang.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // comboBoxUtilisateur
             // 
@@ -327,15 +341,15 @@
             labelStatutTournoi.Text = "Commentaire";
             labelStatutTournoi.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // textBox1
+            // textBoxCommentaire
             // 
-            textBox1.Location = new Point(797, 38);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Laisser un commentaire sur le tournoi...";
-            tableLayoutPanel.SetRowSpan(textBox1, 3);
-            textBox1.Size = new Size(456, 208);
-            textBox1.TabIndex = 19;
+            textBoxCommentaire.Location = new Point(797, 38);
+            textBoxCommentaire.Multiline = true;
+            textBoxCommentaire.Name = "textBoxCommentaire";
+            textBoxCommentaire.PlaceholderText = "Laisser un commentaire sur le tournoi...";
+            tableLayoutPanel.SetRowSpan(textBoxCommentaire, 3);
+            textBoxCommentaire.Size = new Size(456, 208);
+            textBoxCommentaire.TabIndex = 19;
             // 
             // labelEvaluation
             // 
@@ -390,20 +404,20 @@
             labelLot.TabIndex = 25;
             labelLot.Text = "Lot remis :";
             // 
-            // dateTimePickerDateTournoi
+            // dateTimePickerDateHeureInscription
             // 
-            dateTimePickerDateTournoi.CustomFormat = "dd/MM/yyyy HH:mm";
-            dateTimePickerDateTournoi.Dock = DockStyle.Fill;
-            dateTimePickerDateTournoi.Format = DateTimePickerFormat.Custom;
-            dateTimePickerDateTournoi.Location = new Point(4, 133);
-            dateTimePickerDateTournoi.Margin = new Padding(4);
-            dateTimePickerDateTournoi.MaxDate = new DateTime(2026, 5, 25, 17, 0, 0, 0);
-            dateTimePickerDateTournoi.MinDate = new DateTime(2026, 5, 23, 9, 0, 0, 0);
-            dateTimePickerDateTournoi.Name = "dateTimePickerDateTournoi";
-            dateTimePickerDateTournoi.ShowUpDown = true;
-            dateTimePickerDateTournoi.Size = new Size(211, 31);
-            dateTimePickerDateTournoi.TabIndex = 34;
-            dateTimePickerDateTournoi.Value = new DateTime(2026, 5, 23, 9, 0, 0, 0);
+            dateTimePickerDateHeureInscription.CustomFormat = "dd/MM/yyyy HH:mm";
+            dateTimePickerDateHeureInscription.Dock = DockStyle.Fill;
+            dateTimePickerDateHeureInscription.Format = DateTimePickerFormat.Custom;
+            dateTimePickerDateHeureInscription.Location = new Point(4, 133);
+            dateTimePickerDateHeureInscription.Margin = new Padding(4);
+            dateTimePickerDateHeureInscription.MaxDate = new DateTime(2026, 5, 25, 17, 0, 0, 0);
+            dateTimePickerDateHeureInscription.MinDate = new DateTime(2026, 5, 23, 9, 0, 0, 0);
+            dateTimePickerDateHeureInscription.Name = "dateTimePickerDateHeureInscription";
+            dateTimePickerDateHeureInscription.ShowUpDown = true;
+            dateTimePickerDateHeureInscription.Size = new Size(211, 31);
+            dateTimePickerDateHeureInscription.TabIndex = 34;
+            dateTimePickerDateHeureInscription.Value = new DateTime(2026, 5, 23, 9, 0, 0, 0);
             // 
             // labelRang
             // 
@@ -416,17 +430,6 @@
             labelRang.TabIndex = 23;
             labelRang.Text = "Rang :";
             // 
-            // textBox3
-            // 
-            textBox3.Enabled = false;
-            textBox3.Location = new Point(374, 38);
-            textBox3.Margin = new Padding(4, 3, 4, 3);
-            textBox3.Name = "textBox3";
-            textBox3.PlaceholderText = "Ex: 8/26";
-            textBox3.ReadOnly = true;
-            textBox3.Size = new Size(144, 31);
-            textBox3.TabIndex = 24;
-            // 
             // label2
             // 
             label2.AutoSize = true;
@@ -438,16 +441,17 @@
             label2.TabIndex = 35;
             label2.Text = "Score final :";
             // 
-            // textBox2
+            // numericUpDownScoreFinal
             // 
-            textBox2.Enabled = false;
-            textBox2.Location = new Point(374, 132);
-            textBox2.Margin = new Padding(4, 3, 4, 3);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Ex: 253 points";
-            textBox2.ReadOnly = true;
-            textBox2.Size = new Size(144, 31);
-            textBox2.TabIndex = 36;
+            numericUpDownScoreFinal.Increment = new decimal(new int[] { 5, 0, 0, 0 });
+            numericUpDownScoreFinal.Location = new Point(374, 133);
+            numericUpDownScoreFinal.Margin = new Padding(4);
+            numericUpDownScoreFinal.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            numericUpDownScoreFinal.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericUpDownScoreFinal.Name = "numericUpDownScoreFinal";
+            numericUpDownScoreFinal.Size = new Size(144, 31);
+            numericUpDownScoreFinal.TabIndex = 38;
+            numericUpDownScoreFinal.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // groupBox1
             // 
@@ -539,6 +543,7 @@
             dataGridParticipations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridParticipations.Size = new Size(1264, 433);
             dataGridParticipations.TabIndex = 4;
+            dataGridParticipations.CellClick += dataGridParticipationsUtilisateur_CellClick;
             // 
             // UcParticiper
             // 
@@ -556,7 +561,9 @@
             tableLayoutPanelCRUD.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownRang).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarEvaluation).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownScoreFinal).EndInit();
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridParticipations).EndInit();
             ResumeLayout(false);
@@ -587,17 +594,17 @@
         private Label labelStatEspacesLibres;
         private Label labelStatEspacesTotal;
         private Label labelTitreEspaces;
-        private TextBox textBox1;
+        private TextBox textBoxCommentaire;
         private TrackBar trackBarEvaluation;
         private Label labelDateHeureInscription;
         private Label labelRang;
-        private TextBox textBox3;
         private Label labelLot;
         private ComboBox comboBoxLotRemis;
         private ComboBox comboBoxUtilisateur;
         private ComboBox comboBoxTournoi;
-        private DateTimePicker dateTimePickerDateTournoi;
+        private DateTimePicker dateTimePickerDateHeureInscription;
         private Label label2;
-        private TextBox textBox2;
+        private NumericUpDown numericUpDownRang;
+        private NumericUpDown numericUpDownScoreFinal;
     }
 }
