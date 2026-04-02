@@ -247,8 +247,11 @@ namespace ApplicationUi
             }
             _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero.Value;
             _serviceLotComposant.Modifier(_lotComposantSelectionnee);
+            _lotSelectionnee.ValeurTotale += _lotComposantSelectionnee.Valeur;
+            _serviceLot.Modifier(_lotSelectionnee);
             ChargerLotComposants();
             ChargerLotComposantsDunLot();
+            ChargerLots();
             // On enlève juste le lot composant selectionné
             comboBoxLotComposant.SelectedItem = null;
             _lotComposantSelectionnee = null;
@@ -294,8 +297,11 @@ namespace ApplicationUi
             }
             _lotComposantDunLotSelectionnee.NumeroLot = null;
             _serviceLotComposant.Modifier(_lotComposantDunLotSelectionnee);
+            _lotSelectionnee.ValeurTotale -= _lotComposantDunLotSelectionnee.Valeur;
+            _serviceLot.Modifier(_lotSelectionnee);
             ChargerLotComposants();
             ChargerLotComposantsDunLot();
+            ChargerLots();
             // On enlève juste le lot composant selectionné
             comboBoxLotComposant.SelectedItem = null;
             _lotComposantDunLotSelectionnee = null;
