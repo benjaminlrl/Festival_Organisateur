@@ -32,7 +32,6 @@ namespace ApplicationUi
             buttonModifier = new Button();
             buttonSupprimerLot = new Button();
             label1 = new Label();
-            dataGridLots = new DataGridView();
             label2 = new Label();
             textBoxRecherche = new TextBox();
             dataGridLotComposants = new DataGridView();
@@ -53,11 +52,12 @@ namespace ApplicationUi
             labelComposantDunLot = new Label();
             panel4 = new Panel();
             label4 = new Label();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            dataGridLots = new DataGridView();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridLots).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridLotComposants).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridLotComposantsDunLot).BeginInit();
             panel1.SuspendLayout();
@@ -68,6 +68,8 @@ namespace ApplicationUi
             groupBox3.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             panel4.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridLots).BeginInit();
             SuspendLayout();
             // 
             // panelForm
@@ -75,10 +77,13 @@ namespace ApplicationUi
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel);
             panelForm.Controls.Add(panelButtons);
-            panelForm.Location = new Point(19, 36);
+            panelForm.Controls.Add(label2);
+            panelForm.Controls.Add(textBoxRecherche);
+            panelForm.Dock = DockStyle.Fill;
+            panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(900, 210);
+            panelForm.Size = new Size(903, 334);
             panelForm.TabIndex = 1;
             // 
             // tableLayoutPanel
@@ -101,7 +106,7 @@ namespace ApplicationUi
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(879, 110);
+            tableLayoutPanel.Size = new Size(799, 110);
             tableLayoutPanel.TabIndex = 0;
             // 
             // labelLibelle
@@ -111,7 +116,7 @@ namespace ApplicationUi
             labelLibelle.Location = new Point(4, 0);
             labelLibelle.Margin = new Padding(4, 0, 4, 0);
             labelLibelle.Name = "labelLibelle";
-            labelLibelle.Size = new Size(67, 17);
+            labelLibelle.Size = new Size(86, 23);
             labelLibelle.TabIndex = 0;
             labelLibelle.Text = "Libelle * :";
             // 
@@ -119,10 +124,10 @@ namespace ApplicationUi
             // 
             labelRang.AutoSize = true;
             labelRang.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelRang.Location = new Point(297, 0);
+            labelRang.Location = new Point(270, 0);
             labelRang.Margin = new Padding(4, 0, 4, 0);
             labelRang.Name = "labelRang";
-            labelRang.Size = new Size(57, 17);
+            labelRang.Size = new Size(74, 23);
             labelRang.TabIndex = 1;
             labelRang.Text = "Rang * :";
             // 
@@ -132,36 +137,36 @@ namespace ApplicationUi
             textBoxLibelle.Margin = new Padding(4);
             textBoxLibelle.Name = "textBoxLibelle";
             textBoxLibelle.PlaceholderText = "Ex: 1er Prix";
-            textBoxLibelle.Size = new Size(210, 23);
+            textBoxLibelle.Size = new Size(210, 27);
             textBoxLibelle.TabIndex = 0;
             // 
             // textBoxRang
             // 
-            textBoxRang.Location = new Point(297, 39);
+            textBoxRang.Location = new Point(270, 39);
             textBoxRang.Margin = new Padding(4);
             textBoxRang.Name = "textBoxRang";
             textBoxRang.PlaceholderText = "1";
-            textBoxRang.Size = new Size(210, 23);
+            textBoxRang.Size = new Size(210, 27);
             textBoxRang.TabIndex = 4;
             // 
             // labelTournoi
             // 
             labelTournoi.AutoSize = true;
             labelTournoi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelTournoi.Location = new Point(590, 0);
+            labelTournoi.Location = new Point(536, 0);
             labelTournoi.Margin = new Padding(4, 0, 4, 0);
             labelTournoi.Name = "labelTournoi";
-            labelTournoi.Size = new Size(122, 17);
+            labelTournoi.Size = new Size(153, 23);
             labelTournoi.TabIndex = 3;
             labelTournoi.Text = "Tournoi associé * :";
             // 
             // comboBoxTournoi
             // 
             comboBoxTournoi.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxTournoi.Location = new Point(590, 39);
+            comboBoxTournoi.Location = new Point(536, 39);
             comboBoxTournoi.Margin = new Padding(4);
             comboBoxTournoi.Name = "comboBoxTournoi";
-            comboBoxTournoi.Size = new Size(210, 26);
+            comboBoxTournoi.Size = new Size(210, 31);
             comboBoxTournoi.TabIndex = 3;
             // 
             // panelButtons
@@ -258,42 +263,26 @@ namespace ApplicationUi
             label1.Location = new Point(0, 0);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 18);
+            label1.Size = new Size(0, 23);
             label1.TabIndex = 6;
-            // 
-            // dataGridLots
-            // 
-            dataGridLots.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridLots.BackgroundColor = Color.White;
-            dataGridLots.BorderStyle = BorderStyle.None;
-            dataGridLots.ColumnHeadersHeight = 34;
-            dataGridLots.Location = new Point(19, 320);
-            dataGridLots.Margin = new Padding(4);
-            dataGridLots.Name = "dataGridLots";
-            dataGridLots.ReadOnly = true;
-            dataGridLots.RowHeadersWidth = 62;
-            dataGridLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLots.Size = new Size(900, 434);
-            dataGridLots.TabIndex = 2;
-            dataGridLots.CellClick += dataGridLots_CellClick;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(119, 275);
+            label2.Location = new Point(59, 265);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(89, 20);
+            label2.Size = new Size(112, 25);
             label2.TabIndex = 4;
             label2.Text = "Recherche :";
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(252, 275);
+            textBoxRecherche.Location = new Point(222, 265);
             textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(574, 23);
+            textBoxRecherche.Size = new Size(574, 27);
             textBoxRecherche.TabIndex = 5;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -303,29 +292,30 @@ namespace ApplicationUi
             dataGridLotComposants.BackgroundColor = Color.White;
             dataGridLotComposants.BorderStyle = BorderStyle.None;
             dataGridLotComposants.ColumnHeadersHeight = 34;
-            dataGridLotComposants.Location = new Point(955, 320);
+            dataGridLotComposants.Dock = DockStyle.Fill;
+            dataGridLotComposants.Location = new Point(915, 346);
             dataGridLotComposants.Margin = new Padding(4);
             dataGridLotComposants.Name = "dataGridLotComposants";
             dataGridLotComposants.ReadOnly = true;
             dataGridLotComposants.RowHeadersWidth = 62;
             dataGridLotComposants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLotComposants.Size = new Size(246, 434);
+            dataGridLotComposants.Size = new Size(271, 358);
             dataGridLotComposants.TabIndex = 6;
             dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
             // 
             // dataGridLotComposantsDunLot
             // 
-            dataGridLotComposantsDunLot.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridLotComposantsDunLot.BackgroundColor = Color.White;
             dataGridLotComposantsDunLot.BorderStyle = BorderStyle.None;
             dataGridLotComposantsDunLot.ColumnHeadersHeight = 34;
-            dataGridLotComposantsDunLot.Location = new Point(1222, 320);
+            dataGridLotComposantsDunLot.Dock = DockStyle.Fill;
+            dataGridLotComposantsDunLot.Location = new Point(1194, 346);
             dataGridLotComposantsDunLot.Margin = new Padding(4);
             dataGridLotComposantsDunLot.Name = "dataGridLotComposantsDunLot";
             dataGridLotComposantsDunLot.ReadOnly = true;
             dataGridLotComposantsDunLot.RowHeadersWidth = 62;
             dataGridLotComposantsDunLot.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLotComposantsDunLot.Size = new Size(246, 434);
+            dataGridLotComposantsDunLot.Size = new Size(260, 358);
             dataGridLotComposantsDunLot.TabIndex = 7;
             dataGridLotComposantsDunLot.CellClick += dataGridLotComposantsDunLot_CellClick;
             // 
@@ -335,10 +325,10 @@ namespace ApplicationUi
             panel1.Controls.Add(groupBox2);
             panel1.Controls.Add(tableLayoutPanel1);
             panel1.Controls.Add(panel2);
-            panel1.Location = new Point(952, 36);
+            panel1.Location = new Point(915, 4);
             panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(249, 210);
+            panel1.Size = new Size(271, 210);
             panel1.TabIndex = 2;
             // 
             // groupBox2
@@ -391,7 +381,7 @@ namespace ApplicationUi
             comboBoxLotComposant.Location = new Point(4, 39);
             comboBoxLotComposant.Margin = new Padding(4);
             comboBoxLotComposant.Name = "comboBoxLotComposant";
-            comboBoxLotComposant.Size = new Size(210, 26);
+            comboBoxLotComposant.Size = new Size(210, 31);
             comboBoxLotComposant.TabIndex = 4;
             // 
             // labelComposant
@@ -401,7 +391,7 @@ namespace ApplicationUi
             labelComposant.Location = new Point(4, 0);
             labelComposant.Margin = new Padding(4, 0, 4, 0);
             labelComposant.Name = "labelComposant";
-            labelComposant.Size = new Size(139, 17);
+            labelComposant.Size = new Size(180, 23);
             labelComposant.TabIndex = 0;
             labelComposant.Text = "Composant de Lot * :";
             // 
@@ -420,7 +410,7 @@ namespace ApplicationUi
             label6.Location = new Point(0, 0);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(0, 18);
+            label6.Size = new Size(0, 23);
             label6.TabIndex = 6;
             // 
             // panel3
@@ -429,10 +419,10 @@ namespace ApplicationUi
             panel3.Controls.Add(groupBox3);
             panel3.Controls.Add(tableLayoutPanel2);
             panel3.Controls.Add(panel4);
-            panel3.Location = new Point(1222, 36);
+            panel3.Location = new Point(1194, 4);
             panel3.Margin = new Padding(4);
             panel3.Name = "panel3";
-            panel3.Size = new Size(249, 210);
+            panel3.Size = new Size(259, 210);
             panel3.TabIndex = 8;
             // 
             // groupBox3
@@ -440,7 +430,7 @@ namespace ApplicationUi
             groupBox3.Controls.Add(buttonSupprimerLotComposant);
             groupBox3.Location = new Point(10, 125);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(229, 82);
+            groupBox3.Size = new Size(245, 82);
             groupBox3.TabIndex = 7;
             groupBox3.TabStop = false;
             groupBox3.Text = "⚡ Actions";
@@ -452,10 +442,10 @@ namespace ApplicationUi
             buttonSupprimerLotComposant.FlatStyle = FlatStyle.Flat;
             buttonSupprimerLotComposant.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimerLotComposant.ForeColor = Color.White;
-            buttonSupprimerLotComposant.Location = new Point(28, 25);
+            buttonSupprimerLotComposant.Location = new Point(15, 25);
             buttonSupprimerLotComposant.Margin = new Padding(4);
             buttonSupprimerLotComposant.Name = "buttonSupprimerLotComposant";
-            buttonSupprimerLotComposant.Size = new Size(186, 45);
+            buttonSupprimerLotComposant.Size = new Size(223, 45);
             buttonSupprimerLotComposant.TabIndex = 7;
             buttonSupprimerLotComposant.Text = "🗑️    Supprimer du lot";
             buttonSupprimerLotComposant.UseVisualStyleBackColor = false;
@@ -486,7 +476,7 @@ namespace ApplicationUi
             comboBoxLotComposantDunLot.Location = new Point(4, 39);
             comboBoxLotComposantDunLot.Margin = new Padding(4);
             comboBoxLotComposantDunLot.Name = "comboBoxLotComposantDunLot";
-            comboBoxLotComposantDunLot.Size = new Size(210, 26);
+            comboBoxLotComposantDunLot.Size = new Size(210, 31);
             comboBoxLotComposantDunLot.TabIndex = 4;
             // 
             // labelComposantDunLot
@@ -496,7 +486,7 @@ namespace ApplicationUi
             labelComposantDunLot.Location = new Point(4, 0);
             labelComposantDunLot.Margin = new Padding(4, 0, 4, 0);
             labelComposantDunLot.Name = "labelComposantDunLot";
-            labelComposantDunLot.Size = new Size(214, 17);
+            labelComposantDunLot.Size = new Size(163, 35);
             labelComposantDunLot.TabIndex = 0;
             labelComposantDunLot.Text = "Composant du Lot selectionné * :";
             // 
@@ -515,33 +505,66 @@ namespace ApplicationUi
             label4.Location = new Point(0, 0);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(0, 18);
+            label4.Size = new Size(0, 23);
             label4.TabIndex = 6;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 3;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 76.51007F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.489933F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 267F));
+            tableLayoutPanel3.Controls.Add(panelForm, 0, 0);
+            tableLayoutPanel3.Controls.Add(panel1, 1, 0);
+            tableLayoutPanel3.Controls.Add(panel3, 2, 0);
+            tableLayoutPanel3.Controls.Add(dataGridLotComposantsDunLot, 2, 1);
+            tableLayoutPanel3.Controls.Add(dataGridLots, 0, 1);
+            tableLayoutPanel3.Controls.Add(dataGridLotComposants, 1, 1);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(0, 0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 2;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 48.39109F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 51.60891F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 307F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Size = new Size(1458, 708);
+            tableLayoutPanel3.TabIndex = 9;
+            // 
+            // dataGridLots
+            // 
+            dataGridLots.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridLots.BackgroundColor = Color.White;
+            dataGridLots.BorderStyle = BorderStyle.None;
+            dataGridLots.ColumnHeadersHeight = 34;
+            dataGridLots.Dock = DockStyle.Fill;
+            dataGridLots.Location = new Point(4, 346);
+            dataGridLots.Margin = new Padding(4);
+            dataGridLots.Name = "dataGridLots";
+            dataGridLots.ReadOnly = true;
+            dataGridLots.RowHeadersWidth = 62;
+            dataGridLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridLots.Size = new Size(903, 358);
+            dataGridLots.TabIndex = 2;
+            dataGridLots.CellClick += dataGridLots_CellClick;
             // 
             // UcLots
             // 
-            AutoScaleDimensions = new SizeF(7F, 18F);
+            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 253);
-            Controls.Add(panel3);
-            Controls.Add(panel1);
-            Controls.Add(dataGridLotComposantsDunLot);
-            Controls.Add(dataGridLotComposants);
-            Controls.Add(textBoxRecherche);
-            Controls.Add(label2);
-            Controls.Add(panelForm);
-            Controls.Add(dataGridLots);
+            Controls.Add(tableLayoutPanel3);
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
             Name = "UcLots";
-            Size = new Size(1482, 809);
+            Size = new Size(1458, 708);
             panelForm.ResumeLayout(false);
+            panelForm.PerformLayout();
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             panelButtons.ResumeLayout(false);
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridLots).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridLotComposants).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridLotComposantsDunLot).EndInit();
             panel1.ResumeLayout(false);
@@ -556,8 +579,9 @@ namespace ApplicationUi
             tableLayoutPanel2.PerformLayout();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
+            tableLayoutPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridLots).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -576,7 +600,6 @@ namespace ApplicationUi
         private Button buttonModifier;
         private Button buttonSupprimerLot;
         private Label label1;
-        private DataGridView dataGridLots;
         private Label label2;
         private TextBox textBoxRecherche;
         private TextBox textBoxRang;
@@ -598,5 +621,7 @@ namespace ApplicationUi
         private Label labelComposantDunLot;
         private Panel panel4;
         private Label label4;
+        private TableLayoutPanel tableLayoutPanel3;
+        private DataGridView dataGridLots;
     }
 }
