@@ -33,13 +33,7 @@ namespace Lib_Services.Services
         public List<Voter> Lister(string filtre = "")
         {
             // Utilise le DbSet Votes pour matérialiser la collection en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Voter
-                     .Include(v => v.Plateforme)
-                     .Include(v => v.Jeu)
-                     .ToList();
-            return
-                _context.Voter
+            return _context.Voter
                 .Include(v => v.Plateforme)
                 .Include(v => v.Jeu)
                 .Where(v => v.DateVote.ToString().Contains(filtre))
@@ -51,16 +45,19 @@ namespace Lib_Services.Services
         /// les Votes présents dans la base de données.
         /// </summary>
         /// <param name="idUser">Id unique de l'utilisateur</param>
+        /// <param name="filtre">Filtre de la recherche<param>
         /// <returns>Liste de <see cref="Voter"/>.</returns>
-        public List<Voter> ListerPourUnUtilisateur(int idUser)
+        public List<Voter> ListerPourUnUtilisateur(int idUser, string filtre = "")
         {
-            // Utilise le DbSet Votes pour matérialiser la collection en mémoire.
-            return
-                _context.Voter
-                    .Include(v => v.Plateforme)
-                    .Include(v => v.Jeu)
-                    .Where(v => v.IdUser == idUser)
-                    .ToList();
+            return _context.Voter
+                .Include(v => v.Plateforme)
+                .Include(v => v.Jeu)
+                .Where(v => v.IdUser == idUser
+                    && (v.Plateforme.Libelle.Contains(filtre) 
+                        || v.Jeu.Titre.Contains(filtre) 
+                        || v.DateVote.ToString().Contains(filtre)))
+                .ToList();
+
         }
 
         /// <summary>

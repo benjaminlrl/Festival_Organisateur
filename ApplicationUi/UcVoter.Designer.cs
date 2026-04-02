@@ -93,7 +93,7 @@
             tableLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             tableLayoutPanel1.ColumnCount = 3;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.49249F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 8F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 576F));
             tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 2, 0);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
@@ -136,6 +136,7 @@
             dataGridJeuxVotes.RowHeadersWidth = 62;
             dataGridJeuxVotes.Size = new Size(564, 295);
             dataGridJeuxVotes.TabIndex = 7;
+            dataGridJeuxVotes.CellClick += dataGridJeuxVotes_CellClick;
             // 
             // tableLayoutPanel4
             // 
@@ -190,7 +191,7 @@
             panelForm.Location = new Point(4, 3);
             panelForm.Margin = new Padding(4, 3, 4, 3);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(1125, 352);
+            panelForm.Size = new Size(1137, 352);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel
@@ -448,7 +449,7 @@
             dataGridJeux.ReadOnly = true;
             dataGridJeux.RowHeadersWidth = 62;
             dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridJeux.Size = new Size(1125, 416);
+            dataGridJeux.Size = new Size(1137, 416);
             dataGridJeux.TabIndex = 6;
             dataGridJeux.CellClick += dataGridJeux_CellClick;
             // 

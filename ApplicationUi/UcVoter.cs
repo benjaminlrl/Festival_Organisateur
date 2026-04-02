@@ -23,6 +23,7 @@ namespace ApplicationUi
         private Voter? _voterSelectionne;
         private string filtre;
         private string ordreChamp;
+        private string ordreChampVotes;
         private readonly Organisateur _organisateurConnecte;
         // Constante de debug pour avoir un utilisateur fictif avec lequel tester les fonctionnalités de vote.
         const int ID_USER_TEST = 1;
@@ -39,6 +40,7 @@ namespace ApplicationUi
             _voterSelectionne = null;
             filtre = "";
             ordreChamp = "ASC";
+            ordreChampVotes = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerJeux();
             ChargerJeuxVotes();
@@ -71,7 +73,7 @@ namespace ApplicationUi
         private void ChargerJeuxVotes()
         {
             List<Voter> votesUtilisateur = new List<Voter>();
-            votesUtilisateur = _serviceVoter.ListerPourUnUtilisateur(ID_USER_TEST);// TODO: Récupérer l'ID de l'utilisateur connecté
+            votesUtilisateur = _serviceVoter.ListerPourUnUtilisateur(ID_USER_TEST, filtre);// TODO: Récupérer l'ID de l'utilisateur connecté
 
             dataGridJeuxVotes.DataSource = null;
             dataGridJeuxVotes.DataSource = votesUtilisateur;
@@ -121,8 +123,7 @@ namespace ApplicationUi
             textBoxPegi.Clear();
             _jeuSelectionne = null;
             _voterSelectionne = null;
-            dataGridJeuxVotes.DataSource = null;
-            dateTimePickerDateSortie.Value = new DateTime(2001,01,01);
+            dateTimePickerDateSortie.Value = new DateTime(2001, 01, 01);
             AfficherBouttons();
         }
         private void MEP_DataGrid()
@@ -143,6 +144,7 @@ namespace ApplicationUi
 
             dataGridJeuxVotes.Columns["TitreJeu"].HeaderText = "Jeu";
             dataGridJeuxVotes.Columns["LibellePlateforme"].HeaderText = "Plateforme";
+            dataGridJeuxVotes.Columns["DateVote"].HeaderText = "Date du vote";
 
             dataGridJeuxVotes.Columns["TitreJeu"].DisplayIndex = 1;
             dataGridJeuxVotes.Columns["LibellePlateforme"].DisplayIndex = 2;
@@ -151,6 +153,48 @@ namespace ApplicationUi
             dataGridJeuxVotes.Columns["TitreJeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridJeuxVotes.Columns["LibellePlateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridJeuxVotes.Columns["DateVote"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        }
+
+        private void dataGridJeuxVotes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // on ne gère le clic que sur les lignes, pas sur les en-têtes
+            // Ignorer les clics sur l'en-tête (gérés pour le tri)
+            // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
+            if (e.RowIndex < 0)
+            {
+                // on né gère pas les cliques sur la première colonne
+                if (e.ColumnIndex < 1)
+                    return;
+
+                var donnees = _serviceVoter.Lister(filtre);
+
+                // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
+                // à des fonctions de sélection de clé
+                var map = new Dictionary<int, Func<Voter, object>>
+                {
+                    {dataGridJeuxVotes.Columns["TitreJeu"].Index, v => v.TitreJeu},
+                    {dataGridJeuxVotes.Columns["Plateforme"].Index, v => v.Plateforme},
+                    {dataGridJeuxVotes.Columns["DateVote"].Index, v => v.DateVote},
+                };
+
+                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                    return;
+
+                dataGridJeuxVotes.DataSource = ordreChampVotes == "ASC"
+                    ? donnees.OrderByDescending(keySelector).ToList()
+                    : donnees.OrderBy(keySelector).ToList();
+                // permute l'ordre du champ
+                ordreChampVotes = ordreChampVotes == "ASC" ? "DESC" : "ASC";
+                MEP_DataGridJeuxVotes();
+                return;
+            }
+
+            _voterSelectionne = dataGridJeuxVotes.Rows[e.RowIndex].DataBoundItem as Voter;
+            _jeuSelectionne = _voterSelectionne?.Jeu;
+
+            if (_jeuSelectionne != null && _voterSelectionne != null)
+                RemplirFormulaire(_jeuSelectionne);
+
         }
 
         private void dataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -194,7 +238,6 @@ namespace ApplicationUi
 
             if (_jeuSelectionne != null)
                 RemplirFormulaire(_jeuSelectionne);
-
         }
 
         private void RemplirFormulaire(Jeu jeu)
@@ -218,6 +261,7 @@ namespace ApplicationUi
         {
             filtre = textBoxRecherche.Text;
             ChargerJeux();
+            ChargerJeuxVotes();
         }
         #endregion
 
