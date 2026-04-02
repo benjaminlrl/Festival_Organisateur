@@ -76,11 +76,11 @@ namespace ApplicationUi
             }
             else if (unFormulaire == "LotComposantsDunLot")
             {
-                dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
-                dataGridLotComposants.Columns["Lot"].Visible = false;
-                dataGridLotComposants.Columns["NumeroLot"].Visible = false;
-                dataGridLotComposants.Columns["Valeur"].Visible = false;
-                dataGridLotComposants.Columns["Description"].Visible = false;
+                dataGridLotComposantsDunLot.Columns["Numero"].DisplayIndex = 0;
+                dataGridLotComposantsDunLot.Columns["Lot"].Visible = false;
+                dataGridLotComposantsDunLot.Columns["NumeroLot"].Visible = false;
+                dataGridLotComposantsDunLot.Columns["Valeur"].Visible = false;
+                dataGridLotComposantsDunLot.Columns["Description"].Visible = false;
             }
         }
         private void ChargerLots()
@@ -145,7 +145,7 @@ namespace ApplicationUi
             var listeLotComposantsDunLot = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value)
                 .Where(t => t.NumeroLot != null) // On affiche que les lots composants qui sont associés à un lot
                 .ToList();
-            comboBoxLotComposant.DataSource = listeLotComposantsDunLot;
+            dataGridLotComposantsDunLot.DataSource = listeLotComposantsDunLot;
             MEP_DataGrid("LotComposantsDunLot");
 
             // On charge la liste des lots composants dans le comboBox
