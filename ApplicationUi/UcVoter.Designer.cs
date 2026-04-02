@@ -80,7 +80,6 @@
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.BorderStyle = BorderStyle.FixedSingle;
             textBoxRecherche.Font = new Font("Segoe UI", 11F);
             textBoxRecherche.Location = new Point(187, 275);
             textBoxRecherche.Name = "textBoxRecherche";

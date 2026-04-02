@@ -96,11 +96,13 @@ namespace ApplicationUi
                 _voterSelectionne = _serviceVoter.Obtenir(_jeuSelectionne.IdJeu, ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme, ID_USER_TEST) ?? null;
                 buttonVoter.Enabled = _jeuSelectionne != null && _voterSelectionne == null;
                 buttonSupprimer.Enabled = _voterSelectionne != null;
+                buttonEffacer.Enabled = _jeuSelectionne != null;
             }
             else
             {
                 buttonVoter.Enabled = false;
                 buttonSupprimer.Enabled = false;
+                buttonEffacer.Enabled = false;
             }
 
         }
@@ -120,6 +122,7 @@ namespace ApplicationUi
             _jeuSelectionne = null;
             _voterSelectionne = null;
             dataGridJeuxVotes.DataSource = null;
+            dateTimePickerDateSortie.Value = new DateTime(2001,01,01);
             AfficherBouttons();
         }
         private void MEP_DataGrid()
