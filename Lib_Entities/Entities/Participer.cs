@@ -6,8 +6,8 @@ namespace Lib_Entities.Entities
 {
     public class Participer
     {
-        public int id_user { get; set; }
-        public int numero_tournoi { get; set; }
+        public int IdUser { get; set; }
+        public int NumeroTournoi { get; set; }
         public Tournoi? Tournoi { get; set; }
         /// <summary>
         /// Propriété récupérée utilisée pour l'affichage (DataGridView).

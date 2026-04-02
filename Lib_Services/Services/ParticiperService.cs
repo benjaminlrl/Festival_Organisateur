@@ -37,8 +37,8 @@ namespace Lib_Services.Services
                 _context.Participer
                 .Include(p => p.Tournoi)
                 .Include(p => p.Lot)
-                .Where(p => p.id_user.ToString().Contains(filtre)
-                    || p.numero_tournoi.ToString().Contains(filtre)
+                .Where(p => p.NumeroTournoi.ToString().Contains(filtre)
+                    || p.NumeroTournoi.ToString().Contains(filtre)
                     || p.Rang.ToString().Contains(filtre)
                     || (p.Commentaire ?? "").Contains(filtre)
                     || p.DateHeureInscription.ToString().Contains(filtre)
@@ -57,7 +57,7 @@ namespace Lib_Services.Services
             return _context.Participer
                            .Include(p => p.Tournoi)
                            .Include(p => p.Lot)
-                           .FirstOrDefault(p => p.id_user == idUser && p.numero_tournoi == numeroTournoi);
+                           .FirstOrDefault(p => p.IdUser == idUser && p.NumeroTournoi == numeroTournoi);
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace Lib_Metier.Data.Configurations
 
             // Définition de la clé primaire
             builder.HasKey(p =>
-                new { p.id_user, p.numero_tournoi });
+                new { p.IdUser, p.NumeroTournoi });
 
             // Mapping explicite des colonnes : utile pour conserver la compatibilité
             // avec un schéma existant ou des conventions de nommage particulières.
