@@ -38,10 +38,10 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 
 ![Gestion des organisateurs](Documentation/App/gestionOrganisateurs.png)
 
-
 ### Gestion des jeux
 
 ![Gestion des organisateurs](Documentation/App/gestionJeux.png)
 
 ### Espace de votes pour les utilisateurs
+
 ![Espace de vote dédiés aux utilisateurs](Documentation/App/espaceVoter.png)
