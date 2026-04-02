@@ -68,8 +68,8 @@ namespace ApplicationUi
         #region Evènements
         private void ChargerParticipations()
         {
-            dataGridParticipationsUtilisateur.DataSource = null;
-            dataGridParticipationsUtilisateur.DataSource = _serviceParticiper.Lister(filtre);
+            dataGridParticipations.DataSource = null;
+            dataGridParticipations.DataSource = _serviceParticiper.Lister(filtre);
             MEP_DataGrid();
             ChargerStatistiques();
         }
@@ -139,14 +139,14 @@ namespace ApplicationUi
         // et le nom de la plateforme au lieu des ids
         // et masquer les colonnes idEspace et idPlateforme
         {
-            dataGridParticipationsUtilisateur.Columns["Tournoi"].Visible = false;
-            dataGridParticipationsUtilisateur.Columns["NumeroTournoi"].Visible = false;
-            dataGridParticipationsUtilisateur.Columns["NomTournoi"].HeaderText = "Tournoi";
-            dataGridParticipationsUtilisateur.Columns["id_user"].HeaderText = "Utilisateur";
-            dataGridParticipationsUtilisateur.Columns["DateHeureInscription"].HeaderText = "Date d'inscription";
+            dataGridParticipations.Columns["Tournoi"].Visible = false;
+            dataGridParticipations.Columns["NumeroTournoi"].Visible = false;
+            dataGridParticipations.Columns["NomTournoi"].HeaderText = "Tournoi";
+            dataGridParticipations.Columns["IdUser"].HeaderText = "Utilisateur";
+            dataGridParticipations.Columns["DateHeureInscription"].HeaderText = "Date d'inscription";
         }
 
-        private void dataGridParticipationsUtilisateur_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridParticipations_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // on ne gère le clic que sur les lignes, pas sur les en-têtes
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
@@ -159,11 +159,11 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 var map = new Dictionary<int, Func<Participer, object>>
                 {
-                    {dataGridParticipationsUtilisateur.Columns["id_user"].Index, p => p.IdUser},
-                    {dataGridParticipationsUtilisateur.Columns["NomTournoi"].Index, p => p.Tournoi.Nom},
-                    {dataGridParticipationsUtilisateur.Columns["DateHeureInscription"].Index, p => p.DateHeureInscription},
-                    {dataGridParticipationsUtilisateur.Columns["Evaluation"].Index, p => p.Evaluation},
-                    {dataGridParticipationsUtilisateur.Columns["Rang"].Index, p => p.Rang},
+                    {dataGridParticipations.Columns["IdUser"].Index, p => p.IdUser},
+                    {dataGridParticipations.Columns["NomTournoi"].Index, p => p.Tournoi.Nom},
+                    {dataGridParticipations.Columns["DateHeureInscription"].Index, p => p.DateHeureInscription},
+                    {dataGridParticipations.Columns["Evaluation"].Index, p => p.Evaluation},
+                    {dataGridParticipations.Columns["Rang"].Index, p => p.Rang},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
@@ -236,7 +236,7 @@ namespace ApplicationUi
                     DateHeureInscription = dateTimePickerDateHeureInscription.Value,
                     LotRemis = ((Lot)comboBoxLotRemis.SelectedItem).Numero,
                     Lot = (Lot)comboBoxLotRemis.SelectedItem,
-                    IdUser = ((Participer)comboBoxUtilisateur.SelectedItem).IdUser,
+                    IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
                     NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
                 };
                 _serviceParticiper.Creer(participer);
@@ -261,7 +261,7 @@ namespace ApplicationUi
             _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
             _participerSelectionne.LotRemis = ((Lot)comboBoxLotRemis.SelectedItem).Numero;
             _participerSelectionne.Lot = ((Lot)comboBoxLotRemis.SelectedItem);
-            _participerSelectionne.IdUser = ((Participer)comboBoxUtilisateur.SelectedItem).IdUser;
+            _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
             _participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
 
             _serviceParticiper.Modifier(_participerSelectionne);
