@@ -11,7 +11,7 @@ namespace Lib_Services.Services
     public class VoterService : IVoterService
     {
         private readonly ApplicationDbContext _context;
-        private int nbVotesMax;
+        private readonly int nbVotesMax;
 
         /// <summary>
         /// Constructeur avec injection du contexte de données.
