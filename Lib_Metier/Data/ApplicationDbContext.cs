@@ -66,6 +66,11 @@ namespace Lib_Metier.Data.Configurations
         /// </summary>
         public DbSet<SoumisVote> SoumisVotes => Set<SoumisVote>();
 
+        /// <summary>
+        /// Ensemble des Participants (table `Participer`).
+        /// </summary>
+        public DbSet<Participer> Participer => Set<Participer>();
+
 
         /// <summary>
         /// Configure la source de données : ici une base SQLite locale : `gestionTournois.db`
