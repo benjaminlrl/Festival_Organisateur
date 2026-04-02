@@ -129,7 +129,13 @@ namespace ApplicationUi
         private void MEP_DataGrid()
         {
             dataGridJeux.Columns["Titre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeux.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeux.Columns["Editeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeux.Columns["Pegi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeux.Columns["DateSortie"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
             dataGridJeux.Columns["IdJeu"].Visible = false;
+            dataGridJeux.Columns["AnneeSortie"].Visible = false;
             dataGridJeux.Columns["Tournois"].Visible = false;
             dataGridJeux.Columns["Plateformes"].Visible = false;
         }
@@ -298,6 +304,7 @@ namespace ApplicationUi
                 _voterSelectionne = voter;
                 ChargerJeux();
                 ChargerJeuxVotes();
+                AfficherBouttons();
             }
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
@@ -320,6 +327,7 @@ namespace ApplicationUi
             _voterSelectionne = null;
             ChargerJeux();
             ChargerJeuxVotes();
+            AfficherBouttons();
             Raz_Zones();
 
         }
