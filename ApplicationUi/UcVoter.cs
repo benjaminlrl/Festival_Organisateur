@@ -19,7 +19,6 @@ namespace ApplicationUi
         private readonly IJeuService _serviceJeu;
         private readonly IVoterService _serviceVoter;
         private readonly IPlateformeService _servicePlateforme;
-        private bool fonctionnelSelectionne;
         private Jeu? _jeuSelectionne;
         private Voter? _voterSelectionne;
         private string filtre;
@@ -43,8 +42,7 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             ChargerJeux();
             ChargerJeuxVotes();
-            buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
-            buttonVoter.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
+            AfficherBouttons();
             buttonEffacer.Text = " 🧽  Effacer";
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
@@ -55,8 +53,7 @@ namespace ApplicationUi
                 buttonSupprimer.Visible = false;
             }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
-            // TODO: Ajouter un graphique pour indiquer le nombre de postes de jeu
-            // fonctionnels vs non fonctionnels
+            // TODO: Ajouter un graphique pour indiquer le nombre de votes restants
             // TODO: ajouter une option de filtrage croissant décroissant sur la référence du poste de jeu
         }
 
@@ -67,15 +64,21 @@ namespace ApplicationUi
             dataGridJeux.DataSource = _serviceJeu.Lister(filtre);
             MEP_DataGrid();
         }
+
         /// <summary>
         /// Permet de charger les jeux déjà votés par l'utilisateur en fonction de la recherche saisie
         /// </summary>
         private void ChargerJeuxVotes()
         {
+            List<Voter> votesUtilisateur = new List<Voter>();
+            votesUtilisateur = _serviceVoter.ListerPourUnUtilisateur(ID_USER_TEST);// TODO: Récupérer l'ID de l'utilisateur connecté
+
             dataGridJeuxVotes.DataSource = null;
-            dataGridJeuxVotes.DataSource = _serviceVoter.ListerPourUnUtilisateur(ID_USER_TEST); // TODO: Récupérer l'ID de l'utilisateur connecté
+            dataGridJeuxVotes.DataSource = votesUtilisateur;
+
             if (dataGridJeuxVotes.DataSource != null)
                 MEP_DataGridJeuxVotes();
+            labelNbVotes.Text = $"Votes : {votesUtilisateur.Count()} / {ConstanteService.Voter.NbMaxVotes}";
         }
         private void ChargerPlateforme()
         {
@@ -86,14 +89,20 @@ namespace ApplicationUi
             comboBoxPlateforme.ValueMember = "IdPlateforme";
         }
 
-        private void AfficherBouttonSupprimer()
+        private void AfficherBouttons()
         {
             if ((Plateforme)comboBoxPlateforme.SelectedItem != null && _jeuSelectionne != null)
             {
                 _voterSelectionne = _serviceVoter.Obtenir(_jeuSelectionne.IdJeu, ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme, ID_USER_TEST) ?? null;
+                buttonVoter.Enabled = _jeuSelectionne != null && _voterSelectionne == null;
                 buttonSupprimer.Enabled = _voterSelectionne != null;
             }
-                
+            else
+            {
+                buttonVoter.Enabled = false;
+                buttonSupprimer.Enabled = false;
+            }
+
         }
 
         /// <summary>
@@ -109,9 +118,9 @@ namespace ApplicationUi
             comboBoxPlateforme.SelectedItem = null;
             textBoxPegi.Clear();
             _jeuSelectionne = null;
+            _voterSelectionne = null;
             dataGridJeuxVotes.DataSource = null;
-            buttonSupprimer.Enabled = false;
-            buttonVoter.Enabled = false;
+            AfficherBouttons();
         }
         private void MEP_DataGrid()
         {
@@ -183,9 +192,6 @@ namespace ApplicationUi
             if (_jeuSelectionne != null)
                 RemplirFormulaire(_jeuSelectionne);
 
-            buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
-            buttonVoter.Enabled = _jeuSelectionne != null;
-
         }
 
         private void RemplirFormulaire(Jeu jeu)
@@ -193,10 +199,10 @@ namespace ApplicationUi
             textBoxTitre.Text = jeu.Titre;
             textBoxDescription.Text = jeu.Description;
             textBoxEditeur.Text = jeu.Editeur;
-            textBoxPegi.Text = jeu.Pegi.ToString();           
+            textBoxPegi.Text = jeu.Pegi.ToString();
             dateTimePickerDateSortie.Value = jeu.DateSortie;
             ChargerPlateforme();
-            AfficherBouttonSupprimer();
+            AfficherBouttons();
         }
 
         /// <summary>
@@ -234,7 +240,7 @@ namespace ApplicationUi
                 IdJeu = _jeuSelectionne.IdJeu,
                 IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
                 IdUser = ID_USER_TEST,//TODO: Récupérer l'ID de l'utilisateur connecté
-                Plateforme = ((Plateforme)comboBoxPlateforme.SelectedItem),
+                Plateforme = (Plateforme)comboBoxPlateforme.SelectedItem,
                 Jeu = _jeuSelectionne,
                 DateVote = DateTime.Now
 
@@ -243,8 +249,6 @@ namespace ApplicationUi
             {
                 _serviceVoter.Creer(voter);
                 _voterSelectionne = voter;
-                buttonSupprimer.Enabled = _jeuSelectionne != null && _voterSelectionne != null;
-                buttonVoter.Enabled = _jeuSelectionne != null;
                 ChargerJeux();
                 ChargerJeuxVotes();
             }
@@ -267,7 +271,6 @@ namespace ApplicationUi
 
             _serviceVoter.Supprimer(_voterSelectionne.IdJeu, _voterSelectionne.IdPlateforme, _voterSelectionne.IdUser);
             _voterSelectionne = null;
-            buttonVoter.Enabled = _jeuSelectionne != null;
             ChargerJeux();
             ChargerJeuxVotes();
             Raz_Zones();
@@ -280,7 +283,7 @@ namespace ApplicationUi
         {
             if (comboBoxPlateforme.SelectedItem == null)
                 return;
-            AfficherBouttonSupprimer();
+            AfficherBouttons();
         }
     }
 }

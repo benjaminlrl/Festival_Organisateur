@@ -11,6 +11,7 @@ namespace Lib_Services.Services
     public class VoterService : IVoterService
     {
         private readonly ApplicationDbContext _context;
+        private int nbVotesMax;
 
         /// <summary>
         /// Constructeur avec injection du contexte de données.
@@ -19,6 +20,7 @@ namespace Lib_Services.Services
         public VoterService(ApplicationDbContext context)
         {
             _context = context;
+            nbVotesMax = ConstanteService.Voter.NbMaxVotes;
         }
 
         /// <summary>
@@ -132,8 +134,8 @@ namespace Lib_Services.Services
                 erreurs.Add("L'identifiant de l'utilisateur doit être supérieur à zéro.");
 
             // L'utilisateur ne peut pas voter plus de NB_VOTES_MAX fois pour un même jeu sur une même plateforme.
-            if (_context.Voter.Count(v => v.IdUser == vote.IdUser) >= NB_VOTES_MAX)
-                erreurs.Add($"Vous ne pouvez pas voter plus de {NB_VOTES_MAX} fois");
+            if (_context.Voter.Count(v => v.IdUser == vote.IdUser) >= nbVotesMax)
+                erreurs.Add($"Vous ne pouvez pas voter plus de {nbVotesMax} fois");
 
             // Si l'utilisateur a déjà voté pour ce jeu sur cette plateforme, il ne peut pas voter à nouveau.
             if (Obtenir(vote.IdJeu, vote.IdPlateforme, vote.IdUser) != null)
