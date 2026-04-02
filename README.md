@@ -16,7 +16,7 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 
 ### Acceuil
 
-![Acceuil](Documentation/App/acceuilJeux.png)
+![Acceuil](Documentation/App/acceuilVotes.png)
 
 ### Gestion des espaces
 
@@ -42,3 +42,6 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 ### Gestion des jeux
 
 ![Gestion des organisateurs](Documentation/App/gestionJeux.png)
+
+### Espace de votes pour les utilisateurs
+![Espace de vote dédiés aux utilisateurs](Documentation/App/espaceVoter.png)
