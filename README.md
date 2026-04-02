@@ -16,7 +16,7 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 
 ### Acceuil
 
-![Acceuil](Documentation/App/acceuilVotes.png)
+![Acceuil](Documentation/App/Acceuil.png)
 
 ### Gestion des espaces
 
@@ -44,4 +44,8 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 
 ### Espace de votes pour les utilisateurs
 
-![Espace de vote dédiés aux utilisateurs](Documentation/App/espaceVoter.png)
+![Espace de votes dédié aux utilisateurs](Documentation/App/espaceVoter.png)
+
+### Gestion des composants des lots
+
+![Espace de votes dédié aux utilisateurs](Documentation/App/gestionComposantsLots.png)
