@@ -127,5 +127,10 @@ namespace ApplicationUi
         {
             LoadUserControl(new UcVoter(_organisateurConnecte), "Espace de votes");
         }
+
+        private void btnParticiper_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcParticiper(_organisateurConnecte), "Gestion des participations");
+        }
     }
 }
