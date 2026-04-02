@@ -12,9 +12,6 @@ namespace Lib_Services.Services
     {
         private readonly ApplicationDbContext _context;
 
-        // Constante définissant le nombre maximum de votes autorisés par utilisateur.
-        const int NB_VOTES_MAX = 15;
-
         /// <summary>
         /// Constructeur avec injection du contexte de données.
         /// </summary>
