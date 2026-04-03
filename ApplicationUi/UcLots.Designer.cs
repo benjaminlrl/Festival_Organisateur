@@ -136,7 +136,7 @@ namespace ApplicationUi
             textBoxLibelle.Location = new Point(4, 39);
             textBoxLibelle.Margin = new Padding(4);
             textBoxLibelle.Name = "textBoxLibelle";
-            textBoxLibelle.PlaceholderText = "Ex: 1er Prix";
+            textBoxLibelle.PlaceholderText = "Ex: Lot de clavier";
             textBoxLibelle.Size = new Size(210, 27);
             textBoxLibelle.TabIndex = 0;
             // 
