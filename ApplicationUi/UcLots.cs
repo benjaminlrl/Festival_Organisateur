@@ -21,11 +21,14 @@ namespace ApplicationUi
         private readonly ITournoiService _serviceTournoi;
         private readonly ILotService _serviceLot;
         private readonly ILotComposantService _serviceLotComposant;
+        private readonly Organisateur _organisateurConnecte;
         private LotComposant? _lotComposantSelectionnee = null;
         private LotComposant? _lotComposantDunLotSelectionnee = null;
         private Lot? _lotSelectionnee = null;
         private Lot? unNouveauLot;
-        private readonly Organisateur _organisateurConnecte;
+        private List<Tournoi> listeTournoi;
+        private List<LotComposant> listeLotComposants;
+        private List<LotComposant> listeLotComposantsDunLot;
         string filtre;
         int? nouveauNumeroTournoi;
 
@@ -40,6 +43,8 @@ namespace ApplicationUi
             filtre = "";
             ChargerLots();
             ChargerTournoi();
+            DemarrageLotComposants();
+            DemarrageLotComposantsDunlot();
             buttonModifier.Enabled = _lotSelectionnee != null;
             buttonSupprimerLot.Enabled = _lotSelectionnee != null;
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Ajouter") == false)
@@ -103,14 +108,12 @@ namespace ApplicationUi
             comboBoxTournoi.ValueMember = "NumeroTournoi";
             comboBoxTournoi.DataSource = null;
 
-            var liste = new List<Tournoi>();
-            liste.Add(new Tournoi { NumeroTournoi = null, Nom = "Aucun" });
-            liste.AddRange(tournois);
+            listeTournoi = new List<Tournoi>();
+            listeTournoi.Add(new Tournoi { NumeroTournoi = null, Nom = "Aucun" });
+            listeTournoi.AddRange(tournois);
 
-            comboBoxTournoi.DataSource = liste;
+            comboBoxTournoi.DataSource = listeTournoi;
             comboBoxTournoi.SelectedIndex = 0; // sélectionne "Aucun" par défaut
-
-
             MEP_DataGrid("Lots");
         }
 
@@ -118,50 +121,81 @@ namespace ApplicationUi
         {
             // On charge les lots composants dans la combobox ainsi que la liste des lots composants dans le dataGrid
             dataGridLotComposants.DataSource = null;
-            var listeLotComposants = _serviceLotComposant.Lister(filtre)
+            var listeLotComposantsCharger = _serviceLotComposant.Lister(filtre)
                 .Where(t => t.NumeroLot == null) // On affiche que les lots composants qui ne sont pas encore associés à un lot
                 .ToList();
-            dataGridLotComposants.DataSource = listeLotComposants;
+            dataGridLotComposants.DataSource = listeLotComposantsCharger;
+            comboBoxLotComposant.DataSource = listeLotComposantsCharger;
+
+            // On force l'affichage et la selection au 1er composant chargé
+            if (comboBoxLotComposant.Items.Count > 0)
+            {
+                comboBoxLotComposant.SelectedIndex = 0;
+                _lotComposantSelectionnee = listeLotComposantsCharger[0];
+            }
+            else
+            {
+                comboBoxLotComposant.SelectedItem = null;
+                _lotComposantSelectionnee = null;
+            }
             MEP_DataGrid("LotComposants");
-
-            // On charge la liste des lots composants dans le comboBox
-            // On ajoute un élément "Aucun" en tête de liste
-            comboBoxLotComposant.DisplayMember = "Libelle";
-            comboBoxLotComposant.ValueMember = "Numero";
-            comboBoxLotComposant.DataSource = null;
-
-            var liste = new List<LotComposant>();
-            liste.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
-            liste.AddRange(liste);
-
-            comboBoxLotComposant.DataSource = liste;
-            comboBoxLotComposant.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         private void ChargerLotComposantsDunLot()
         {
             // On charge les lots composants du lot selectionné dans le dataGrid
-            dataGridLotComposants.DataSource = null;
-            var listeLotComposantsDunLot = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value)
+            dataGridLotComposantsDunLot.DataSource = null;
+            var listeLotComposantsDunLotCharger = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value)
                 .Where(t => t.NumeroLot != null) // On affiche que les lots composants qui sont associés à un lot
                 .ToList();
-            dataGridLotComposantsDunLot.DataSource = listeLotComposantsDunLot;
-            MEP_DataGrid("LotComposantsDunLot");
+            dataGridLotComposantsDunLot.DataSource = listeLotComposantsDunLotCharger;
+            comboBoxLotComposantDunLot.DataSource = listeLotComposantsDunLotCharger;
 
+            // On force l'affichage et la selection au 1er composant chargé
+            if (comboBoxLotComposantDunLot.Items.Count > 0)
+            {
+                comboBoxLotComposantDunLot.SelectedIndex = 0;
+                _lotComposantDunLotSelectionnee = listeLotComposantsDunLotCharger[0];
+            }
+            else
+            {
+                comboBoxLotComposantDunLot.SelectedItem = null;
+                _lotComposantDunLotSelectionnee = null;
+            }
+            MEP_DataGrid("LotComposantsDunLot");
+        }
+
+        private void DemarrageLotComposantsDunlot()
+        {
+            var lotcomposantsDunLot = _serviceLotComposant.Lister("");
             // On charge la liste des lots composants dans le comboBox
             // On ajoute un élément "Aucun" en tête de liste
             comboBoxLotComposantDunLot.DisplayMember = "Libelle";
             comboBoxLotComposantDunLot.ValueMember = "Numero";
             comboBoxLotComposantDunLot.DataSource = null;
 
-            var liste = new List<LotComposant>();
-            liste.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
-            liste.AddRange(liste);
+            // On ajoute un lot composant avec le libelle "Aucun"
+            listeLotComposantsDunLot = new List<LotComposant>();
+            listeLotComposantsDunLot.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
 
-            comboBoxLotComposantDunLot.DataSource = liste;
+            comboBoxLotComposantDunLot.DataSource = listeLotComposantsDunLot;
             comboBoxLotComposantDunLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
+        private void DemarrageLotComposants()
+        {
+            var lotcomposants = _serviceLotComposant.Lister("");
+            // On charge la liste des lots composants dans le comboBox
+            // On ajoute un élément "Aucun" en tête de liste
+            comboBoxLotComposant.DisplayMember = "Libelle";
+            comboBoxLotComposant.ValueMember = "Numero";
+            comboBoxLotComposant.DataSource = null;
 
+            // On ajoute un lot composant avec le libelle "Aucun"
+            listeLotComposants = new List<LotComposant>();
+            listeLotComposants.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
+            comboBoxLotComposant.DataSource = listeLotComposants;
+            comboBoxLotComposant.SelectedIndex = 0; // sélectionne "Aucun" par défaut
+        }
 
         private void RemplirFormulaireLot(Lot lot)
         {
@@ -205,6 +239,22 @@ namespace ApplicationUi
             buttonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
 
+        // Méthode permettant de charger la Cellule du lot selectionne dans le datagrid Lots
+        // Elle permet de selectionner le bon lot après un rafraichissement du datagrid Lots
+        private void ChargerCellOrigine()
+        {
+            // Code fait par IA (ChatGPT)
+            var row = dataGridLots.Rows
+                .Cast<DataGridViewRow>()
+                .FirstOrDefault(r => (r.DataBoundItem as Lot)?.Numero == _lotSelectionnee.Numero);
+
+            if (row != null)
+            {
+                dataGridLots.CurrentCell = row.Cells[0];
+                row.Selected = true;
+            }
+        }
+
         #endregion
 
         #region Validations
@@ -224,6 +274,24 @@ namespace ApplicationUi
             return true;
         }
 
+        /// <summary>
+        /// Permet de voir si les champs du formulaire ne sont pas vides
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public bool ChampVide()
+        {
+            if (string.IsNullOrWhiteSpace(textBoxLibelle.Text))
+            {
+                MessageBox.Show("Le Libelle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxRang.Text))
+            {
+                MessageBox.Show("Le Rang ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         #region Evènements
@@ -237,7 +305,7 @@ namespace ApplicationUi
             }
             if (_lotComposantSelectionnee == null)
             {
-                MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero.Value)
@@ -249,15 +317,19 @@ namespace ApplicationUi
             _serviceLotComposant.Modifier(_lotComposantSelectionnee);
             _lotSelectionnee.ValeurTotale += _lotComposantSelectionnee.Valeur;
             _serviceLot.Modifier(_lotSelectionnee);
+            ChargerLots();
             ChargerLotComposants();
             ChargerLotComposantsDunLot();
-            ChargerLots();
-            // On enlève juste le lot composant selectionné
-            comboBoxLotComposant.SelectedItem = null;
-            _lotComposantSelectionnee = null;
+            ChargerCellOrigine();
         }
         private void buttonAjouterLot_Click(object sender, EventArgs e)
         {
+            // On check si les champs sont vides
+            if (ChampVide() == false)
+            {
+                return;
+            }
+
             // On crée un nouveau lot composant avec les données des champs
             unNouveauLot = new Lot
             {
@@ -292,7 +364,7 @@ namespace ApplicationUi
             }
             if (_lotComposantDunLotSelectionnee == null)
             {
-                MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero.Value)
@@ -304,12 +376,10 @@ namespace ApplicationUi
             _serviceLotComposant.Modifier(_lotComposantDunLotSelectionnee);
             _lotSelectionnee.ValeurTotale -= _lotComposantDunLotSelectionnee.Valeur;
             _serviceLot.Modifier(_lotSelectionnee);
+            ChargerLots();
             ChargerLotComposants();
             ChargerLotComposantsDunLot();
-            ChargerLots();
-            // On enlève juste le lot composant selectionné
-            comboBoxLotComposant.SelectedItem = null;
-            _lotComposantDunLotSelectionnee = null;
+            ChargerCellOrigine();
         }
         private void buttonSupprimerLot_Click(object sender, EventArgs e)
         {
@@ -348,7 +418,7 @@ namespace ApplicationUi
             if (nouveauNumeroTournoi != _lotSelectionnee.NumeroTournoi)
             {
                 _lotSelectionnee.NumeroTournoi = nouveauNumeroTournoi;
-                if(_lotSelectionnee.EstAttribue != true) // On modifie uniquement si le champ est pas déjà à true
+                if (_lotSelectionnee.EstAttribue != true) // On modifie uniquement si le champ est pas déjà à true
                     _lotSelectionnee.EstAttribue = true;
             }
             _serviceLot.Modifier(_lotSelectionnee);
@@ -396,7 +466,7 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
                 return;
 
-            _lotComposantDunLotSelectionnee = dataGridLotComposants.Rows[e.RowIndex].DataBoundItem as LotComposant;
+            _lotComposantDunLotSelectionnee = dataGridLotComposantsDunLot.Rows[e.RowIndex].DataBoundItem as LotComposant;
 
             if (_lotComposantDunLotSelectionnee != null)
                 RemplirFormulaireLotComposantDunLot(_lotComposantDunLotSelectionnee);
