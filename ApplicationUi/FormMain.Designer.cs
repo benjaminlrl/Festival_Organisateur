@@ -28,11 +28,11 @@ namespace ApplicationUi
             btnOrganisateurs = new Button();
             btnLots = new Button();
             btnLotComposants = new Button();
+            buttonVoter = new Button();
             btnQuitter = new Button();
             panelHeader = new Panel();
             lblTitre = new Label();
             panelContent = new Panel();
-            buttonVoter = new Button();
             panelMenu.SuspendLayout();
             panelHeader.SuspendLayout();
             SuspendLayout();
@@ -188,6 +188,7 @@ namespace ApplicationUi
             btnLots.TabIndex = 7;
             btnLots.Text = "Lots";
             btnLots.UseVisualStyleBackColor = false;
+            btnLots.Click += btnLots_Click;
             // 
             // btnLotComposants
             // 
@@ -207,6 +208,25 @@ namespace ApplicationUi
             btnLotComposants.Text = "      Composant des lots";
             btnLotComposants.UseVisualStyleBackColor = false;
             btnLotComposants.Click += btnLotComposants_Click;
+            // 
+            // buttonVoter
+            // 
+            buttonVoter.BackColor = Color.FromArgb(0, 192, 0);
+            buttonVoter.BackgroundImageLayout = ImageLayout.None;
+            buttonVoter.FlatAppearance.BorderSize = 0;
+            buttonVoter.FlatStyle = FlatStyle.Flat;
+            buttonVoter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            buttonVoter.ForeColor = Color.White;
+            buttonVoter.Image = Properties.Resources.tournoi;
+            buttonVoter.ImageAlign = ContentAlignment.MiddleLeft;
+            buttonVoter.Location = new Point(0, 921);
+            buttonVoter.Margin = new Padding(0, 11, 0, 9);
+            buttonVoter.Name = "buttonVoter";
+            buttonVoter.Size = new Size(286, 81);
+            buttonVoter.TabIndex = 8;
+            buttonVoter.Text = "Voter";
+            buttonVoter.UseVisualStyleBackColor = false;
+            buttonVoter.Click += buttonVoter_Click;
             // 
             // btnQuitter
             // 
@@ -259,25 +279,6 @@ namespace ApplicationUi
             panelContent.Name = "panelContent";
             panelContent.Size = new Size(1245, 1020);
             panelContent.TabIndex = 0;
-            // 
-            // buttonVoter
-            // 
-            buttonVoter.BackColor = Color.FromArgb(0, 192, 0);
-            buttonVoter.BackgroundImageLayout = ImageLayout.None;
-            buttonVoter.FlatAppearance.BorderSize = 0;
-            buttonVoter.FlatStyle = FlatStyle.Flat;
-            buttonVoter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            buttonVoter.ForeColor = Color.White;
-            buttonVoter.Image = Properties.Resources.tournoi;
-            buttonVoter.ImageAlign = ContentAlignment.MiddleLeft;
-            buttonVoter.Location = new Point(0, 921);
-            buttonVoter.Margin = new Padding(0, 11, 0, 9);
-            buttonVoter.Name = "buttonVoter";
-            buttonVoter.Size = new Size(286, 81);
-            buttonVoter.TabIndex = 8;
-            buttonVoter.Text = "Voter";
-            buttonVoter.UseVisualStyleBackColor = false;
-            buttonVoter.Click += buttonVoter_Click;
             // 
             // FormMain
             // 
