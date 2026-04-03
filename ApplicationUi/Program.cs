@@ -28,7 +28,39 @@ namespace ApplicationUi
             var organisateurService = new OrganisateurService(context);
             var roleService = new RoleService(context);
             var lotComposantService = new LotComposantService(context);
+            var lotService = new LotService(context);
             var jeuService = new JeuService(context);
+
+            if (!context.Lots.Any())
+            {
+                context.Lots.AddRange(new List<Lot>
+                {
+                    new Lot { Libelle = "Lot de jeux vidéo", RangAttribution = 1},
+                    new Lot { Libelle = "Lot de casque", RangAttribution = 2},
+                    new Lot { Libelle = "Lot de tapis de souris", RangAttribution = 3},
+                    new Lot { Libelle = "Lot de cartes cadeaux", RangAttribution = 1},
+                    new Lot { Libelle = "Lot de clavier", RangAttribution = 2},
+                    new Lot { Libelle = "Lot de manettes", RangAttribution = 3}
+                });
+            }
+
+            if (!context.LotComposants.Any())
+            {
+                context.LotComposants.AddRange(new List<LotComposant>
+                {
+                    new LotComposant { Libelle = "PS4", Description = "Console de jeu de type Playstation", Valeur = 250 },
+                    new LotComposant { Libelle = "PS5", Description = "Console de jeu de type Playstation", Valeur = 350 },
+                    new LotComposant { Libelle = "Xbox One", Description = "Console de jeu de type Xbox", Valeur = 325 },
+                    new LotComposant { Libelle = "Clavier Razer Ornata V2", Description = "Clavier gamer de marque Razer", Valeur = 80 },
+                    new LotComposant { Libelle = "Clavier Klim", Description = "Clavier gamer de marque Klim", Valeur = 30 },
+                    new LotComposant { Libelle = "Souris Razer Naga Trinity", Description = "Souris gamer de marque Razer", Valeur = 70 },
+                    new LotComposant { Libelle = "Souris Logitech G Pro X", Description = "Souris gamer de marque Logitech", Valeur = 75 },
+                    new LotComposant { Libelle = "Manettes PS4", Description = "Manette de marque Playstation", Valeur = 40 },
+                    new LotComposant { Libelle = "Manettes Xbox", Description = "Manette de marque Xbox", Valeur = 50 },
+                    new LotComposant { Libelle = "Casque Razer Kraken", Description = "Casque gamer de marque Razer", Valeur = 60 },
+                    new LotComposant { Libelle = "Casque HyperX Cloud 2", Description = "Casque gamer de marque HyperX", Valeur = 54 },
+                });
+            }
 
             if (!context.Espaces.Any())
             {

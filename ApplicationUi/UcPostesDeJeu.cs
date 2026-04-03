@@ -38,6 +38,7 @@ namespace ApplicationUi
             _servicePlateforme = new PlateformeService(context);
             _posteJeuSelectionne = null;
             fonctionnelSelectionne = false;
+            dataGridTournois.Visible = false;
             filtre = "";
             ordreChamp = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
@@ -118,6 +119,68 @@ namespace ApplicationUi
                 labelStatPostesJeuFonctionnels.ForeColor = Color.Green;
             }
         }
+        private void ChargerTournois(ICollection<Tournoi> tournoisEspace)
+        {
+            dataGridTournois.DataSource = null;
+            dataGridTournois.DataSource = tournoisEspace?.ToList();
+            if (tournoisEspace != null)
+            {
+
+                MEP_DataGridTournois();
+            }
+            else
+            {
+                dataGridTournois.Visible = false;
+            }
+        }
+
+
+        /// <summary>
+        /// Permet de déterminer d'afficher une indication visuelle sur les tournois associés à l'espace sélectionné, en fonction de leur statut (en cours, planifié ou aucun tournoi).
+        /// </summary>
+        private void StatutTounois()
+        {
+            var tournois = _posteJeuSelectionne.Espace.Tournois ?? new List<Tournoi>();
+
+            var enCours = tournois
+                .Where(t => t.Statut == "EnCours")
+                .OrderBy(t => t.DateHeure)
+                .ToList();
+
+            if (enCours.Any())
+            {
+                labelStatutTournoi.Text = "Poste occupé";
+                labelStatutTournoi.ForeColor = Color.Maroon;
+                labelStatutTournoi.BackColor = Color.FromArgb(255, 128, 128);
+
+                ChargerTournois(enCours);
+            }
+            else
+            {
+                var futurs = tournois
+                    .Where(t => t.Statut == "Planifié")
+                    .OrderBy(t => t.DateHeure)
+                    .ToList();
+
+                if (futurs.Any())
+                {
+                    labelStatutTournoi.Text ="Poste reservé";
+                    labelStatutTournoi.ForeColor = Color.Chocolate;
+                    labelStatutTournoi.BackColor = Color.FromArgb(255, 224, 192);
+
+                    ChargerTournois(futurs);
+                }
+                else
+                {
+                    labelStatutTournoi.Text = "Poste libre";
+                    labelStatutTournoi.ForeColor = Color.DarkGreen;
+                    labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
+                    ChargerTournois(null);
+                }
+            }
+
+            labelStatutTournoi.Visible = true;
+        }
 
         /// <summary>
         /// Resets all tournament-related input fields and controls to their default values.
@@ -135,6 +198,7 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             radioButtonFonctionnelTrue.Checked = false;
             radioButtonFonctionnelFalse.Checked = false;
+            dataGridTournois.Visible = false;
         }
         private void MEP_DataGrid()
         // TODO: Modifier les données de la grille pour afficher le nom de l'espace
@@ -151,6 +215,29 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
+        private void MEP_DataGridTournois()
+        {
+            dataGridTournois.Visible = true;
+            dataGridTournois.Columns["NumeroTournoi"].Visible = false;
+            dataGridTournois.Columns["IdEspace"].Visible = false;
+            dataGridTournois.Columns["Espace"].Visible = false;
+            dataGridTournois.Columns["IdJeu"].Visible = false;
+            dataGridTournois.Columns["Jeu"].Visible = false;
+            dataGridTournois.Columns["NbParticipants"].Visible = false;
+            dataGridTournois.Columns["NomEspace"].Visible = false;
+            dataGridTournois.Columns["TitreJeu"].Visible = false;
+            dataGridTournois.Columns["Statut"].Visible = false;
+            dataGridTournois.Columns["Statut"].Visible = false;
+            dataGridTournois.Columns["DureePrevue"].Visible = false;
+            dataGridTournois.Columns["Lot"].Visible = false;
+
+            dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            dataGridTournois.Columns["DateHeure"].HeaderText = "Début";
+
+            dataGridTournois.Columns["Nom"].DisplayIndex = 1;
+        }
         private void dataGridPostesJeu_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // on ne gère le clic que sur les lignes, pas sur les en-têtes
@@ -214,6 +301,7 @@ namespace ApplicationUi
             {
                 radioButtonFonctionnelFalse.Checked = true;
             }
+            StatutTounois();
         }
 
         private void radioButtonFonctionnelFalse_CheckedChanged(object sender, EventArgs e)
