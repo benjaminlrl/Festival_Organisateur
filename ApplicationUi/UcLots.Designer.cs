@@ -83,7 +83,7 @@ namespace ApplicationUi
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(903, 334);
+            panelForm.Size = new Size(903, 307);
             panelForm.TabIndex = 1;
             // 
             // tableLayoutPanel
@@ -270,7 +270,7 @@ namespace ApplicationUi
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(59, 265);
+            label2.Location = new Point(60, 251);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new Size(112, 25);
@@ -279,7 +279,7 @@ namespace ApplicationUi
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(222, 265);
+            textBoxRecherche.Location = new Point(207, 249);
             textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(574, 27);
@@ -293,13 +293,13 @@ namespace ApplicationUi
             dataGridLotComposants.BorderStyle = BorderStyle.None;
             dataGridLotComposants.ColumnHeadersHeight = 34;
             dataGridLotComposants.Dock = DockStyle.Fill;
-            dataGridLotComposants.Location = new Point(915, 346);
+            dataGridLotComposants.Location = new Point(915, 319);
             dataGridLotComposants.Margin = new Padding(4);
             dataGridLotComposants.Name = "dataGridLotComposants";
             dataGridLotComposants.ReadOnly = true;
             dataGridLotComposants.RowHeadersWidth = 62;
             dataGridLotComposants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLotComposants.Size = new Size(271, 358);
+            dataGridLotComposants.Size = new Size(271, 385);
             dataGridLotComposants.TabIndex = 6;
             dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
             // 
@@ -309,13 +309,13 @@ namespace ApplicationUi
             dataGridLotComposantsDunLot.BorderStyle = BorderStyle.None;
             dataGridLotComposantsDunLot.ColumnHeadersHeight = 34;
             dataGridLotComposantsDunLot.Dock = DockStyle.Fill;
-            dataGridLotComposantsDunLot.Location = new Point(1194, 346);
+            dataGridLotComposantsDunLot.Location = new Point(1194, 319);
             dataGridLotComposantsDunLot.Margin = new Padding(4);
             dataGridLotComposantsDunLot.Name = "dataGridLotComposantsDunLot";
             dataGridLotComposantsDunLot.ReadOnly = true;
             dataGridLotComposantsDunLot.RowHeadersWidth = 62;
             dataGridLotComposantsDunLot.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLotComposantsDunLot.Size = new Size(260, 358);
+            dataGridLotComposantsDunLot.Size = new Size(260, 385);
             dataGridLotComposantsDunLot.TabIndex = 7;
             dataGridLotComposantsDunLot.CellClick += dataGridLotComposantsDunLot_CellClick;
             // 
@@ -524,8 +524,8 @@ namespace ApplicationUi
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 48.39109F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 51.60891F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 44.6327667F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 55.3672333F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 307F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Size = new Size(1458, 708);
@@ -538,13 +538,13 @@ namespace ApplicationUi
             dataGridLots.BorderStyle = BorderStyle.None;
             dataGridLots.ColumnHeadersHeight = 34;
             dataGridLots.Dock = DockStyle.Fill;
-            dataGridLots.Location = new Point(4, 346);
+            dataGridLots.Location = new Point(4, 319);
             dataGridLots.Margin = new Padding(4);
             dataGridLots.Name = "dataGridLots";
             dataGridLots.ReadOnly = true;
             dataGridLots.RowHeadersWidth = 62;
             dataGridLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLots.Size = new Size(903, 358);
+            dataGridLots.Size = new Size(903, 385);
             dataGridLots.TabIndex = 2;
             dataGridLots.CellClick += dataGridLots_CellClick;
             // 
