@@ -379,18 +379,18 @@ namespace ApplicationUi
                 context.Tournois.AddRange(new List<Tournoi>
                 {
                     // Samedi 10h-20h — espaces différents, pas de chevauchement
-                    new Tournoi { Nom = "Tournoi Mario Kart",         DateHeure = new DateTime(2025, 4, 5, 10, 0, 0), NbParticipants = 16, DureePrevue = 120, Statut = "Terminé",  IdEspace = espaceNintendo.IdEspace, IdJeu = jeuMK.IdJeu },
-                    new Tournoi { Nom = "Tournoi Fortnite Saison 1",  DateHeure = new DateTime(2025, 4, 5, 10, 0, 0), NbParticipants = 20, DureePrevue = 180, Statut = "Terminé",  IdEspace = espaceXbox.IdEspace,    IdJeu = jeuFortnite.IdJeu },
-                    new Tournoi { Nom = "Tournoi Halo Open",          DateHeure = new DateTime(2025, 4, 5, 14, 0, 0), NbParticipants = 12, DureePrevue = 90,  Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuHalo.IdJeu },
-                    new Tournoi { Nom = "Tournoi FC 25 Ligue 1",      DateHeure = new DateTime(2025, 4, 5, 14, 0, 0), NbParticipants = 8,  DureePrevue = 120, Statut = "Terminé",  IdEspace = espaceSports.IdEspace,  IdJeu = jeuFC25.IdJeu },
-                    new Tournoi { Nom = "Tournoi Smash Bros Elite",   DateHeure = new DateTime(2025, 4, 5, 17, 0, 0), NbParticipants = 16, DureePrevue = 90,  Statut = "Terminé",  IdEspace = espaceFighting.IdEspace,IdJeu = jeuSmash.IdJeu },
+                    new Tournoi { Nom = "Tournoi Mario Kart",         DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 16, DureePrevue = 20, Statut = "Terminé",  IdEspace = espaceNintendo.IdEspace, IdJeu = jeuMK.IdJeu },
+                    new Tournoi { Nom = "Tournoi Fortnite Saison 1", DateHeure = new DateTime(2026,05,24,12,0,0),NbParticipants = 16, DureePrevue = 50, Statut = "Terminé",  IdEspace = espaceXbox.IdEspace,    IdJeu = jeuFortnite.IdJeu },
+                    new Tournoi { Nom = "Tournoi Halo Open",          DateHeure = new DateTime(2026,05,24,13,0,0),NbParticipants = 16,DureePrevue = 60,  Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuHalo.IdJeu },
+                    new Tournoi { Nom = "Tournoi FC 25 Ligue 1",      DateHeure = new DateTime(2026,05,24,14,0,0),NbParticipants = 8,  DureePrevue = 20, Statut = "Terminé",  IdEspace = espaceSports.IdEspace,  IdJeu = jeuFC25.IdJeu },
+                    new Tournoi { Nom = "Tournoi Smash Bros Elite",  DateHeure = new DateTime(2026,05,24,15,0,0), NbParticipants = 16, DureePrevue = 30,  Statut = "Terminé",  IdEspace = espaceFighting.IdEspace,IdJeu = jeuSmash.IdJeu },
 
                     // Dimanche 10h-18h
-                    new Tournoi { Nom = "Tournoi LoL Printemps",      DateHeure = new DateTime(2025, 4, 6, 10, 0, 0), NbParticipants = 10, DureePrevue = 180, Statut = "Terminé",  IdEspace = espaceMOBA.IdEspace,    IdJeu = jeuLoL.IdJeu },
-                    new Tournoi { Nom = "Tournoi CS2 Qualif",         DateHeure = new DateTime(2025, 4, 6, 10, 0, 0), NbParticipants = 10, DureePrevue = 120, Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuCS2.IdJeu },
-                    new Tournoi { Nom = "Tournoi Valorant Invitatio", DateHeure = new DateTime(2025, 4, 6, 14, 0, 0), NbParticipants = 10, DureePrevue = 120, Statut = "En cours", IdEspace = espaceEsport.IdEspace,  IdJeu = jeuValorant.IdJeu },
-                    new Tournoi { Nom = "Tournoi Elden Ring No Hit",  DateHeure = new DateTime(2025, 4, 6, 14, 0, 0), NbParticipants = 8,  DureePrevue = 90,  Statut = "En cours", IdEspace = espacePS.IdEspace,      IdJeu = jeuElden.IdJeu },
-                    new Tournoi { Nom = "Tournoi Minecraft Build",    DateHeure = new DateTime(2025, 4, 6, 16, 30, 0),NbParticipants = 12, DureePrevue = 60,  Statut = "Planifié", IdEspace = espaceXbox.IdEspace,    IdJeu = jeuMinecraft.IdJeu },
+                    new Tournoi { Nom = "Tournoi LoL Printemps",     DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 10, DureePrevue = 20, Statut = "Terminé",  IdEspace = espaceMOBA.IdEspace,    IdJeu = jeuLoL.IdJeu },
+                    new Tournoi { Nom = "Tournoi CS2 Qualif",         DateHeure = new DateTime(2026,05,24,11,0,0),NbParticipants = 10, DureePrevue = 15, Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuCS2.IdJeu },
+                    new Tournoi { Nom = "Tournoi Valorant Invitatio", DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 10, DureePrevue = 25, Statut = "En cours", IdEspace = espaceEsport.IdEspace,  IdJeu = jeuValorant.IdJeu },
+                    new Tournoi { Nom = "Tournoi Elden Ring No Hit", DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 8,  DureePrevue = 30,  Statut = "En cours", IdEspace = espacePS.IdEspace,      IdJeu = jeuElden.IdJeu },
+                    new Tournoi { Nom = "Tournoi Minecraft Build",   DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 12, DureePrevue = 50,  Statut = "Planifié", IdEspace = espaceXbox.IdEspace,    IdJeu = jeuMinecraft.IdJeu },
                 });
 
                 context.SaveChanges();
