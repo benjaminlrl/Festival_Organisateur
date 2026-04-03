@@ -28,7 +28,21 @@ namespace ApplicationUi
             var organisateurService = new OrganisateurService(context);
             var roleService = new RoleService(context);
             var lotComposantService = new LotComposantService(context);
+            var lotService = new LotService(context);
             var jeuService = new JeuService(context);
+
+            if (!context.Lots.Any())
+            {
+                context.Lots.AddRange(new List<Lot>
+                {
+                    new Lot { Libelle = "Lot de jeux vidéo", RangAttribution = 1},
+                    new Lot { Libelle = "Lot de consoles de jeu", RangAttribution = 2},
+                    new Lot { Libelle = "Lot de tapis de souris", RangAttribution = 3},
+                    new Lot { Libelle = "Lot de cartes cadeaux", RangAttribution = 1},
+                    new Lot { Libelle = "Lot de clavier", RangAttribution = 2},
+                    new Lot { Libelle = "Lot de manettes", RangAttribution = 3}
+                });
+            }
 
             if (!context.Espaces.Any())
             {
