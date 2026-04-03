@@ -266,6 +266,11 @@ namespace ApplicationUi
                 ValeurTotale = 0,
                 NumeroTournoi = comboBoxTournoi.SelectedValue != null ? (int)comboBoxTournoi.SelectedValue : null
             };
+            // On oublie pas de mettre "estAttribue" à true si un tournoi est sélectionné (= le NumeroTournoi pas null)
+            if (unNouveauLot.NumeroTournoi != null)
+            {
+                _lotSelectionnee.EstAttribue = true;
+            }
 
             // On check si le lot composant est valide
             if (LotValide(unNouveauLot) == false)
@@ -341,8 +346,11 @@ namespace ApplicationUi
             // Gestion du tournoi nullable
             nouveauNumeroTournoi = comboBoxTournoi.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
             if (nouveauNumeroTournoi != _lotSelectionnee.NumeroTournoi)
+            {
                 _lotSelectionnee.NumeroTournoi = nouveauNumeroTournoi;
-
+                if(_lotSelectionnee.EstAttribue != true) // On modifie uniquement si le champ est pas déjà à true
+                    _lotSelectionnee.EstAttribue = true;
+            }
             _serviceLot.Modifier(_lotSelectionnee);
             ChargerLots();
             Raz_Zones();
