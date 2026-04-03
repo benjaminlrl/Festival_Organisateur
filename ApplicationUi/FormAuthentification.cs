@@ -22,7 +22,6 @@ namespace ApplicationUi
             InitializeComponent();
             _organisateurService = new OrganisateurService(new ApplicationDbContext());
             ArrondirLesCoins(panelCard, 15);
-
         }
 
         #region Chargements
@@ -58,24 +57,35 @@ namespace ApplicationUi
         // Boutton Connexion
         private async void btnLogin_ClickAsync(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
+            // On check si le username n'est pas vide
+            if(string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                MessageBox.Show("Veuillez remplir tous les champs.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                await Task.Delay(5000);
+                MessageBox.Show("L'Identifiant ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            // On check si le mot de passe n'est pas vide
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show("Le Mot de Passe ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (_organisateurService.EstIdentique(txtPassword.Text, txtUsername.Text.Trim()))
-            {
-                this.Hide();
-                organisateurConnecte = _organisateurService.Obtenir(txtUsername.Text);
-                if (organisateurConnecte != null)
-                    new FormMain(organisateurConnecte).Show();
-            }else
+            // On check si l'identifiant & le mot de passe correspondent à un compte dans la base de données
+            if (!_organisateurService.EstIdentique(txtPassword.Text, txtUsername.Text.Trim()))
             {
                 MessageBox.Show("Login ou mot de passe incorrect.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                await Task.Delay(5000);
+                return;
             }
+
+            // On check s'il n'y a aucune erreur sur le compte récupéré
+            organisateurConnecte = _organisateurService.Obtenir(txtUsername.Text);
+            if (organisateurConnecte == null)
+            {
+                MessageBox.Show("Erreur de récupération de votre compte.\nVeuillez contacter un administrateur.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            this.Hide();
+            new FormMain(organisateurConnecte).Show();
         }
 
         // Validation par touche Entrée

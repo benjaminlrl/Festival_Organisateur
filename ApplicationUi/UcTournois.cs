@@ -18,6 +18,8 @@ namespace ApplicationUi
 {
     public partial class UcTournois : UserControl
     {
+        private readonly Organisateur _organisateurConnecte;
+        private readonly ApplicationDbContext _context;
         private readonly ITournoiService _serviceTournoi;
         private readonly IEspaceService _serviceEspace;
         private readonly IOrganisateurService _serviceOrganisateur;
@@ -26,8 +28,6 @@ namespace ApplicationUi
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
         private string ordreChamp;
-        private readonly Organisateur _organisateurConnecte;
-        private readonly ApplicationDbContext _context;
 
 
         public UcTournois(Organisateur unOrganisateurConnecte)

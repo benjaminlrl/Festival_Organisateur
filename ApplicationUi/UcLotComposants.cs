@@ -22,6 +22,7 @@ namespace ApplicationUi
         private LotComposant? _lotComposantSelectionne = null;
         private LotComposant? unNouveauLotComposant;
         private readonly Organisateur _organisateurConnecte;
+        private List<Lot> listeLots;
         int? nouveauNumeroLot;
         string filtre;
 
@@ -79,11 +80,11 @@ namespace ApplicationUi
             comboBoxLot.ValueMember = "Numero";
             comboBoxLot.DataSource = null;
 
-            var liste = new List<Lot>();
-            liste.Add(new Lot { Numero = null, Libelle = "Aucun" });
-            liste.AddRange(lots);
+            listeLots = new List<Lot>();
+            listeLots.Add(new Lot { Numero = null, Libelle = "Aucun" });
+            listeLots.AddRange(lots);
 
-            comboBoxLot.DataSource = liste;
+            comboBoxLot.DataSource = listeLots;
             comboBoxLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
@@ -133,6 +134,29 @@ namespace ApplicationUi
             }
             return true;
         }
+        /// <summary>
+        /// Permet de voir si tout les champs d'un lot composant ne sont pas vides
+        /// </summary>
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public bool ChampVide()
+        {
+            if (string.IsNullOrWhiteSpace(textBoxLibelle.Text))
+            {
+                MessageBox.Show("Le Libelle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
+            {
+                MessageBox.Show("La Description ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
+            {
+                MessageBox.Show("La Valeur ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
 
         #endregion
 
@@ -140,6 +164,12 @@ namespace ApplicationUi
 
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
+            // On check si les champs sont vides
+            if (ChampVide() == false)
+            {
+                return;
+            }
+
             // On crée un nouveau lot composant avec les données des champs
             unNouveauLotComposant = new LotComposant
             {

@@ -235,13 +235,13 @@ namespace Lib_Services.Services
             // liste des erreurs
             var erreurs = new List<string>();
 
+            if (string.IsNullOrWhiteSpace(identifiant))
+            {
+                erreurs.Add("Le login ne peut pas être vide.");
+            }
             if (Obtenir(identifiant) != null)
             {
                 erreurs.Add("Ce login est déjà utilisé.");
-            }
-            if(string.IsNullOrWhiteSpace(identifiant))
-            {
-                erreurs.Add("Le login ne peut pas être vide.");
             }
             if (identifiant.Length < 3 || identifiant.Length > 12)
             {

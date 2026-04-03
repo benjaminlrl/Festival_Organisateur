@@ -145,7 +145,7 @@ namespace ApplicationUi
             textBoxRang.Location = new Point(270, 39);
             textBoxRang.Margin = new Padding(4);
             textBoxRang.Name = "textBoxRang";
-            textBoxRang.PlaceholderText = "1";
+            textBoxRang.PlaceholderText = "1,2,3...";
             textBoxRang.Size = new Size(210, 27);
             textBoxRang.TabIndex = 4;
             // 
@@ -355,6 +355,7 @@ namespace ApplicationUi
             buttonAjouterLotComposant.TabIndex = 6;
             buttonAjouterLotComposant.Text = "➕  Ajouter au lot";
             buttonAjouterLotComposant.UseVisualStyleBackColor = false;
+            buttonAjouterLotComposant.Click += buttonAjouterLotComposant_Click;
             // 
             // tableLayoutPanel1
             // 

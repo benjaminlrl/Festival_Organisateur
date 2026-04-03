@@ -137,6 +137,34 @@ namespace ApplicationUi
             }
             return true;
         }
+        /// <summary>
+        /// Permet de voir si tout les champs d'un organisateur ne sont pas vides
+        /// </summary>
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public bool ChampVide()
+        {
+            if (string.IsNullOrWhiteSpace(textBoxLogin.Text))
+            {
+                MessageBox.Show("Le Login ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxMail.Text))
+            {
+                MessageBox.Show("Le Mail ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxMotDePasse.Text))
+            {
+                MessageBox.Show("Le Mot de Passe ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (comboBoxRole.SelectedValue == null)
+            {
+                MessageBox.Show("Le Rôle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
 
         #endregion
 
@@ -144,6 +172,12 @@ namespace ApplicationUi
 
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
+            // On check si les champs sont vides
+            if (ChampVide() == false)
+            {
+                return;
+            }
+
             // On crée un nouveau organisateur avec les données des champs
             _unNouveauOrganisateur = new Organisateur
             {
@@ -153,11 +187,12 @@ namespace ApplicationUi
                 IdRole = (int)comboBoxRole.SelectedValue
             };
 
-            // On check si l'identifiant & le mot de passe sont valides, puis on créer un nouvel organisateur
+            // On check si l'identifiant est valide
             if (IdentifiantValide(textBoxLogin.Text) == false)
             {
                 return;
             }
+            // On check si le mot de passe est valide
             if (MdpValide(textBoxMotDePasse.Text) == false)
             {
                 return;
@@ -213,6 +248,11 @@ namespace ApplicationUi
             if (_organisateurSelectionne == _organisateurConnecte)
             {
                 MessageBox.Show("Vous ne pouvez pas supprimer votre propre compte.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if(_organisateurSelectionne.NomRole == "Administrateur")
+            {
+                MessageBox.Show("Vous ne pouvez pas supprimer de compte Administrateur.\nVeuillez contacter un SuperAdmin.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login);
