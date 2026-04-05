@@ -64,7 +64,6 @@ namespace Lib_Services.Services
         public void Creer(Organisateur organisateur)
         {
             // Ajout de l'entité au contexte puis persistance immédiate.
-
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);
             _context.Organisateurs.Add(organisateur);
@@ -238,10 +237,6 @@ namespace Lib_Services.Services
             if (string.IsNullOrWhiteSpace(identifiant))
             {
                 erreurs.Add("Le login ne peut pas être vide.");
-            }
-            if (Obtenir(identifiant) != null)
-            {
-                erreurs.Add("Ce login est déjà utilisé.");
             }
             if (identifiant.Length < 3 || identifiant.Length > 12)
             {

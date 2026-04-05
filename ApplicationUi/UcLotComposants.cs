@@ -25,6 +25,7 @@ namespace ApplicationUi
         private List<Lot> listeLots;
         int? nouveauNumeroLot;
         string filtre;
+        string ordreChamp = "ASC";
 
         public UcLotComposants(Organisateur unOrganisateurConnecte)
         {
@@ -58,6 +59,10 @@ namespace ApplicationUi
             // On affiche et modifie l'affichage des colonnes du dataGrid
             dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
             dataGridLotComposants.Columns["Lot"].Visible = false;
+            dataGridLotComposants.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["Valeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NumeroLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void ChargerLotComposants()
@@ -243,10 +248,32 @@ namespace ApplicationUi
 
         private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // On récupére le lot composant cliqué et on appelle RemplirFormulaire(...)
+            // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
-                return;
+            {
+                // ordonner sur les champs numero, libelle, description et valeur
+                var donnees = _serviceLotComposant.Lister(filtre);
+                var map = new Dictionary<int, Func<LotComposant, object>>
+                {
+                    { dataGridLotComposants.Columns["Numero"].Index, lc => lc.Numero },
+                    { dataGridLotComposants.Columns["Libelle"].Index, lc => lc.Libelle },
+                    { dataGridLotComposants.Columns["Description"].Index, lc => lc.Description },
+                    { dataGridLotComposants.Columns["Valeur"].Index, lc => lc.Valeur }
+                };
 
+                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                    return;
+                // Appliquer le tri
+                dataGridLotComposants.DataSource = ordreChamp == "ASC"
+                    ? donnees.OrderByDescending(keySelector).ToList()
+                    : donnees.OrderBy(keySelector).ToList();
+                // Inverser l’ordre
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+                MEP_DataGrid();
+                return;
+            }
+
+            // Ne pas recharger le DataSource lors d'un clic sur une cellule : cela réinitialise la sélection
             _lotComposantSelectionne = dataGridLotComposants.Rows[e.RowIndex].DataBoundItem as LotComposant;
 
             if (_lotComposantSelectionne != null)
