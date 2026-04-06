@@ -54,6 +54,11 @@ namespace ApplicationUi
         }
 
         #region Chargement
+
+        /// <summary>
+        /// Met en page le DataGrid des lots composants en configurant la visibilité
+        /// et le redimensionnement automatique des colonnes.
+        /// </summary>
         private void MEP_DataGrid()
         {
             // On affiche et modifie l'affichage des colonnes du dataGrid
@@ -65,6 +70,9 @@ namespace ApplicationUi
             dataGridLotComposants.Columns["NumeroLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
+        /// <summary>
+        /// Charge la liste des lots composants dans le DataGrid en appliquant le filtre de recherche en cours.
+        /// </summary>
         private void ChargerLotComposants()
         {
             // On charge la liste des lots composants dans le dataGrid
@@ -75,6 +83,10 @@ namespace ApplicationUi
             MEP_DataGrid();
         }
 
+        /// <summary>
+        /// Charge la liste des lots dans la ComboBox en ajoutant un élément "Aucun" en tête de liste.
+        /// Sélectionne "Aucun" par défaut.
+        /// </summary>
         private void ChargerLots()
         {
             // On charge les lots dans la comboBox
@@ -93,6 +105,10 @@ namespace ApplicationUi
             comboBoxLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
+        /// <summary>
+        /// Remet tous les champs du formulaire à vide et désélectionne le lot composant en cours.
+        /// Désactive également les boutons Modifier et Supprimer.
+        /// </summary>
         private void Raz_Zones()
         {
             // On remet tous les champs à vide
@@ -105,6 +121,11 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
         }
 
+        /// <summary>
+        /// Remplit les champs du formulaire avec les données du lot composant sélectionné.
+        /// Sélectionne "Aucun" dans la ComboBox si le lot composant n'est associé à aucun lot.
+        /// </summary>
+        /// <param name="lotComposant">Le lot composant dont les données sont affichées.</param>
         private void RemplirFormulaire(LotComposant lotComposant)
         {
             // On remplie les champs avec les données du lot composant sélectionné
@@ -167,6 +188,10 @@ namespace ApplicationUi
 
         #region Evènements
 
+        /// <summary>
+        /// Crée un nouveau lot composant avec les données saisies dans le formulaire.
+        /// Vérifie que les champs sont valides et que les règles métier sont respectées.
+        /// </summary>
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
@@ -196,6 +221,10 @@ namespace ApplicationUi
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Modifie le lot composant sélectionné avec les nouvelles valeurs saisies dans le formulaire.
+        /// Met à jour uniquement les champs modifiés et gère le lot nullable.
+        /// </summary>
         private void buttonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
@@ -227,6 +256,9 @@ namespace ApplicationUi
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Supprime le lot composant sélectionné après vérification qu'un lot composant est bien sélectionné.
+        /// </summary>
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
@@ -241,11 +273,19 @@ namespace ApplicationUi
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Remet le formulaire à vide sans sauvegarder les modifications.
+        /// </summary>
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Gère les clics sur le DataGrid des lots composants.
+        /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
+        /// Si le clic est sur une cellule, sélectionne le lot composant et remplit le formulaire.
+        /// </summary>
         private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)

@@ -63,6 +63,12 @@ namespace ApplicationUi
         }
 
         #region Chargement
+
+        /// <summary>
+        /// Met en page les DataGrids en configurant la visibilité, l'ordre d'affichage
+        /// et le redimensionnement automatique des colonnes selon le formulaire ciblé.
+        /// </summary>
+        /// <param name="unFormulaire">Nom du formulaire ciblé : "Lots", "LotComposants" ou "LotComposantsDunLot".</param>
         private void MEP_DataGrid(string unFormulaire)
         {
             // Ici on affiche et modifie l'affichage des colonnes du dataGrid
@@ -98,6 +104,10 @@ namespace ApplicationUi
                 dataGridLotComposantsDunLot.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
         }
+
+        /// <summary>
+        /// Charge la liste des lots dans le DataGrid en appliquant le filtre de recherche en cours.
+        /// </summary>
         private void ChargerLots()
         {
             // On charge la liste des lots dans le dataGrid
@@ -108,6 +118,10 @@ namespace ApplicationUi
             MEP_DataGrid("Lots");
         }
 
+        /// <summary>
+        /// Charge la liste des tournois dans la ComboBox en ajoutant un élément "Aucun" en tête de liste.
+        /// Sélectionne "Aucun" par défaut.
+        /// </summary>
         private void ChargerTournoi()
         {
             // On charge les tournois uniquement pour la combobox, pas besoin de les charger dans un dataGrid
@@ -127,6 +141,10 @@ namespace ApplicationUi
             MEP_DataGrid("Lots");
         }
 
+        /// <summary>
+        /// Charge la liste des lots composants non encore associés à un lot dans le DataGrid et la ComboBox.
+        /// Sélectionne automatiquement le premier élément si la liste n'est pas vide.
+        /// </summary>
         private void ChargerLotComposants()
         {
             // On charge les lots composants dans la combobox ainsi que la liste des lots composants dans le dataGrid
@@ -151,6 +169,10 @@ namespace ApplicationUi
             MEP_DataGrid("LotComposants");
         }
 
+        /// <summary>
+        /// Charge la liste des lots composants associés au lot sélectionné dans le DataGrid et la ComboBox.
+        /// Sélectionne automatiquement le premier élément si la liste n'est pas vide.
+        /// </summary>
         private void ChargerLotComposantsDunLot()
         {
             // On charge les lots composants du lot selectionné dans le dataGrid
@@ -175,6 +197,10 @@ namespace ApplicationUi
             MEP_DataGrid("LotComposantsDunLot");
         }
 
+        /// <summary>
+        /// Initialise la ComboBox des lots composants d'un lot avec un élément "Aucun" par défaut.
+        /// Appelée une seule fois au démarrage du formulaire.
+        /// </summary>
         private void DemarrageLotComposantsDunlot()
         {
             var lotcomposantsDunLot = _serviceLotComposant.Lister("");
@@ -191,6 +217,11 @@ namespace ApplicationUi
             comboBoxLotComposantDunLot.DataSource = listeLotComposantsDunLot;
             comboBoxLotComposantDunLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
+
+        /// <summary>
+        /// Initialise la ComboBox des lots composants avec un élément "Aucun" par défaut.
+        /// Appelée une seule fois au démarrage du formulaire.
+        /// </summary>
         private void DemarrageLotComposants()
         {
             var lotcomposants = _serviceLotComposant.Lister("");
@@ -207,6 +238,11 @@ namespace ApplicationUi
             comboBoxLotComposant.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
+        /// <summary>
+        /// Remplit les champs du formulaire avec les données du lot sélectionné.
+        /// Sélectionne "Aucun" dans la ComboBox si le lot n'est associé à aucun tournoi.
+        /// </summary>
+        /// <param name="lot">Le lot dont les données sont affichées.</param>
         private void RemplirFormulaireLot(Lot lot)
         {
             // On remplie les champs avec les données du Lot sélectionné
@@ -222,18 +258,30 @@ namespace ApplicationUi
             }
         }
 
+        /// <summary>
+        /// Sélectionne dans la ComboBox le lot composant correspondant à celui passé en paramètre.
+        /// </summary>
+        /// <param name="lotComposant">Le lot composant à sélectionner dans la ComboBox.</param>
         private void RemplirFormulaireLotComposant(LotComposant lotComposant)
         {
             // On remplie la combobox avec les données du Lot Composant sélectionné
             comboBoxLotComposant.SelectedValue = lotComposant.Numero;
         }
 
+        /// <summary>
+        /// Sélectionne dans la ComboBox du lot le lot composant correspondant à celui passé en paramètre.
+        /// </summary>
+        /// <param name="lotComposant">Le lot composant à sélectionner dans la ComboBox.</param>
         private void RemplirFormulaireLotComposantDunLot(LotComposant lotComposant)
         {
             // On remplie la combobox avec les données du Lot Composant sélectionné
             comboBoxLotComposantDunLot.SelectedValue = lotComposant.Numero;
         }
 
+        /// <summary>
+        /// Remet tous les champs du formulaire à vide et désélectionne le lot en cours.
+        /// Désactive également les boutons Modifier et Supprimer.
+        /// </summary>
         private void Raz_Zones()
         {
             // On remet tous les champs à vide
@@ -249,8 +297,10 @@ namespace ApplicationUi
             buttonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
 
-        // Méthode permettant de charger la Cellule du lot selectionne dans le datagrid Lots
-        // Elle permet de selectionner le bon lot après un rafraichissement du datagrid Lots
+        /// <summary>
+        /// Resélectionne dans le DataGrid la ligne correspondant au lot actuellement sélectionné,
+        /// après un rafraîchissement de la source de données.
+        /// </summary>
         private void ChargerCellOrigine()
         {
             // Code fait par IA (ChatGPT)
@@ -306,6 +356,11 @@ namespace ApplicationUi
 
         #region Evènements
 
+        /// <summary>
+        /// Associe le lot composant sélectionné au lot en cours, met à jour la valeur totale du lot
+        /// et rafraîchit les DataGrids.
+        /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant n'est pas déjà associé.
+        /// </summary>
         private void buttonAjouterLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
@@ -332,6 +387,12 @@ namespace ApplicationUi
             ChargerLotComposantsDunLot();
             ChargerCellOrigine();
         }
+
+        /// <summary>
+        /// Crée un nouveau lot avec les données saisies dans le formulaire.
+        /// Vérifie que les champs sont valides et que les règles métier sont respectées.
+        /// Met à jour EstAttribue si un tournoi est sélectionné.
+        /// </summary>
         private void buttonAjouterLot_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
@@ -365,6 +426,12 @@ namespace ApplicationUi
             ChargerLots();
             Raz_Zones();
         }
+
+        /// <summary>
+        /// Dissocie le lot composant sélectionné du lot en cours, met à jour la valeur totale du lot
+        /// et rafraîchit les DataGrids.
+        /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant appartient bien au lot.
+        /// </summary>
         private void buttonSupprimerLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
@@ -391,6 +458,10 @@ namespace ApplicationUi
             ChargerLotComposantsDunLot();
             ChargerCellOrigine();
         }
+
+        /// <summary>
+        /// Supprime le lot sélectionné après vérification qu'un lot est bien sélectionné.
+        /// </summary>
         private void buttonSupprimerLot_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
@@ -404,6 +475,12 @@ namespace ApplicationUi
             ChargerLots();
             Raz_Zones();
         }
+
+        /// <summary>
+        /// Modifie le lot sélectionné avec les nouvelles valeurs saisies dans le formulaire.
+        /// Met à jour uniquement les champs modifiés et gère le tournoi nullable.
+        /// Met à jour EstAttribue si un tournoi est associé.
+        /// </summary>
         private void buttonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
@@ -435,11 +512,21 @@ namespace ApplicationUi
             ChargerLots();
             Raz_Zones();
         }
+
+        /// <summary>
+        /// Remet le formulaire à vide sans sauvegarder les modifications.
+        /// </summary>
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Gère les clics sur le DataGrid des lots.
+        /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
+        /// Si le clic est sur une cellule, sélectionne le lot, remplit le formulaire
+        /// et charge les lots composants associés.
+        /// </summary>
         private void dataGridLots_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
@@ -481,6 +568,12 @@ namespace ApplicationUi
             buttonModifier.Enabled = _lotSelectionnee != null;
             buttonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
+
+        /// <summary>
+        /// Gère les clics sur le DataGrid des lots composants disponibles (non associés à un lot).
+        /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
+        /// Si le clic est sur une cellule, sélectionne le lot composant et remplit la ComboBox.
+        /// </summary>
         private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
@@ -515,6 +608,11 @@ namespace ApplicationUi
                 RemplirFormulaireLotComposant(_lotComposantSelectionnee);
         }
 
+        /// <summary>
+        /// Gère les clics sur le DataGrid des lots composants associés au lot sélectionné.
+        /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
+        /// Si le clic est sur une cellule, sélectionne le lot composant et remplit la ComboBox.
+        /// </summary>
         private void dataGridLotComposantsDunLot_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
