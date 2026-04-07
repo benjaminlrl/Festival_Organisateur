@@ -11,6 +11,8 @@ namespace Lib_Services.Services
     public class SoumisVoteService : ISoumisVoteService
     {
         private readonly ApplicationDbContext _context;
+        private IJeuService _jeuService;
+        private IPlateformeService _plateformeService;
 
         /// <summary>
         /// Constructeur avec injection du contexte de données.
@@ -19,6 +21,8 @@ namespace Lib_Services.Services
         public SoumisVoteService(ApplicationDbContext context)
         {
             _context = context;
+            _jeuService = new JeuService(context);
+            _plateformeService = new PlateformeService(context);
         }
 
         /// <summary>
@@ -65,6 +69,8 @@ namespace Lib_Services.Services
         /// <param name="soumisVote">Objet <see cref="SoumisVote"/> à ajouter.</param>
         public void Creer(SoumisVote soumisVote)
         {
+            if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null)
+                return;
             _context.SoumisVotes.Add(soumisVote);
             _context.SaveChanges();
         }
@@ -99,29 +105,7 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
-        /// <summary>
-        /// Permet de vérifier les propriétés associés a une SoumisVote.
-        /// </summary>
-        /// <param name="soumisVote">Le SoumisVote à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderSoumisVote(SoumisVote soumisVote)
-        {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
-            //if (string.IsNullOrWhiteSpace(SoumisVote.Libelle))
-            //    erreurs.Add("Le libellé est requis.");
-
-            //if (SoumisVote.IdSoumisVote <= 0)
-            //    erreurs.Add("Une SoumisVote est requise.");
-
-            //if (Lister(SoumisVote.Libelle).Any(v => v.Libelle == SoumisVote.Libelle && p.IdSoumisVote != SoumisVote.IdSoumisVote))
-            //    erreurs.Add("Une autre SoumisVote avec ce libellé existe déjà.");
-
-            return erreurs;
-        }
-
+        #region Statistiques de vote
         /// <summary>
         /// Permet d'obtenir le taux de vote (%) pour un jeu passé en paramètre,
         /// </summary>
@@ -189,6 +173,39 @@ namespace Lib_Services.Services
                 .ToList();
 
         }
+        #endregion
+        #region Validations
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a une SoumisVote.
+        /// </summary>
+        /// <param name="soumisVote">Le SoumisVote à valider</param>
+        /// <returns>La liste contenant toutes les erreurs</returns>
+        public List<string> ValiderSoumisVote(SoumisVote soumisVote)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
 
+            if (_jeuService.Obtenir(soumisVote.IdJeu) == null)
+                erreurs.Add("Le jeu associé n'existe pas.");
+
+            if (_plateformeService.Obtenir(soumisVote.IdPlateforme) == null)
+                erreurs.Add("La plateforme associée n'existe pas.");
+
+            if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null)
+                erreurs.Add("Une autre SoumisVote existe déjà.");
+
+            // Contrôles des dates
+            if (soumisVote.DateDebutVote >= soumisVote.DateFinVote)
+                erreurs.Add("La date de début doit être antérieure à la date de fin.");
+
+            if (soumisVote.DateDebutVote < DateTime.Now)
+                erreurs.Add("La date de début doit être dans le futur.");
+
+            if (soumisVote.DateFinVote < DateTime.Now)
+                erreurs.Add("La date de fin doit être dans le futur.");
+
+            return erreurs;
+        }
+        #endregion
     }
 }
