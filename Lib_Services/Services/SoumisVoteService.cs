@@ -122,5 +122,71 @@ namespace Lib_Services.Services
             return erreurs;
         }
 
+        /// <summary>
+        /// Permet d'obtenir le taux de vote (%) pour un jeu passé en paramètre,
+        /// </summary>
+        /// <param name="idJeu">Id unique du jeu</param>
+        /// <returns></returns>
+        public double CalculerTauxVoteJeu(int idJeu, DateTime dateDebut, DateTime dateFin)
+        {
+            int totalVotes = _context.Voter.Count(v => v.DateVote >= dateDebut && v.DateVote <= dateFin);
+            if (totalVotes == 0) return 0;
+
+            // Compte le nombre de votes associés au jeu
+            int votesJeu = _context.Voter.Count(v => v.IdJeu == idJeu);
+
+            return votesJeu / totalVotes * 100;
+        }
+
+        public int ObtenirVotesJeu(int idJeu,SoumisVote soumisVote)
+        {
+            int totalVotes = _context.Voter.Count(v => v.DateVote >= soumisVote.DateDebutVote 
+                && v.DateVote <= soumisVote.DateFinVote);
+            if (totalVotes == 0) return 0;
+
+            // Compte le nombre de votes associés au jeu
+            int votesJeu = _context.Voter.Count(v => v.IdJeu == idJeu);
+
+            return votesJeu / totalVotes * 100;
+        }
+
+        /// <summary>
+        /// Permet d'obtenir le taux de vote (%) pour un jeu et sa plateformepassé en paramètre,
+        /// </summary>
+        /// <param name="idJeu">Id unique du jeu</param>
+        /// <param name="idPlateforme">Id unique de la plateforme associé au jeu</param>
+        /// <returns></returns>
+        public double CalculerTauxVoteJeuPlateforme(int idJeu, int idPlateforme)
+        {
+            int totalVotes = _context.Voter.Count();
+            if (totalVotes == 0) return 0;
+
+            // Compte le nombre de votes associés au jeu et à la plateforme
+            int votesJeu = _context.Voter.Count(v => v.IdJeu == idJeu && v.IdPlateforme == idPlateforme);
+
+            return votesJeu / totalVotes * 100;
+        }
+
+        /// <summary>
+        /// Retourne le classement des binomes (jeu, plateforme) les plus votés
+        /// </summary>
+        /// <param name="soumisVote"></param>
+        /// <returns>Le classement des binomes</returns>
+        public List<Voter> ObtenirClassmentJeuxVotes(SoumisVote soumisVote)
+        {
+            return _context.Voter
+                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binome
+                .Select(g => new Voter //récupère les objets Voter 
+                {
+                    IdJeu = g.Key.IdJeu,
+                    IdPlateforme = g.Key.IdPlateforme,
+                    NbVotes = g.Count()
+                }) 
+                .OrderByDescending(v => v.NbVotes) // + populaires au moins populaires
+                //.Take(10) // Correspond au LIMIT en SQL
+                .ToList();
+
+        }
+
     }
 }
