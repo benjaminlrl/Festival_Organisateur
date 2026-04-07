@@ -172,17 +172,19 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="soumisVote"></param>
         /// <returns>Le classement des binomes</returns>
-        public List<Voter> ObtenirClassmentJeuxVotes(SoumisVote soumisVote)
+        public List<Voter> ListerClassmentJeuxVotes()
         {
             return _context.Voter
-                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binome
-                .Select(g => new Voter //récupère les objets Voter 
+                .Include(v => v.Plateforme)
+                .Include(v => v.Jeu)
+                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binomes
+                .Select(g => new Voter //récupère les objets en type Voter 
                 {
                     IdJeu = g.Key.IdJeu,
                     IdPlateforme = g.Key.IdPlateforme,
                     NbVotes = g.Count()
                 }) 
-                .OrderByDescending(v => v.NbVotes) // + populaires au moins populaires
+                .OrderByDescending(v => v.NbVotes) // du + populaires au moins populaires
                 //.Take(10) // Correspond au LIMIT en SQL
                 .ToList();
 

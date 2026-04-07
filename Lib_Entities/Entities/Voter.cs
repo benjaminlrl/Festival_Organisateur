@@ -17,7 +17,6 @@ namespace Lib_Entities.Entities
         public int IdPlateforme { get; set; }
         public DateTime DateVote { get; set; }
 
-        [NotMapped]
         public Plateforme Plateforme { get; set; }
         /// <summary>
         /// Propriété récupérée utilisée pour l'affichage (DataGridView).
@@ -26,7 +25,6 @@ namespace Lib_Entities.Entities
         /// </summary>
         [NotMapped] 
         public string LibellePlateforme => Plateforme?.Libelle ?? string.Empty;
-        [NotMapped]
         public Jeu Jeu { get; set; }
         /// <summary>
         /// Propriété récupérée utilisée pour l'affichage (DataGridView).

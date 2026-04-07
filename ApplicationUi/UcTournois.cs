@@ -45,10 +45,12 @@ namespace ApplicationUi
 
             buttonModifier.Enabled = _tournoiSelectionne != null;
             buttonSupprimer.Enabled = _tournoiSelectionne != null;
+
             _organisateurConnecte = unOrganisateurConnecte;
             buttonEffacer.Text = " 🧽  Effacer";
             filtre = "";
             ordreChamp = "ASC";
+
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;

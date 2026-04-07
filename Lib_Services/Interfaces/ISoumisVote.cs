@@ -14,5 +14,7 @@ namespace Lib_Services.Interfaces
         SoumisVote? Obtenir(int idJeu, int idPlateforme);
 
         List<string> ValiderSoumisVote(SoumisVote soumisVote);
+
+        List<Voter> ListerClassmentJeuxVotes();
     }
 }
