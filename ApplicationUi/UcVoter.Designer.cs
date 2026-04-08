@@ -34,8 +34,7 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             dataGridClassement = new DataGridView();
             tableLayoutPanel4 = new TableLayoutPanel();
-            labelNbVotes = new Label();
-            labelVotes = new Label();
+            labelClassement = new Label();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
             comboBoxJeu = new ComboBox();
@@ -138,12 +137,9 @@
             // 
             // tableLayoutPanel4
             // 
-            tableLayoutPanel4.ColumnCount = 3;
+            tableLayoutPanel4.ColumnCount = 1;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 97F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 236F));
-            tableLayoutPanel4.Controls.Add(labelNbVotes, 2, 0);
-            tableLayoutPanel4.Controls.Add(labelVotes, 0, 0);
+            tableLayoutPanel4.Controls.Add(labelClassement, 0, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(3, 3);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -152,31 +148,18 @@
             tableLayoutPanel4.Size = new Size(564, 45);
             tableLayoutPanel4.TabIndex = 8;
             // 
-            // labelNbVotes
+            // labelClassement
             // 
-            labelNbVotes.BackColor = Color.YellowGreen;
-            labelNbVotes.Dock = DockStyle.Fill;
-            labelNbVotes.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelNbVotes.ForeColor = Color.FromArgb(0, 0, 64);
-            labelNbVotes.Location = new Point(331, 0);
-            labelNbVotes.Name = "labelNbVotes";
-            labelNbVotes.Size = new Size(230, 45);
-            labelNbVotes.TabIndex = 12;
-            labelNbVotes.Text = "x votes restants";
-            labelNbVotes.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // labelVotes
-            // 
-            labelVotes.BackColor = Color.FromArgb(192, 192, 255);
-            labelVotes.Dock = DockStyle.Fill;
-            labelVotes.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelVotes.ForeColor = Color.FromArgb(0, 0, 64);
-            labelVotes.Location = new Point(3, 0);
-            labelVotes.Name = "labelVotes";
-            labelVotes.Size = new Size(225, 45);
-            labelVotes.TabIndex = 11;
-            labelVotes.Text = "Jeux votés";
-            labelVotes.TextAlign = ContentAlignment.MiddleCenter;
+            labelClassement.BackColor = Color.FromArgb(192, 192, 255);
+            labelClassement.Dock = DockStyle.Fill;
+            labelClassement.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelClassement.ForeColor = Color.FromArgb(0, 0, 64);
+            labelClassement.Location = new Point(3, 0);
+            labelClassement.Name = "labelClassement";
+            labelClassement.Size = new Size(558, 45);
+            labelClassement.TabIndex = 11;
+            labelClassement.Text = "Classement des jeux et plateformes";
+            labelClassement.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panelForm
             // 
@@ -472,9 +455,8 @@
         private ComboBox comboBoxPlateforme;
         private TableLayoutPanel tableLayoutPanel3;
         private DataGridView dataGridClassement;
-        private Label labelVotes;
+        private Label labelClassement;
         private TableLayoutPanel tableLayoutPanel4;
-        private Label labelNbVotes;
         private Label label3;
         private DateTimePicker dateTimePickerDateFinVote;
         private ComboBox comboBoxJeu;

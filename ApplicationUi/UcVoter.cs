@@ -45,6 +45,7 @@ namespace ApplicationUi
             dateTimePickerDateDebutVote.Value = new DateTime(2000, 01, 01);
             dateTimePickerDateFinVote.Value = new DateTime(2000, 01, 01);
 
+            ChargerClassement();
             ChargerJeux();
             ChargerPlateforme();
             ChargerSoumisVotes();
@@ -98,13 +99,9 @@ namespace ApplicationUi
         /// </summary>
         private void ChargerClassement()
         {
-            List<Voter> classement = _serviceSoumisVote.ListerClassmentJeuxVotes();
-
             dataGridClassement.DataSource = null;
-            dataGridClassement.DataSource = classement;
-
-            if (dataGridClassement.DataSource != null)
-                MEP_DataGridClassement();
+            dataGridClassement.DataSource = _serviceSoumisVote.ListerClassmentJeuxVotes();
+            MEP_DataGridClassement();
         }
 
         private void AfficherBouttons()
@@ -146,23 +143,24 @@ namespace ApplicationUi
 
         private void MEP_DataGridClassement()
         {
-            //dataGridClassement.Columns["IdUser"].Visible = false;
-            //dataGridClassement.Columns["IdPlateforme"].Visible = false;
-            //dataGridClassement.Columns["IdJeu"].Visible = false;
-            //dataGridClassement.Columns["Plateforme"].Visible = false;
-            //dataGridClassement.Columns["Jeu"].Visible = false;
+            dataGridClassement.Columns["NbVotes"].DisplayIndex = 2; // A placer en premier à cause des conflits de propriétés calculés
+            dataGridClassement.Columns["TitreJeu"].DisplayIndex = 0;
+            dataGridClassement.Columns["LibellePlateforme"].DisplayIndex = 1;
 
-            //dataGridClassement.Columns["TitreJeu"].HeaderText = "Jeu";
-            //dataGridClassement.Columns["LibellePlateforme"].HeaderText = "Plateforme";
-            //dataGridClassement.Columns["DateVote"].HeaderText = "Date du vote";
+            dataGridClassement.Columns["IdPlateforme"].Visible = false;
+            dataGridClassement.Columns["IdUser"].Visible = false;
+            dataGridClassement.Columns["IdJeu"].Visible = false;
+            dataGridClassement.Columns["Plateforme"].Visible = false;
+            dataGridClassement.Columns["Jeu"].Visible = false;
+            dataGridClassement.Columns["DateVote"].Visible = false;
 
-            //dataGridClassement.Columns["TitreJeu"].DisplayIndex = 1;
-            //dataGridClassement.Columns["LibellePlateforme"].DisplayIndex = 2;
+            dataGridClassement.Columns["TitreJeu"].HeaderText = "Jeu";
+            dataGridClassement.Columns["LibellePlateforme"].HeaderText = "Plateforme";
+            dataGridClassement.Columns["DateVote"].HeaderText = "Date du vote";
+            dataGridClassement.Columns["NbVotes"].HeaderText = "Nombre de votes";
 
-
-            //dataGridClassement.Columns["TitreJeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            //dataGridClassement.Columns["LibellePlateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            //dataGridClassement.Columns["DateVote"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridClassement.Columns["TitreJeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridClassement.Columns["LibellePlateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void dataGridClassement_CellClick(object sender, DataGridViewCellEventArgs e)
