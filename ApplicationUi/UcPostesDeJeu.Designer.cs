@@ -403,6 +403,7 @@
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(713, 31);
             textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // groupBoxStatsPostesJeu
             // 
