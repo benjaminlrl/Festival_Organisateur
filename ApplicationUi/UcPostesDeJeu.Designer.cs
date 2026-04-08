@@ -402,8 +402,9 @@
             // 
             textBoxRecherche.Location = new Point(185, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(713, 31);
+            textBoxRecherche.Size = new Size(784, 31);
             textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // groupBoxStatsPostesJeu
             // 
