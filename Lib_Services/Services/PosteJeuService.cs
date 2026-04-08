@@ -42,6 +42,8 @@ namespace Lib_Services.Services
                     .Include(p => p.Plateforme)
                     .ToList();
             return _context.PostesJeu
+                .Include(p => p.Espace)
+                .Include(p => p.Plateforme)
                 .Where(p => p.Reference.Contains(filtre)
                     || p.Espace.Nom.Contains(filtre)
                     || p.Plateforme.Libelle.Contains(filtre))

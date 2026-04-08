@@ -164,7 +164,7 @@ namespace ApplicationUi
 
                 if (futurs.Any())
                 {
-                    labelStatutTournoi.Text ="Poste reservé";
+                    labelStatutTournoi.Text = "Poste reservé";
                     labelStatutTournoi.ForeColor = Color.Chocolate;
                     labelStatutTournoi.BackColor = Color.FromArgb(255, 224, 192);
 
@@ -414,6 +414,5 @@ namespace ApplicationUi
         }
 
         #endregion
-
     }
 }
