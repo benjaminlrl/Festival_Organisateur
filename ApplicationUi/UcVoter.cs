@@ -42,8 +42,9 @@ namespace ApplicationUi
 
             filtre = "";
             ordreChamp = "ASC";
-            dateTimePickerDateDebutVote.Value = new DateTime(2000, 01, 01);
-            dateTimePickerDateFinVote.Value = new DateTime(2000, 01, 01);
+
+            dateTimePickerDateDebutVote.Value = DateTime.Now;
+            dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
 
             ChargerClassement();
             ChargerJeux();
@@ -123,12 +124,17 @@ namespace ApplicationUi
             textBoxRecherche.Clear();
             comboBoxPlateforme.SelectedItem = null;
             _soumisVoteSelectionne = null;
-            dateTimePickerDateDebutVote.Value = new DateTime(2000, 01, 01);
-            dateTimePickerDateFinVote.Value = new DateTime(2000, 01, 01);
+            dateTimePickerDateDebutVote.Value = DateTime.Now;
+            dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
             AfficherBouttons();
         }
         private void MEP_DataGrid()
         {
+            dataGridSoumisVote.Columns["LibellePlateforme"].DisplayIndex = 0;
+            dataGridSoumisVote.Columns["TitreJeu"].DisplayIndex = 1;
+            dataGridSoumisVote.Columns["DateDebutVote"].DisplayIndex = 2;
+            dataGridSoumisVote.Columns["DateFinVote"].DisplayIndex = 3;
+
             dataGridSoumisVote.Columns["IdJeu"].Visible = false;
             dataGridSoumisVote.Columns["IdPlateforme"].Visible = false;
             dataGridSoumisVote.Columns["Plateforme"].Visible = false;
@@ -156,7 +162,6 @@ namespace ApplicationUi
 
             dataGridClassement.Columns["TitreJeu"].HeaderText = "Jeu";
             dataGridClassement.Columns["LibellePlateforme"].HeaderText = "Plateforme";
-            dataGridClassement.Columns["DateVote"].HeaderText = "Date du vote";
             dataGridClassement.Columns["NbVotes"].HeaderText = "Nombre de votes";
 
             dataGridClassement.Columns["TitreJeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -211,7 +216,7 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // on ne gère pas les cliques sur la première colonne
-                if (e.ColumnIndex < 1)
+                if (e.ColumnIndex < 0)
                     return;
 
                 var donnees = _serviceSoumisVote.Lister(filtre);
