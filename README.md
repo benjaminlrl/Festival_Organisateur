@@ -6,6 +6,8 @@ dotnet tool update --global dotnet-ef
 
 Puis:
 dotnet ef migrations add InitialCreate --project Lib_Metier --startup-project ApplicationUi
+
+Pour update (non recommandé pour l'instant) :
 dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 
 ## 📸 Captures d'écran
@@ -45,6 +47,10 @@ dotnet ef database update --project Lib_Metier --startup-project ApplicationUi
 ### Espace de votes pour les utilisateurs
 
 ![Espace de votes dédié aux utilisateurs](Documentation/App/espaceVoter.png)
+
+### Gestion des lots
+
+![Gestion des lots](Documentation/App/gestionLots.png)
 
 ### Gestion des composants des lots
 
