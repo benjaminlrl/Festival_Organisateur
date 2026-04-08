@@ -24,14 +24,14 @@ namespace ApplicationUi
             btnPostes = new Button();
             btnEspaces = new Button();
             btnTournois = new Button();
-            btnLotComposants = new Button();
             buttonJeux = new Button();
             btnOrganisateurs = new Button();
+            btnLots = new Button();
+            btnLotComposants = new Button();
             btnQuitter = new Button();
             panelHeader = new Panel();
             lblTitre = new Label();
             panelContent = new Panel();
-            btnLots = new Button();
             panelMenu.SuspendLayout();
             panelHeader.SuspendLayout();
             SuspendLayout();
@@ -131,25 +131,6 @@ namespace ApplicationUi
             btnTournois.UseVisualStyleBackColor = false;
             btnTournois.Click += btnTournois_Click;
             // 
-            // btnLotComposants
-            // 
-            btnLotComposants.BackColor = Color.Blue;
-            btnLotComposants.BackgroundImageLayout = ImageLayout.None;
-            btnLotComposants.FlatAppearance.BorderSize = 0;
-            btnLotComposants.FlatStyle = FlatStyle.Flat;
-            btnLotComposants.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            btnLotComposants.ForeColor = Color.White;
-            btnLotComposants.Image = Properties.Resources.tournoi;
-            btnLotComposants.ImageAlign = ContentAlignment.MiddleLeft;
-            btnLotComposants.Location = new Point(0, 634);
-            btnLotComposants.Margin = new Padding(0, 9, 0, 4);
-            btnLotComposants.Name = "btnLotComposants";
-            btnLotComposants.Size = new Size(225, 91);
-            btnLotComposants.TabIndex = 6;
-            btnLotComposants.Text = "      Composant des lots";
-            btnLotComposants.UseVisualStyleBackColor = false;
-            btnLotComposants.Click += btnLotComposants_Click;
-            // 
             // buttonJeux
             // 
             buttonJeux.BackColor = Color.FromArgb(255, 128, 0);
@@ -187,6 +168,44 @@ namespace ApplicationUi
             btnOrganisateurs.Text = "      Organisateurs";
             btnOrganisateurs.UseVisualStyleBackColor = false;
             btnOrganisateurs.Click += btnOrganisateurs_Click;
+            // 
+            // btnLots
+            // 
+            btnLots.BackColor = Color.FromArgb(128, 128, 255);
+            btnLots.BackgroundImageLayout = ImageLayout.None;
+            btnLots.FlatAppearance.BorderSize = 0;
+            btnLots.FlatStyle = FlatStyle.Flat;
+            btnLots.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            btnLots.ForeColor = Color.White;
+            btnLots.Image = Properties.Resources.tournoi;
+            btnLots.ImageAlign = ContentAlignment.MiddleLeft;
+            btnLots.Location = new Point(0, 553);
+            btnLots.Margin = new Padding(0, 9, 0, 7);
+            btnLots.Name = "btnLots";
+            btnLots.Size = new Size(229, 65);
+            btnLots.TabIndex = 7;
+            btnLots.Text = "Lots";
+            btnLots.UseVisualStyleBackColor = false;
+            btnLots.Click += btnLots_Click;
+            // 
+            // btnLotComposants
+            // 
+            btnLotComposants.BackColor = Color.Blue;
+            btnLotComposants.BackgroundImageLayout = ImageLayout.None;
+            btnLotComposants.FlatAppearance.BorderSize = 0;
+            btnLotComposants.FlatStyle = FlatStyle.Flat;
+            btnLotComposants.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            btnLotComposants.ForeColor = Color.White;
+            btnLotComposants.Image = Properties.Resources.tournoi;
+            btnLotComposants.ImageAlign = ContentAlignment.MiddleLeft;
+            btnLotComposants.Location = new Point(0, 634);
+            btnLotComposants.Margin = new Padding(0, 9, 0, 4);
+            btnLotComposants.Name = "btnLotComposants";
+            btnLotComposants.Size = new Size(225, 91);
+            btnLotComposants.TabIndex = 6;
+            btnLotComposants.Text = "      Composant des lots";
+            btnLotComposants.UseVisualStyleBackColor = false;
+            btnLotComposants.Click += btnLotComposants_Click;
             // 
             // btnQuitter
             // 
@@ -238,24 +257,6 @@ namespace ApplicationUi
             panelContent.Name = "panelContent";
             panelContent.Size = new Size(996, 816);
             panelContent.TabIndex = 0;
-            // 
-            // btnLots
-            // 
-            btnLots.BackColor = Color.FromArgb(128, 128, 255);
-            btnLots.BackgroundImageLayout = ImageLayout.None;
-            btnLots.FlatAppearance.BorderSize = 0;
-            btnLots.FlatStyle = FlatStyle.Flat;
-            btnLots.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            btnLots.ForeColor = Color.White;
-            btnLots.Image = Properties.Resources.tournoi;
-            btnLots.ImageAlign = ContentAlignment.MiddleLeft;
-            btnLots.Location = new Point(0, 553);
-            btnLots.Margin = new Padding(0, 9, 0, 7);
-            btnLots.Name = "btnLots";
-            btnLots.Size = new Size(229, 65);
-            btnLots.TabIndex = 7;
-            btnLots.Text = "Lots";
-            btnLots.UseVisualStyleBackColor = false;
             // 
             // FormMain
             // 
