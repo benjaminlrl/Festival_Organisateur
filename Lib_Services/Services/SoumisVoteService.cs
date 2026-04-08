@@ -45,7 +45,9 @@ namespace Lib_Services.Services
                 .Include(v => v.Plateforme)
                 .Include(v => v.Jeu)
                 .Where(v => v.DateDebutVote.ToString().Contains(filtre)
-                        || v.DateFinVote.ToString().Contains(filtre))
+                        || v.DateFinVote.ToString().Contains(filtre)
+                        || v.Plateforme.Libelle.Contains(filtre)
+                        || v.Jeu.Titre.Contains(filtre))
                 .ToList();
         }
 
@@ -60,7 +62,7 @@ namespace Lib_Services.Services
         public SoumisVote? Obtenir(int idJeu, int idPlateforme)
         {
             // Find retourne null si l'entité n'existe pas.
-            return _context.SoumisVotes.Find(new {idJeu, idPlateforme });
+            return _context.SoumisVotes.Find(idJeu, idPlateforme);
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace Lib_Services.Services
         public void Supprimer(int idJeu, int idPlateforme)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var soumisVote = _context.SoumisVotes.Find(new {idJeu, idPlateforme });
+            var soumisVote = _context.SoumisVotes.Find(idJeu, idPlateforme);
             if (soumisVote != null)
             {
                 _context.SoumisVotes.Remove(soumisVote);
@@ -159,20 +161,22 @@ namespace Lib_Services.Services
         public List<Voter> ListerClassmentJeuxVotes()
         {
             return _context.Voter
-                .Include(v => v.Plateforme)
                 .Include(v => v.Jeu)
-                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binomes
-                .Select(g => new Voter //récupère les objets en type Voter 
+                .Include(v => v.Plateforme)
+                .AsEnumerable() // Charge tout en mémoire pour que Include fonctionne avec GroupBy
+                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binôme (jeu, plateforme)
+                .Select(g => new Voter
                 {
                     IdJeu = g.Key.IdJeu,
                     IdPlateforme = g.Key.IdPlateforme,
-                    NbVotes = g.Count()
-                }) 
-                .OrderByDescending(v => v.NbVotes) // du + populaires au moins populaires
-                //.Take(10) // Correspond au LIMIT en SQL
+                    Jeu = g.First().Jeu,           // Récupère l'objet Jeu depuis le 1er élément du groupe
+                    Plateforme = g.First().Plateforme, // Récupère l'objet Plateforme depuis le 1er élément du groupe
+                    NbVotes = g.Count()            // Compte le nombre de votes pour ce binôme
+                })
+                .OrderByDescending(v => v.NbVotes) // Trie du plus populaire au moins populaire
                 .ToList();
-
         }
+
         #endregion
         #region Validations
         /// <summary>
