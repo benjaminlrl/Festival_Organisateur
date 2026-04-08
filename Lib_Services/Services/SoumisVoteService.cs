@@ -202,10 +202,11 @@ namespace Lib_Services.Services
             if (soumisVote.DateDebutVote >= soumisVote.DateFinVote)
                 erreurs.Add("La date de début doit être antérieure à la date de fin.");
 
-            if (soumisVote.DateDebutVote < DateTime.Now)
+            // Vérifier que les dates ne sont pas dans le passé
+            if (soumisVote.DateDebutVote.Day < DateTime.Now.Day)
                 erreurs.Add("La date de début doit être dans le futur.");
 
-            if (soumisVote.DateFinVote < DateTime.Now)
+            if (soumisVote.DateFinVote.Day < DateTime.Now.Day)
                 erreurs.Add("La date de fin doit être dans le futur.");
 
             return erreurs;
