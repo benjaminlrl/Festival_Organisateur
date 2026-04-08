@@ -13,7 +13,7 @@ namespace Lib_Services.Interfaces
         List<SoumisVote> Lister(string filtre);
         SoumisVote? Obtenir(int idJeu, int idPlateforme);
 
-        List<string> ValiderSoumisVote(SoumisVote soumisVote);
+        List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification);
 
         List<Voter> ListerClassmentJeuxVotes();
     }

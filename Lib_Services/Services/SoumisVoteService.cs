@@ -52,17 +52,21 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Modifie un SoumisVote identifié par l'id de l'utilisateur, 
-        /// l'id du jeu et l'id de la plateforme, 
-        /// puis persiste la modification.
+        /// Retourne un SoumisVote identifié par l'id du jeu et l'id de la plateforme.
+        /// AsNoTracking() est utilisé pour éviter les conflits de tracking lors des modifications.
         /// </summary>
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
-        /// <returns></returns>
+        /// <returns>Le SoumisVote correspondant ou null s'il n'existe pas</returns>
         public SoumisVote? Obtenir(int idJeu, int idPlateforme)
         {
-            // Find retourne null si l'entité n'existe pas.
-            return _context.SoumisVotes.Find(idJeu, idPlateforme);
+            // AsNoTracking() force EF Core à aller chercher l'entité directement en base de données
+            // et non depuis le cache local (ChangeTracker).
+            // Cela garantit que l'on compare les données réelles en BDD avec les données modifiées,
+            // et évite les conflits de tracking lors des appels à Valider() puis Modifier().
+            return _context.SoumisVotes
+                .AsNoTracking()
+                .FirstOrDefault(s => s.IdJeu == idJeu && s.IdPlateforme == idPlateforme);
         }
 
         /// <summary>
@@ -184,7 +188,7 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="soumisVote">Le SoumisVote à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderSoumisVote(SoumisVote soumisVote)
+        public List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false)
         {
             // liste des erreurs
             var erreurs = new List<string>();
@@ -195,8 +199,14 @@ namespace Lib_Services.Services
             if (_plateformeService.Obtenir(soumisVote.IdPlateforme) == null)
                 erreurs.Add("La plateforme associée n'existe pas.");
 
-            if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null)
+            if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null && !estModification)
                 erreurs.Add("Une autre SoumisVote existe déjà.");
+
+            // compare la bdd et le soumisVote modif
+            SoumisVote? _enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
+            if (_enBdd != null && _enBdd.DateDebutVote == soumisVote.DateDebutVote
+                && _enBdd.DateFinVote == soumisVote.DateFinVote)
+                erreurs.Add("Aucune modification détectée.");
 
             // Contrôles des dates
             if (soumisVote.DateDebutVote >= soumisVote.DateFinVote)

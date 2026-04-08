@@ -49,6 +49,7 @@
             dateTimePickerDateDebutVote = new DateTimePicker();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
+            buttonModifier = new Button();
             buttonAjouter = new Button();
             buttonEffacer = new Button();
             buttonSupprimer = new Button();
@@ -324,6 +325,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonAjouter);
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonSupprimer);
@@ -334,6 +336,22 @@
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
+            // 
+            // buttonModifier
+            // 
+            buttonModifier.BackColor = Color.FromArgb(33, 150, 243);
+            buttonModifier.FlatAppearance.BorderSize = 0;
+            buttonModifier.FlatStyle = FlatStyle.Flat;
+            buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonModifier.ForeColor = Color.White;
+            buttonModifier.Location = new Point(453, 25);
+            buttonModifier.Margin = new Padding(4);
+            buttonModifier.Name = "buttonModifier";
+            buttonModifier.Size = new Size(176, 45);
+            buttonModifier.TabIndex = 7;
+            buttonModifier.Text = "✏️    Modifier";
+            buttonModifier.UseVisualStyleBackColor = false;
+            buttonModifier.Click += buttonModifier_Click;
             // 
             // buttonAjouter
             // 
@@ -459,5 +477,6 @@
         private Label label3;
         private DateTimePicker dateTimePickerDateFinVote;
         private ComboBox comboBoxJeu;
+        private Button buttonModifier;
     }
 }

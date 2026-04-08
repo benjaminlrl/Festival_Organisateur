@@ -107,8 +107,14 @@ namespace ApplicationUi
 
         private void AfficherBouttons()
         {
-            buttonAjouter.Enabled = true;
-            buttonSupprimer.Enabled = true;
+            buttonAjouter.Enabled = _soumisVoteSelectionne == null;
+            buttonModifier.Enabled = _soumisVoteSelectionne != null;
+            buttonSupprimer.Enabled = _soumisVoteSelectionne != null;
+            buttonEffacer.Enabled = _soumisVoteSelectionne != null;
+
+            comboBoxJeu.Enabled = _soumisVoteSelectionne == null;
+            comboBoxPlateforme.Enabled = _soumisVoteSelectionne == null;
+
         }
 
         /// <summary>
@@ -280,9 +286,9 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        private bool ValiderSoumisVote(SoumisVote soumisvote)
+        private bool ValiderSoumisVote(SoumisVote soumisvote, bool estModification)
         {
-            var erreurs = _serviceSoumisVote.ValiderSoumisVote(soumisvote);
+            var erreurs = _serviceSoumisVote.ValiderSoumisVote(soumisvote, estModification);
             if (erreurs.Any())
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -296,7 +302,7 @@ namespace ApplicationUi
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
 
-            var soumisVote = new SoumisVote
+            SoumisVote soumisVote = new SoumisVote
             {
                 IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
                 IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
@@ -306,13 +312,25 @@ namespace ApplicationUi
                 DateDebutVote = dateTimePickerDateDebutVote.Value,
 
             };
-            if (ValiderSoumisVote(soumisVote))
+            if (ValiderSoumisVote(soumisVote, false))
             {
                 _serviceSoumisVote.Creer(soumisVote);
                 _soumisVoteSelectionne = soumisVote;
                 ChargerJeux();
                 ChargerSoumisVotes();
                 AfficherBouttons();
+            }
+        }
+        private void buttonModifier_Click(object sender, EventArgs e)
+        {
+            _soumisVoteSelectionne.DateDebutVote = dateTimePickerDateDebutVote.Value;
+            _soumisVoteSelectionne.DateFinVote = dateTimePickerDateFinVote.Value;
+            if (ValiderSoumisVote(_soumisVoteSelectionne, true))
+            {
+                _serviceSoumisVote.Modifier(_soumisVoteSelectionne);
+                ChargerSoumisVotes();
+                AfficherBouttons();
+                Raz_Zones();
             }
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
