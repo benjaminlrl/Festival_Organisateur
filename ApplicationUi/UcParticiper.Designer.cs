@@ -33,7 +33,6 @@
             label1 = new Label();
             labelNom = new Label();
             textBoxRecherche = new TextBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
             panelForm = new Panel();
             tableLayoutPanelCRUD = new TableLayoutPanel();
@@ -62,7 +61,6 @@
             buttonSupprimer = new Button();
             dataGridParticipations = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dataGridParticipationsUtilisateur).BeginInit();
-            tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panelForm.SuspendLayout();
             tableLayoutPanelCRUD.SuspendLayout();
@@ -101,14 +99,14 @@
             dataGridParticipationsUtilisateur.Name = "dataGridParticipationsUtilisateur";
             dataGridParticipationsUtilisateur.ReadOnly = true;
             dataGridParticipationsUtilisateur.RowHeadersWidth = 62;
-            dataGridParticipationsUtilisateur.Size = new Size(422, 386);
+            dataGridParticipationsUtilisateur.Size = new Size(422, 425);
             dataGridParticipationsUtilisateur.TabIndex = 5;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(3, 0);
+            label1.Location = new Point(70, 125);
             label1.Name = "label1";
             label1.Size = new Size(131, 30);
             label1.TabIndex = 1;
@@ -128,25 +126,11 @@
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(240, 3);
+            textBoxRecherche.Location = new Point(194, 124);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(1001, 31);
             textBoxRecherche.TabIndex = 0;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.7640457F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.2359543F));
-            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
-            tableLayoutPanel2.Controls.Add(label1, 0, 0);
-            tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 400);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1266, 35);
-            tableLayoutPanel2.TabIndex = 6;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged_1;
             // 
             // tableLayoutPanel1
             // 
@@ -154,17 +138,14 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.87981F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.1201916F));
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
-            tableLayoutPanel1.Controls.Add(dataGridParticipations, 0, 2);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(dataGridParticipationsUtilisateur, 1, 0);
+            tableLayoutPanel1.Controls.Add(dataGridParticipations, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 89.49772F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10.5022831F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 216F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 222F));
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 49.1448135F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50.8551865F));
             tableLayoutPanel1.Size = new Size(1700, 877);
             tableLayoutPanel1.TabIndex = 6;
             // 
@@ -176,7 +157,7 @@
             panelForm.Location = new Point(4, 3);
             panelForm.Margin = new Padding(4, 3, 4, 3);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(1264, 386);
+            panelForm.Size = new Size(1264, 425);
             panelForm.TabIndex = 3;
             // 
             // tableLayoutPanelCRUD
@@ -190,9 +171,9 @@
             tableLayoutPanelCRUD.Location = new Point(0, 0);
             tableLayoutPanelCRUD.Name = "tableLayoutPanelCRUD";
             tableLayoutPanelCRUD.RowCount = 2;
-            tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 66.1721039F));
-            tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 33.8278923F));
-            tableLayoutPanelCRUD.Size = new Size(1264, 386);
+            tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 51.52941F));
+            tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 48.47059F));
+            tableLayoutPanelCRUD.Size = new Size(1264, 425);
             tableLayoutPanelCRUD.TabIndex = 8;
             // 
             // tableLayoutPanel
@@ -230,7 +211,7 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(1256, 249);
+            tableLayoutPanel.Size = new Size(1256, 213);
             tableLayoutPanel.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -240,7 +221,7 @@
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(559, 132);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(232, 114);
+            flowLayoutPanel1.Size = new Size(232, 78);
             flowLayoutPanel1.TabIndex = 39;
             // 
             // radioButtonLotRemisTrue
@@ -321,7 +302,7 @@
             textBoxCommentaire.Name = "textBoxCommentaire";
             textBoxCommentaire.PlaceholderText = "Laisser un commentaire sur le tournoi...";
             tableLayoutPanel.SetRowSpan(textBoxCommentaire, 3);
-            textBoxCommentaire.Size = new Size(456, 208);
+            textBoxCommentaire.Size = new Size(456, 172);
             textBoxCommentaire.TabIndex = 19;
             // 
             // labelEvaluation
@@ -436,13 +417,15 @@
             // groupBox1
             // 
             groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(textBoxRecherche);
             groupBox1.Controls.Add(buttonAjouter);
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Location = new Point(3, 258);
+            groupBox1.Location = new Point(3, 222);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1258, 125);
+            groupBox1.Size = new Size(1258, 200);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
@@ -518,14 +501,13 @@
             dataGridParticipations.BorderStyle = BorderStyle.None;
             dataGridParticipations.ColumnHeadersHeight = 34;
             dataGridParticipations.Dock = DockStyle.Fill;
-            dataGridParticipations.Location = new Point(4, 441);
+            dataGridParticipations.Location = new Point(4, 434);
             dataGridParticipations.Margin = new Padding(4, 3, 4, 3);
             dataGridParticipations.Name = "dataGridParticipations";
             dataGridParticipations.ReadOnly = true;
             dataGridParticipations.RowHeadersWidth = 62;
-            tableLayoutPanel1.SetRowSpan(dataGridParticipations, 2);
             dataGridParticipations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridParticipations.Size = new Size(1264, 433);
+            dataGridParticipations.Size = new Size(1264, 440);
             dataGridParticipations.TabIndex = 4;
             dataGridParticipations.CellClick += dataGridParticipations_CellClick;
             // 
@@ -537,8 +519,6 @@
             Name = "UcParticiper";
             Size = new Size(1700, 877);
             ((System.ComponentModel.ISupportInitialize)dataGridParticipationsUtilisateur).EndInit();
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             panelForm.ResumeLayout(false);
             tableLayoutPanelCRUD.ResumeLayout(false);
@@ -550,6 +530,7 @@
             ((System.ComponentModel.ISupportInitialize)trackBarEvaluation).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownScoreFinal).EndInit();
             groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridParticipations).EndInit();
             ResumeLayout(false);
         }

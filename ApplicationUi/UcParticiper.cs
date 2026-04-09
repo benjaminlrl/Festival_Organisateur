@@ -314,5 +314,10 @@ namespace ApplicationUi
         {
 
         }
+
+        private void textBoxRecherche_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
