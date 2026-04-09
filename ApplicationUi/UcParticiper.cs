@@ -21,11 +21,11 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly IParticiperService _serviceParticiper;
         private readonly IPlateformeService _servicePlateforme;
-        private bool fonctionnelSelectionne;
         private Participer? _participerSelectionne;
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
+        private bool lotRemisSelectionne;
 
         public UcParticiper(Organisateur unOrganisateurConnecte)
         {
@@ -37,7 +37,7 @@ namespace ApplicationUi
             _serviceParticiper = new ParticiperService(context);
             _servicePlateforme = new PlateformeService(context);
             _participerSelectionne = null;
-            fonctionnelSelectionne = false;
+            lotRemisSelectionne = false;
             filtre = "";
             ordreChamp = "ASC";
             _organisateurConnecte = unOrganisateurConnecte;
@@ -133,6 +133,8 @@ namespace ApplicationUi
             _participerSelectionne = null;
             buttonModifier.Enabled = _participerSelectionne != null;
             buttonSupprimer.Enabled = _participerSelectionne != null;
+            radioButtonLotRemisTrue.Checked = false;
+            radioButtonLotRemisTrue.Checked = false;
         }
         private void MEP_DataGrid()
         // TODO: Modifier les données de la grille pour afficher le nom de l'espace
@@ -179,7 +181,7 @@ namespace ApplicationUi
                 return;
             }
 
-            _participerSelectionne = dataGridParticipationsUtilisateur.Rows[e.RowIndex].DataBoundItem as Participer;
+            _participerSelectionne = dataGridParticipations.Rows[e.RowIndex].DataBoundItem as Participer;
 
             if (_participerSelectionne != null)
                 RemplirFormulaire(_participerSelectionne);
@@ -196,9 +198,18 @@ namespace ApplicationUi
             textBoxCommentaire.Text = _participerSelectionne.Commentaire;
             trackBarEvaluation.Value = _participerSelectionne.Evaluation;
             dateTimePickerDateHeureInscription.Value = _participerSelectionne.DateHeureInscription;
-            comboBoxLotRemis.SelectedItem = _participerSelectionne.LotRemis; // true ou false selon le choix de l'utilisateur
             comboBoxUtilisateur.SelectedItem = _participerSelectionne.IdUser;
             comboBoxTournoi.SelectedItem = _participerSelectionne.NumeroTournoi;
+
+            // LotRemis (RadioButtons)
+            if (participer.LotRemis)
+            {
+                radioButtonLotRemisTrue.Checked = true;
+            }
+            else
+            {
+                radioButtonLotRemisTrue.Checked = true;
+            }
 
         }
 
@@ -212,6 +223,15 @@ namespace ApplicationUi
         {
             filtre = textBoxRecherche.Text;
             ChargerParticipations();
+        }
+        private void radioButtonLotRemisFalse_CheckedChanged(object sender, EventArgs e)
+        {
+            lotRemisSelectionne = false;
+        }
+
+        private void radioButtonLotRemisTrue_CheckedChanged(object sender, EventArgs e)
+        {
+            lotRemisSelectionne = true;
         }
         #endregion
 
@@ -234,10 +254,9 @@ namespace ApplicationUi
                     Commentaire = textBoxCommentaire.Text,
                     Evaluation = trackBarEvaluation.Value,
                     DateHeureInscription = dateTimePickerDateHeureInscription.Value,
-                    LotRemis = ((Lot)comboBoxLotRemis.SelectedItem).Numero,
-                    Lot = (Lot)comboBoxLotRemis.SelectedItem,
                     IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
                     NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
+                    LotRemis = lotRemisSelectionne
                 };
                 _serviceParticiper.Creer(participer);
                 ChargerParticipations();
@@ -259,10 +278,9 @@ namespace ApplicationUi
             _participerSelectionne.Commentaire = textBoxCommentaire.Text;
             _participerSelectionne.Evaluation = trackBarEvaluation.Value;
             _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
-            _participerSelectionne.LotRemis = ((Lot)comboBoxLotRemis.SelectedItem).Numero;
-            _participerSelectionne.Lot = ((Lot)comboBoxLotRemis.SelectedItem);
             _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
             _participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
+            _participerSelectionne.LotRemis = lotRemisSelectionne;
 
             _serviceParticiper.Modifier(_participerSelectionne);
             ChargerParticipations();
@@ -290,5 +308,9 @@ namespace ApplicationUi
 
         #endregion
 
+        private void radioButtonLotRemisFalse_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

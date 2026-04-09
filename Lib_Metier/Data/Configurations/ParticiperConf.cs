@@ -36,8 +36,16 @@ namespace Lib_Metier.Data.Configurations
             builder.Property(p => p.ScoreFinal)
                    .HasColumnName("scoreFinal");
 
+            // Conversion personnalisée pour la propriété booléenne :
+            // - En base : "O" (oui) ou "N" (non)
+            // - En CLR : true / false
+            // Utile si le schéma existant stocke des flags 'O'/'N' au lieu de bit/bool.
             builder.Property(p => p.LotRemis)
-                   .HasColumnName("lotRemis");
+                   .HasColumnName("lotRemis")
+                   .HasConversion(
+                        v => v ? "O" : "N",    // CLR -> DB
+                        v => v == "O"          // DB  -> CLR
+                    );
         }
     }
 }

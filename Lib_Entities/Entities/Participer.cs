@@ -20,14 +20,10 @@ namespace Lib_Entities.Entities
         public string? Commentaire { get; set; }
         public DateTime DateHeureInscription { get; set; }
         public int? ScoreFinal { get; set; }
-        public int? LotRemis { get; set; }
-        public Lot? Lot { get; set; }
         /// <summary>
-        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
-        /// Renvoie le libellé de la plateforme de façon null-safe ;
-        /// retourne chaîne vide si l'espace est null.
+        /// Inidque si le lot a été remis ou non au participant.
         /// </summary>
-        public string LibelleLot => Lot?.Libelle ?? string.Empty;
+        public bool LotRemis { get; set; }
 
     }
 }
