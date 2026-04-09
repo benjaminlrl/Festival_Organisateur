@@ -130,7 +130,7 @@
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(1001, 31);
             textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged_1;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // tableLayoutPanel1
             // 
@@ -234,6 +234,7 @@
             radioButtonLotRemisTrue.TabStop = true;
             radioButtonLotRemisTrue.Text = "Oui";
             radioButtonLotRemisTrue.UseVisualStyleBackColor = true;
+            radioButtonLotRemisTrue.CheckedChanged += radioButtonLotRemisFalse_CheckedChanged;
             // 
             // radioButtonLotRemisFalse
             // 
@@ -245,7 +246,6 @@
             radioButtonLotRemisFalse.TabStop = true;
             radioButtonLotRemisFalse.Text = "Non";
             radioButtonLotRemisFalse.UseVisualStyleBackColor = true;
-            radioButtonLotRemisFalse.Click += radioButtonLotRemisFalse_Click;
             // 
             // numericUpDownRang
             // 

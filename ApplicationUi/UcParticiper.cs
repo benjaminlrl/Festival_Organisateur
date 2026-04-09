@@ -309,15 +309,5 @@ namespace ApplicationUi
         }
 
         #endregion
-
-        private void radioButtonLotRemisFalse_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBoxRecherche_TextChanged_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }
