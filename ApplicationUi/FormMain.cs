@@ -51,6 +51,14 @@ namespace ApplicationUi
             {
                 btnLots.Visible = false;
             }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Consulter") == false)
+            {
+                btnVoter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcParticiper, "Consulter") == false)
+            {
+                btnParticiper.Visible = false;
+            }
         }
 
 
