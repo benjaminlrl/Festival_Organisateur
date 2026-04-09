@@ -14,6 +14,7 @@ namespace Lib_Services.Services
     public class ParticiperService : IParticiperService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ITournoiService _tournoiService;
 
         /// <summary>
         /// Initialise une nouvelle instance de <see cref="ParticiperService"/>.
@@ -22,6 +23,7 @@ namespace Lib_Services.Services
         public ParticiperService(ApplicationDbContext context)
         {
             _context = context;
+            _tournoiService = new TournoiService(_context);
         }
 
         /// <summary>
@@ -93,7 +95,90 @@ namespace Lib_Services.Services
                 _context.Participer.Remove(Participer);
                 _context.SaveChanges();
             }
-        }        
+        }
+
+        #region statistiques
+        /// <summary>
+        /// Permet de récupérer le podium Par tournoi
+        /// </summary>
+        /// <param name="numeroTournoi"></param>
+        /// <returns></returns>
+        public List<Participer> ObtenirTop10ParTournoi(int numeroTournoi)
+        {
+            return _context.Participer
+                .Include(p => p.Tournoi)
+                .Where(p => p.NumeroTournoi == numeroTournoi)
+                .OrderByDescending(p => p.ScoreFinal)
+                .ThenBy(p => p.Rang)
+                .Take(10)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Calcule la moyenne des évaluations attribuées aux participations d'un tournoi spécifié. 
+        /// </summary>
+        /// <param name="numeroTournoi">Le numéro unique identifiant le tournoi pour lequel la moyenne des évaluations doit être calculée.</param>
+        /// <returns>La moyenne des évaluations pour le tournoi spécifié. Retourne 0,0 si aucune évaluation n'est disponible.</returns>
+        public double? ObtenirMoyenneEvaluationParTournoi(int numeroTournoi)
+        {
+            var evaluations = _context.Participer
+                .Where(p => p.NumeroTournoi == numeroTournoi && p.Evaluation > 0 && p.Evaluation <= 10)
+                .Select(p => p.Evaluation);
+            return evaluations.Any() ? evaluations.Average() : null;
+        }
+
+        /// <summary>
+        /// Permet d'obtenir le nombre de participants inscrits à un tournoi donné.
+        /// </summary>
+        /// <param name="numeroTournoi">Numero unique du tournoi associé à la participation</param>
+        /// <returns>Le nombre de participants inscrit au tournoi</returns>
+        public int ObtenirNombreParticipantsParTournoi(int numeroTournoi)
+        {
+            return _context.Participer.Count(p => p.NumeroTournoi == numeroTournoi);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a une plateforme.
+        /// </summary>
+        /// <param name="participer">La participation à valider</param>
+        /// <returns>La liste contenant toutes les erreurs</returns>
+        public List<string> ValiderParticiper(Participer participer, bool estModification)
+        {
+            // liste des erreurs
+            var erreurs = new List<string>();
+
+            if (Obtenir(participer.IdUser,participer.NumeroTournoi) != null && !estModification)
+                erreurs.Add("L'utilisateur ne peux pas participer deux fois au même tournoi");
+
+            if (participer.ScoreFinal < 0)
+                erreurs.Add("Le score final ne peut pas être négatif");
+
+
+            if (participer.Rang < 0)
+                erreurs.Add("Le rang doit être un entier positif.");
+
+            if (participer.Evaluation < 0 || participer.Evaluation > 10)
+                erreurs.Add("L'évaluation doit être comprise entre 0 et 10");
+
+            // Le nombre de participants doit être inférieur à la limite du tournoi
+            Tournoi tournoi = _tournoiService.Obtenir(participer.NumeroTournoi);
+
+            if (tournoi == null)
+            {
+                erreurs.Add("Le nombre de participants a atteint la limite du tournoi");
+
+            }
+            else
+            {
+                if (ObtenirNombreParticipantsParTournoi(participer.NumeroTournoi) >= tournoi.NbParticipants)
+                            erreurs.Add("Le nombre de participants a atteint la limite du tournoi");
+            }
+          
+
+            return erreurs;
+        }
     }
 
 }

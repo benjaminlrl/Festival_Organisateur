@@ -16,7 +16,7 @@ namespace Lib_Entities.Entities
         /// </summary>
         public string NomTournoi => Tournoi?.Nom ?? string.Empty;
         public int Rang{ get; set; }
-        public int Evaluation { get; set; }
+        public int? Evaluation { get; set; }
         public string? Commentaire { get; set; }
         public DateTime DateHeureInscription { get; set; }
         public int? ScoreFinal { get; set; }

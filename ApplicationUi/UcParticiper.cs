@@ -60,8 +60,6 @@ namespace ApplicationUi
                 buttonSupprimer.Visible = false;
             }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
-            // TODO: Ajouter un graphique pour indiquer le nombre de postes de jeu
-            // fonctionnels vs non fonctionnels
             // TODO: ajouter une option de filtrage croissant décroissant sur la référence du poste de jeu
         }
 
@@ -134,7 +132,7 @@ namespace ApplicationUi
             buttonModifier.Enabled = _participerSelectionne != null;
             buttonSupprimer.Enabled = _participerSelectionne != null;
             radioButtonLotRemisTrue.Checked = false;
-            radioButtonLotRemisTrue.Checked = false;
+            radioButtonLotRemisFalse.Checked = false;
         }
         private void MEP_DataGrid()
         // TODO: Modifier les données de la grille pour afficher le nom de l'espace
@@ -193,22 +191,27 @@ namespace ApplicationUi
 
         private void RemplirFormulaire(Participer participer)
         {
-            numericUpDownRang.Value = _participerSelectionne.Rang;
-            numericUpDownScoreFinal.Value = (int)_participerSelectionne.ScoreFinal;
-            textBoxCommentaire.Text = _participerSelectionne.Commentaire;
-            trackBarEvaluation.Value = _participerSelectionne.Evaluation;
-            dateTimePickerDateHeureInscription.Value = _participerSelectionne.DateHeureInscription;
-            comboBoxUtilisateur.SelectedItem = _participerSelectionne.IdUser;
-            comboBoxTournoi.SelectedItem = _participerSelectionne.NumeroTournoi;
+            numericUpDownRang.Value = participer.Rang;
+            numericUpDownScoreFinal.Value = participer.ScoreFinal ?? 0;
+            textBoxCommentaire.Text = participer.Commentaire;
+            trackBarEvaluation.Value = participer.Evaluation ?? 0;
+            dateTimePickerDateHeureInscription.Value = participer.DateHeureInscription;
+
+            comboBoxUtilisateur.SelectedItem = participer.IdUser;
+
+            comboBoxTournoi.SelectedItem = participer.Tournoi;
+            comboBoxTournoi.SelectedValue = participer.NumeroTournoi;
 
             // LotRemis (RadioButtons)
             if (participer.LotRemis)
             {
                 radioButtonLotRemisTrue.Checked = true;
+                lotRemisSelectionne = true;
             }
             else
             {
-                radioButtonLotRemisTrue.Checked = true;
+                radioButtonLotRemisFalse.Checked = true;
+                lotRemisSelectionne = false;
             }
 
         }
@@ -236,8 +239,14 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        private bool ValiderParticiper()
+        private bool ValiderParticiper(Participer participer, bool estModification)
         {
+            var erreurs = _serviceParticiper.ValiderParticiper(participer, estModification);
+            if (erreurs.Any())
+            {
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
             return true;
         }
         #endregion
@@ -245,20 +254,21 @@ namespace ApplicationUi
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderParticiper())
+            Participer participer = new Participer
             {
-                Participer participer = new Participer
-                {
-                    Rang = (int)numericUpDownRang.Value,
-                    ScoreFinal = (int)numericUpDownScoreFinal.Value,
-                    Commentaire = textBoxCommentaire.Text,
-                    Evaluation = trackBarEvaluation.Value,
-                    DateHeureInscription = dateTimePickerDateHeureInscription.Value,
-                    IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-                    //NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi, TODO: voir conflit lucien
-                    NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
-                    LotRemis = lotRemisSelectionne
-                };
+                Rang = (int)numericUpDownRang.Value,
+                ScoreFinal = (int)numericUpDownScoreFinal.Value,
+                Commentaire = textBoxCommentaire.Text,
+                Evaluation = trackBarEvaluation.Value,
+                DateHeureInscription = dateTimePickerDateHeureInscription.Value,
+                IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
+                NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi, 
+                // TODO: voir conflit lucien
+                //NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
+                LotRemis = lotRemisSelectionne
+            };
+            if (ValiderParticiper(participer, false))
+            {                
                 _serviceParticiper.Creer(participer);
                 ChargerParticipations();
                 Raz_Zones();
@@ -267,7 +277,7 @@ namespace ApplicationUi
         }
         private void buttonModifier_Click(object sender, EventArgs e)
         {
-            if (dataGridParticipationsUtilisateur.CurrentRow == null)
+            if (dataGridParticipations.CurrentRow == null)
                 return;
 
             if (_participerSelectionne == null)
@@ -280,13 +290,18 @@ namespace ApplicationUi
             _participerSelectionne.Evaluation = trackBarEvaluation.Value;
             _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
             _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-            //_participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi; TODO: voir conflit lucien
-            _participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
+            _participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
+            // TODO: voir conflit lucien
+            //puisque NumeroTournoi est une clé primaire, elle ne peut pas être null
+            //_participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
             _participerSelectionne.LotRemis = lotRemisSelectionne;
 
-            _serviceParticiper.Modifier(_participerSelectionne);
-            ChargerParticipations();
-            Raz_Zones();
+            if (ValiderParticiper(_participerSelectionne, true))
+            {
+                _serviceParticiper.Modifier(_participerSelectionne);
+                ChargerParticipations();
+                Raz_Zones();
+            }
         }
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
@@ -294,7 +309,7 @@ namespace ApplicationUi
         }
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
-            if (dataGridParticipationsUtilisateur.CurrentRow == null)
+            if (dataGridParticipations.CurrentRow == null)
                 return;
 
             if (_participerSelectionne == null)
@@ -305,7 +320,6 @@ namespace ApplicationUi
             _participerSelectionne = null;
             ChargerParticipations();
             Raz_Zones();
-
         }
 
         #endregion

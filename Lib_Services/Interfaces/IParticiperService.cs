@@ -12,5 +12,6 @@ namespace Lib_Services.Interfaces
         void Supprimer(int idUser, int numeroTournoi);
         List<Participer> Lister(string filtre);
         Participer? Obtenir(int idUser, int numeroTournoi);
+        List<string> ValiderParticiper(Participer participer, bool estModification);
     }
 }
