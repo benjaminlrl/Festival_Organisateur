@@ -289,6 +289,5 @@ namespace ApplicationUi
         }
 
         #endregion
-
     }
 }
