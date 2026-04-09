@@ -29,6 +29,7 @@ namespace ApplicationUi
         public UcVoter(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
+
             var context = new ApplicationDbContext();
             _serviceTournoi = new TournoiService(context);
             _serviceOrganisateur = new OrganisateurService(context);
@@ -58,10 +59,15 @@ namespace ApplicationUi
             {
                 buttonAjouter.Visible = false;
             }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
+            {
+                buttonModifier.Visible = false;
+            }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
             }
+            
         }
 
         #region Evènements
