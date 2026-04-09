@@ -28,8 +28,9 @@ namespace ApplicationUi
             btnOrganisateurs = new Button();
             btnLots = new Button();
             btnLotComposants = new Button();
-            buttonVoter = new Button();
+            btnVoter = new Button();
             btnQuitter = new Button();
+            btnParticiper = new Button();
             panelHeader = new Panel();
             lblTitre = new Label();
             panelContent = new Panel();
@@ -210,24 +211,24 @@ namespace ApplicationUi
             btnLotComposants.UseVisualStyleBackColor = false;
             btnLotComposants.Click += btnLotComposants_Click;
             // 
-            // buttonVoter
+            // btnVoter
             // 
-            buttonVoter.BackColor = Color.FromArgb(0, 192, 0);
-            buttonVoter.BackgroundImageLayout = ImageLayout.None;
-            buttonVoter.FlatAppearance.BorderSize = 0;
-            buttonVoter.FlatStyle = FlatStyle.Flat;
-            buttonVoter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            buttonVoter.ForeColor = Color.White;
-            buttonVoter.Image = Properties.Resources.tournoi;
-            buttonVoter.ImageAlign = ContentAlignment.MiddleLeft;
-            buttonVoter.Location = new Point(0, 921);
-            buttonVoter.Margin = new Padding(0, 11, 0, 9);
-            buttonVoter.Name = "buttonVoter";
-            buttonVoter.Size = new Size(286, 81);
-            buttonVoter.TabIndex = 8;
-            buttonVoter.Text = "Voter";
-            buttonVoter.UseVisualStyleBackColor = false;
-            buttonVoter.Click += buttonVoter_Click;
+            btnVoter.BackColor = Color.FromArgb(0, 192, 0);
+            btnVoter.BackgroundImageLayout = ImageLayout.None;
+            btnVoter.FlatAppearance.BorderSize = 0;
+            btnVoter.FlatStyle = FlatStyle.Flat;
+            btnVoter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            btnVoter.ForeColor = Color.White;
+            btnVoter.Image = Properties.Resources.tournoi;
+            btnVoter.ImageAlign = ContentAlignment.MiddleLeft;
+            btnVoter.Location = new Point(0, 921);
+            btnVoter.Margin = new Padding(0, 11, 0, 9);
+            btnVoter.Name = "btnVoter";
+            btnVoter.Size = new Size(286, 81);
+            btnVoter.TabIndex = 8;
+            btnVoter.Text = "Voter";
+            btnVoter.UseVisualStyleBackColor = false;
+            btnVoter.Click += btnVoter_Click;
             // 
             // btnQuitter
             // 

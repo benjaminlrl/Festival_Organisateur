@@ -255,7 +255,8 @@ namespace ApplicationUi
                     Evaluation = trackBarEvaluation.Value,
                     DateHeureInscription = dateTimePickerDateHeureInscription.Value,
                     IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-                    NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
+                    //NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi, TODO: voir conflit lucien
+                    NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
                     LotRemis = lotRemisSelectionne
                 };
                 _serviceParticiper.Creer(participer);
@@ -279,7 +280,8 @@ namespace ApplicationUi
             _participerSelectionne.Evaluation = trackBarEvaluation.Value;
             _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
             _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-            _participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
+            //_participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi; TODO: voir conflit lucien
+            _participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
             _participerSelectionne.LotRemis = lotRemisSelectionne;
 
             _serviceParticiper.Modifier(_participerSelectionne);
