@@ -59,8 +59,6 @@ namespace ApplicationUi
             {
                 buttonSupprimer.Visible = false;
             }
-            // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
-            // TODO: ajouter une option de filtrage croissant décroissant sur la référence du poste de jeu
         }
 
         #region Evènements
