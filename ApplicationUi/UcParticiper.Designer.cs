@@ -60,6 +60,8 @@
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             dataGridParticipations = new DataGridView();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridParticipationsUtilisateur).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             panelForm.SuspendLayout();
@@ -71,6 +73,7 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDownScoreFinal).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridParticipations).BeginInit();
+            tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
             // 
             // process1
@@ -95,11 +98,11 @@
             dataGridParticipationsUtilisateur.BackgroundColor = Color.White;
             dataGridParticipationsUtilisateur.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridParticipationsUtilisateur.Dock = DockStyle.Fill;
-            dataGridParticipationsUtilisateur.Location = new Point(1275, 3);
+            dataGridParticipationsUtilisateur.Location = new Point(3, 47);
             dataGridParticipationsUtilisateur.Name = "dataGridParticipationsUtilisateur";
             dataGridParticipationsUtilisateur.ReadOnly = true;
             dataGridParticipationsUtilisateur.RowHeadersWidth = 62;
-            dataGridParticipationsUtilisateur.Size = new Size(422, 425);
+            dataGridParticipationsUtilisateur.Size = new Size(416, 375);
             dataGridParticipationsUtilisateur.TabIndex = 5;
             // 
             // label1
@@ -138,8 +141,8 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.87981F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.1201916F));
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
-            tableLayoutPanel1.Controls.Add(dataGridParticipationsUtilisateur, 1, 0);
             tableLayoutPanel1.Controls.Add(dataGridParticipations, 0, 1);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -511,6 +514,35 @@
             dataGridParticipations.TabIndex = 4;
             dataGridParticipations.CellClick += dataGridParticipations_CellClick;
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(label3, 0, 0);
+            tableLayoutPanel2.Controls.Add(dataGridParticipationsUtilisateur, 0, 1);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(1275, 3);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 10.3529415F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 89.64706F));
+            tableLayoutPanel2.Size = new Size(422, 425);
+            tableLayoutPanel2.TabIndex = 6;
+            // 
+            // label3
+            // 
+            label3.BackColor = Color.MidnightBlue;
+            label3.Dock = DockStyle.Fill;
+            label3.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            label3.ForeColor = Color.AliceBlue;
+            label3.Location = new Point(4, 0);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(414, 44);
+            label3.TabIndex = 19;
+            label3.Text = "Participations de l'utilisateur";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // UcParticiper
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -532,6 +564,7 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridParticipations).EndInit();
+            tableLayoutPanel2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -570,5 +603,6 @@
         private RadioButton radioButtonLotRemisTrue;
         private RadioButton radioButtonLotRemisFalse;
         private NumericUpDown numericUpDownScoreFinal;
+        private Label label3;
     }
 }
