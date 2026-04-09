@@ -213,7 +213,7 @@ namespace ApplicationUi
                 return;
             //var tournoi = (Tournoi)dataGridTournois.CurrentRow.DataBoundItem;
 
-            _serviceTournoi.Supprimer(_tournoiSelectionne.NumeroTournoi.Value);
+            _serviceTournoi.Supprimer(_tournoiSelectionne.NumeroTournoi);
             _tournoiSelectionne = null;
             ChargerTournois();
             Raz_Zones();
