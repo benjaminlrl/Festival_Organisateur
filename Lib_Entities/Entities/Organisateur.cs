@@ -57,6 +57,9 @@ namespace Lib_Entities.Entities
             UcPostesDeJeu,
             UcLotComposants,
             UcLots,
+            UcJeux,
+            UcVoter,
+            UcParticiper
         }
     }
 }

@@ -73,10 +73,11 @@
             // 
             panelForm.BackColor = Color.White;
             panelForm.Controls.Add(tableLayoutPanel3);
+            panelForm.Dock = DockStyle.Fill;
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(946, 257);
+            panelForm.Size = new Size(970, 269);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel3
@@ -91,7 +92,7 @@
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 61.8677025F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 38.1322975F));
-            tableLayoutPanel3.Size = new Size(946, 257);
+            tableLayoutPanel3.Size = new Size(970, 269);
             tableLayoutPanel3.TabIndex = 8;
             // 
             // groupBox1
@@ -100,7 +101,7 @@
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Location = new Point(3, 162);
+            groupBox1.Location = new Point(3, 169);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(879, 82);
             groupBox1.TabIndex = 7;
@@ -198,7 +199,7 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(938, 151);
+            tableLayoutPanel.Size = new Size(962, 158);
             tableLayoutPanel.TabIndex = 0;
             // 
             // textBoxReference
@@ -239,7 +240,7 @@
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(3, 108);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(272, 35);
+            flowLayoutPanel1.Size = new Size(284, 35);
             flowLayoutPanel1.TabIndex = 18;
             // 
             // radioButtonFonctionnelTrue
@@ -270,7 +271,7 @@
             // 
             labelPlateforme.AutoSize = true;
             labelPlateforme.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelPlateforme.Location = new Point(282, 0);
+            labelPlateforme.Location = new Point(294, 0);
             labelPlateforme.Margin = new Padding(4, 0, 4, 0);
             labelPlateforme.Name = "labelPlateforme";
             labelPlateforme.Size = new Size(128, 28);
@@ -280,7 +281,7 @@
             // comboBoxPlateforme
             // 
             comboBoxPlateforme.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPlateforme.Location = new Point(282, 39);
+            comboBoxPlateforme.Location = new Point(294, 39);
             comboBoxPlateforme.Margin = new Padding(4);
             comboBoxPlateforme.Name = "comboBoxPlateforme";
             comboBoxPlateforme.Size = new Size(217, 33);
@@ -290,7 +291,7 @@
             // 
             labelEspace.AutoSize = true;
             labelEspace.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelEspace.Location = new Point(282, 79);
+            labelEspace.Location = new Point(294, 79);
             labelEspace.Margin = new Padding(4, 0, 4, 0);
             labelEspace.Name = "labelEspace";
             labelEspace.Size = new Size(147, 26);
@@ -300,7 +301,7 @@
             // comboBoxEspace
             // 
             comboBoxEspace.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxEspace.Location = new Point(282, 109);
+            comboBoxEspace.Location = new Point(294, 109);
             comboBoxEspace.Margin = new Padding(4);
             comboBoxEspace.Name = "comboBoxEspace";
             comboBoxEspace.Size = new Size(217, 33);
@@ -312,7 +313,7 @@
             labelStatutTournoi.Dock = DockStyle.Fill;
             labelStatutTournoi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelStatutTournoi.ForeColor = Color.Chocolate;
-            labelStatutTournoi.Location = new Point(560, 0);
+            labelStatutTournoi.Location = new Point(584, 0);
             labelStatutTournoi.Margin = new Padding(4, 0, 4, 0);
             labelStatutTournoi.Name = "labelStatutTournoi";
             labelStatutTournoi.Size = new Size(374, 35);
@@ -328,7 +329,7 @@
             dataGridTournois.BackgroundColor = Color.White;
             dataGridTournois.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridTournois.Dock = DockStyle.Fill;
-            dataGridTournois.Location = new Point(559, 38);
+            dataGridTournois.Location = new Point(583, 38);
             dataGridTournois.Name = "dataGridTournois";
             dataGridTournois.ReadOnly = true;
             dataGridTournois.RowHeadersWidth = 62;
@@ -401,8 +402,9 @@
             // 
             textBoxRecherche.Location = new Point(185, 3);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(713, 31);
+            textBoxRecherche.Size = new Size(784, 31);
             textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // groupBoxStatsPostesJeu
             // 

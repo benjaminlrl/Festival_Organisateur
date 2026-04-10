@@ -126,18 +126,11 @@ namespace ApplicationUi
         {
             // On charge les tournois uniquement pour la combobox, pas besoin de les charger dans un dataGrid
 
-            var tournois = _serviceTournoi.Lister("");
             // On ajoute un élément "Aucun" en tête de liste
             comboBoxTournoi.DisplayMember = "Nom";
             comboBoxTournoi.ValueMember = "NumeroTournoi";
             comboBoxTournoi.DataSource = null;
-
-            listeTournoi = new List<Tournoi>();
-            listeTournoi.Add(new Tournoi { NumeroTournoi = null, Nom = "Aucun" });
-            listeTournoi.AddRange(tournois);
-
-            comboBoxTournoi.DataSource = listeTournoi;
-            comboBoxTournoi.SelectedIndex = 0; // sélectionne "Aucun" par défaut
+            comboBoxTournoi.DataSource = _serviceTournoi.Lister("");
             MEP_DataGrid("Lots");
         }
 

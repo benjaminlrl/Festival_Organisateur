@@ -11,6 +11,8 @@ namespace Lib_Services.Services
     public class SoumisVoteService : ISoumisVoteService
     {
         private readonly ApplicationDbContext _context;
+        private IJeuService _jeuService;
+        private IPlateformeService _plateformeService;
 
         /// <summary>
         /// Constructeur avec injection du contexte de données.
@@ -19,6 +21,8 @@ namespace Lib_Services.Services
         public SoumisVoteService(ApplicationDbContext context)
         {
             _context = context;
+            _jeuService = new JeuService(context);
+            _plateformeService = new PlateformeService(context);
         }
 
         /// <summary>
@@ -41,22 +45,28 @@ namespace Lib_Services.Services
                 .Include(v => v.Plateforme)
                 .Include(v => v.Jeu)
                 .Where(v => v.DateDebutVote.ToString().Contains(filtre)
-                        || v.DateFinVote.ToString().Contains(filtre))
+                        || v.DateFinVote.ToString().Contains(filtre)
+                        || v.Plateforme.Libelle.Contains(filtre)
+                        || v.Jeu.Titre.Contains(filtre))
                 .ToList();
         }
 
         /// <summary>
-        /// Modifie un SoumisVote identifié par l'id de l'utilisateur, 
-        /// l'id du jeu et l'id de la plateforme, 
-        /// puis persiste la modification.
+        /// Retourne un SoumisVote identifié par l'id du jeu et l'id de la plateforme.
+        /// AsNoTracking() est utilisé pour éviter les conflits de tracking lors des modifications.
         /// </summary>
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
-        /// <returns></returns>
+        /// <returns>Le SoumisVote correspondant ou null s'il n'existe pas</returns>
         public SoumisVote? Obtenir(int idJeu, int idPlateforme)
         {
-            // Find retourne null si l'entité n'existe pas.
-            return _context.SoumisVotes.Find(new {idJeu, idPlateforme });
+            // AsNoTracking() force EF Core à aller chercher l'entité directement en base de données
+            // et non depuis le cache local (ChangeTracker).
+            // Cela garantit que l'on compare les données réelles en BDD avec les données modifiées,
+            // et évite les conflits de tracking lors des appels à Valider() puis Modifier().
+            return _context.SoumisVotes
+                .AsNoTracking()
+                .FirstOrDefault(s => s.IdJeu == idJeu && s.IdPlateforme == idPlateforme);
         }
 
         /// <summary>
@@ -65,6 +75,8 @@ namespace Lib_Services.Services
         /// <param name="soumisVote">Objet <see cref="SoumisVote"/> à ajouter.</param>
         public void Creer(SoumisVote soumisVote)
         {
+            if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null)
+                return;
             _context.SoumisVotes.Add(soumisVote);
             _context.SaveChanges();
         }
@@ -90,7 +102,7 @@ namespace Lib_Services.Services
         public void Supprimer(int idJeu, int idPlateforme)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var soumisVote = _context.SoumisVotes.Find(new {idJeu, idPlateforme });
+            var soumisVote = _context.SoumisVotes.Find(idJeu, idPlateforme);
             if (soumisVote != null)
             {
                 _context.SoumisVotes.Remove(soumisVote);
@@ -99,28 +111,116 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
+        #region Statistiques de vote
+        /// <summary>
+        /// Permet d'obtenir le taux de vote (%) pour un jeu passé en paramètre,
+        /// </summary>
+        /// <param name="idJeu">Id unique du jeu</param>
+        /// <returns></returns>
+        public double CalculerTauxVoteJeu(int idJeu, DateTime dateDebut, DateTime dateFin)
+        {
+            int totalVotes = _context.Voter.Count(v => v.DateVote >= dateDebut && v.DateVote <= dateFin);
+            if (totalVotes == 0) return 0;
 
+            // Compte le nombre de votes associés au jeu
+            int votesJeu = _context.Voter.Count(v => v.IdJeu == idJeu);
+
+            return votesJeu / totalVotes * 100;
+        }
+
+        public int ObtenirVotesJeu(int idJeu,SoumisVote soumisVote)
+        {
+            int totalVotes = _context.Voter.Count(v => v.DateVote >= soumisVote.DateDebutVote 
+                && v.DateVote <= soumisVote.DateFinVote);
+            if (totalVotes == 0) return 0;
+
+            // Compte le nombre de votes associés au jeu
+            int votesJeu = _context.Voter.Count(v => v.IdJeu == idJeu);
+
+            return votesJeu / totalVotes * 100;
+        }
+
+        /// <summary>
+        /// Permet d'obtenir le taux de vote (%) pour un jeu et sa plateformepassé en paramètre,
+        /// </summary>
+        /// <param name="idJeu">Id unique du jeu</param>
+        /// <param name="idPlateforme">Id unique de la plateforme associé au jeu</param>
+        /// <returns></returns>
+        public double CalculerTauxVoteJeuPlateforme(int idJeu, int idPlateforme)
+        {
+            int totalVotes = _context.Voter.Count();
+            if (totalVotes == 0) return 0;
+
+            // Compte le nombre de votes associés au jeu et à la plateforme
+            int votesJeu = _context.Voter.Count(v => v.IdJeu == idJeu && v.IdPlateforme == idPlateforme);
+
+            return votesJeu / totalVotes * 100;
+        }
+
+        /// <summary>
+        /// Retourne le classement des binomes (jeu, plateforme) les plus votés
+        /// </summary>
+        /// <param name="soumisVote"></param>
+        /// <returns>Le classement des binomes</returns>
+        public List<Voter> ListerClassmentJeuxVotes()
+        {
+            return _context.Voter
+                .Include(v => v.Jeu)
+                .Include(v => v.Plateforme)
+                .AsEnumerable() // Charge tout en mémoire pour que Include fonctionne avec GroupBy
+                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binôme (jeu, plateforme)
+                .Select(g => new Voter
+                {
+                    IdJeu = g.Key.IdJeu,
+                    IdPlateforme = g.Key.IdPlateforme,
+                    Jeu = g.First().Jeu,           // Récupère l'objet Jeu depuis le 1er élément du groupe
+                    Plateforme = g.First().Plateforme, // Récupère l'objet Plateforme depuis le 1er élément du groupe
+                    NbVotes = g.Count()            // Compte le nombre de votes pour ce binôme
+                })
+                .OrderByDescending(v => v.NbVotes) // Trie du plus populaire au moins populaire
+                .ToList();
+        }
+
+        #endregion
+        #region Validations
         /// <summary>
         /// Permet de vérifier les propriétés associés a une SoumisVote.
         /// </summary>
         /// <param name="soumisVote">Le SoumisVote à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderSoumisVote(SoumisVote soumisVote)
+        public List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false)
         {
             // liste des erreurs
             var erreurs = new List<string>();
 
-            //if (string.IsNullOrWhiteSpace(SoumisVote.Libelle))
-            //    erreurs.Add("Le libellé est requis.");
+            if (_jeuService.Obtenir(soumisVote.IdJeu) == null)
+                erreurs.Add("Le jeu associé n'existe pas.");
 
-            //if (SoumisVote.IdSoumisVote <= 0)
-            //    erreurs.Add("Une SoumisVote est requise.");
+            if (_plateformeService.Obtenir(soumisVote.IdPlateforme) == null)
+                erreurs.Add("La plateforme associée n'existe pas.");
 
-            //if (Lister(SoumisVote.Libelle).Any(v => v.Libelle == SoumisVote.Libelle && p.IdSoumisVote != SoumisVote.IdSoumisVote))
-            //    erreurs.Add("Une autre SoumisVote avec ce libellé existe déjà.");
+            if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null && !estModification)
+                erreurs.Add("Une autre SoumisVote existe déjà.");
+
+            // compare la bdd et le soumisVote modif
+            SoumisVote? _enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
+            if (_enBdd != null && _enBdd.DateDebutVote == soumisVote.DateDebutVote
+                && _enBdd.DateFinVote == soumisVote.DateFinVote)
+                erreurs.Add("Aucune modification détectée.");
+
+            // Contrôles des dates
+            if (soumisVote.DateDebutVote >= soumisVote.DateFinVote)
+                erreurs.Add("La date de début doit être antérieure à la date de fin.");
+
+            // Vérifier que les dates ne sont pas dans le passé
+            if (soumisVote.DateDebutVote.Day < DateTime.Now.Day)
+                erreurs.Add("La date de début doit être dans le futur.");
+
+            if (soumisVote.DateFinVote.Day < DateTime.Now.Day)
+                erreurs.Add("La date de fin doit être dans le futur.");
 
             return erreurs;
         }
-
+        #endregion
     }
 }

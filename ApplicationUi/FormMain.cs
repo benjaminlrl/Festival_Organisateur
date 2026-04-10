@@ -51,6 +51,14 @@ namespace ApplicationUi
             {
                 btnLots.Visible = false;
             }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Consulter") == false)
+            {
+                btnVoter.Visible = false;
+            }
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcParticiper, "Consulter") == false)
+            {
+                btnParticiper.Visible = false;
+            }
         }
 
 
@@ -123,9 +131,14 @@ namespace ApplicationUi
             LoadUserControl(new UcJeux(_organisateurConnecte), "Gestion des jeux");
         }
 
-        private void buttonVoter_Click(object sender, EventArgs e)
+        private void btnVoter_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcVoter(_organisateurConnecte), "Espace de votes");
+        }
+
+        private void btnParticiper_Click(object sender, EventArgs e)
+        {
+            LoadUserControl(new UcParticiper(_organisateurConnecte), "Gestion des participations");
         }
     }
 }

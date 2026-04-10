@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Lib_Entities.Entities
@@ -22,6 +23,7 @@ namespace Lib_Entities.Entities
         /// Renvoie le libellé de la plateforme de façon null-safe ;
         /// retourne chaîne vide si l'espace est null.
         /// </summary>
+        [NotMapped] 
         public string LibellePlateforme => Plateforme?.Libelle ?? string.Empty;
         public Jeu Jeu { get; set; }
         /// <summary>
@@ -29,6 +31,13 @@ namespace Lib_Entities.Entities
         /// Renvoie le titre du jeu de façon null-safe ;
         /// retourne chaîne vide si l'espace est null.
         /// </summary>
+        [NotMapped] 
         public string TitreJeu => Jeu?.Titre ?? string.Empty;
+
+        /// <summary>
+        /// Correspond au nombres de votes associés au binome (id_jeu,id_plateforme) pour le classement des votes
+        /// </summary>
+        [NotMapped]
+        public int NbVotes { get; set; }
     }
 }

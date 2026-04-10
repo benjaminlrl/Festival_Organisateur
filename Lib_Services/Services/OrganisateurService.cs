@@ -122,35 +122,39 @@ namespace Lib_Services.Services
             {
                 return true;
             }
-            //System.Diagnostics.Debug.WriteLine($"ESTAUTORISER : {role.Libelle} {action} {unUC}");
+            // System.Diagnostics.Debug.WriteLine($"ESTAUTORISER : {role.Libelle} {action} {unUC}");
             // Role Gestionnaire de stock
+            // Consulter : Tournoi, Jeu, Espace, PosteJeu, Plateforme
+            // CRUD: Lot, LotComposant
             if (role.Libelle == "Gestionnaire du stock")
             {
                 if (action == "Consulter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcPostesDeJeu 
-                        || unUC == Organisateur.LesUC.UcEspaces || unUC == Organisateur.LesUC.UcPlateformes) //Rajouter interface Lot & LotComposant
+                    if (unUC == Organisateur.LesUC.UcTournois   || unUC == Organisateur.LesUC.UcPostesDeJeu 
+                        || unUC == Organisateur.LesUC.UcEspaces || unUC == Organisateur.LesUC.UcPlateformes
+                        || unUC == Organisateur.LesUC.UcJeux)
                     {
                         return true;
                     }
                 }
                 else if (action == "Modifier" || action == "Supprimer" || action == "Ajouter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois) //Modifier en Lot & LotComposant
+                    if (unUC == Organisateur.LesUC.UcLotComposants || unUC == Organisateur.LesUC.UcLots)
                     {
                         return true;
                     }
                 }
             }
 
-            //Role Gestionnaire de l'Espace
+            // Role Gestionnaire de l'Espace
+            // Consulter : Plateforme, Jeu, Participer
+            // CRUD: Espace, PosteJeu, Tournoi
             if (role.Libelle == "Gestionnaire de l'espace")
             {
                 if (action == "Consulter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcPlateformes 
-                        || unUC == Organisateur.LesUC.UcPostesDeJeu || unUC == Organisateur.LesUC.UcPlateformes 
-                        || unUC == Organisateur.LesUC.UcEspaces) //Ajouter ,Jeu,Participer
+                    if (unUC == Organisateur.LesUC.UcPlateformes || unUC == Organisateur.LesUC.UcJeux 
+                        || unUC == Organisateur.LesUC.UcParticiper)
                     {
                         return true;
                     }
@@ -165,20 +169,25 @@ namespace Lib_Services.Services
                 }
             }
 
-            //Role Gestionnaire des tournois
+            // Role Gestionnaire des tournois
+            // Consulter : Espace, PosteJeu, Plateforme, Jeu, Lot
+            // CRUD: Tournoi, Participer, SoumisVote
             if (role.Libelle == "Gestionnaire des tournois")
             {
                 if (action == "Consulter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcEspaces 
-                        || unUC == Organisateur.LesUC.UcPostesDeJeu || unUC == Organisateur.LesUC.UcPlateformes) //Ajouter Jeu, Lot, Votre, SoumisVote
+                    if (unUC == Organisateur.LesUC.UcEspaces        || unUC == Organisateur.LesUC.UcPostesDeJeu 
+                        || unUC == Organisateur.LesUC.UcPlateformes || unUC == Organisateur.LesUC.UcPostesDeJeu
+                        || unUC == Organisateur.LesUC.UcJeux        || unUC == Organisateur.LesUC.UcLots 
+                        || unUC == Organisateur.LesUC.UcVoter) 
                     {
                         return true;
                     }
                 }
                 else if (action == "Modifier" || action == "Supprimer" || action == "Ajouter")
                 {
-                    if (unUC == Organisateur.LesUC.UcTournois) //Ajouter Participer, SoumisVote
+                    if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcParticiper 
+                        || unUC == Organisateur.LesUC.UcVoter) 
                     {
                         return true;
                     }
