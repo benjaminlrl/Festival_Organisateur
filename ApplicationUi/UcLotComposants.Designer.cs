@@ -147,7 +147,7 @@ namespace ApplicationUi
             textBoxValeur.Location = new Point(442, 39);
             textBoxValeur.Margin = new Padding(4);
             textBoxValeur.Name = "textBoxValeur";
-            textBoxValeur.PlaceholderText = "300";
+            textBoxValeur.PlaceholderText = "Ex: 300";
             textBoxValeur.Size = new Size(210, 23);
             textBoxValeur.TabIndex = 2;
             // 
@@ -289,11 +289,12 @@ namespace ApplicationUi
             textBoxRecherche.Location = new Point(252, 275);
             textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.PlaceholderText = "Ex: Xbox";
             textBoxRecherche.Size = new Size(574, 23);
             textBoxRecherche.TabIndex = 5;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
-            // UcLotComposant
+            // UcLotComposants
             // 
             AutoScaleDimensions = new SizeF(7F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -304,7 +305,7 @@ namespace ApplicationUi
             Controls.Add(dataGridLotComposants);
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
-            Name = "UcLotComposant";
+            Name = "UcLotComposants";
             Size = new Size(950, 809);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
