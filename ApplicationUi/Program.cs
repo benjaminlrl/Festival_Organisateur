@@ -55,8 +55,8 @@ namespace ApplicationUi
                     new LotComposant { Libelle = "Clavier Klim", Description = "Clavier gamer de marque Klim", Valeur = 30 },
                     new LotComposant { Libelle = "Souris Razer Naga Trinity", Description = "Souris gamer de marque Razer", Valeur = 70 },
                     new LotComposant { Libelle = "Souris Logitech G Pro X", Description = "Souris gamer de marque Logitech", Valeur = 75 },
-                    new LotComposant { Libelle = "Manettes PS4", Description = "Manette de marque Playstation", Valeur = 40 },
-                    new LotComposant { Libelle = "Manettes Xbox", Description = "Manette de marque Xbox", Valeur = 50 },
+                    new LotComposant { Libelle = "Manette PS4", Description = "Manette de marque Playstation", Valeur = 40 },
+                    new LotComposant { Libelle = "Manette Xbox", Description = "Manette de marque Xbox", Valeur = 50 },
                     new LotComposant { Libelle = "Casque Razer Kraken", Description = "Casque gamer de marque Razer", Valeur = 60 },
                     new LotComposant { Libelle = "Casque HyperX Cloud 2", Description = "Casque gamer de marque HyperX", Valeur = 54 },
                 });

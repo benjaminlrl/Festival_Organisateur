@@ -290,11 +290,12 @@ namespace ApplicationUi
             textBoxRecherche.Location = new Point(253, 279);
             textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.PlaceholderText = "Ex: jean";
             textBoxRecherche.Size = new Size(574, 23);
             textBoxRecherche.TabIndex = 4;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
-            // UcOrganisateur
+            // UcOrganisateurs
             // 
             AutoScaleDimensions = new SizeF(7F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -305,7 +306,7 @@ namespace ApplicationUi
             Controls.Add(dataGridOrganisateurs);
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
-            Name = "UcOrganisateur";
+            Name = "UcOrganisateurs";
             Size = new Size(950, 809);
             panelForm.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);

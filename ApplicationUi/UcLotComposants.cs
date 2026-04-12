@@ -22,8 +22,10 @@ namespace ApplicationUi
         private LotComposant? _lotComposantSelectionne = null;
         private LotComposant? unNouveauLotComposant;
         private readonly Organisateur _organisateurConnecte;
+        private List<Lot> listeLots;
         int? nouveauNumeroLot;
         string filtre;
+        string ordreChamp = "ASC";
 
         public UcLotComposants(Organisateur unOrganisateurConnecte)
         {
@@ -52,13 +54,25 @@ namespace ApplicationUi
         }
 
         #region Chargement
+
+        /// <summary>
+        /// Met en page le DataGrid des lots composants en configurant la visibilité
+        /// et le redimensionnement automatique des colonnes.
+        /// </summary>
         private void MEP_DataGrid()
         {
             // On affiche et modifie l'affichage des colonnes du dataGrid
             dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
             dataGridLotComposants.Columns["Lot"].Visible = false;
+            dataGridLotComposants.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["Valeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NumeroLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
+        /// <summary>
+        /// Charge la liste des lots composants dans le DataGrid en appliquant le filtre de recherche en cours.
+        /// </summary>
         private void ChargerLotComposants()
         {
             // On charge la liste des lots composants dans le dataGrid
@@ -69,6 +83,10 @@ namespace ApplicationUi
             MEP_DataGrid();
         }
 
+        /// <summary>
+        /// Charge la liste des lots dans la ComboBox en ajoutant un élément "Aucun" en tête de liste.
+        /// Sélectionne "Aucun" par défaut.
+        /// </summary>
         private void ChargerLots()
         {
             // On charge les lots dans la comboBox
@@ -79,14 +97,18 @@ namespace ApplicationUi
             comboBoxLot.ValueMember = "Numero";
             comboBoxLot.DataSource = null;
 
-            var liste = new List<Lot>();
-            liste.Add(new Lot { Numero = null, Libelle = "Aucun" });
-            liste.AddRange(lots);
+            listeLots = new List<Lot>();
+            listeLots.Add(new Lot { Numero = null, Libelle = "Aucun" });
+            listeLots.AddRange(lots);
 
-            comboBoxLot.DataSource = liste;
+            comboBoxLot.DataSource = listeLots;
             comboBoxLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
+        /// <summary>
+        /// Remet tous les champs du formulaire à vide et désélectionne le lot composant en cours.
+        /// Désactive également les boutons Modifier et Supprimer.
+        /// </summary>
         private void Raz_Zones()
         {
             // On remet tous les champs à vide
@@ -99,6 +121,11 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
         }
 
+        /// <summary>
+        /// Remplit les champs du formulaire avec les données du lot composant sélectionné.
+        /// Sélectionne "Aucun" dans la ComboBox si le lot composant n'est associé à aucun lot.
+        /// </summary>
+        /// <param name="lotComposant">Le lot composant dont les données sont affichées.</param>
         private void RemplirFormulaire(LotComposant lotComposant)
         {
             // On remplie les champs avec les données du lot composant sélectionné
@@ -133,13 +160,46 @@ namespace ApplicationUi
             }
             return true;
         }
+        /// <summary>
+        /// Permet de voir si tout les champs d'un lot composant ne sont pas vides
+        /// </summary>
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public bool ChampVide()
+        {
+            if (string.IsNullOrWhiteSpace(textBoxLibelle.Text))
+            {
+                MessageBox.Show("Le Libelle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
+            {
+                MessageBox.Show("La Description ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
+            {
+                MessageBox.Show("La Valeur ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
 
         #endregion
 
         #region Evènements
 
+        /// <summary>
+        /// Crée un nouveau lot composant avec les données saisies dans le formulaire.
+        /// Vérifie que les champs sont valides et que les règles métier sont respectées.
+        /// </summary>
         private void buttonAjouter_Click(object sender, EventArgs e)
         {
+            // On check si les champs sont vides
+            if (ChampVide() == false)
+            {
+                return;
+            }
+
             // On crée un nouveau lot composant avec les données des champs
             unNouveauLotComposant = new LotComposant
             {
@@ -161,6 +221,10 @@ namespace ApplicationUi
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Modifie le lot composant sélectionné avec les nouvelles valeurs saisies dans le formulaire.
+        /// Met à jour uniquement les champs modifiés et gère le lot nullable.
+        /// </summary>
         private void buttonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
@@ -192,6 +256,9 @@ namespace ApplicationUi
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Supprime le lot composant sélectionné après vérification qu'un lot composant est bien sélectionné.
+        /// </summary>
         private void buttonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
@@ -206,17 +273,47 @@ namespace ApplicationUi
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Remet le formulaire à vide sans sauvegarder les modifications.
+        /// </summary>
         private void buttonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
 
+        /// <summary>
+        /// Gère les clics sur le DataGrid des lots composants.
+        /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
+        /// Si le clic est sur une cellule, sélectionne le lot composant et remplit le formulaire.
+        /// </summary>
         private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // On récupére le lot composant cliqué et on appelle RemplirFormulaire(...)
+            // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
-                return;
+            {
+                // ordonner sur les champs numero, libelle, description et valeur
+                var donnees = _serviceLotComposant.Lister(filtre);
+                var map = new Dictionary<int, Func<LotComposant, object>>
+                {
+                    { dataGridLotComposants.Columns["Numero"].Index, lc => lc.Numero },
+                    { dataGridLotComposants.Columns["Libelle"].Index, lc => lc.Libelle },
+                    { dataGridLotComposants.Columns["Description"].Index, lc => lc.Description },
+                    { dataGridLotComposants.Columns["Valeur"].Index, lc => lc.Valeur }
+                };
 
+                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                    return;
+                // Appliquer le tri
+                dataGridLotComposants.DataSource = ordreChamp == "ASC"
+                    ? donnees.OrderByDescending(keySelector).ToList()
+                    : donnees.OrderBy(keySelector).ToList();
+                // Inverser l’ordre
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+                MEP_DataGrid();
+                return;
+            }
+
+            // Ne pas recharger le DataSource lors d'un clic sur une cellule : cela réinitialise la sélection
             _lotComposantSelectionne = dataGridLotComposants.Rows[e.RowIndex].DataBoundItem as LotComposant;
 
             if (_lotComposantSelectionne != null)
