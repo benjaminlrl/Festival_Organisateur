@@ -4,7 +4,9 @@ using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace Lib_Services.Services
 {
@@ -32,20 +34,38 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
         /// <returns>Liste d'objets <see cref="Espace"/>.</returns>
-        public List<Espace> Lister(string filtre = "")
+        public List<Espace> Lister(string filtre = "", string colonne = "Nom", string ordre = "ASC")
         {
-            // ToList force l'exécution de la requête et charge les entités en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Espaces
-                .Include(e => e.PostesJeu)
+            IQueryable<Espace> query = _context.Espaces
                 .Include(e => e.Tournois)
-                .ToList();
-            return
-                _context.Espaces
-                .Include(e => e.PostesJeu)
-                .Include(e => e.Tournois)
-                .Where(e => e.Nom.Contains(filtre)
-                    || e.Description.Contains(filtre))
+                .Include(e => e.PostesJeu);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(e =>
+                    e.Nom.Contains(filtre) ||
+                    e.Description.Contains(filtre));
+
+            query = colonne switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Nom" => ordre == "ASC" ? query.OrderBy(e => e.Nom) : query.OrderByDescending(e => e.Nom),
+                "Description" => ordre == "ASC" ? query.OrderBy(e => e.Description) : query.OrderByDescending(e => e.Description),
+                "Superficie" => ordre == "ASC" ? query.OrderBy(e => e.Superficie) : query.OrderByDescending(e => e.Superficie),
+                "CapaciteMaxi" => ordre == "ASC" ? query.OrderBy(e => e.CapaciteMaxi) : query.OrderByDescending(e => e.CapaciteMaxi),
+                _ => query.OrderBy(e => e.Nom) // valeur par défaut
+            };
+
+            return query.ToList();
+        }
+
+        public List<Espace> ListerEspacesDisponibles(string filtre = "")
+        {
+            return Lister(filtre)
+                .Where(e => 
+                    e.Tournois == null 
+                    || !e.Tournois.Any(t => 
+                        t.Statut == "Planifié" 
+                        || t.Statut == "EnCours"))
                 .ToList();
         }
 
@@ -98,6 +118,34 @@ namespace Lib_Services.Services
             }
         }
 
+        #region statistiques
+        /// <summary>
+        /// Retourne le nombre d'espaces disponibales en fonction du filtre.
+        /// Un espace est considéré comme disponible si aucun tournoi planifié ou en cours n'est associé à cet espace.
+        /// </summary>
+        /// <param name="filtre">Filtre optionnel pour rechercher des espaces spécifiques.</param>
+        /// <returns>Nombre d'espaces disponibles.</returns>
+        public int CompterEspacesDisponibles(string filtre = "")
+        {
+            return Lister(filtre)
+                .Count(e => 
+                e.Tournois == null 
+                || !e.Tournois.Any(t => 
+                    t.Statut == "Planifié"
+                    || t.Statut == "EnCours"));
+        }
+
+        /// <summary>
+        /// Retourne le nombres d'espaces total en fonction du filtre.
+        /// </summary>
+        /// <param name="filtre">Filtre optionnel pour rechercher des espaces spécifiques.</param>
+        /// <returns>Nombre total d'espaces.</returns>
+        public int CompterEspacesTotal(string filtre = "")
+        {
+            return Lister(filtre).Count;
+        }
+        #endregion
+
         /// <summary>
         /// Permet de vérifier les propriétés associés a un espace.
         /// </summary>
@@ -106,7 +154,7 @@ namespace Lib_Services.Services
         public List<string> ValiderEspace(Espace espace)
         {
             // liste des erreurs
-            var erreurs = new List<string>();
+            List<string> erreurs = [];
 
             if (string.IsNullOrWhiteSpace(espace.Nom))
                 erreurs.Add("Le nom est requis.");

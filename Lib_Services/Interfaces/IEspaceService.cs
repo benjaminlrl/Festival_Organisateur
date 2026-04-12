@@ -1,6 +1,7 @@
 ﻿using Lib_Entities.Entities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Lib_Services.Interfaces
@@ -10,9 +11,10 @@ namespace Lib_Services.Interfaces
         void Creer(Espace espace);
         void Modifier(Espace espace);
         void Supprimer(int idEspace);
-        List<Espace> Lister(string filtre);
+        List<Espace> Lister(string filtre = "", string colonne = "Nom", string ordre = "ASC");
         Espace? Obtenir(int idEspace);
-
-        List<String> ValiderEspace(Espace espace);
+        List<string> ValiderEspace(Espace espace);
+        int CompterEspacesDisponibles(string filtre);
+        public int CompterEspacesTotal(string filtre);
     }
 }

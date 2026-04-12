@@ -120,7 +120,6 @@ namespace ApplicationUi
 
             comboBoxJeu.Enabled = _soumisVoteSelectionne == null;
             comboBoxPlateforme.Enabled = _soumisVoteSelectionne == null;
-
         }
 
         /// <summary>
@@ -350,7 +349,7 @@ namespace ApplicationUi
 
             if (_soumisVoteSelectionne == null)
                 return;
-            var soumisVote = (SoumisVote)dataGridSoumisVote.CurrentRow.DataBoundItem;
+            SoumisVote soumisVote = (SoumisVote)dataGridSoumisVote.CurrentRow.DataBoundItem;
 
             if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Validation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
