@@ -37,7 +37,8 @@ namespace ApplicationUi
 
             AfficherBouttons();
 
-            labelStatutTournoi.Visible = false;
+            labelStatutTournoi.Visible = _espaceSelectionnee != null;
+            dataGridTournois.Visible = _espaceSelectionnee != null;
             buttonEffacer.Text = "🧽  Effacer";
 
             ordreChamp = "ASC";
@@ -76,17 +77,36 @@ namespace ApplicationUi
         }
 
         /// <summary>
-        /// Charge les postes de jeux de l'espace selectionnee
+        /// Charge les postes de jeux de l'espace selectionne
         /// </summary>
         private void ChargerPostesJeu()
         {
-            if(_espaceSelectionnee == null)
+            // Si l'espace est null, on ne fait rien
+            if (_espaceSelectionnee == null)
             {
                 dataGridPostesJeu.DataSource = null;
+                dataGridPostesJeu.Visible = true;
                 return;
             }
-            dataGridPostesJeu.DataSource = _espaceSelectionnee.PostesJeu.ToList();
-            MEP_DataGridPostesJeu();
+            // Si il n'y a aucun poste de jeu associé à l'espace, on affiche un message et on masque le datagrid
+            if (_espaceSelectionnee.PostesJeu.Count <= 0)
+            {
+                labelPostesJeu.Text = "Aucun poste de jeu associé";
+                dataGridPostesJeu.Visible = false;
+            }
+            else
+            {
+                // Si il y a un ou plusieurs postes de jeu associés à l'espace,
+                // on affiche le nombre de postes de jeu associés et on affiche le datagrid
+                if (_espaceSelectionnee.PostesJeu.Count > 1)
+                    labelPostesJeu.Text = "Postes de jeu associés";
+                else
+                    labelPostesJeu.Text = "Poste de jeu associé";
+
+                dataGridPostesJeu.Visible = true;
+                dataGridPostesJeu.DataSource = _espaceSelectionnee.PostesJeu.ToList();
+                MEP_DataGridPostesJeu();
+            }
         }
         /// <summary>
         /// Permet de charger les tournois associés à l'espace sélectionné et d'afficher une indication visuelle
@@ -127,7 +147,7 @@ namespace ApplicationUi
         {
             if (_espaceSelectionnee == null)
                 return;
-            
+
             List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee.IdEspace);
             List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee.IdEspace);
 
@@ -161,8 +181,6 @@ namespace ApplicationUi
                     ChargerTournois(null);
                 }
             }
-
-            labelStatutTournoi.Visible = true;
         }
 
         /// <summary>
@@ -178,7 +196,7 @@ namespace ApplicationUi
             // Un espace libre est un espace qui n'a pas de tournoi futur associé ou dont tous les tournois sont terminés
             int nbEspacesLibres = _serviceEspace.CompterEspacesDisponibles(filtre);
             int nbEspacesTotal = _serviceEspace.CompterEspacesTotal(filtre);
-            labelStatEspacesTotal.Text = $"{nbEspacesTotal}" ;
+            labelStatEspacesTotal.Text = $"{nbEspacesTotal}";
 
             if (nbEspacesLibres == 0)
             {
@@ -208,10 +226,12 @@ namespace ApplicationUi
 
             filtre = "";
 
-            labelStatutTournoi.Visible = false;
-
             // Réinitialiser la sélection de l'espace
             _espaceSelectionnee = null;
+
+            labelStatutTournoi.Visible = _espaceSelectionnee != null;
+            dataGridPostesJeu.Visible = _espaceSelectionnee != null;
+            dataGridTournois.Visible = _espaceSelectionnee != null;
 
             // Recharger les espaces pour réinitialiser la sélection et les statistiques
             ChargerEspaces();
@@ -244,7 +264,7 @@ namespace ApplicationUi
         }
 
         private void MEP_DataGridPostesJeu()
-        {            
+        {
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
             dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
             dataGridPostesJeu.Columns["Plateforme"].Visible = false;
@@ -252,8 +272,8 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["IdEspace"].Visible = false;
             dataGridPostesJeu.Columns["Espace"].Visible = false;
             dataGridPostesJeu.Columns["NomEspace"].Visible = false;
-            
-            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridPostesJeu.Columns["Fonctionnel"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
@@ -341,6 +361,10 @@ namespace ApplicationUi
             numericUpDownCapaciteMaxi.Value = _espaceSelectionnee.CapaciteMaxi;
             numericUpDownSuperficie.Value = _espaceSelectionnee.Superficie;
 
+            labelStatutTournoi.Visible = _espaceSelectionnee != null;
+            dataGridPostesJeu.Visible = _espaceSelectionnee != null;
+            dataGridTournois.Visible = _espaceSelectionnee != null;
+
             ChargerPostesJeu();
             StatutTournois();
             AfficherBouttons();
@@ -350,7 +374,7 @@ namespace ApplicationUi
         private bool ValiderEspace(Espace espace)
         {
             var erreurs = _serviceEspace.ValiderEspace(espace);
-            if (erreurs.Any())
+            if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
@@ -378,7 +402,7 @@ namespace ApplicationUi
             };
 
             if (ValiderEspace(espace))
-            {                
+            {
                 _serviceEspace.Creer(espace);
                 MessageBox.Show("L'espace a bien été ajouté.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
@@ -414,7 +438,7 @@ namespace ApplicationUi
                 MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-           
+
         }
         /// <summary>
         /// Gère l'événement de clic sur le bouton Effacer et réinitialise les zones de saisie du formulaire.
@@ -436,12 +460,8 @@ namespace ApplicationUi
         private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
             // Si aucune ligne n'est sélectionnée, ne rien faire
-            if (dataGridEspaces.CurrentRow == null)
+            if (dataGridEspaces.CurrentRow == null ||_espaceSelectionnee == null)
                 return;
-
-            if (_espaceSelectionnee == null)
-                return;
-            Espace espace = (Espace)dataGridEspaces.CurrentRow.DataBoundItem;
 
             if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Validation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
@@ -449,6 +469,7 @@ namespace ApplicationUi
             _serviceEspace.Supprimer(_espaceSelectionnee.IdEspace);
             Raz_Zones();
         }
+
         #endregion
     }
 }
