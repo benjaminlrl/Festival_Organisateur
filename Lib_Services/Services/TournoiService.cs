@@ -30,22 +30,66 @@ namespace Lib_Services.Services
         public List<Tournoi> Lister(string filtre = "")
         {
             // Include(t => t.Espace) pour éviter le chargement paresseux lors de l'affichage.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Tournois
-                    .Include(t => t.Espace)
-                    .Include(t => t.Jeu)
-                    .ToList();
+            // List<Tournoi>Exécute la requête immédiatement en BDD
+            // IQueryable<Tournoi> Construit la requête SQL sans l'exécuter, le Where sera intégré dans le SQL final
+            IQueryable<Tournoi> query = _context.Tournois
+                .Include(t => t.Espace)
+                .Include(t => t.Jeu)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(t =>
+                    t.Nom.Contains(filtre) ||
+                    t.NbParticipants.ToString().Contains(filtre) ||
+                    t.DureePrevue.ToString().Contains(filtre) ||
+                    t.DateHeure.ToString().Contains(filtre) ||
+                    t.Statut.Contains(filtre) ||
+                    t.Espace.Nom.Contains(filtre) ||
+                    t.Jeu.Titre.Contains(filtre));
+
+            return query.ToList();
+        }
+
+        /// <summary>
+        /// Retourne la liste des tournois dont le statut est "En cours" avec l'espace et le jeu associé chargé.
+        /// </summary>
+        /// <param name="idEspace">Id de l'espace</param>
+        /// <returns>Les tournois en cours.</returns>
+        public List<Tournoi> ListerTournoisEnCoursEspace(int idEspace)
+        {
             return _context.Tournois
-                    .Where(t => t.Nom.Contains(filtre)
-                        || t.NbParticipants.ToString().Contains(filtre)
-                        || t.DureePrevue.ToString().Contains(filtre)
-                        || t.DateHeure.ToString().Contains(filtre)
-                        || t.Statut.Contains(filtre)
-                        || t.Espace.Nom.Contains(filtre)
-                        || t.Jeu.Titre.Contains(filtre))
-                    .Include(t => t.Espace)
-                    .Include(t => t.Jeu)
-                    .ToList();
+                .Include(t => t.Espace)
+                .Include(t => t.Jeu)
+                .Where(t => t.Statut == "En cours" && t.IdEspace == idEspace)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Retourne la liste des tournois dont le statut est "Planifié" avec l'espace et le jeu associé chargé.
+        /// </summary>
+        /// <param name="idEspace">Id de l'espace</param>
+        /// <returns>Les tournois planifiés.</returns>
+        public List<Tournoi> ListerTournoisPlanifiesEspace(int idEspace)
+        {
+            return _context.Tournois
+                .Include(t => t.Espace)
+                .Include(t => t.Jeu)
+                .Where(t => t.Statut == "Planifié" && t.IdEspace == idEspace)                
+                .ToList();
+        }
+
+        /// <summary>
+        /// Retourne la liste des tournois dont le statut est "Terminé" avec l'espace et le jeu associé chargé.
+        /// </summary>
+        /// <param name="idEspace">Id de l'espace</param>
+        /// <returns></returns>
+        public List<Tournoi> ListerTournoisTerminesEspace(int idEspace)
+        {
+            return _context.Tournois
+                .Include(t => t.Espace)
+                .Include(t => t.Jeu)
+                .Where(t => t.Statut == "Terminé" && t.IdEspace == idEspace)                
+                .ToList();
         }
 
         /// <summary>
