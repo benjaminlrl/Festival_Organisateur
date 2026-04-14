@@ -16,7 +16,7 @@ namespace Lib_Services.Services
     public class EspaceService : IEspaceService
     {
         private readonly ApplicationDbContext _context;
-
+       
         /// <summary>
         /// Initialise une nouvelle instance de <see cref="EspaceService"/>.
         /// </summary>
@@ -57,6 +57,13 @@ namespace Lib_Services.Services
 
             return query.ToList();
         }
+
+        /// <summary>
+        /// Retourne la liste complète des espaces disponibles présents en base.
+        /// Un espace est considéré comme disponible si aucun tournois planifié ou en cours y est associé.
+        /// </summary>
+        /// <param name="filtre"></param>
+        /// <returns></returns>
 
         public List<Espace> ListerEspacesDisponibles(string filtre = "")
         {
