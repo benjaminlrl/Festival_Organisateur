@@ -302,9 +302,10 @@ namespace ApplicationUi
 
         private void DataGridEspaces_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Ignorer les clics sur l'en-tête (gérés pour le tri)
+            // Gestion des clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
+                // Association des index avec les propriétés de l'objet
                 var map = new Dictionary<int, string>
                 {
                     { dataGridEspaces.Columns["Nom"].Index,          "Nom" },
@@ -312,11 +313,12 @@ namespace ApplicationUi
                     { dataGridEspaces.Columns["Superficie"].Index,   "Superficie" },
                     { dataGridEspaces.Columns["CapaciteMaxi"].Index, "CapaciteMaxi" },
                 };
-
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
                 dataGridEspaces.DataSource = _serviceEspace.Lister(filtre, colonne, ordreChamp);
+                // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
                 MEP_DataGridEspaces();
                 return;
