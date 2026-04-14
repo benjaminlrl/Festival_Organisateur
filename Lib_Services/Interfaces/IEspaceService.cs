@@ -6,9 +6,6 @@ using System.Text;
 
 namespace Lib_Services.Interfaces
 {
-    /// <summary>
-    /// Cette interface correspond aux
-    /// </summary>
     public interface IEspaceService
     {
         #region Lecture
