@@ -164,6 +164,37 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+        #region Validations
+        // TODO: AJouter un formalisme gérer dans le setter de l'entité PosteJeu pour normaliser le nommage des références des Postes de Jeu en fonction de l'espace, la plateforme et le numéro du poste.
+
+        /// <summary>
+        /// Valide les données d'un poste de jeu avant création ou modification.
+        /// </summary>
+        /// <param name="posteJeu">Le poste de jeu concerné</param>
+        /// <returns>La liste des erreurs de type <see cref="string"/></returns>
+        public List<string> ValiderPosteJeu(PosteJeu posteJeu)
+        {
+            var erreurs = new List<string>();
+            if (string.IsNullOrWhiteSpace(posteJeu.Reference))
+                erreurs.Add("La référence du poste de jeu est obligatoire.");
+
+            if (posteJeu.NumeroPoste <= 0)
+                erreurs.Add("Le numéro du poste doit être supérieur à zéro.");
+
+            if (posteJeu.IdEspace <= 0)
+                erreurs.Add("L'espace associé est obligatoire.");
+
+            if (posteJeu.IdPlateforme <= 0)
+                erreurs.Add("La plateforme associée est obligatoire.");
+
+            if(posteJeu.Fonctionnel != true && posteJeu.Fonctionnel != false)
+                erreurs.Add("Le champ Fonctionnel doit être un booléen.");
+
+            if(ReferenceExiste(posteJeu.Reference) != null && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
+                erreurs.Add("Un poste de jeu avec cette référence existe déjà.");
+            return erreurs;
+        }
+        #endregion
     }
 
 }
