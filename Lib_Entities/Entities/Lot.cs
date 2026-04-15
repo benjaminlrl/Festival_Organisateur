@@ -44,6 +44,13 @@ namespace Lib_Entities.Entities
         public int? NumeroTournoi { get; set; }
 
         /// <summary>
+        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
+        /// Renvoie le nom du Tournoi de façon null-safe ;
+        /// retourne chaîne vide si le Tournoi est null.
+        /// </summary>
+        public string NomTournoi => Tournoi?.Nom ?? string.Empty;
+
+        /// <summary>
         /// Ensemble des composants du lot
         /// </summary>
         public ICollection<LotComposant>? LotComposant { get; set; } = new List<LotComposant>();

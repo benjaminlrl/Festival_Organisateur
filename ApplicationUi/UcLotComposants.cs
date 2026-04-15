@@ -64,10 +64,12 @@ namespace ApplicationUi
             // On affiche et modifie l'affichage des colonnes du dataGrid
             dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
             dataGridLotComposants.Columns["Lot"].Visible = false;
+            dataGridLotComposants.Columns["NumeroLot"].Visible = false;
             dataGridLotComposants.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridLotComposants.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridLotComposants.Columns["Valeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridLotComposants.Columns["NumeroLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NomLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NomLot"].HeaderText = "Lot associé";
         }
 
         /// <summary>
@@ -81,6 +83,7 @@ namespace ApplicationUi
                 .ToList();
             dataGridLotComposants.DataSource = listeLotComposants;
             MEP_DataGrid();
+            ChargerStatistiques();
         }
 
         /// <summary>
@@ -139,6 +142,34 @@ namespace ApplicationUi
             else
             {
                 comboBoxLot.SelectedValue = lotComposant.NumeroLot;
+            }
+        }
+
+        /// <summary>
+        /// Permet de charger les statistiques liées aux lots composants, notamment le nombre total de composant 
+        /// et le nombre de composant non attribué (sans lot associé). 
+        /// Les statistiques sont affichées dans des labels dédiés, 
+        /// avec une indication visuelle (couleur) pour les composants non attribués.
+        /// Cette méthode est appelée après le chargement des composants pour garantir 
+        /// que les statistiques sont à jour.
+        /// </summary>
+        private void ChargerStatistiques()
+        {
+            // Un lot composant est considéré comme non attribués quand il dispose d'aucun lot associé
+            int nbComposantNonAttribue = _serviceLotComposant.Lister(filtre)
+                                    .Count(e => e.Lot == null);
+
+            labelStatComposantsTotal.Text = $"{_serviceLotComposant.Lister(filtre).Count()}";
+
+            if (nbComposantNonAttribue == 0)
+            {
+                labelStatComposantNonAttribuer.Text = "Aucun composant non attribué";
+                labelStatComposantNonAttribuer.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelStatComposantNonAttribuer.Text = $"Composants non attribués : {nbComposantNonAttribue}";
+                labelStatComposantNonAttribuer.ForeColor = Color.Green;
             }
         }
 

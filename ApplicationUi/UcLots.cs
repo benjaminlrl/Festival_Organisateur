@@ -77,11 +77,13 @@ namespace ApplicationUi
                 dataGridLots.Columns["Numero"].DisplayIndex = 0;
                 dataGridLots.Columns["LotComposant"].Visible = false;
                 dataGridLots.Columns["NumeroTournoi"].Visible = false;
+                dataGridLots.Columns["Tournoi"].Visible = false;
                 dataGridLots.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 dataGridLots.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 dataGridLots.Columns["ValeurTotale"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 dataGridLots.Columns["RangAttribution"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["Tournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["NomTournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["NomTournoi"].HeaderText = "Tournoi associé";
             }
             else if (unFormulaire == "LotComposants")
             {
@@ -116,6 +118,7 @@ namespace ApplicationUi
                 .ToList();
             dataGridLots.DataSource = listeLots;
             MEP_DataGrid("Lots");
+            ChargerStatistiquesLots();
         }
 
         /// <summary>
@@ -125,8 +128,6 @@ namespace ApplicationUi
         private void ChargerTournoi()
         {
             // On charge les tournois uniquement pour la combobox, pas besoin de les charger dans un dataGrid
-
-            // On ajoute un élément "Aucun" en tête de liste
             comboBoxTournoi.DisplayMember = "Nom";
             comboBoxTournoi.ValueMember = "NumeroTournoi";
             comboBoxTournoi.DataSource = null;
@@ -187,6 +188,9 @@ namespace ApplicationUi
                 comboBoxLotComposantDunLot.SelectedItem = null;
                 _lotComposantDunLotSelectionnee = null;
             }
+
+            // On met à jour les stats du nombre de composants associés au lot
+            labelStatsComposantDunLotTotal.Text = $"{listeLotComposantsDunLotCharger.Count()}";
             MEP_DataGrid("LotComposantsDunLot");
         }
 
@@ -202,6 +206,9 @@ namespace ApplicationUi
             comboBoxLotComposantDunLot.DisplayMember = "Libelle";
             comboBoxLotComposantDunLot.ValueMember = "Numero";
             comboBoxLotComposantDunLot.DataSource = null;
+
+            // On met les stats à 0 au démarrage du formulaire
+            labelStatsComposantDunLotTotal.Text = "0";
 
             // On ajoute un lot composant avec le libelle "Aucun"
             listeLotComposantsDunLot = new List<LotComposant>();
@@ -305,6 +312,34 @@ namespace ApplicationUi
             {
                 dataGridLots.CurrentCell = row.Cells[0];
                 row.Selected = true;
+            }
+        }
+
+        /// <summary>
+        /// Permet de charger les statistiques liées aux lots, notamment le nombre total de lot 
+        /// et le nombre de lot non attribué (sans tournoi associé). 
+        /// Les statistiques sont affichées dans des labels dédiés, 
+        /// avec une indication visuelle (couleur) pour les lots non attribués.
+        /// Cette méthode est appelée après le chargement des lots pour garantir 
+        /// que les statistiques sont à jour.
+        /// </summary>
+        private void ChargerStatistiquesLots()
+        {
+            // Un lot composant est considéré comme non attribués quand il dispose d'aucun lot associé
+            int nbLotNonAttribue = _serviceLot.Lister(filtre)
+                                    .Count(e => e.Tournoi == null);
+
+            labelStatLotsTotal.Text = $"{_serviceLot.Lister(filtre).Count()}";
+
+            if (nbLotNonAttribue == 0)
+            {
+                labelStatLotNonAttribue.Text = "Aucun lot non attribué";
+                labelStatLotNonAttribue.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelStatLotNonAttribue.Text = $"Lots non attribués : {nbLotNonAttribue}";
+                labelStatLotNonAttribue.ForeColor = Color.Green;
             }
         }
 

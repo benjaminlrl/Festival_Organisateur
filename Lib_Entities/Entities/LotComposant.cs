@@ -41,5 +41,12 @@ namespace Lib_Entities.Entities
         /// Lot auquel il est associé (nullable)
         /// </summary>
         public Lot? Lot { get; set; }
+
+        /// <summary>
+        /// Propriété récupérée utilisée pour l'affichage (DataGridView).
+        /// Renvoie le nom de Lot de façon null-safe ;
+        /// retourne chaîne vide si le Lot est null.
+        /// </summary>
+        public string NomLot => Lot?.Libelle ?? string.Empty;
     }
 }
