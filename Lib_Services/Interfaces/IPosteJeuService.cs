@@ -7,7 +7,7 @@ namespace Lib_Services.Interfaces
 {
     public interface IPosteJeuService
     {
-     
+
         #region Lecture
         /// <summary>
         ///  Retourne la liste complète des postes de jeu présents en base, 
@@ -69,6 +69,14 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="idPosteJeu">Identifiant du poste de jeu à supprimer.</param>
         void Supprimer(int idPosteJeu);
+        #endregion
+        #region Validations
+        /// <summary>
+        /// Valide les données d'un poste de jeu avant création ou modification.
+        /// </summary>
+        /// <param name="posteJeu">Le poste de jeu concerné</param>
+        /// <returns>La liste des erreurs de type <see cref="string"/></returns>
+        List<string> ValiderPosteJeu(PosteJeu posteJeu);
         #endregion
     }
 }
