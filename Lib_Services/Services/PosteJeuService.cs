@@ -25,29 +25,83 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
+        #region Lecture
 
         /// <summary>
-        /// Récupère l'ensemble des postes de jeu depuis la base de données.
-        /// Si un filtre est fourni, ne retourne que 
-        /// les postes de jeu dont la référence correspond au filtre.
+        ///  Retourne la liste complète des postes de jeu présents en base, 
+        ///  avec possibilité de filtrer par nom ou description.
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Reference, NumeroPoste, NomPlateforme, NomEspace, Fonctionnel) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <param name="filtre">Optionnel : référence à filtrer.</param>
-        /// <returns>Liste de <see cref="PosteJeu"/>.</returns>
-        public List<PosteJeu> Lister(string filtre = "")
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="PosteJeu"/>.</returns>
+        public List<PosteJeu> Lister(string filtre = "", string propriete = "Reference", string ordre = "ASC")
         {
-            // ToList matérialise la requête et ramène les entités en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre)) 
-                return _context.PostesJeu
+            IQueryable<PosteJeu> query = _context.PostesJeu
                     .Include(p => p.Espace)
-                    .Include(p => p.Plateforme)
-                    .ToList();
-            return _context.PostesJeu
-                .Include(p => p.Espace)
-                .Include(p => p.Plateforme)
-                .Where(p => p.Reference.Contains(filtre)
+                    .Include(p => p.Plateforme);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(p =>
+                    p.Reference.Contains(filtre)
                     || p.Espace.Nom.Contains(filtre)
-                    || p.Plateforme.Libelle.Contains(filtre))
-                .ToList();
+                    || p.Plateforme.Libelle.Contains(filtre));
+
+            query = propriete switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Reference" => ordre == "ASC" ? query.OrderBy(p => p.Reference) : query.OrderByDescending(p => p.Reference),
+                "NumeroPoste" => ordre == "ASC" ? query.OrderBy(p => p.NumeroPoste) : query.OrderByDescending(p => p.NumeroPoste),
+                "NomPlateforme" => ordre == "ASC" ? query.OrderBy(p => p.Plateforme.Libelle) : query.OrderByDescending(p => p.Plateforme.Libelle),
+                "NomEspace" => ordre == "ASC" ? query.OrderBy(p => p.Espace.Nom) : query.OrderByDescending(p => p.Espace.Nom),
+                "Fonctionnel" => ordre == "ASC" ? query.OrderBy(p => p.Fonctionnel) : query.OrderByDescending(p => p.Fonctionnel),
+                _ => query.OrderBy(p => p.Reference) // valeur par défaut
+            };
+
+            return query.ToList();
+        }
+
+        /// <summary>
+        ///  Retourne la liste complète des postes de jeu NON FONCTIONNELS présents en base, 
+        ///  avec possibilité de filtrer par nom ou description.
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Reference, NumeroPoste, NomPlateforme, NomEspace, Fonctionnel) 
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="PosteJeu"/>.</returns>
+        public List<PosteJeu> ListerPostesJeuNonFonctionnels(string filtre = "", string propriete = "Nom", string ordre = "ASC")
+        {
+            IQueryable<PosteJeu> query = _context.PostesJeu
+                    .Include(p => p.Espace)
+                    .Include(p => p.Plateforme);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(p =>
+                    p.Fonctionnel == false 
+                    && (p.Reference.Contains(filtre)
+                        || p.Espace.Nom.Contains(filtre)
+                        || p.Plateforme.Libelle.Contains(filtre)));
+
+            query = propriete switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Reference" => ordre == "ASC" ? query.OrderBy(p => p.Reference) : query.OrderByDescending(p => p.Reference),
+                "NumeroPoste" => ordre == "ASC" ? query.OrderBy(p => p.NumeroPoste) : query.OrderByDescending(p => p.NumeroPoste),
+                "NomPlateforme" => ordre == "ASC" ? query.OrderBy(p => p.Plateforme.Libelle) : query.OrderByDescending(p => p.Plateforme.Libelle),
+                "NomEspace" => ordre == "ASC" ? query.OrderBy(p => p.Espace.Nom) : query.OrderByDescending(p => p.Espace.Nom),
+                "Fonctionnel" => ordre == "ASC" ? query.OrderBy(p => p.Fonctionnel) : query.OrderByDescending(p => p.Fonctionnel),
+                _ => query.OrderBy(p => p.Reference) // valeur par défaut
+            };
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -60,7 +114,7 @@ namespace Lib_Services.Services
             // Find retourne null si l'entité n'existe pas dans le contexte/la base.
             return _context.PostesJeu.Find(idPosteJeu);
         }
-
+        
         /// <summary>
         /// Récupère un poste de jeu par sa référence.
         /// </summary>
@@ -71,7 +125,8 @@ namespace Lib_Services.Services
             // Find retourne null si l'entité n'existe pas dans le contexte/la base.
             return _context.PostesJeu.FirstOrDefault(p => p.Reference == reference);
         }
-
+        #endregion
+        #region CUD
         /// <summary>
         /// Ajoute un nouveau poste de jeu .
         /// </summary>
@@ -108,6 +163,7 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
+        #endregion
     }
 
 }
