@@ -20,7 +20,7 @@ namespace ApplicationUi
         private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly Organisateur _organisateurConnecte;
-        private Espace? _espaceSelectionnee = null;
+        private Espace? _espaceSelectionnee;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
         private string filtre;
         // Champ pour stocker l'ordre de tri actuel sur la propriété de l'espace (ASC ou DESC)
@@ -35,6 +35,7 @@ namespace ApplicationUi
             _serviceTournoi = new TournoiService(context);
 
             _organisateurConnecte = unOrganisateurConnecte;
+            _espaceSelectionnee = null;
 
             AfficherBouttons();
 
@@ -231,8 +232,8 @@ namespace ApplicationUi
                 MessageBox.Show("L'espace a bien été ajouté.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-
         }
+
         /// <summary>
         /// Gère l'événement de clic sur le bouton de modification pour appliquer les changements apportés à l'espace
         /// sélectionné.
@@ -245,10 +246,7 @@ namespace ApplicationUi
         private void ButtonModifier_Click(object sender, EventArgs e)
         {
             // Si aucune ligne n'est sélectionnée, ne rien faire
-            if (dataGridEspaces.CurrentRow == null)
-                return;
-
-            if (_espaceSelectionnee == null)
+            if (dataGridEspaces.CurrentRow == null || _espaceSelectionnee == null)
                 return;
 
             _espaceSelectionnee.Nom = textBoxNom.Text;
@@ -273,6 +271,7 @@ namespace ApplicationUi
         {
             Raz_Zones();
         }
+
         /// <summary>
         /// Gère l'événement de clic sur le bouton de suppression pour retirer l'espace sélectionné de la liste.
         /// </summary>
@@ -292,19 +291,6 @@ namespace ApplicationUi
 
             _serviceEspace.Supprimer(_espaceSelectionnee.IdEspace);
             Raz_Zones();
-        }
-
-        /// <summary>
-        /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
-        /// </summary>
-        private void AfficherBouttons()
-        {
-            buttonAjouter.Enabled = _espaceSelectionnee == null;
-
-            // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
-            buttonModifier.Enabled = _espaceSelectionnee != null;
-            buttonSupprimer.Enabled = _espaceSelectionnee != null;
-            buttonEffacer.Enabled = _espaceSelectionnee != null;
         }
         #endregion 
 
@@ -371,6 +357,9 @@ namespace ApplicationUi
             return true;
         }
 
+        #endregion
+        #region Méthodes
+
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
@@ -382,8 +371,7 @@ namespace ApplicationUi
             numericUpDownCapaciteMaxi.Enabled = false;
             numericUpDownSuperficie.Enabled = false;
         }
-        #endregion #region Méthodes
-        #region Méthodes
+
         /// <summary>
         /// Permet de déterminer d'afficher une indication visuelle sur les tournois associés à l'espace sélectionné, 
         /// en fonction de leur statut (en cours, planifié ou aucun tournoi).
@@ -391,7 +379,12 @@ namespace ApplicationUi
         private void StatutTournois()
         {
             if (_espaceSelectionnee == null)
+            {
+                labelStatutTournoi.Visible = _espaceSelectionnee != null;
                 return;
+            }
+
+            labelStatutTournoi.Visible = _espaceSelectionnee != null; 
 
             List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee.IdEspace);
             List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee.IdEspace);
@@ -477,7 +470,6 @@ namespace ApplicationUi
             numericUpDownCapaciteMaxi.Value = _espaceSelectionnee.CapaciteMaxi;
             numericUpDownSuperficie.Value = _espaceSelectionnee.Superficie;
 
-            labelStatutTournoi.Visible = _espaceSelectionnee != null;
             dataGridPostesJeu.Visible = _espaceSelectionnee != null;
             dataGridTournois.Visible = _espaceSelectionnee != null;
 
@@ -485,7 +477,20 @@ namespace ApplicationUi
             StatutTournois();
             AfficherBouttons();
         }
-#endregion
+
+        /// <summary>
+        /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
+        /// </summary>
+        private void AfficherBouttons()
+        {
+            buttonAjouter.Enabled = _espaceSelectionnee == null;
+
+            // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
+            buttonModifier.Enabled = _espaceSelectionnee != null;
+            buttonSupprimer.Enabled = _espaceSelectionnee != null;
+            buttonEffacer.Enabled = _espaceSelectionnee != null;
+        }
+        #endregion
 
     }
 }
