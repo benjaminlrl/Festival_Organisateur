@@ -245,27 +245,23 @@ namespace ApplicationUi
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
             {
-                var donnees = _servicePosteJeu.Lister(filtre);
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                var map = new Dictionary<int, Func<PosteJeu, object>>
+                var map = new Dictionary<int, string>
                 {
-                    {dataGridPostesJeu.Columns["Reference"].Index, p => p.Reference},
-                    {dataGridPostesJeu.Columns["Fonctionnel"].Index, p => p.Fonctionnel},
-                    {dataGridPostesJeu.Columns["NomEspace"].Index, p => p.NomEspace},
-                    {dataGridPostesJeu.Columns["Nomplateforme"].Index, p => p.NomPlateforme},
+                    {dataGridPostesJeu.Columns["Reference"].Index, "Reference"},
+                    {dataGridPostesJeu.Columns["Fonctionnel"].Index, "Fonctionnel"},
+                    {dataGridPostesJeu.Columns["NomEspace"].Index, "NomEspace"},
+                    {dataGridPostesJeu.Columns["Nomplateforme"].Index, "NomPlateforme"},
                 };
-
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                // Vérifie si l'index de la colonne est associé a une propriété
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridPostesJeu.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
-
+                dataGridPostesJeu.DataSource = _serviceEspace.Lister(filtre, colonne, ordreChamp);
+                // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
-
                 MEP_DataGrid();
                 return;
             }
@@ -328,30 +324,19 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        private bool ValiderPosteJeu()
+        /// <summary>
+        /// Retourne un booléen indiquant si les informations du poste de jeu sont valides ou non,
+        /// en fonction des règles métier définies dans le service Espace.
+        /// </summary>
+        /// <param name="posteJeu">L'objet PosteJeu à valider.</param>
+        /// <returns>Vraie si le le poste de jeu est valide, sinon faux.</returns>
+        private bool ValiderPosteJeu(PosteJeu posteJeu)
         {
-            // valider que la référence n'est pas vide ou composée uniquement d'espaces
-            if (string.IsNullOrWhiteSpace(textBoxReference.Text))
+            var erreurs = _servicePosteJeu.ValiderPosteJeu(posteJeu);
+            if (erreurs.Count > 0)
             {
-                MessageBox.Show("La référence du poste de jeu est obligatoire.",
-                    "Validation",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // on efface le contenu pour forcer l'utilisateur à saisir une valeur valide
-                textBoxReference.Clear();
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
-            }
-            else
-            {
-                // vérifie que la référence saisie n'existe pas déjà pour un autre poste de jeu
-                if (_servicePosteJeu.ReferenceExiste(textBoxReference.Text) != null)
-                {
-                    MessageBox.Show($"Le poste de {textBoxReference.Text} existe déjà",
-                        "Validation",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    // on efface le contenu pour forcer l'utilisateur à saisir une valeur valide
-                    textBoxReference.Clear();
-                    return false;
-                }
             }
             return true;
         }
@@ -360,15 +345,15 @@ namespace ApplicationUi
         #region Boutons
         public void buttonAjouter_Click(object sender, EventArgs e)
         {
-            if (ValiderPosteJeu())
+            var posteJeu = new PosteJeu
             {
-                var posteJeu = new PosteJeu
-                {
-                    Reference = textBoxReference.Text,
-                    Fonctionnel = fonctionnelSelectionne,
-                    IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
-                    IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace
-                };
+                Reference = textBoxReference.Text,
+                Fonctionnel = fonctionnelSelectionne,
+                IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
+                IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace
+            };
+            if (ValiderPosteJeu(posteJeu))
+            {
                 _servicePosteJeu.Creer(posteJeu);
                 ChargerPostesDeJeu();
                 Raz_Zones();
