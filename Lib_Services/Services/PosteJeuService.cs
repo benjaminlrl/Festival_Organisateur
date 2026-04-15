@@ -195,6 +195,51 @@ namespace Lib_Services.Services
             return erreurs;
         }
         #endregion
+        #region Statistiques
+
+        /// <summary>
+        /// Permet d'obtenir le nombre de postes de jeu fonctionnel enregistrés en base de données
+        /// </summary>
+        /// <param name="filtre">Optionnel, filtre sur les propriétés du poste de Jeu</param>
+        /// <returns></returns>
+        public int NombrePostesJeuFonctionnels(string filtre = "")
+        {
+            IQueryable<PosteJeu> query = _context.PostesJeu
+                    .Include(p => p.Espace)
+                    .Include(p => p.Plateforme)
+                    .Where(p =>
+                           p.Fonctionnel == true);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(p =>
+                            p.Reference.Contains(filtre)
+                            || p.Espace.Nom.Contains(filtre)
+                            || p.Plateforme.Libelle.Contains(filtre));
+
+            return query.Count();
+        }
+
+        /// <summary>
+        /// Permet d'obtenir le nombre total de postes de jeu enregistrés en base de données
+        /// </summary>
+        /// <param name="filtre">Optionnel, filtre sur les propriétés du poste de Jeu</param>
+        /// <returns></returns>
+        public int NombrePostesJeu(string filtre = "")
+        {
+            IQueryable<PosteJeu> query = _context.PostesJeu
+                    .Include(p => p.Espace)
+                    .Include(p => p.Plateforme);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(p => 
+                        p.Reference.Contains(filtre)
+                        || p.Espace.Nom.Contains(filtre)
+                        || p.Plateforme.Libelle.Contains(filtre));
+
+            return query.Count();
+        }
+
+        #endregion
     }
 
 }

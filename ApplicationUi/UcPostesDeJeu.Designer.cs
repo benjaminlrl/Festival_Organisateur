@@ -39,7 +39,7 @@
             textBoxReference = new TextBox();
             labelReference = new Label();
             labelFonctionnel = new Label();
-            flowLayoutPanel1 = new FlowLayoutPanel();
+            flowLayoutPanelFonctionnel = new FlowLayoutPanel();
             radioButtonFonctionnelTrue = new RadioButton();
             radioButtonFonctionnelFalse = new RadioButton();
             labelPlateforme = new Label();
@@ -61,7 +61,7 @@
             tableLayoutPanel3.SuspendLayout();
             groupBox1.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanelFonctionnel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
             tableLayoutPanel1.SuspendLayout();
@@ -122,7 +122,7 @@
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += buttonAjouter_Click;
+            buttonAjouter.Click += ButtonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -138,7 +138,7 @@
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += buttonEffacer_Click;
+            buttonEffacer.Click += ButtonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -154,7 +154,7 @@
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonModifier_Click;
+            buttonModifier.Click += ButtonModifier_Click;
             // 
             // buttonSupprimer
             // 
@@ -170,7 +170,7 @@
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += buttonSupprimer_Click;
+            buttonSupprimer.Click += ButtonSupprimer_Click;
             // 
             // tableLayoutPanel
             // 
@@ -181,7 +181,7 @@
             tableLayoutPanel.Controls.Add(textBoxReference, 0, 1);
             tableLayoutPanel.Controls.Add(labelReference, 0, 0);
             tableLayoutPanel.Controls.Add(labelFonctionnel, 0, 2);
-            tableLayoutPanel.Controls.Add(flowLayoutPanel1, 0, 3);
+            tableLayoutPanel.Controls.Add(flowLayoutPanelFonctionnel, 0, 3);
             tableLayoutPanel.Controls.Add(labelPlateforme, 1, 0);
             tableLayoutPanel.Controls.Add(comboBoxPlateforme, 1, 1);
             tableLayoutPanel.Controls.Add(labelEspace, 1, 2);
@@ -233,15 +233,15 @@
             labelFonctionnel.TabIndex = 8;
             labelFonctionnel.Text = "Fonctionnel";
             // 
-            // flowLayoutPanel1
+            // flowLayoutPanelFonctionnel
             // 
-            flowLayoutPanel1.Controls.Add(radioButtonFonctionnelTrue);
-            flowLayoutPanel1.Controls.Add(radioButtonFonctionnelFalse);
-            flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(3, 108);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(284, 35);
-            flowLayoutPanel1.TabIndex = 18;
+            flowLayoutPanelFonctionnel.Controls.Add(radioButtonFonctionnelTrue);
+            flowLayoutPanelFonctionnel.Controls.Add(radioButtonFonctionnelFalse);
+            flowLayoutPanelFonctionnel.Dock = DockStyle.Fill;
+            flowLayoutPanelFonctionnel.Location = new Point(3, 108);
+            flowLayoutPanelFonctionnel.Name = "flowLayoutPanelFonctionnel";
+            flowLayoutPanelFonctionnel.Size = new Size(284, 35);
+            flowLayoutPanelFonctionnel.TabIndex = 18;
             // 
             // radioButtonFonctionnelTrue
             // 
@@ -253,7 +253,7 @@
             radioButtonFonctionnelTrue.TabStop = true;
             radioButtonFonctionnelTrue.Text = "Oui";
             radioButtonFonctionnelTrue.UseVisualStyleBackColor = true;
-            radioButtonFonctionnelTrue.CheckedChanged += radioButtonFonctionnelTrue_CheckedChanged;
+            radioButtonFonctionnelTrue.CheckedChanged += RadioButtonFonctionnelTrue_CheckedChanged;
             // 
             // radioButtonFonctionnelFalse
             // 
@@ -265,7 +265,7 @@
             radioButtonFonctionnelFalse.TabStop = true;
             radioButtonFonctionnelFalse.Text = "Non";
             radioButtonFonctionnelFalse.UseVisualStyleBackColor = true;
-            radioButtonFonctionnelFalse.CheckedChanged += radioButtonFonctionnelFalse_CheckedChanged;
+            radioButtonFonctionnelFalse.CheckedChanged += RadioButtonFonctionnelFalse_CheckedChanged;
             // 
             // labelPlateforme
             // 
@@ -352,7 +352,7 @@
             dataGridPostesJeu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridPostesJeu.Size = new Size(970, 387);
             dataGridPostesJeu.TabIndex = 6;
-            dataGridPostesJeu.CellClick += dataGridPostesJeu_CellClick;
+            dataGridPostesJeu.CellClick += DataGridPostesJeu_CellClick;
             // 
             // tableLayoutPanel1
             // 
@@ -404,7 +404,7 @@
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(784, 31);
             textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // groupBoxStatsPostesJeu
             // 
@@ -469,8 +469,8 @@
             groupBox1.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
+            flowLayoutPanelFonctionnel.ResumeLayout(false);
+            flowLayoutPanelFonctionnel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
@@ -493,7 +493,7 @@
         private Button buttonModifier;
         private Button buttonSupprimer;
         private DataGridView dataGridPostesJeu;
-        private FlowLayoutPanel flowLayoutPanel1;
+        private FlowLayoutPanel flowLayoutPanelFonctionnel;
         private RadioButton radioButtonFonctionnelTrue;
         private RadioButton radioButtonFonctionnelFalse;
         private Label labelEspace;

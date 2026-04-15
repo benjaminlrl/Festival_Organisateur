@@ -78,5 +78,21 @@ namespace Lib_Services.Interfaces
         /// <returns>La liste des erreurs de type <see cref="string"/></returns>
         List<string> ValiderPosteJeu(PosteJeu posteJeu);
         #endregion
+        #region Statistiques
+        /// <summary>
+        /// Permet d'obtenir le nombre total de postes de jeu enregistrés en base de données
+        /// </summary>
+        /// <param name="filtre">Optionnel, filtre sur les propriétés du poste de Jeu</param>
+        /// <returns></returns>
+        int NombrePostesJeu(string filtre = "");
+
+        /// <summary>
+        /// Permet d'obtenir le nombre de postes de jeu fonctionnel enregistrés en base de données
+        /// </summary>
+        /// <param name="filtre">Optionnel, filtre sur les propriétés du poste de Jeu</param>
+        /// <returns></returns>
+        int NombrePostesJeuFonctionnels(string filtre = "");
+
+        #endregion
     }
 }
