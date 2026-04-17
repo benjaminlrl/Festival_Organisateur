@@ -26,6 +26,8 @@ namespace ApplicationUi
         int? nouveauNumeroLot;
         string filtre;
         string ordreChamp = "ASC";
+        Lot lotActuelle;
+        Lot lotAncien;
 
         public UcLotComposants(Organisateur unOrganisateurConnecte)
         {
@@ -280,7 +282,33 @@ namespace ApplicationUi
             // Gestion du lot nullable
             nouveauNumeroLot = comboBoxLot.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
             if (nouveauNumeroLot != _lotComposantSelectionne.NumeroLot)
+            {
+                lotActuelle = _serviceLot.Obtenir(nouveauNumeroLot.Value);
+                lotAncien = _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value) ?? null; // A FINIR ICI BUG
                 _lotComposantSelectionne.NumeroLot = nouveauNumeroLot;
+                // Si sa passe de aucun a un lot :
+                if (_lotComposantSelectionne.NumeroLot == null)
+                {
+                    lotActuelle.ValeurTotale = lotActuelle.ValeurTotale + _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                }
+
+                // Si sa passe de un lot a aucun :
+                if (comboBoxLot.SelectedValue == null) 
+                {
+                    lotActuelle.ValeurTotale = lotActuelle.ValeurTotale - _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                }
+
+                // Si sa passe de un lot a un autre lot :
+                else
+                {
+                    lotActuelle.ValeurTotale = lotActuelle.ValeurTotale + _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                    lotAncien.ValeurTotale = lotAncien.ValeurTotale - _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotAncien);
+                }
+            }
 
             _serviceLotComposant.Modifier(_lotComposantSelectionne);
             ChargerLotComposants();
