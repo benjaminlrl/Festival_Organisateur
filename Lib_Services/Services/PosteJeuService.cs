@@ -16,6 +16,8 @@ namespace Lib_Services.Services
     {
         // Contexte Entity Framework 
         private readonly ApplicationDbContext _context;
+        private readonly IPlateformeService _plateformeService;
+        private readonly IEspaceService _espaceService;
 
         /// <summary>
         /// Constructeur .
@@ -24,6 +26,8 @@ namespace Lib_Services.Services
         public PosteJeuService(ApplicationDbContext context)
         {
             _context = context;
+            _espaceService = new EspaceService(context);
+            _plateformeService = new PlateformeService(context);
         }
         #region Lecture
 
@@ -133,6 +137,13 @@ namespace Lib_Services.Services
         /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> à créer.</param>
         public void Creer(PosteJeu posteJeu)
         {
+            int numeroPoste = ObtenirNbPostesJeuEspacePlateforme(posteJeu.IdEspace, posteJeu.IdPlateforme) + 1;
+            Espace? espace = _espaceService.Obtenir(posteJeu.IdEspace);
+
+            if (espace == null)
+                return;
+            
+            posteJeu.SetReference(espace, numeroPoste);
             // Ajout à l'ensemble suivi d'un commit via SaveChanges.
             _context.PostesJeu.Add(posteJeu);
             _context.SaveChanges();
@@ -177,9 +188,6 @@ namespace Lib_Services.Services
             var erreurs = new List<string>();
             if (string.IsNullOrWhiteSpace(posteJeu.Reference))
                 erreurs.Add("La référence du poste de jeu est obligatoire.");
-
-            if (posteJeu.NumeroPoste <= 0)
-                erreurs.Add("Le numéro du poste doit être supérieur à zéro.");
 
             if (posteJeu.IdEspace <= 0)
                 erreurs.Add("L'espace associé est obligatoire.");
@@ -239,6 +247,14 @@ namespace Lib_Services.Services
             return query.Count();
         }
 
+        #endregion
+        #region Méthodes
+        public int ObtenirNbPostesJeuEspacePlateforme(int idEspace, int idPlateforme)
+        {
+            return _context.PostesJeu
+                .Where(p => p.IdEspace == idEspace && p.IdPlateforme == idPlateforme)
+                .Count();
+        }
         #endregion
     }
 

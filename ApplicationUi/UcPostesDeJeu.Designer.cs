@@ -36,7 +36,6 @@
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             tableLayoutPanel = new TableLayoutPanel();
-            textBoxReference = new TextBox();
             labelReference = new Label();
             labelFonctionnel = new Label();
             flowLayoutPanelFonctionnel = new FlowLayoutPanel();
@@ -50,13 +49,13 @@
             dataGridTournois = new DataGridView();
             dataGridPostesJeu = new DataGridView();
             tableLayoutPanel1 = new TableLayoutPanel();
-            tableLayoutPanel2 = new TableLayoutPanel();
             label2 = new Label();
             textBoxRecherche = new TextBox();
             groupBoxStatsPostesJeu = new GroupBox();
             labelStatPostesJeuFonctionnels = new Label();
             labelStatPostesJeuTotal = new Label();
             labelTitreEspaces = new Label();
+            textBoxReference = new TextBox();
             panelForm.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -65,7 +64,6 @@
             ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).BeginInit();
             tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
             groupBoxStatsPostesJeu.SuspendLayout();
             SuspendLayout();
             // 
@@ -77,7 +75,7 @@
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(970, 269);
+            panelForm.Size = new Size(970, 323);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel3
@@ -90,20 +88,22 @@
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 61.8677025F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 38.1322975F));
-            tableLayoutPanel3.Size = new Size(970, 269);
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 52.2471924F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 47.7528076F));
+            tableLayoutPanel3.Size = new Size(970, 323);
             tableLayoutPanel3.TabIndex = 8;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(buttonAjouter);
+            groupBox1.Controls.Add(textBoxRecherche);
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonModifier);
             groupBox1.Controls.Add(buttonSupprimer);
-            groupBox1.Location = new Point(3, 169);
+            groupBox1.Location = new Point(3, 171);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(879, 82);
+            groupBox1.Size = new Size(879, 149);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
@@ -199,17 +199,8 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.Size = new Size(962, 158);
+            tableLayoutPanel.Size = new Size(962, 160);
             tableLayoutPanel.TabIndex = 0;
-            // 
-            // textBoxReference
-            // 
-            textBoxReference.Location = new Point(4, 39);
-            textBoxReference.Margin = new Padding(4);
-            textBoxReference.Name = "textBoxReference";
-            textBoxReference.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
-            textBoxReference.Size = new Size(270, 31);
-            textBoxReference.TabIndex = 0;
             // 
             // labelReference
             // 
@@ -344,13 +335,13 @@
             dataGridPostesJeu.BorderStyle = BorderStyle.None;
             dataGridPostesJeu.ColumnHeadersHeight = 34;
             dataGridPostesJeu.Dock = DockStyle.Fill;
-            dataGridPostesJeu.Location = new Point(4, 329);
+            dataGridPostesJeu.Location = new Point(4, 335);
             dataGridPostesJeu.Margin = new Padding(4);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
             dataGridPostesJeu.ReadOnly = true;
             dataGridPostesJeu.RowHeadersWidth = 62;
             dataGridPostesJeu.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridPostesJeu.Size = new Size(970, 387);
+            dataGridPostesJeu.Size = new Size(970, 381);
             dataGridPostesJeu.TabIndex = 6;
             dataGridPostesJeu.CellClick += DataGridPostesJeu_CellClick;
             // 
@@ -359,40 +350,23 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.7717743F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.2282276F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
-            tableLayoutPanel1.Controls.Add(groupBoxStatsPostesJeu, 1, 2);
-            tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 0, 2);
+            tableLayoutPanel1.Controls.Add(groupBoxStatsPostesJeu, 1, 1);
+            tableLayoutPanel1.Controls.Add(dataGridPostesJeu, 0, 1);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 85.09317F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 14.9068327F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 394F));
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 45.97222F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 54.02778F));
             tableLayoutPanel1.Size = new Size(1364, 720);
             tableLayoutPanel1.TabIndex = 7;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.7640457F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.2359543F));
-            tableLayoutPanel2.Controls.Add(label2, 0, 0);
-            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
-            tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 291);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(972, 31);
-            tableLayoutPanel2.TabIndex = 9;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(3, 0);
+            label2.Location = new Point(70, 102);
             label2.Name = "label2";
             label2.Size = new Size(131, 30);
             label2.TabIndex = 1;
@@ -400,9 +374,9 @@
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(185, 3);
+            textBoxRecherche.Location = new Point(207, 101);
             textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(784, 31);
+            textBoxRecherche.Size = new Size(613, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
@@ -413,7 +387,7 @@
             groupBoxStatsPostesJeu.Controls.Add(labelStatPostesJeuTotal);
             groupBoxStatsPostesJeu.Controls.Add(labelTitreEspaces);
             groupBoxStatsPostesJeu.Dock = DockStyle.Top;
-            groupBoxStatsPostesJeu.Location = new Point(982, 330);
+            groupBoxStatsPostesJeu.Location = new Point(982, 336);
             groupBoxStatsPostesJeu.Margin = new Padding(4, 5, 4, 5);
             groupBoxStatsPostesJeu.Name = "groupBoxStatsPostesJeu";
             groupBoxStatsPostesJeu.Padding = new Padding(4, 5, 4, 5);
@@ -456,6 +430,16 @@
             labelTitreEspaces.Text = "🏢 POSTES DE JEU";
             labelTitreEspaces.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // textBoxReference
+            // 
+            textBoxReference.Location = new Point(4, 39);
+            textBoxReference.Margin = new Padding(4);
+            textBoxReference.Name = "textBoxReference";
+            textBoxReference.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
+            textBoxReference.ReadOnly = true;
+            textBoxReference.Size = new Size(270, 31);
+            textBoxReference.TabIndex = 0;
+            // 
             // UcPostesDeJeu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -467,6 +451,7 @@
             panelForm.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             flowLayoutPanelFonctionnel.ResumeLayout(false);
@@ -474,8 +459,6 @@
             ((System.ComponentModel.ISupportInitialize)dataGridTournois).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridPostesJeu).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
             groupBoxStatsPostesJeu.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -484,7 +467,6 @@
 
         private Panel panelForm;
         private TableLayoutPanel tableLayoutPanel;
-        private TextBox textBoxReference;
         private Label labelReference;
         private Label labelFonctionnel;
         private GroupBox groupBox1;
@@ -505,11 +487,11 @@
         private Label labelStatPostesJeuFonctionnels;
         private Label labelStatPostesJeuTotal;
         private Label labelTitreEspaces;
-        private TableLayoutPanel tableLayoutPanel2;
         private Label label2;
         private TextBox textBoxRecherche;
         private DataGridView dataGridTournois;
         private Label labelStatutTournoi;
         private TableLayoutPanel tableLayoutPanel3;
+        private TextBox textBoxReference;
     }
 }

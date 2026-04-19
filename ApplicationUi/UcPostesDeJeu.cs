@@ -147,6 +147,12 @@ namespace ApplicationUi
 
         private void MEP_DataGridPostesJeu()
         {
+            // Après avoir lié la DataSource, définir le SortMode de chaque colonne
+            foreach (DataGridViewColumn col in dataGridPostesJeu.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+
             dataGridPostesJeu.Columns["Espace"].Visible = false;
             dataGridPostesJeu.Columns["IdEspace"].Visible = false;
             dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
@@ -255,11 +261,13 @@ namespace ApplicationUi
                 };
                 // Vérifie si l'index de la colonne est associé a une propriété
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
-                    return;
-
-                dataGridPostesJeu.DataSource = _serviceEspace.Lister(filtre, colonne, ordreChamp);
+                    return;                
                 // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                dataGridPostesJeu.DataSource = _servicePosteJeu.Lister(filtre, colonne, ordreChamp);
+                dataGridPostesJeu.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
 
                 MEP_DataGridPostesJeu();
                 return;
