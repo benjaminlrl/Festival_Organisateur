@@ -137,13 +137,6 @@ namespace Lib_Services.Services
         /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> à créer.</param>
         public void Creer(PosteJeu posteJeu)
         {
-            int numeroPoste = ObtenirNbPostesJeuEspacePlateforme(posteJeu.IdEspace, posteJeu.IdPlateforme) + 1;
-            Espace? espace = _espaceService.Obtenir(posteJeu.IdEspace);
-
-            if (espace == null)
-                return;
-            
-            posteJeu.SetReference(espace, numeroPoste);
             // Ajout à l'ensemble suivi d'un commit via SaveChanges.
             _context.PostesJeu.Add(posteJeu);
             _context.SaveChanges();
@@ -249,7 +242,13 @@ namespace Lib_Services.Services
 
         #endregion
         #region Méthodes
-        public int ObtenirNbPostesJeuEspacePlateforme(int idEspace, int idPlateforme)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idEspace"></param>
+        /// <param name="idPlateforme"></param>
+        /// <returns></returns>
+        public int NombrePostesJeuEspacePlateforme(int idEspace, int idPlateforme)
         {
             return _context.PostesJeu
                 .Where(p => p.IdEspace == idEspace && p.IdPlateforme == idPlateforme)

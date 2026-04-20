@@ -226,6 +226,7 @@
             textBoxReference.Margin = new Padding(4);
             textBoxReference.Name = "textBoxReference";
             textBoxReference.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
+            textBoxReference.ReadOnly = true;
             textBoxReference.Size = new Size(282, 31);
             textBoxReference.TabIndex = 0;
             // 

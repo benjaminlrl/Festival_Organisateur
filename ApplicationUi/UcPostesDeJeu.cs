@@ -192,13 +192,19 @@ namespace ApplicationUi
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
+            Espace espaceSelectionne = (Espace)comboBoxEspace.SelectedItem;
+            Plateforme plateformeSelectionne = (Plateforme)comboBoxPlateforme.SelectedItem;
+
             var posteJeu = new PosteJeu
             {
-                Reference = textBoxReference.Text,
                 Fonctionnel = fonctionnelSelectionne,
-                IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
-                IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace
+                IdPlateforme = plateformeSelectionne.IdPlateforme,
+                IdEspace = espaceSelectionne.IdEspace
             };
+            // Formattage de la référence du poste"
+            posteJeu.SetReference(espaceSelectionne, _servicePosteJeu.
+                NombrePostesJeuEspacePlateforme(espaceSelectionne.IdEspace, plateformeSelectionne.IdPlateforme) + 1);
+
             if (ValiderPosteJeu(posteJeu))
             {
                 _servicePosteJeu.Creer(posteJeu);

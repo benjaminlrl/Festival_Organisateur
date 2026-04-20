@@ -93,6 +93,13 @@ namespace Lib_Services.Interfaces
         /// <returns></returns>
         int NombrePostesJeuFonctionnels(string filtre = "");
 
+        /// <summary>
+        /// Permet d'obtenir le nombre de postes de jeu enregistrés en base de données
+        /// </summary>
+        /// <param name="idEspace"></param>
+        /// <param name="idPlateforme"></param>
+        /// <returns></returns>
+        int NombrePostesJeuEspacePlateforme(int idEspace, int idPlateforme);
         #endregion
     }
 }
