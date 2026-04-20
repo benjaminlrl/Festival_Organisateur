@@ -35,6 +35,8 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="colonne">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Espace"/>.</returns>
         public List<Espace> Lister(string filtre = "", string colonne = "Nom", string ordre = "ASC")
         {
@@ -180,6 +182,7 @@ namespace Lib_Services.Services
         }
         #endregion
         #region Validations
+
         /// <summary>
         /// Permet de vérifier les propriétés associés a un espace.
         /// </summary>
