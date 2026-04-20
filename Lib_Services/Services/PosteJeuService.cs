@@ -240,8 +240,6 @@ namespace Lib_Services.Services
             return query.Count();
         }
 
-        #endregion
-        #region Méthodes
         /// <summary>
         /// 
         /// </summary>
@@ -255,6 +253,7 @@ namespace Lib_Services.Services
                 .Count();
         }
         #endregion
+
     }
 
 }
