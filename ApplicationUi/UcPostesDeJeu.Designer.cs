@@ -31,11 +31,14 @@
             panelForm = new Panel();
             tableLayoutPanel3 = new TableLayoutPanel();
             groupBox1 = new GroupBox();
+            label2 = new Label();
             buttonAjouter = new Button();
+            textBoxRecherche = new TextBox();
             buttonEffacer = new Button();
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             tableLayoutPanel = new TableLayoutPanel();
+            textBoxReference = new TextBox();
             labelReference = new Label();
             labelFonctionnel = new Label();
             flowLayoutPanelFonctionnel = new FlowLayoutPanel();
@@ -49,13 +52,10 @@
             dataGridTournois = new DataGridView();
             dataGridPostesJeu = new DataGridView();
             tableLayoutPanel1 = new TableLayoutPanel();
-            label2 = new Label();
-            textBoxRecherche = new TextBox();
             groupBoxStatsPostesJeu = new GroupBox();
             labelStatPostesJeuFonctionnels = new Label();
             labelStatPostesJeuTotal = new Label();
             labelTitreEspaces = new Label();
-            textBoxReference = new TextBox();
             panelForm.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -108,6 +108,16 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(70, 102);
+            label2.Name = "label2";
+            label2.Size = new Size(131, 30);
+            label2.TabIndex = 1;
+            label2.Text = "Recherche :";
+            // 
             // buttonAjouter
             // 
             buttonAjouter.BackColor = Color.FromArgb(76, 175, 80);
@@ -123,6 +133,14 @@
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
             buttonAjouter.Click += ButtonAjouter_Click;
+            // 
+            // textBoxRecherche
+            // 
+            textBoxRecherche.Location = new Point(207, 101);
+            textBoxRecherche.Name = "textBoxRecherche";
+            textBoxRecherche.Size = new Size(613, 31);
+            textBoxRecherche.TabIndex = 0;
+            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // buttonEffacer
             // 
@@ -192,35 +210,46 @@
             tableLayoutPanel.Location = new Point(4, 4);
             tableLayoutPanel.Margin = new Padding(4);
             tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.RowCount = 5;
+            tableLayoutPanel.RowCount = 4;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 41F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.Size = new Size(962, 160);
             tableLayoutPanel.TabIndex = 0;
+            // 
+            // textBoxReference
+            // 
+            textBoxReference.Dock = DockStyle.Fill;
+            textBoxReference.Location = new Point(4, 39);
+            textBoxReference.Margin = new Padding(4);
+            textBoxReference.Name = "textBoxReference";
+            textBoxReference.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
+            textBoxReference.Size = new Size(282, 31);
+            textBoxReference.TabIndex = 0;
             // 
             // labelReference
             // 
             labelReference.AutoSize = true;
+            labelReference.Dock = DockStyle.Fill;
             labelReference.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelReference.Location = new Point(4, 0);
             labelReference.Margin = new Padding(4, 0, 4, 0);
             labelReference.Name = "labelReference";
-            labelReference.Size = new Size(118, 28);
+            labelReference.Size = new Size(282, 35);
             labelReference.TabIndex = 6;
             labelReference.Text = "Référence :";
             // 
             // labelFonctionnel
             // 
             labelFonctionnel.AutoSize = true;
+            labelFonctionnel.Dock = DockStyle.Fill;
             labelFonctionnel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelFonctionnel.Location = new Point(4, 79);
             labelFonctionnel.Margin = new Padding(4, 0, 4, 0);
             labelFonctionnel.Name = "labelFonctionnel";
-            labelFonctionnel.Size = new Size(123, 26);
+            labelFonctionnel.Size = new Size(282, 26);
             labelFonctionnel.TabIndex = 8;
             labelFonctionnel.Text = "Fonctionnel";
             // 
@@ -231,7 +260,7 @@
             flowLayoutPanelFonctionnel.Dock = DockStyle.Fill;
             flowLayoutPanelFonctionnel.Location = new Point(3, 108);
             flowLayoutPanelFonctionnel.Name = "flowLayoutPanelFonctionnel";
-            flowLayoutPanelFonctionnel.Size = new Size(284, 35);
+            flowLayoutPanelFonctionnel.Size = new Size(284, 49);
             flowLayoutPanelFonctionnel.TabIndex = 18;
             // 
             // radioButtonFonctionnelTrue
@@ -261,41 +290,45 @@
             // labelPlateforme
             // 
             labelPlateforme.AutoSize = true;
+            labelPlateforme.Dock = DockStyle.Fill;
             labelPlateforme.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelPlateforme.Location = new Point(294, 0);
             labelPlateforme.Margin = new Padding(4, 0, 4, 0);
             labelPlateforme.Name = "labelPlateforme";
-            labelPlateforme.Size = new Size(128, 28);
+            labelPlateforme.Size = new Size(282, 35);
             labelPlateforme.TabIndex = 21;
             labelPlateforme.Text = "Plateforme :";
             // 
             // comboBoxPlateforme
             // 
+            comboBoxPlateforme.Dock = DockStyle.Fill;
             comboBoxPlateforme.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPlateforme.Location = new Point(294, 39);
             comboBoxPlateforme.Margin = new Padding(4);
             comboBoxPlateforme.Name = "comboBoxPlateforme";
-            comboBoxPlateforme.Size = new Size(217, 33);
+            comboBoxPlateforme.Size = new Size(282, 33);
             comboBoxPlateforme.TabIndex = 22;
             // 
             // labelEspace
             // 
             labelEspace.AutoSize = true;
+            labelEspace.Dock = DockStyle.Fill;
             labelEspace.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelEspace.Location = new Point(294, 79);
             labelEspace.Margin = new Padding(4, 0, 4, 0);
             labelEspace.Name = "labelEspace";
-            labelEspace.Size = new Size(147, 26);
+            labelEspace.Size = new Size(282, 26);
             labelEspace.TabIndex = 19;
             labelEspace.Text = "Espace / Lieu :";
             // 
             // comboBoxEspace
             // 
+            comboBoxEspace.Dock = DockStyle.Fill;
             comboBoxEspace.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxEspace.Location = new Point(294, 109);
             comboBoxEspace.Margin = new Padding(4);
             comboBoxEspace.Name = "comboBoxEspace";
-            comboBoxEspace.Size = new Size(217, 33);
+            comboBoxEspace.Size = new Size(282, 33);
             comboBoxEspace.TabIndex = 20;
             // 
             // labelStatutTournoi
@@ -325,7 +358,7 @@
             dataGridTournois.ReadOnly = true;
             dataGridTournois.RowHeadersWidth = 62;
             tableLayoutPanel.SetRowSpan(dataGridTournois, 3);
-            dataGridTournois.Size = new Size(376, 105);
+            dataGridTournois.Size = new Size(376, 119);
             dataGridTournois.TabIndex = 24;
             // 
             // dataGridPostesJeu
@@ -361,24 +394,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 54.02778F));
             tableLayoutPanel1.Size = new Size(1364, 720);
             tableLayoutPanel1.TabIndex = 7;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(70, 102);
-            label2.Name = "label2";
-            label2.Size = new Size(131, 30);
-            label2.TabIndex = 1;
-            label2.Text = "Recherche :";
-            // 
-            // textBoxRecherche
-            // 
-            textBoxRecherche.Location = new Point(207, 101);
-            textBoxRecherche.Name = "textBoxRecherche";
-            textBoxRecherche.Size = new Size(613, 31);
-            textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // groupBoxStatsPostesJeu
             // 
@@ -429,16 +444,6 @@
             labelTitreEspaces.TabIndex = 0;
             labelTitreEspaces.Text = "🏢 POSTES DE JEU";
             labelTitreEspaces.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // textBoxReference
-            // 
-            textBoxReference.Location = new Point(4, 39);
-            textBoxReference.Margin = new Padding(4);
-            textBoxReference.Name = "textBoxReference";
-            textBoxReference.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
-            textBoxReference.ReadOnly = true;
-            textBoxReference.Size = new Size(270, 31);
-            textBoxReference.TabIndex = 0;
             // 
             // UcPostesDeJeu
             // 
