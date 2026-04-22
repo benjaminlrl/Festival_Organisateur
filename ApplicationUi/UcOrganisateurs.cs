@@ -194,7 +194,7 @@ namespace ApplicationUi
         /// Vérifie que les champs sont valides, que le login n'existe pas déjà,
         /// et que l'identifiant et le mot de passe respectent les règles de validation.
         /// </summary>
-        private void buttonAjouter_Click(object sender, EventArgs e)
+        private void ButtonAjouter_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -240,7 +240,7 @@ namespace ApplicationUi
         /// Vérifie que les champs sont valides et que le login n'a pas été modifié.
         /// Le mot de passe est hashé via BCrypt avant d'être sauvegardé.
         /// </summary>
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void ButtonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un organisateur à modifier
             if (_organisateurSelectionne == null)
@@ -282,7 +282,7 @@ namespace ApplicationUi
         /// Supprime l'organisateur sélectionné après vérification.
         /// Empêche la suppression de son propre compte et des comptes Administrateur.
         /// </summary>
-        private void buttonSupprimer_Click(object sender, EventArgs e)
+        private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un organisateur à supprimé
             // On check s'il essaye pas de supprimer l'organisateur connecté
@@ -309,7 +309,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void ButtonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -319,32 +319,27 @@ namespace ApplicationUi
         /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
         /// Si le clic est sur une cellule, sélectionne l'organisateur et remplit le formulaire.
         /// </summary>
-        private void dataGridOrganisateurs_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridOrganisateurs_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
-                // ordonner sur les champs login, mail et nom du role
-                var donnees = _serviceOrganisateur.Lister(filtre)
-                    .Where(o => !o.Login.Contains("admin"))
-                    .ToList();
-
-                var map = new Dictionary<int, Func<Organisateur, object>>
+                var map = new Dictionary<int, string>
                 {
-                    { dataGridOrganisateurs.Columns["Login"].Index, o => o.Login },
-                    { dataGridOrganisateurs.Columns["Mail"].Index, o => o.Mail },
-                    { dataGridOrganisateurs.Columns["NomRole"].Index, o => o.NomRole }
+                    { dataGridOrganisateurs.Columns["Login"].Index, "Login" },
+                    { dataGridOrganisateurs.Columns["Mail"].Index, "Mail" },
+                    { dataGridOrganisateurs.Columns["NomRole"].Index, "NomRole" }
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
-                // Appliquer le tri
-                dataGridOrganisateurs.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
 
                 // Inverser l'ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridOrganisateurs.DataSource = _serviceOrganisateur.Lister("admin", colonne, ordreChamp);
+
                 MEP_DataGrid();
                 return;
             }
@@ -366,7 +361,7 @@ namespace ApplicationUi
         /// fonction de la saisie de l'utilisateur.</remarks>
         /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
         /// <param name="e">Les données associées à l'événement de modification du texte.</param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerOrganisateurs();

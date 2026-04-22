@@ -21,7 +21,7 @@ namespace Lib_Services.Interfaces
         /// <param name="property">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Tournoi"/>.</returns>
-        List<Tournoi> Lister(string filtre = "", string property = "", string ordre;
+        List<Tournoi> Lister(string filtre = "", string property = "", string ordre="");
         /// <summary>
         /// Retourne la liste des tournois dont le statut est "Terminé" avec l'espace et le jeu associé chargé.
         /// </summary>

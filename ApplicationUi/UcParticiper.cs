@@ -62,6 +62,13 @@ namespace ApplicationUi
         }
 
         #region Evènements
+        /// <summary>
+        /// Met à jour l'affichage des participations dans le contrôle de grille de données en appliquant le filtre
+        /// courant.
+        /// </summary>
+        /// <remarks>Cette méthode recharge la liste des participations affichées et met à jour les
+        /// statistiques associées. Elle doit être appelée après toute modification du filtre ou des données
+        /// sous-jacentes pour garantir que l'affichage reste cohérent.</remarks>
         private void ChargerParticipations()
         {
             dataGridParticipations.DataSource = null;
@@ -70,6 +77,13 @@ namespace ApplicationUi
             ChargerStatistiques();
         }
 
+        /// <summary>
+        /// Charge la liste des tournois et met à jour la source de données du contrôle ComboBox pour permettre la
+        /// sélection d'un tournoi par son nom.
+        /// </summary>
+        /// <remarks>Le contrôle ComboBox affiche le nom du tournoi à l'utilisateur tout en conservant
+        /// l'identifiant du tournoi comme valeur associée. Cette méthode doit être appelée pour rafraîchir la liste des
+        /// tournois disponibles, par exemple après l'ajout ou la suppression d'un tournoi.</remarks>
         private void ChargerTournois()
         {
             comboBoxTournoi.DataSource = null;
@@ -78,11 +92,18 @@ namespace ApplicationUi
             comboBoxTournoi.DisplayMember = "Nom";
             comboBoxTournoi.ValueMember = "NumeroTournoi";
         }
-
+        /// <summary>
+        /// Charge la liste des utilisateurs dans le contrôle de sélection utilisateur et configure l'affichage des
+        /// identifiants.
+        /// </summary>
+        /// <remarks>Cette méthode réinitialise la source de données du contrôle, puis la remplit avec la
+        /// liste des utilisateurs obtenue via le service associé. Le champ affiché et la valeur sélectionnée
+        /// correspondent à l'identifiant de l'utilisateur. À utiliser pour synchroniser l'interface avec les données
+        /// actuelles des utilisateurs.</remarks>
         private void ChargerUtilisateurs()
         {
             comboBoxUtilisateur.DataSource = null;
-            comboBoxUtilisateur.DataSource = _serviceParticiper.Lister("");
+            comboBoxUtilisateur.DataSource = _serviceParticiper.Lister(""); // TODO: remplacer par un service utilisateur lorsque les utilisateurs seront intégrés
             // charge les participations dans le comboBox et affiche l'id tout en conservant l'id en valeur
             comboBoxUtilisateur.DisplayMember = "IdUser";
             comboBoxUtilisateur.ValueMember = "IdUser";
@@ -146,32 +167,28 @@ namespace ApplicationUi
 
         private void dataGridParticipations_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // on ne gère le clic que sur les lignes, pas sur les en-têtes
-            // Ignorer les clics sur l'en-tête (gérés pour le tri)
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
             {
-                var donnees = _serviceParticiper.Lister(filtre);
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                var map = new Dictionary<int, Func<Participer, object>>
+                var map = new Dictionary<int, string>
                 {
-                    {dataGridParticipations.Columns["IdUser"].Index, p => p.IdUser},
-                    {dataGridParticipations.Columns["NomTournoi"].Index, p => p.Tournoi.Nom},
-                    {dataGridParticipations.Columns["DateHeureInscription"].Index, p => p.DateHeureInscription},
-                    {dataGridParticipations.Columns["Evaluation"].Index, p => p.Evaluation},
-                    {dataGridParticipations.Columns["Rang"].Index, p => p.Rang},
+                    {dataGridParticipations.Columns["IdUser"].Index, "IdUser"},
+                    {dataGridParticipations.Columns["NomTournoi"].Index, "NomTournoi"},
+                    {dataGridParticipations.Columns["DateHeureInscription"].Index, "DateHeureInscription"},
+                    {dataGridParticipations.Columns["Evaluation"].Index, "Evaluation"},
+                    {dataGridParticipations.Columns["Rang"].Index, "Rang"},
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridParticipationsUtilisateur.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
-
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                dataGridParticipationsUtilisateur.DataSource = _serviceParticiper.Lister(filtre, colonne, ordreChamp);
+
 
                 MEP_DataGrid();
                 return;

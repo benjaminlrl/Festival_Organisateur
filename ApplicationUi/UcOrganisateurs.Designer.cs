@@ -199,7 +199,7 @@ namespace ApplicationUi
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += buttonAjouter_Click;
+            buttonAjouter.Click += ButtonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -215,7 +215,7 @@ namespace ApplicationUi
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " \U0001f9fd  Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += buttonEffacer_Click;
+            buttonEffacer.Click += ButtonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -231,7 +231,7 @@ namespace ApplicationUi
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonModifier_Click;
+            buttonModifier.Click += ButtonModifier_Click;
             // 
             // buttonSupprimer
             // 
@@ -247,7 +247,7 @@ namespace ApplicationUi
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += buttonSupprimer_Click;
+            buttonSupprimer.Click += ButtonSupprimer_Click;
             // 
             // label1
             // 
@@ -272,7 +272,7 @@ namespace ApplicationUi
             dataGridOrganisateurs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridOrganisateurs.Size = new Size(900, 434);
             dataGridOrganisateurs.TabIndex = 2;
-            dataGridOrganisateurs.CellClick += dataGridOrganisateurs_CellClick;
+            dataGridOrganisateurs.CellClick += DataGridOrganisateurs_CellClick;
             // 
             // label2
             // 
@@ -293,7 +293,7 @@ namespace ApplicationUi
             textBoxRecherche.PlaceholderText = "Ex: jean";
             textBoxRecherche.Size = new Size(574, 23);
             textBoxRecherche.TabIndex = 4;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // UcOrganisateurs
             // 
