@@ -318,7 +318,7 @@ namespace ApplicationUi
         /// <returns>true si tout est respectés, sinon false.</returns>
         public bool LotValide(Lot lot)
         {
-            var erreurs = _serviceLot.LotValide(lot);
+            var erreurs = _serviceLot.ValiderLot(lot);
             if (erreurs.Any())
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);

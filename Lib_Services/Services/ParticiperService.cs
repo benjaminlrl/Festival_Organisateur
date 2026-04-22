@@ -25,25 +25,43 @@ namespace Lib_Services.Services
             _context = context;
             _tournoiService = new TournoiService(_context);
         }
+        #region Lecture
 
         /// <summary>
-        /// Retourne la liste complète des Participer présents en base.
-        /// Exécute immédiatement la requête via <c>ToList()</c>.
+        ///  Retourne la liste complète des jeux présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Participer"/>.</returns>
-        public List<Participer> Lister(string filtre = "")
+        public List<Participer> Lister(string filtre = "", string property = "", string ordre = "")
         {
-            // Include(t => t.Role) pour éviter le chargement paresseux lors de l'affichage.
-            return
-                _context.Participer
-                .Include(p => p.Tournoi)
-                .Where(p => p.NumeroTournoi.ToString().Contains(filtre)
-                    || p.NumeroTournoi.ToString().Contains(filtre)
-                    || p.Rang.ToString().Contains(filtre)
-                    || (p.Commentaire ?? "").Contains(filtre)
-                    || p.DateHeureInscription.ToString().Contains(filtre))
-                .ToList();
+            IQueryable<Participer> query = _context.Participer
+                .Include(p => p.Tournoi);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(p => p.NumeroTournoi.ToString().Contains(filtre)
+                || p.NumeroTournoi.ToString().Contains(filtre)
+                || p.Rang.ToString().Contains(filtre)
+                || (p.Commentaire ?? "").Contains(filtre)
+                || p.DateHeureInscription.ToString().Contains(filtre));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(p => p.NumeroTournoi) : query.OrderByDescending(p => p.NumeroTournoi),
+                "Rang" => ordre == "ASC" ? query.OrderBy(p => p.Rang) : query.OrderByDescending(p => p.Rang),
+                "Commentaire" => ordre == "ASC" ? query.OrderBy(p => p.Commentaire) : query.OrderByDescending(p => p.Commentaire),
+                "DateHeureInscription" => ordre == "ASC" ? query.OrderBy(p => p.DateHeureInscription) : query.OrderByDescending(p => p.DateHeureInscription),
+                _ => query.OrderByDescending(p => p.DateHeureInscription) // valeur par défaut
+            };
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -58,6 +76,8 @@ namespace Lib_Services.Services
                            .FirstOrDefault(p => p.IdUser == idUser && p.NumeroTournoi == numeroTournoi);
         }
 
+        #endregion
+        #region CUD
         /// <summary>
         /// Crée un nouvel Participer en base.
         /// Appelle immédiatement <c>SaveChanges()</c> pour persister l'entité.
@@ -96,8 +116,8 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
-        #region statistiques
+        #endregion
+        #region Statistiques
         /// <summary>
         /// Permet de récupérer le podium Par tournoi
         /// </summary>
@@ -138,13 +158,13 @@ namespace Lib_Services.Services
         }
 
         #endregion
-
+        #region Validations
         /// <summary>
         /// Permet de vérifier les propriétés associés a une plateforme.
         /// </summary>
         /// <param name="participer">La participation à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderParticiper(Participer participer, bool estModification)
+        public List<string> ValiderParticipation(Participer participer, bool estModification)
         {
             // liste des erreurs
             var erreurs = new List<string>();
@@ -179,6 +199,7 @@ namespace Lib_Services.Services
 
             return erreurs;
         }
+        #endregion
     }
 
 }

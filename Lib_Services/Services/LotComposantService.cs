@@ -25,26 +25,41 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Retourne la liste complète des lots composants présents en base.
-        /// Exécute immédiatement la requête via <c>ToList()</c>.
+        ///  Retourne la liste complète des jeux présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        public List<LotComposant> Lister(string filtre = "")
+        public List<LotComposant> Lister(string filtre = "", string property = "", string ordre = "")
         {
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.LotComposants
-                     .Include(t => t.Lot)
-                     .ToList();
-            return
-                _context.LotComposants
-                .Where(t => t.Libelle.Contains(filtre)
-                        || t.Description.Contains(filtre)
-                        || t.Valeur.ToString().Contains(filtre)
-                        || t.Numero.ToString().Contains(filtre)
-                        || t.Lot.Libelle.Contains(filtre))
-                .Include(t => t.Lot)
-                .ToList();
+            IQueryable<LotComposant> query = _context.LotComposants
+                .Include(lc => lc.Lot);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(lc => lc.Libelle.Contains(filtre)
+                || lc.Description.Contains(filtre)
+                || lc.Valeur.ToString().Contains(filtre)
+                || lc.Numero.ToString().Contains(filtre)
+                || lc.Lot.Libelle.Contains(filtre));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Libelle" => ordre == "ASC" ? query.OrderBy(lc => lc.Libelle) : query.OrderByDescending(lc => lc.Libelle),
+                "Description" => ordre == "ASC" ? query.OrderBy(lc => lc.Description) : query.OrderByDescending(lc => lc.Description),
+                "Valeur" => ordre == "ASC" ? query.OrderBy(lc => lc.Valeur) : query.OrderByDescending(lc => lc.Valeur),
+                "Numero" => ordre == "ASC" ? query.OrderBy(lc => lc.Numero) : query.OrderByDescending(lc => lc.Numero),
+                "Lot" => ordre == "ASC" ? query.OrderBy(lc => lc.Lot.Libelle) : query.OrderByDescending(lc => lc.Lot.Libelle),
+                _ => query.OrderBy(lc => lc.Libelle) // valeur par défaut
+            };
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -56,8 +71,8 @@ namespace Lib_Services.Services
         public List<LotComposant> ListerParNumeroDunLot(int numero)
         {
             return _context.LotComposants
-                .Where(t => t.Lot.Numero.Equals(numero))
-                .Include(t => t.Lot)
+                .Where(lc => lc.Lot.Numero.Equals(numero))
+                .Include(lc => lc.Lot)
                 .ToList();
         }
 
@@ -69,7 +84,7 @@ namespace Lib_Services.Services
         public LotComposant? Obtenir(int numero)
         {
             return _context.LotComposants
-                           .FirstOrDefault(o => o.Numero == numero);
+                           .FirstOrDefault(lc => lc.Numero == numero);
         }
 
         /// <summary>
@@ -115,7 +130,7 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
-        public List<string> LotComposantValide(LotComposant lotComposant)
+        public List<string> ValiderLotComposant(LotComposant lotComposant)
         {
             // liste des erreurs
             var erreurs = new List<string>();
