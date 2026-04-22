@@ -26,8 +26,8 @@ namespace ApplicationUi
         int? nouveauNumeroLot;
         string filtre;
         string ordreChamp = "ASC";
-        Lot lotActuelle;
-        Lot lotAncien;
+        Lot? lotActuelle;
+        Lot? lotAncien;
 
         public UcLotComposants(Organisateur unOrganisateurConnecte)
         {
@@ -250,6 +250,14 @@ namespace ApplicationUi
             
             // On crée le lot composant en bdd
             _serviceLotComposant.Creer(unNouveauLotComposant);
+            // On ajoute sa valeur à la valeur totale du lot associé si il en a un
+            if (unNouveauLotComposant.NumeroLot != null)
+            {
+                lotActuelle = _serviceLot.Obtenir(unNouveauLotComposant.NumeroLot.Value);
+                lotActuelle.ValeurTotale += unNouveauLotComposant.Valeur;
+                _serviceLot.Modifier(lotActuelle);
+            }
+
             ChargerLotComposants();
             Raz_Zones();
         }
@@ -283,29 +291,34 @@ namespace ApplicationUi
             nouveauNumeroLot = comboBoxLot.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
             if (nouveauNumeroLot != _lotComposantSelectionne.NumeroLot)
             {
-                lotActuelle = _serviceLot.Obtenir(nouveauNumeroLot.Value);
-                lotAncien = _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value) ?? null; // A FINIR ICI BUG
+                lotActuelle = nouveauNumeroLot.HasValue
+                    ? _serviceLot.Obtenir(nouveauNumeroLot.Value)
+                    : null;
+
+                lotAncien = _lotComposantSelectionne.NumeroLot.HasValue
+                    ? _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value)
+                    : null;
+
                 _lotComposantSelectionne.NumeroLot = nouveauNumeroLot;
-                // Si sa passe de aucun a un lot :
-                if (_lotComposantSelectionne.NumeroLot == null)
+
+                // aucun lot -> un lot 
+                if (lotAncien == null && lotActuelle != null)
                 {
-                    lotActuelle.ValeurTotale = lotActuelle.ValeurTotale + _lotComposantSelectionne.Valeur;
+                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
                     _serviceLot.Modifier(lotActuelle);
                 }
-
-                // Si sa passe de un lot a aucun :
-                if (comboBoxLot.SelectedValue == null) 
+                // un lot -> aucun lot
+                else if (lotActuelle == null && lotAncien != null)
                 {
-                    lotActuelle.ValeurTotale = lotActuelle.ValeurTotale - _lotComposantSelectionne.Valeur;
-                    _serviceLot.Modifier(lotActuelle);
+                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotAncien);
                 }
-
-                // Si sa passe de un lot a un autre lot :
-                else
+                // un lot -> un autre lot
+                else if (lotActuelle != null && lotAncien != null)
                 {
-                    lotActuelle.ValeurTotale = lotActuelle.ValeurTotale + _lotComposantSelectionne.Valeur;
+                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
                     _serviceLot.Modifier(lotActuelle);
-                    lotAncien.ValeurTotale = lotAncien.ValeurTotale - _lotComposantSelectionne.Valeur;
+                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
                     _serviceLot.Modifier(lotAncien);
                 }
             }
@@ -326,6 +339,13 @@ namespace ApplicationUi
             {
                 MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+            // On retire la valeur du lot composant si il a un lot associé
+            if(_lotComposantSelectionne.NumeroLot != null)
+            {
+                lotActuelle = _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value);
+                lotActuelle.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                _serviceLot.Modifier(lotActuelle);
             }
             _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero.Value);
             ChargerLotComposants();
