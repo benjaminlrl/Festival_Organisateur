@@ -13,9 +13,6 @@ namespace Lib_Services.Services
         private readonly ApplicationDbContext _context;
         private readonly int nbVotesMax;
 
-        // Constante définissant le nombre maximum de votes autorisés par utilisateur.
-        const int NB_VOTES_MAX = 15;
-
         /// <summary>
         /// Constructeur avec injection du contexte de données.
         /// </summary>
@@ -71,7 +68,7 @@ namespace Lib_Services.Services
         /// <param name="idUser">Id de l'utilisateur</param>
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
-        /// <returns></returns>
+        /// <returns>L'objet <see cref="Voter"/> ou null si aucun vote n'est trouvé.</returns>
         public Voter? Obtenir(int idJeu, int idPlateforme, int idUser)
         {
             // Find retourne null si l'entité n'existe pas.

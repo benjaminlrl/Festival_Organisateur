@@ -75,6 +75,35 @@ namespace Lib_Services.Services
                 .Include(lc => lc.Lot)
                 .ToList();
         }
+        /// <summary>
+        ///  Retourne la liste complète des lots présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Libelle, Description, Valeur, Numero)
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="numero">Numero du lot associé au composant</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="Lot"/>.</returns>
+        public List<LotComposant> ListerParNumeroDunLot(int numero, string property = "", string ordre = "")
+        {
+            IQueryable<LotComposant> query = _context.LotComposants
+                        .Where(lc => lc.Lot.Numero.Equals(numero))
+                        .Include(lc => lc.Lot);
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Libelle" => ordre == "ASC" ? query.OrderBy(lc => lc.Libelle) : query.OrderByDescending(lc => lc.Libelle),
+                "Description" => ordre == "ASC" ? query.OrderBy(lc => lc.Description) : query.OrderByDescending(lc => lc.Description),
+                "Valeur" => ordre == "ASC" ? query.OrderBy(lc => lc.Valeur) : query.OrderByDescending(lc => lc.Valeur),
+                _ => query.OrderByDescending(lc => lc.Numero) // valeur par défaut
+            };
+
+            return query.ToList();
+        }
 
         /// <summary>
         /// Récupère un lotcomposant par son numero.

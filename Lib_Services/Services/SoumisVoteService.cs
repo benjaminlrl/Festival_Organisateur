@@ -24,31 +24,97 @@ namespace Lib_Services.Services
             _jeuService = new JeuService(context);
             _plateformeService = new PlateformeService(context);
         }
+        #region Lecture
+        /// <summary>
+        ///  Retourne la liste des binomes jeu plateforme présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Libelle, IdRole) 
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="SoumisVote"/>.</returns>
+        public List<SoumisVote> Lister(string filtre = "", string property = "", string ordre = "")
+        {
+            IQueryable<SoumisVote> query = _context.SoumisVotes
+                .Include(sv => sv.Plateforme)
+                .Include(sv => sv.Jeu);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(sv => sv.Plateforme.Libelle.Contains(filtre)
+                        || sv.Jeu.Titre.Contains(filtre)
+                        || sv.DateDebutVote.ToString().Contains(filtre)
+                        || sv.DateFinVote.ToString().Contains(filtre));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Libelle" => ordre == "ASC" ? query.OrderBy(sv => sv.Plateforme.Libelle) : query.OrderByDescending(sv => sv.Plateforme.Libelle),
+                "Titre" => ordre == "ASC" ? query.OrderBy(sv => sv.Jeu.Titre) : query.OrderByDescending(sv => sv.Jeu.Titre),
+                "DateDebutVote" => ordre == "ASC" ? query.OrderBy(sv => sv.DateDebutVote) : query.OrderByDescending(sv => sv.DateDebutVote),
+                "DateFinVote" => ordre == "ASC" ? query.OrderBy(sv => sv.DateFinVote) : query.OrderByDescending(sv => sv.DateFinVote),
+                _ => query.OrderByDescending(sv => sv.DateDebutVote) // valeur par défaut
+            };
+
+            return query.ToList();
+        }
 
         /// <summary>
-        /// Retourne tous les SoumisVotes présents dans la base de données.
-        /// Si un filtre est fourni, retourne uniquement 
-        /// les SoumisVotes dont le contenu correspond au filtre.
+        ///  Retourne la liste complète des roles présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Libelle, Titre)
+        ///  et dans un ordre donné (ASC ou DESC).
+        ///  
+        /// Permet également de filtrer les résultats sur une période de vote donnée,
+        /// 
         /// </summary>
-        /// <param name="filtre">Optionnel : contenu à filtrer.</param>
-        /// <returns>Liste de <see cref="SoumisVote"/>.</returns>
-        public List<SoumisVote> Lister(string filtre = "")
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <param name="dateDebut">Optionnel, date de début de la période de vote</param>
+        /// <param name="dateFin">Optionnel, date de fin de la période de vote</param>
+        /// <returns>Liste d'objets <see cref="Voter"/>.</returns>
+        public List<Voter> ListerClassmentJeuxVotes(string filtre = "", string property = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null)
         {
-            // Utilise le DbSet SoumisVotes pour matérialiser la collection en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.SoumisVotes
-                     .Include(v => v.Plateforme)
-                     .Include(v => v.Jeu)
-                     .ToList();
-            return
-                _context.SoumisVotes
-                .Include(v => v.Plateforme)
+            // (Iqueryable<Voter>) est nécessaire pour que le GroupBy soit traité en mémoire
+            IQueryable<Voter> query = (IQueryable<Voter>)_context.Voter
                 .Include(v => v.Jeu)
-                .Where(v => v.DateDebutVote.ToString().Contains(filtre)
-                        || v.DateFinVote.ToString().Contains(filtre)
-                        || v.Plateforme.Libelle.Contains(filtre)
-                        || v.Jeu.Titre.Contains(filtre))
-                .ToList();
+                .Include(v => v.Plateforme)
+                .AsEnumerable() // Charge tout en mémoire pour que Include fonctionne avec GroupBy
+                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binôme (jeu, plateforme)
+                .Select(g => new Voter
+                {
+                    IdJeu = g.Key.IdJeu,
+                    IdPlateforme = g.Key.IdPlateforme,
+                    Jeu = g.First().Jeu,           // Récupère l'objet Jeu depuis le 1er élément du groupe
+                    Plateforme = g.First().Plateforme, // Récupère l'objet Plateforme depuis le 1er élément du groupe
+                    NbVotes = g.Count()            // Compte le nombre de votes pour ce binôme
+                });
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(v => v.Plateforme.Libelle.Contains(filtre)
+                        || v.Jeu.Titre.Contains(filtre));
+            
+            if (dateDebut.HasValue && !dateFin.HasValue)
+                query = query.Where(v => (v.DateVote >= dateDebut.Value));
+
+            if (dateDebut.HasValue && dateFin.HasValue)
+                query = query.Where(v => (v.DateVote >= dateDebut.Value && v.DateVote <= dateFin.Value));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "LibellePlateforme" => ordre == "ASC" ? query.OrderBy(v => v.Plateforme.Libelle) : query.OrderByDescending(v => v.Plateforme.Libelle),
+                "TitreJeu" => ordre == "ASC" ? query.OrderBy(v => v.Jeu.Titre) : query.OrderByDescending(v => v.Jeu.Titre),
+                _ => query.OrderBy(v => v.Jeu.Titre) // valeur par défaut
+            };
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -68,6 +134,9 @@ namespace Lib_Services.Services
                 .AsNoTracking()
                 .FirstOrDefault(s => s.IdJeu == idJeu && s.IdPlateforme == idPlateforme);
         }
+
+        #endregion
+        #region CUD
 
         /// <summary>
         /// Crée un nouveau SoumisVote et persiste la modification.
@@ -111,6 +180,7 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
+        #endregion
         #region Statistiques de vote
         /// <summary>
         /// Permet d'obtenir le taux de vote (%) pour un jeu passé en paramètre,
@@ -155,30 +225,6 @@ namespace Lib_Services.Services
             int votesJeu = _context.Voter.Count(v => v.IdJeu == idJeu && v.IdPlateforme == idPlateforme);
 
             return votesJeu / totalVotes * 100;
-        }
-
-        /// <summary>
-        /// Retourne le classement des binomes (jeu, plateforme) les plus votés
-        /// </summary>
-        /// <param name="soumisVote"></param>
-        /// <returns>Le classement des binomes</returns>
-        public List<Voter> ListerClassmentJeuxVotes()
-        {
-            return _context.Voter
-                .Include(v => v.Jeu)
-                .Include(v => v.Plateforme)
-                .AsEnumerable() // Charge tout en mémoire pour que Include fonctionne avec GroupBy
-                .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binôme (jeu, plateforme)
-                .Select(g => new Voter
-                {
-                    IdJeu = g.Key.IdJeu,
-                    IdPlateforme = g.Key.IdPlateforme,
-                    Jeu = g.First().Jeu,           // Récupère l'objet Jeu depuis le 1er élément du groupe
-                    Plateforme = g.First().Plateforme, // Récupère l'objet Plateforme depuis le 1er élément du groupe
-                    NbVotes = g.Count()            // Compte le nombre de votes pour ce binôme
-                })
-                .OrderByDescending(v => v.NbVotes) // Trie du plus populaire au moins populaire
-                .ToList();
         }
 
         #endregion

@@ -29,10 +29,33 @@ namespace Lib_Services.Interfaces
         /// <returns>Instance de <see cref="Plateforme"/> si trouvée, sinon null.</returns>
         public Plateforme? Obtenir(int idPlateforme);
         #endregion
+        #region CUD
+        /// <summary>
+        /// Crée une nouvelle plateforme et persiste la modification.
+        /// </summary>
+        /// <param name="plateforme">Objet <see cref="Plateforme"/> à ajouter.</param>
         void Creer(Plateforme plateforme);
+
+        /// <summary>
+        /// Met à jour une plateforme existante et persiste la modification.
+        /// </summary>
+        /// <param name="plateforme">Objet <see cref="Plateforme"/> contenant les valeurs mises à jour.</param>
         void Modifier(Plateforme plateforme);
+
+        /// <summary>
+        /// Supprime une plateforme identifiée par son identifiant si elle existe.
+        /// </summary>
+        /// <param name="idPlateforme">Identifiant de la plateforme à supprimer.</param>
         void Supprimer(int idplateforme);
-        List<Plateforme> Lister(string filtre);
+        #endregion
+        #region Validations
+
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a une plateforme.
+        /// </summary>
+        /// <param name="plateforme">La plateforme à valider</param>
+        /// <returns>La liste contenant toutes les erreurs</returns>
         List<string> ValiderPlateforme(Plateforme plateforme);
+        #endregion
     }
 }

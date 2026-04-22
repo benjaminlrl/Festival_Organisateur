@@ -59,7 +59,7 @@ namespace Lib_Services.Services
                 "AnneeSortie" => ordre == "ASC" ? query.OrderBy(j => j.AnneeSortie) : query.OrderByDescending(j => j.AnneeSortie),
                 "DateSortie" => ordre == "ASC" ? query.OrderBy(j => j.DateSortie) : query.OrderByDescending(j => j.DateSortie),
                 "Pegi" => ordre == "ASC" ? query.OrderBy(j => j.Pegi) : query.OrderByDescending(j => j.Pegi),
-                _ => query.OrderBy(j => j.Titre) // valeur par défaut
+                _ => query.OrderByDescending(j => j.IdJeu) // valeur par défaut
             };
 
             return query.ToList();

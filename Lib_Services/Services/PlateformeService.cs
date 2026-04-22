@@ -24,7 +24,7 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
-
+        #region Lecture
         /// <summary>
         /// Retourne toutes les plateformes présentes dans la base de données.
         /// Si un filtre est fourni, retourne uniquement 
@@ -90,7 +90,8 @@ namespace Lib_Services.Services
             // Find retourne null si l'entité n'existe pas.
             return _context.Plateformes.Find(idPlateforme);
         }
-
+        #endregion
+        #region CUD
         /// <summary>
         /// Crée une nouvelle plateforme et persiste la modification.
         /// </summary>
@@ -129,7 +130,8 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
+        #endregion
+        #region Validations
         /// <summary>
         /// Permet de vérifier les propriétés associés a une plateforme.
         /// </summary>
@@ -151,6 +153,6 @@ namespace Lib_Services.Services
 
             return erreurs;
         }
-
+        #endregion
     }
 }

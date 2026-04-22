@@ -21,7 +21,7 @@ namespace Lib_Services.Interfaces
         /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="PosteJeu"/>.</returns>
-        List<PosteJeu> Lister(string filtre = "", string propriete = "Reference", string ordre = "ASC");
+        List<PosteJeu> Lister(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
         ///  Retourne la liste complète des postes de jeu NON FONCTIONNELS présents en base, 
@@ -35,7 +35,7 @@ namespace Lib_Services.Interfaces
         /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="PosteJeu"/>.</returns>
-        public List<PosteJeu> ListerPostesJeuNonFonctionnels(string filtre = "", string propriete = "Nom", string ordre = "ASC");
+        public List<PosteJeu> ListerPostesJeuNonFonctionnels(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
         /// Récupère un poste de jeu par son identifiant.

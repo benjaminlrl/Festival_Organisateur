@@ -57,8 +57,8 @@ namespace Lib_Services.Interfaces
         /// <summary>
         /// Permet de récupérer le podium Par tournoi
         /// </summary>
-        /// <param name="numeroTournoi"></param>
-        /// <returns></returns>
+        /// <param name="numeroTournoi">Id du tournoi</param>
+        /// <returns>Le classement des 10 meilleurs participants pour le tournoi spécifié.</returns>
         List<Participer> ObtenirTop10ParTournoi(int numeroTournoi);
 
         /// <summary>

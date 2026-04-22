@@ -38,7 +38,7 @@ namespace Lib_Services.Services
         /// <param name="colonne">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Espace"/>.</returns>
-        public List<Espace> Lister(string filtre = "", string colonne = "Nom", string ordre = "ASC")
+        public List<Espace> Lister(string filtre = "", string colonne = "", string ordre = "")
         {
             IQueryable<Espace> query = _context.Espaces
                 .Include(e => e.Tournois)
@@ -56,7 +56,8 @@ namespace Lib_Services.Services
                 "Description" => ordre == "ASC" ? query.OrderBy(e => e.Description) : query.OrderByDescending(e => e.Description),
                 "Superficie" => ordre == "ASC" ? query.OrderBy(e => e.Superficie) : query.OrderByDescending(e => e.Superficie),
                 "CapaciteMaxi" => ordre == "ASC" ? query.OrderBy(e => e.CapaciteMaxi) : query.OrderByDescending(e => e.CapaciteMaxi),
-                _ => query.OrderBy(e => e.Nom) // valeur par défaut
+                "IdEspace" => ordre == "ASC" ? query.OrderBy(e => e.IdEspace) : query.OrderByDescending(e => e.IdEspace),
+                _ => query.OrderByDescending(e => e.IdEspace) // valeur par défaut
             };
 
             return query.ToList();

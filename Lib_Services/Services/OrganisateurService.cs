@@ -23,27 +23,7 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
-
-        /// <summary>
-        /// Retourne la liste complète des organisateur présents en base.
-        /// Exécute immédiatement la requête via <c>ToList()</c>.
-        /// </summary>
-        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
-        /// <returns>Liste d'objets <see cref="Organisateur"/>.</returns>
-        public List<Organisateur> Lister(string filtre = "")
-        {
-            // Include(t => t.Role) pour éviter le chargement paresseux lors de l'affichage.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Organisateurs
-                     .Include(r => r.Role)
-                     .ToList();
-            return
-                _context.Organisateurs
-                .Include(r => r.Role)
-                .Where(r => r.Login.Contains(filtre))
-                .ToList();
-        }
-
+        #region Lecture
         /// <summary>
         ///  Retourne la liste complète des organisateurs présents en base, 
         ///  avec possibilité de filtrer
@@ -71,7 +51,7 @@ namespace Lib_Services.Services
                 "Login" => ordre == "ASC" ? query.OrderBy(o => o.Login) : query.OrderByDescending(o => o.Login),
                 "Mail" => ordre == "ASC" ? query.OrderBy(o => o.Mail) : query.OrderByDescending(o => o.Mail),
                 "NomRole" => ordre == "ASC" ? query.OrderBy(o => o.NomRole) : query.OrderByDescending(o => o.NomRole),
-                _ => query.OrderBy(o => o.Login) // valeur par défaut
+                _ => query.OrderByDescending(o => o.Login) // valeur par défaut
             };
 
             return query.ToList();
@@ -88,6 +68,8 @@ namespace Lib_Services.Services
                            .Include(o => o.Role)
                            .FirstOrDefault(o => o.Login == login);
         }
+        #endregion
+        #region CUD
 
         /// <summary>
         /// Crée un nouvel organisateur en base.
@@ -129,7 +111,8 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
+        #endregion
+        #region Validations
         /// <summary>
         /// Vérifie si les informations d'identification fournies correspondent à un organisateur existant.
         /// </summary>
@@ -287,6 +270,7 @@ namespace Lib_Services.Services
             }
             return erreurs;
         }
+        #endregion
     }
 
 }

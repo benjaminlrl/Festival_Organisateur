@@ -55,13 +55,13 @@ namespace Lib_Services.Services
             query = property switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
-                "Libelle" => ordre == "ASC" ? query.OrderBy(j => j.Libelle) : query.OrderByDescending(j => j.Libelle),
-                "ValeurTotale" => ordre == "ASC" ? query.OrderBy(j => j.ValeurTotale) : query.OrderByDescending(j => j.ValeurTotale),
-                "RangAttribution" => ordre == "ASC" ? query.OrderBy(j => j.RangAttribution) : query.OrderByDescending(j => j.RangAttribution),
-                "Numero" => ordre == "ASC" ? query.OrderBy(j => j.Numero) : query.OrderByDescending(j => j.Numero),
-                "Tournoi" => ordre == "ASC" ? query.OrderBy(j => j.Tournoi) : query.OrderByDescending(j => j.Tournoi),
-                "LotComposant" => ordre == "ASC" ? query.OrderBy(j => j.LotComposant) : query.OrderByDescending(j => j.LotComposant),
-                _ => query.OrderBy(j => j.Libelle) // valeur par défaut
+                "Libelle" => ordre == "ASC" ? query.OrderBy(l => l.Libelle) : query.OrderByDescending(l => l.Libelle),
+                "ValeurTotale" => ordre == "ASC" ? query.OrderBy(l => l.ValeurTotale) : query.OrderByDescending(l => l.ValeurTotale),
+                "RangAttribution" => ordre == "ASC" ? query.OrderBy(l => l.RangAttribution) : query.OrderByDescending(l => l.RangAttribution),
+                "Numero" => ordre == "ASC" ? query.OrderBy(l => l.Numero) : query.OrderByDescending(l => l.Numero),
+                "Tournoi" => ordre == "ASC" ? query.OrderBy(l => l.Tournoi) : query.OrderByDescending(l => l.Tournoi),
+                "LotComposant" => ordre == "ASC" ? query.OrderBy(l => l.LotComposant) : query.OrderByDescending(l => l.LotComposant),
+                _ => query.OrderByDescending(l => l.Numero) // valeur par défaut
             };
 
             return query.ToList();

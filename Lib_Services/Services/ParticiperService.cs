@@ -121,8 +121,8 @@ namespace Lib_Services.Services
         /// <summary>
         /// Permet de récupérer le podium Par tournoi
         /// </summary>
-        /// <param name="numeroTournoi"></param>
-        /// <returns></returns>
+        /// <param name="numeroTournoi">Id du tournoi</param>
+        /// <returns>Le classement des 10 meilleurs participants pour le tournoi spécifié.</returns>
         public List<Participer> ObtenirTop10ParTournoi(int numeroTournoi)
         {
             return _context.Participer

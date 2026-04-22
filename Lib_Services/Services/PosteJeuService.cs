@@ -43,7 +43,7 @@ namespace Lib_Services.Services
         /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="PosteJeu"/>.</returns>
-        public List<PosteJeu> Lister(string filtre = "", string propriete = "Reference", string ordre = "ASC")
+        public List<PosteJeu> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<PosteJeu> query = _context.PostesJeu
                     .Include(p => p.Espace)
@@ -63,7 +63,7 @@ namespace Lib_Services.Services
                 "NomPlateforme" => ordre == "ASC" ? query.OrderBy(p => p.Plateforme.Libelle) : query.OrderByDescending(p => p.Plateforme.Libelle),
                 "NomEspace" => ordre == "ASC" ? query.OrderBy(p => p.Espace.Nom) : query.OrderByDescending(p => p.Espace.Nom),
                 "Fonctionnel" => ordre == "ASC" ? query.OrderBy(p => p.Fonctionnel) : query.OrderByDescending(p => p.Fonctionnel),
-                _ => query.OrderBy(p => p.Reference) // valeur par défaut
+                _ => query.OrderByDescending(p => p.NumeroPoste) // valeur par défaut
             };
 
             return query.ToList();

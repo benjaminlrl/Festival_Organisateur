@@ -526,24 +526,24 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero, libelle, valeur totale, rang attribution et est attribue
-                var donnees = _serviceLot.Lister(filtre);
-                var map = new Dictionary<int, Func<Lot, object>>
+                var map = new Dictionary<int, string>
                 {
-                    { dataGridLots.Columns["Numero"].Index, l => l.Numero },
-                    { dataGridLots.Columns["Libelle"].Index, l => l.Libelle },
-                    { dataGridLots.Columns["ValeurTotale"].Index, l => l.ValeurTotale },
-                    { dataGridLots.Columns["RangAttribution"].Index, l => l.RangAttribution },
-                    { dataGridLots.Columns["EstAttribue"].Index, l => l.EstAttribue }
+                    { dataGridLots.Columns["Numero"].Index, "Numero"},
+                    { dataGridLots.Columns["Libelle"].Index, "Libelle" },
+                    { dataGridLots.Columns["ValeurTotale"].Index, "ValeurTotale" },
+                    { dataGridLots.Columns["RangAttribution"].Index, "RangAttribution" },
+                    { dataGridLots.Columns["EstAttribue"].Index, "EstAttribue" }
                 };
-                // Appliquer le tri
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridLots.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
+                dataGridLots.DataSource = _serviceLot.Lister(filtre, colonne, ordreChamp);
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
                 MEP_DataGrid("Lots");
                 return;
             }
@@ -573,21 +573,16 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero et libelle
-                var donnees = _serviceLotComposant.Lister(filtre)
-                    .Where(t => t.NumeroLot == null)
-                    .ToList();
-                var map = new Dictionary<int, Func<LotComposant, object>>
+                var map = new Dictionary<int,string>
                 {
-                    { dataGridLotComposants.Columns["Numero"].Index, lc => lc.Numero },
-                    { dataGridLotComposants.Columns["Libelle"].Index, lc => lc.Libelle }
+                    { dataGridLotComposants.Columns["Numero"].Index, "Numero" },
+                    { dataGridLotComposants.Columns["Libelle"].Index, "Libelle" }
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                if (!map.TryGetValue(e.ColumnIndex, out var colonne))
                     return;
                 // Appliquer le tri
-                dataGridLotComposants.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
+                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
                 MEP_DataGrid("LotComposants");
@@ -612,21 +607,16 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero et libelle
-                var donnees = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value)
-                    .Where(t => t.NumeroLot != null)
-                    .ToList();
-                var map = new Dictionary<int, Func<LotComposant, object>>
+                var map = new Dictionary<int, string>
                 {
-                    { dataGridLotComposantsDunLot.Columns["Numero"].Index, lc => lc.Numero },
-                    { dataGridLotComposantsDunLot.Columns["Libelle"].Index, lc => lc.Libelle }
+                    { dataGridLotComposantsDunLot.Columns["Numero"].Index, "Numero" },
+                    { dataGridLotComposantsDunLot.Columns["Libelle"].Index, "Libelle"}
                 };
                 // Appliquer le tri
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                if (!map.TryGetValue(e.ColumnIndex, out var colonne))
                     return;
                 // Inverser l’ordre
-                dataGridLotComposantsDunLot.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
+                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value,colonne, ordreChamp);
 
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
                 MEP_DataGrid("LotComposantsDunLot");

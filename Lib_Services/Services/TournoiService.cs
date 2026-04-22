@@ -21,31 +21,48 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
-
+        #region Lecture
         /// <summary>
-        /// Retourne la liste complète des tournois avec l'espace et le jeu associé chargé.
+        ///  Retourne la liste complète des tournois présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, NbParticipants, DureePrevue, DateHeure, Statut, Espace, Jeu, NumeroTournoi) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <returns>Liste des tournois.</returns>
-        /// <param name="filtre">Optionnel : filtre .</param>
-        public List<Tournoi> Lister(string filtre = "")
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="Tournoi"/>.</returns>
+        public List<Tournoi> Lister(string filtre = "", string property = "", string ordre = "")
         {
-            // Include(t => t.Espace) pour éviter le chargement paresseux lors de l'affichage.
-            // List<Tournoi>Exécute la requête immédiatement en BDD
-            // IQueryable<Tournoi> Construit la requête SQL sans l'exécuter, le Where sera intégré dans le SQL final
             IQueryable<Tournoi> query = _context.Tournois
                 .Include(t => t.Espace)
-                .Include(t => t.Jeu)
-                .AsQueryable();
+                .Include(t => t.Jeu);
 
             if (!string.IsNullOrWhiteSpace(filtre))
                 query = query.Where(t =>
-                    t.Nom.Contains(filtre) ||
-                    t.NbParticipants.ToString().Contains(filtre) ||
-                    t.DureePrevue.ToString().Contains(filtre) ||
-                    t.DateHeure.ToString().Contains(filtre) ||
-                    t.Statut.Contains(filtre) ||
-                    t.Espace.Nom.Contains(filtre) ||
-                    t.Jeu.Titre.Contains(filtre));
+                    t.Nom.Contains(filtre)
+                    || t.NbParticipants.ToString().Contains(filtre)
+                    || t.DureePrevue.ToString().Contains(filtre)
+                    || t.DateHeure.ToString().Contains(filtre)
+                    || t.Statut.Contains(filtre)
+                    || t.Espace.Nom.Contains(filtre)
+                    || t.Jeu.Titre.Contains(filtre));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Nom" => ordre == "ASC" ? query.OrderBy(t => t.Nom) : query.OrderByDescending(t => t.Nom),
+                "NbParticipants" => ordre == "ASC" ? query.OrderBy(t => t.NbParticipants) : query.OrderByDescending(t => t.NbParticipants),
+                "DureePrevue" => ordre == "ASC" ? query.OrderBy(t => t.DureePrevue) : query.OrderByDescending(t => t.DureePrevue),
+                "DateHeure" => ordre == "ASC" ? query.OrderBy(t => t.DateHeure) : query.OrderByDescending(t => t.DateHeure),
+                "Statut" => ordre == "ASC" ? query.OrderBy(t => t.Statut) : query.OrderByDescending(t => t.Statut),
+                "Espace" => ordre == "ASC" ? query.OrderBy(t => t.Espace.Nom) : query.OrderByDescending(t => t.Espace.Nom),
+                "Jeu" => ordre == "ASC" ? query.OrderBy(t => t.Jeu.Titre) : query.OrderByDescending(t => t.Jeu.Titre),
+                "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(t => t.NumeroTournoi) : query.OrderByDescending(t => t.NumeroTournoi),
+                _ => query.OrderByDescending(t => t.NumeroTournoi) // valeur par défaut
+            };
 
             return query.ToList();
         }
@@ -93,16 +110,27 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
+        /// Récupère un tournoi par son identifiant avec l'espace associé.
+        /// Retourne null si aucun tournoi n'est trouvé.
+        /// </summary>
+        /// <param name="numeroTournoi">Identifiant du tournoi.</param>
+        /// <returns>Instance <see cref="Tournoi"/> ou null.</returns>
+        public Tournoi? Obtenir(int numeroTournoi)
+        {
+            // Utilisation de FirstOrDefault avec Include pour obtenir l'entité complète.
+            return _context.Tournois
+                           .Include(t => t.Espace)
+                           .FirstOrDefault(t => t.NumeroTournoi == numeroTournoi);
+        }
+        #endregion  
+        #region CUD
+        /// <summary>
         /// Crée un nouveau tournoi en base après validation métier minimale.
         /// Lance une <see cref="ArgumentException"/> si le nombre de participants est invalide.
         /// </summary>
         /// <param name="tournoi">Instance du tournoi à créer.</param>
         public void Creer(Tournoi tournoi)
         {
-            // Validation métier élémentaire : le nombre de participants doit être strictement positif.
-            if (tournoi.NbParticipants <= 0)
-                throw new ArgumentException("Participants invalides");
-
             // Ajout et sauvegarde immédiate. 
             _context.Tournois.Add(tournoi);
             _context.SaveChanges();
@@ -133,21 +161,8 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
-        /// <summary>
-        /// Récupère un tournoi par son identifiant avec l'espace associé.
-        /// Retourne null si aucun tournoi n'est trouvé.
-        /// </summary>
-        /// <param name="numeroTournoi">Identifiant du tournoi.</param>
-        /// <returns>Instance <see cref="Tournoi"/> ou null.</returns>
-        public Tournoi? Obtenir(int numeroTournoi)
-        {
-            // Utilisation de FirstOrDefault avec Include pour obtenir l'entité complète.
-            return _context.Tournois
-                           .Include(t => t.Espace)
-                           .FirstOrDefault(t => t.NumeroTournoi == numeroTournoi);
-        }
-
+        #endregion
+        #region validations
         private bool ValiderHoraire(DateTime dateHeure)
         {
             var jour = dateHeure.DayOfWeek; // Lundi, Mardi...
@@ -210,6 +225,7 @@ namespace Lib_Services.Services
 
             return erreurs;
         }
+        #endregion
     }
 }
 

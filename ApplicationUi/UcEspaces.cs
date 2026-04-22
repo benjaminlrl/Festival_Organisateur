@@ -307,7 +307,8 @@ namespace ApplicationUi
                     { dataGridEspaces.Columns["Superficie"].Index,   "Superficie" },
                     { dataGridEspaces.Columns["CapaciteMaxi"].Index, "CapaciteMaxi" },
                 };
-                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
