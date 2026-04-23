@@ -75,7 +75,7 @@ namespace ApplicationUi
         {
             dataGridSoumisVote.DataSource = null;
             dataGridSoumisVote.DataSource = _serviceSoumisVote.Lister(filtre);
-            MEP_DataGrid();
+            MEP_DataGridSoumisVote();
         }
 
         private void ChargerJeux()
@@ -139,8 +139,14 @@ namespace ApplicationUi
             dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
             AfficherBouttons();
         }
-        private void MEP_DataGrid()
+        private void MEP_DataGridSoumisVote()
         {
+            // Après avoir lié la DataSource, définir le SortMode de chaque colonne
+            foreach (DataGridViewColumn col in dataGridSoumisVote.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            } 
+
             dataGridSoumisVote.Columns["LibellePlateforme"].DisplayIndex = 0;
             dataGridSoumisVote.Columns["TitreJeu"].DisplayIndex = 1;
             dataGridSoumisVote.Columns["DateDebutVote"].DisplayIndex = 2;
@@ -250,7 +256,9 @@ namespace ApplicationUi
                     : donnees.OrderBy(keySelector).ToList();
                 // permute l'ordre du champ
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
-                MEP_DataGrid();
+
+                dataGridSoumisVote.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                MEP_DataGridSoumisVote();
                 return;
             }
 

@@ -195,7 +195,7 @@ namespace ApplicationUi
             Espace espaceSelectionne = (Espace)comboBoxEspace.SelectedItem;
             Plateforme plateformeSelectionne = (Plateforme)comboBoxPlateforme.SelectedItem;
 
-            var posteJeu = new PosteJeu
+            PosteJeu posteJeu = new ()
             {
                 Fonctionnel = fonctionnelSelectionne,
                 IdPlateforme = plateformeSelectionne.IdPlateforme,
@@ -258,7 +258,7 @@ namespace ApplicationUi
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                var map = new Dictionary<int, string>
+                Dictionary<int, string> map = new Dictionary<int, string>
                 {
                     {dataGridPostesJeu.Columns["Reference"].Index, "Reference"},
                     {dataGridPostesJeu.Columns["Fonctionnel"].Index, "Fonctionnel"},
@@ -272,7 +272,8 @@ namespace ApplicationUi
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 dataGridPostesJeu.DataSource = _servicePosteJeu.Lister(filtre, colonne, ordreChamp);
-                dataGridPostesJeu.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                dataGridPostesJeu.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = 
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
 
                 MEP_DataGridPostesJeu();
@@ -320,7 +321,7 @@ namespace ApplicationUi
         /// <returns>Vraie si le le poste de jeu est valide, sinon faux.</returns>
         private bool ValiderPosteJeu(PosteJeu posteJeu)
         {
-            var erreurs = _servicePosteJeu.ValiderPosteJeu(posteJeu);
+            List<string> erreurs = _servicePosteJeu.ValiderPosteJeu(posteJeu);
             if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);

@@ -28,6 +28,7 @@ namespace ApplicationUi
             var context = new ApplicationDbContext();
             _serviceOrganisateur = new OrganisateurService(context);
             _servicePlateforme = new PlateformeService(context);
+            _serviceEspace = new EspaceService(context);
             buttonModifier.Enabled = _plateformeSelectionee != null;
             buttonSupprimer.Enabled = _plateformeSelectionee != null;
             labelJeux.Visible = false;

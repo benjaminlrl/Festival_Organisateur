@@ -21,11 +21,11 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly IParticiperService _serviceParticiper;
         private readonly IPlateformeService _servicePlateforme;
+        private readonly Organisateur _organisateurConnecte;
         private Participer? _participerSelectionne;
+        private bool lotRemisSelectionne;
         private string filtre;
         private string ordreChamp;
-        private readonly Organisateur _organisateurConnecte;
-        private bool lotRemisSelectionne;
 
         public UcParticiper(Organisateur unOrganisateurConnecte)
         {
@@ -36,32 +36,38 @@ namespace ApplicationUi
             _serviceEspace = new EspaceService(context);
             _serviceParticiper = new ParticiperService(context);
             _servicePlateforme = new PlateformeService(context);
+
+            _organisateurConnecte = unOrganisateurConnecte;
             _participerSelectionne = null;
             lotRemisSelectionne = false;
+
+            AfficherBouttons();
+
             filtre = "";
             ordreChamp = "ASC";
-            _organisateurConnecte = unOrganisateurConnecte;
+            buttonEffacer.Text = " 🧽  Effacer";
+
             ChargerUtilisateurs();
             ChargerTournois();
             ChargerParticipations();
-            buttonModifier.Enabled = _participerSelectionne != null;
-            buttonSupprimer.Enabled = _participerSelectionne != null;
-            buttonEffacer.Text = " 🧽  Effacer";
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
+
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
+                DisabledInputs();
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
+                DisabledInputs();
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Supprimer") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
+                DisabledInputs();
             }
         }
-
-        #region Evènements
+        #region Données
         /// <summary>
         /// Met à jour l'affichage des participations dans le contrôle de grille de données en appliquant le filtre
         /// courant.
@@ -73,7 +79,7 @@ namespace ApplicationUi
         {
             dataGridParticipations.DataSource = null;
             dataGridParticipations.DataSource = _serviceParticiper.Lister(filtre);
-            MEP_DataGrid();
+            MEP_DataGridParticipations();
             ChargerStatistiques();
         }
 
@@ -135,36 +141,92 @@ namespace ApplicationUi
             //    labelStatPostesJeuFonctionnels.ForeColor = Color.Green;
             //}
         }
+        private void MEP_DataGridParticipations()
+        {
+            // Après avoir lié la DataSource, définir le SortMode de chaque colonne
+            foreach (DataGridViewColumn col in dataGridParticipations.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
 
-        /// <summary>
-        /// Resets all tournament-related input fields and controls to their default values.
-        /// </summary>
-        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
-        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
-        /// controls are reset to indicate a planned tournament.</remarks>
-        private void Raz_Zones()
-        {
-            textBoxCommentaire.Clear();
-            comboBoxUtilisateur.SelectedItem = null;
-            comboBoxTournoi.SelectedItem = null;
-            _participerSelectionne = null;
-            buttonModifier.Enabled = _participerSelectionne != null;
-            buttonSupprimer.Enabled = _participerSelectionne != null;
-            radioButtonLotRemisTrue.Checked = false;
-            radioButtonLotRemisFalse.Checked = false;
-        }
-        private void MEP_DataGrid()
-        // TODO: Modifier les données de la grille pour afficher le nom de l'espace
-        // et le nom de la plateforme au lieu des ids
-        // et masquer les colonnes idEspace et idPlateforme
-        {
             dataGridParticipations.Columns["Tournoi"].Visible = false;
             dataGridParticipations.Columns["NumeroTournoi"].Visible = false;
             dataGridParticipations.Columns["NomTournoi"].HeaderText = "Tournoi";
             dataGridParticipations.Columns["IdUser"].HeaderText = "Utilisateur";
             dataGridParticipations.Columns["DateHeureInscription"].HeaderText = "Date d'inscription";
         }
+        #endregion
+        #region Evènements
+        #region Boutons
+        public void buttonAjouter_Click(object sender, EventArgs e)
+        {
+            Participer participer = new ()
+            {
+                Rang = (int)numericUpDownRang.Value,
+                ScoreFinal = (int)numericUpDownScoreFinal.Value,
+                Commentaire = textBoxCommentaire.Text,
+                Evaluation = trackBarEvaluation.Value,
+                DateHeureInscription = dateTimePickerDateHeureInscription.Value,
+                IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
+                NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
+                // TODO: voir conflit lucien
+                //NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
+                LotRemis = lotRemisSelectionne
+            };
+            if (ValiderParticipation(participer, false))
+            {
+                _serviceParticiper.Creer(participer);
+                MessageBox.Show("La participation a bien été ajoutée.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
 
+        }
+        private void buttonModifier_Click(object sender, EventArgs e)
+        {
+            if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
+            {
+                MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            _participerSelectionne.Rang = (int)numericUpDownRang.Value;
+            _participerSelectionne.ScoreFinal = (int)numericUpDownScoreFinal.Value;
+            _participerSelectionne.Commentaire = textBoxCommentaire.Text;
+            _participerSelectionne.Evaluation = trackBarEvaluation.Value;
+            _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
+            _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
+            _participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
+            // TODO: voir conflit lucien
+            // puisque NumeroTournoi est une clé primaire, elle ne peut pas être null
+            //_participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
+            _participerSelectionne.LotRemis = lotRemisSelectionne;
+
+            if (ValiderParticipation(_participerSelectionne, true))
+            {
+                _serviceParticiper.Modifier(_participerSelectionne);
+                MessageBox.Show("La participation a bien été modifiée.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+        }
+        private void buttonEffacer_Click(object sender, EventArgs e)
+        {
+            Raz_Zones();
+        }
+        private void buttonSupprimer_Click(object sender, EventArgs e)
+        {
+            if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
+            {
+                MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            _serviceParticiper.Supprimer(_participerSelectionne.IdUser, _participerSelectionne.NumeroTournoi);
+            _participerSelectionne = null;
+            MessageBox.Show("La participation a bien été supprimée.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Raz_Zones();
+        }
+
+        #endregion
         private void dataGridParticipations_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
@@ -173,7 +235,7 @@ namespace ApplicationUi
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                var map = new Dictionary<int, string>
+                Dictionary<int, string> map = new Dictionary<int, string>
                 {
                     {dataGridParticipations.Columns["IdUser"].Index, "IdUser"},
                     {dataGridParticipations.Columns["NomTournoi"].Index, "NomTournoi"},
@@ -188,46 +250,19 @@ namespace ApplicationUi
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 dataGridParticipationsUtilisateur.DataSource = _serviceParticiper.Lister(filtre, colonne, ordreChamp);
+                dataGridParticipationsUtilisateur.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = 
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
-
-                MEP_DataGrid();
+                MEP_DataGridParticipations();
                 return;
             }
 
             _participerSelectionne = dataGridParticipations.Rows[e.RowIndex].DataBoundItem as Participer;
 
             if (_participerSelectionne != null)
-                RemplirFormulaire(_participerSelectionne);
+                RemplirFormulaire();
 
-            buttonModifier.Enabled = _participerSelectionne != null;
-            buttonSupprimer.Enabled = _participerSelectionne != null;
-
-        }
-
-        private void RemplirFormulaire(Participer participer)
-        {
-            numericUpDownRang.Value = participer.Rang;
-            numericUpDownScoreFinal.Value = participer.ScoreFinal ?? 0;
-            textBoxCommentaire.Text = participer.Commentaire;
-            trackBarEvaluation.Value = participer.Evaluation ?? 0;
-            dateTimePickerDateHeureInscription.Value = participer.DateHeureInscription;
-
-            comboBoxUtilisateur.SelectedItem = participer.IdUser;
-
-            comboBoxTournoi.SelectedItem = participer.Tournoi;
-            comboBoxTournoi.SelectedValue = participer.NumeroTournoi;
-
-            // LotRemis (RadioButtons)
-            if (participer.LotRemis)
-            {
-                radioButtonLotRemisTrue.Checked = true;
-                lotRemisSelectionne = true;
-            }
-            else
-            {
-                radioButtonLotRemisFalse.Checked = true;
-                lotRemisSelectionne = false;
-            }
+            AfficherBouttons();
 
         }
 
@@ -252,12 +287,17 @@ namespace ApplicationUi
             lotRemisSelectionne = true;
         }
         #endregion
-
         #region Validations
+        /// <summary>
+        /// Retourne un booléen indiquant si les informations de la participation sont valides ou non,
+        /// en fonction des règles métier définies dans le service Participer.
+        /// </summary>
+        /// <param name="participer">L'objet Participer à valider.</param>
+        /// <returns>Vraie si la participation est valide, sinon faux.</returns>
         private bool ValiderParticipation(Participer participer, bool estModification)
         {
-            var erreurs = _serviceParticiper.ValiderParticipation(participer, estModification);
-            if (erreurs.Any())
+            List<string> erreurs = _serviceParticiper.ValiderParticipation(participer, estModification);
+            if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
@@ -265,78 +305,104 @@ namespace ApplicationUi
             return true;
         }
         #endregion
-
-        #region Boutons
-        public void buttonAjouter_Click(object sender, EventArgs e)
+        #region Méthodes
+        /// <summary>
+        /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
+        /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
+        /// </summary>
+        private void DisabledInputs()
         {
-            Participer participer = new Participer
-            {
-                Rang = (int)numericUpDownRang.Value,
-                ScoreFinal = (int)numericUpDownScoreFinal.Value,
-                Commentaire = textBoxCommentaire.Text,
-                Evaluation = trackBarEvaluation.Value,
-                DateHeureInscription = dateTimePickerDateHeureInscription.Value,
-                IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-                NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi, 
-                // TODO: voir conflit lucien
-                //NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
-                LotRemis = lotRemisSelectionne
-            };
-            if (ValiderParticipation(participer, false))
-            {                
-                _serviceParticiper.Creer(participer);
-                ChargerParticipations();
-                Raz_Zones();
-            }
-
+            textBoxCommentaire.Enabled = false;
+            comboBoxUtilisateur.Enabled = false;
+            comboBoxTournoi.Enabled = false;
+            radioButtonLotRemisTrue.Enabled = false;
+            radioButtonLotRemisFalse.Enabled = false;
+            dateTimePickerDateHeureInscription.Enabled = false;
+            numericUpDownScoreFinal.Enabled = false;
+            numericUpDownRang.Enabled = false;
+            trackBarEvaluation.Enabled = false;
         }
-        private void buttonModifier_Click(object sender, EventArgs e)
+
+        /// <summary>
+        /// Resets all tournament-related input fields and controls to their default values.
+        /// </summary>
+        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
+        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
+        /// controls are reset to indicate a planned tournament.</remarks>
+        private void Raz_Zones()
         {
-            if (dataGridParticipations.CurrentRow == null)
-                return;
+            textBoxCommentaire.Clear();
 
-            if (_participerSelectionne == null)
-                return;
-            Participer Participer = (Participer)dataGridParticipations.CurrentRow.DataBoundItem;
+            filtre = "";
 
-            _participerSelectionne.Rang = (int)numericUpDownRang.Value;
-            _participerSelectionne.ScoreFinal = (int)numericUpDownScoreFinal.Value;
-            _participerSelectionne.Commentaire = textBoxCommentaire.Text;
-            _participerSelectionne.Evaluation = trackBarEvaluation.Value;
-            _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
-            _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-            _participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
-            // TODO: voir conflit lucien
-            //puisque NumeroTournoi est une clé primaire, elle ne peut pas être null
-            //_participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
-            _participerSelectionne.LotRemis = lotRemisSelectionne;
-
-            if (ValiderParticipation(_participerSelectionne, true))
-            {
-                _serviceParticiper.Modifier(_participerSelectionne);
-                ChargerParticipations();
-                Raz_Zones();
-            }
-        }
-        private void buttonEffacer_Click(object sender, EventArgs e)
-        {
-            Raz_Zones();
-        }
-        private void buttonSupprimer_Click(object sender, EventArgs e)
-        {
-            if (dataGridParticipations.CurrentRow == null)
-                return;
-
-            if (_participerSelectionne == null)
-                return;
-            Participer Participer = (Participer)dataGridParticipations.CurrentRow.DataBoundItem;
-
-            _serviceParticiper.Supprimer(_participerSelectionne.IdUser, _participerSelectionne.NumeroTournoi);
             _participerSelectionne = null;
+
+            comboBoxUtilisateur.SelectedItem = null;
+            comboBoxTournoi.SelectedItem = null;
+            radioButtonLotRemisTrue.Checked = false;
+            radioButtonLotRemisFalse.Checked = false;
+            dateTimePickerDateHeureInscription.Value = dateTimePickerDateHeureInscription.MinDate;
+            numericUpDownScoreFinal.Value = numericUpDownScoreFinal.Minimum;
+            numericUpDownRang.Value = numericUpDownRang.Minimum;
+            trackBarEvaluation.Value = trackBarEvaluation.Minimum;
+
             ChargerParticipations();
-            Raz_Zones();
+
+            AfficherBouttons();
         }
 
+        /// <summary>
+        /// Remplit les champs du formulaire avec les informations de l'espace spécifié.
+        /// </summary>
+        /// <remarks>Cette méthode met à jour les contrôles du formulaire pour refléter les propriétés de
+        /// la participation fournie. Elle doit être appelée lors de l'affichage ou de la modification d'une participation
+        /// existante.</remarks>
+        private void RemplirFormulaire()
+        {
+            if (_participerSelectionne == null)
+            {
+                MessageBox.Show("Aucun espace sélectionné.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            numericUpDownRang.Value = _participerSelectionne.Rang;
+            numericUpDownScoreFinal.Value = _participerSelectionne.ScoreFinal ?? numericUpDownScoreFinal.Minimum;
+            textBoxCommentaire.Text = _participerSelectionne.Commentaire;
+            trackBarEvaluation.Value = _participerSelectionne.Evaluation ?? trackBarEvaluation.Minimum;
+            dateTimePickerDateHeureInscription.Value = _participerSelectionne.DateHeureInscription;
+
+            comboBoxUtilisateur.SelectedItem = _participerSelectionne.IdUser;
+
+            comboBoxTournoi.SelectedItem = _participerSelectionne.Tournoi;
+            comboBoxTournoi.SelectedValue = _participerSelectionne.NumeroTournoi;
+
+            // LotRemis (RadioButtons)
+            if (_participerSelectionne.LotRemis)
+            {
+                radioButtonLotRemisTrue.Checked = true;
+                lotRemisSelectionne = true;
+            }
+            else
+            {
+                radioButtonLotRemisFalse.Checked = true;
+                lotRemisSelectionne = false;
+            }
+
+            AfficherBouttons();
+        }
+
+        /// <summary>
+        /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
+        /// </summary>
+        private void AfficherBouttons()
+        {
+            buttonAjouter.Enabled = _participerSelectionne == null;
+
+            // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
+            buttonModifier.Enabled = _participerSelectionne != null;
+            buttonSupprimer.Enabled = _participerSelectionne != null;
+            buttonEffacer.Enabled = _participerSelectionne != null;
+        }
         #endregion
     }
 }

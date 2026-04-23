@@ -81,8 +81,8 @@ namespace Lib_Services.Services
         /// <returns>Liste d'objets <see cref="Voter"/>.</returns>
         public List<Voter> ListerClassmentJeuxVotes(string filtre = "", string property = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null)
         {
-            // (Iqueryable<Voter>) est nécessaire pour que le GroupBy soit traité en mémoire
-            IQueryable<Voter> query = (IQueryable<Voter>)_context.Voter
+            // IEnumerable si on utilise AsEnumerable() pour que le GroupBy soit traité en mémoire
+            IEnumerable<Voter> query = _context.Voter
                 .Include(v => v.Jeu)
                 .Include(v => v.Plateforme)
                 .AsEnumerable() // Charge tout en mémoire pour que Include fonctionne avec GroupBy

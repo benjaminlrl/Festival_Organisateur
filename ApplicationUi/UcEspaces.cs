@@ -229,7 +229,7 @@ namespace ApplicationUi
             if (ValiderEspace(espace))
             {
                 _serviceEspace.Creer(espace);
-                MessageBox.Show("L'espace a bien été ajouté.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("L'espace a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
         }
@@ -286,10 +286,11 @@ namespace ApplicationUi
             if (dataGridEspaces.CurrentRow == null || _espaceSelectionnee == null)
                 return;
 
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Validation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
 
             _serviceEspace.Supprimer(_espaceSelectionnee.IdEspace);
+            MessageBox.Show("L'espace a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Raz_Zones();
         }
         #endregion 
@@ -457,7 +458,6 @@ namespace ApplicationUi
         /// <remarks>Cette méthode met à jour les contrôles du formulaire pour refléter les propriétés de
         /// l'espace fourni. Elle doit être appelée lors de l'affichage ou de la modification d'un espace
         /// existant.</remarks>
-        /// <param name="espace"></param>
         private void RemplirFormulaire()
         {
             if (_espaceSelectionnee == null)
