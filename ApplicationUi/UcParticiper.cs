@@ -254,9 +254,9 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        private bool ValiderParticiper(Participer participer, bool estModification)
+        private bool ValiderParticipation(Participer participer, bool estModification)
         {
-            var erreurs = _serviceParticiper.ValiderParticiper(participer, estModification);
+            var erreurs = _serviceParticiper.ValiderParticipation(participer, estModification);
             if (erreurs.Any())
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -282,7 +282,7 @@ namespace ApplicationUi
                 //NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
                 LotRemis = lotRemisSelectionne
             };
-            if (ValiderParticiper(participer, false))
+            if (ValiderParticipation(participer, false))
             {                
                 _serviceParticiper.Creer(participer);
                 ChargerParticipations();
@@ -311,7 +311,7 @@ namespace ApplicationUi
             //_participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
             _participerSelectionne.LotRemis = lotRemisSelectionne;
 
-            if (ValiderParticiper(_participerSelectionne, true))
+            if (ValiderParticipation(_participerSelectionne, true))
             {
                 _serviceParticiper.Modifier(_participerSelectionne);
                 ChargerParticipations();
