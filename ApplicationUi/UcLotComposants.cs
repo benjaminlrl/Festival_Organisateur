@@ -33,12 +33,16 @@ namespace ApplicationUi
             _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
             _serviceLot = new LotService(new ApplicationDbContext());
             _serviceLotComposant = new LotComposantService(new ApplicationDbContext());
+            listeLots = new List<Lot>();
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
+
             ChargerLotComposants();
             ChargerLots();
+
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
@@ -59,9 +63,11 @@ namespace ApplicationUi
         /// Met en page le DataGrid des lots composants en configurant la visibilité
         /// et le redimensionnement automatique des colonnes.
         /// </summary>
-        private void MEP_DataGrid()
+        private void MEP_DataGridLotComposants()
         {
             // On affiche et modifie l'affichage des colonnes du dataGrid
+            DesactiverTrieAutomatique(dataGridLotComposants);
+
             dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
             dataGridLotComposants.Columns["Lot"].Visible = false;
             dataGridLotComposants.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -80,7 +86,7 @@ namespace ApplicationUi
             var listeLotComposants = _serviceLotComposant.Lister(filtre)
                 .ToList();
             dataGridLotComposants.DataSource = listeLotComposants;
-            MEP_DataGrid();
+            MEP_DataGridLotComposants();
         }
 
         /// <summary>
@@ -309,7 +315,7 @@ namespace ApplicationUi
                     : donnees.OrderBy(keySelector).ToList();
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
-                MEP_DataGrid();
+                MEP_DataGridLotComposants();
                 return;
             }
 
@@ -336,6 +342,20 @@ namespace ApplicationUi
             ChargerLotComposants();
         }
 
+        #endregion
+
+        #region Méthodes
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        private void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
         #endregion
     }
 }
