@@ -16,7 +16,7 @@ namespace ApplicationUi
     public partial class UcVoter : UserControl
     {
         private readonly ITournoiService _serviceTournoi;
-        private readonly OrganisateurService _serviceOrganisateur;
+        private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IJeuService _serviceJeu;
         private readonly IPlateformeService _servicePlateforme;
         private readonly ISoumisVoteService _serviceSoumisVote;
