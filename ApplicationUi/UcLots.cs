@@ -283,11 +283,7 @@ namespace ApplicationUi
             textBoxLibelle.Clear();
             textBoxRang.Clear();
             comboBoxTournoi.SelectedItem = null;
-            //comboBoxLotComposant.SelectedItem = null;
-            //comboBoxLotComposantDunLot.SelectedItem = null;
             _lotSelectionnee = null;
-            //_lotComposantSelectionnee = null;
-            //_lotComposantDunLotSelectionnee = null;
             buttonModifier.Enabled = _lotSelectionnee != null;
             buttonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
@@ -384,7 +380,7 @@ namespace ApplicationUi
         /// et rafraîchit les DataGrids.
         /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant n'est pas déjà associé.
         /// </summary>
-        private void buttonAjouterLotComposant_Click(object sender, EventArgs e)
+        private void ButtonAjouterLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
             {
@@ -418,7 +414,7 @@ namespace ApplicationUi
         /// Vérifie que les champs sont valides et que les règles métier sont respectées.
         /// Met à jour EstAttribue si un tournoi est sélectionné.
         /// </summary>
-        private void buttonAjouterLot_Click(object sender, EventArgs e)
+        private void ButtonAjouterLot_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -458,7 +454,7 @@ namespace ApplicationUi
         /// et rafraîchit les DataGrids.
         /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant appartient bien au lot.
         /// </summary>
-        private void buttonSupprimerLotComposant_Click(object sender, EventArgs e)
+        private void ButtonSupprimerLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
             {
@@ -493,7 +489,7 @@ namespace ApplicationUi
         /// <summary>
         /// Supprime le lot sélectionné après vérification qu'un lot est bien sélectionné.
         /// </summary>
-        private void buttonSupprimerLot_Click(object sender, EventArgs e)
+        private void ButtonSupprimerLot_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
             // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
@@ -515,7 +511,7 @@ namespace ApplicationUi
         /// Met à jour uniquement les champs modifiés et gère le tournoi nullable.
         /// Met à jour EstAttribue si un tournoi est associé.
         /// </summary>
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void ButtonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotSelectionnee == null)
@@ -551,7 +547,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void ButtonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -562,7 +558,7 @@ namespace ApplicationUi
         /// Si le clic est sur une cellule, sélectionne le lot, remplit le formulaire
         /// et charge les lots composants associés.
         /// </summary>
-        private void dataGridLots_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLots_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
@@ -613,7 +609,7 @@ namespace ApplicationUi
         /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
         /// Si le clic est sur une cellule, sélectionne le lot composant et remplit la ComboBox.
         /// </summary>
-        private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
@@ -654,7 +650,7 @@ namespace ApplicationUi
         /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
         /// Si le clic est sur une cellule, sélectionne le lot composant et remplit la ComboBox.
         /// </summary>
-        private void dataGridLotComposantsDunLot_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLotComposantsDunLot_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
@@ -696,7 +692,7 @@ namespace ApplicationUi
         /// fonction de la saisie de l'utilisateur.</remarks>
         /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
         /// <param name="e">Les données associées à l'événement de modification du texte.</param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerLots();

@@ -216,7 +216,7 @@ namespace ApplicationUi
             buttonAjouterLot.TabIndex = 6;
             buttonAjouterLot.Text = "➕  Ajouter";
             buttonAjouterLot.UseVisualStyleBackColor = false;
-            buttonAjouterLot.Click += buttonAjouterLot_Click;
+            buttonAjouterLot.Click += ButtonAjouterLot_Click;
             // 
             // buttonEffacer
             // 
@@ -232,7 +232,7 @@ namespace ApplicationUi
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " \U0001f9fd  Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += buttonEffacer_Click;
+            buttonEffacer.Click += ButtonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -248,7 +248,7 @@ namespace ApplicationUi
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonModifier_Click;
+            buttonModifier.Click += ButtonModifier_Click;
             // 
             // buttonSupprimerLot
             // 
@@ -264,7 +264,7 @@ namespace ApplicationUi
             buttonSupprimerLot.TabIndex = 5;
             buttonSupprimerLot.Text = "🗑️    Supprimer";
             buttonSupprimerLot.UseVisualStyleBackColor = false;
-            buttonSupprimerLot.Click += buttonSupprimerLot_Click;
+            buttonSupprimerLot.Click += ButtonSupprimerLot_Click;
             // 
             // label1
             // 
@@ -294,7 +294,7 @@ namespace ApplicationUi
             textBoxRecherche.PlaceholderText = "Ex: Clavier";
             textBoxRecherche.Size = new Size(574, 23);
             textBoxRecherche.TabIndex = 5;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // dataGridLotComposants
             // 
@@ -311,7 +311,7 @@ namespace ApplicationUi
             dataGridLotComposants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridLotComposants.Size = new Size(259, 329);
             dataGridLotComposants.TabIndex = 6;
-            dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
+            dataGridLotComposants.CellClick += DataGridLotComposants_CellClick;
             // 
             // dataGridLotComposantsDunLot
             // 
@@ -328,7 +328,7 @@ namespace ApplicationUi
             dataGridLotComposantsDunLot.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridLotComposantsDunLot.Size = new Size(297, 329);
             dataGridLotComposantsDunLot.TabIndex = 7;
-            dataGridLotComposantsDunLot.CellClick += dataGridLotComposantsDunLot_CellClick;
+            dataGridLotComposantsDunLot.CellClick += DataGridLotComposantsDunLot_CellClick;
             // 
             // panel1
             // 
@@ -367,7 +367,7 @@ namespace ApplicationUi
             buttonAjouterLotComposant.TabIndex = 6;
             buttonAjouterLotComposant.Text = "➕  Ajouter au lot";
             buttonAjouterLotComposant.UseVisualStyleBackColor = false;
-            buttonAjouterLotComposant.Click += buttonAjouterLotComposant_Click;
+            buttonAjouterLotComposant.Click += ButtonAjouterLotComposant_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -463,7 +463,7 @@ namespace ApplicationUi
             buttonSupprimerLotComposant.TabIndex = 7;
             buttonSupprimerLotComposant.Text = "🗑️    Supprimer du lot";
             buttonSupprimerLotComposant.UseVisualStyleBackColor = false;
-            buttonSupprimerLotComposant.Click += buttonSupprimerLotComposant_Click;
+            buttonSupprimerLotComposant.Click += ButtonSupprimerLotComposant_Click;
             // 
             // tableLayoutPanel2
             // 
@@ -600,7 +600,7 @@ namespace ApplicationUi
             dataGridLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridLots.Size = new Size(906, 329);
             dataGridLots.TabIndex = 2;
-            dataGridLots.CellClick += dataGridLots_CellClick;
+            dataGridLots.CellClick += DataGridLots_CellClick;
             // 
             // groupBoxStatsEspaces
             // 

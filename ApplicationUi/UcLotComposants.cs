@@ -38,11 +38,7 @@ namespace ApplicationUi
             listeLots = new List<Lot>();
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
-
-            ChargerLotComposants();
-            ChargerLots();
-            ChargerStatistiques();
-
+            Raz_Zones();
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
 
@@ -129,6 +125,8 @@ namespace ApplicationUi
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
             ChargerStatistiques();
+            ChargerLotComposants();
+            ChargerLots();
         }
 
         /// <summary>
@@ -142,7 +140,7 @@ namespace ApplicationUi
             textBoxLibelle.Text = lotComposant.Libelle;
             textBoxDescription.Text = lotComposant.Description;
             textBoxValeur.Text = lotComposant.Valeur.ToString();
-            if(lotComposant.NumeroLot == null)
+            if (lotComposant.NumeroLot == null)
             {
                 comboBoxLot.SelectedValue = "Aucun";
             }
@@ -230,7 +228,7 @@ namespace ApplicationUi
         /// Crée un nouveau lot composant avec les données saisies dans le formulaire.
         /// Vérifie que les champs sont valides et que les règles métier sont respectées.
         /// </summary>
-        private void buttonAjouter_Click(object sender, EventArgs e)
+        private void ButtonAjouter_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -252,7 +250,7 @@ namespace ApplicationUi
             {
                 return;
             }
-            
+
             // On crée le lot composant en bdd
             _serviceLotComposant.Creer(unNouveauLotComposant);
             // On ajoute sa valeur à la valeur totale du lot associé si il en a un
@@ -272,7 +270,7 @@ namespace ApplicationUi
         /// Modifie le lot composant sélectionné avec les nouvelles valeurs saisies dans le formulaire.
         /// Met à jour uniquement les champs modifiés et gère le lot nullable.
         /// </summary>
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void ButtonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotComposantSelectionne == null)
@@ -338,7 +336,7 @@ namespace ApplicationUi
         /// <summary>
         /// Supprime le lot composant sélectionné après vérification qu'un lot composant est bien sélectionné.
         /// </summary>
-        private void buttonSupprimer_Click(object sender, EventArgs e)
+        private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
             // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
@@ -365,7 +363,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void ButtonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -375,7 +373,7 @@ namespace ApplicationUi
         /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
         /// Si le clic est sur une cellule, sélectionne le lot composant et remplit le formulaire.
         /// </summary>
-        private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
@@ -423,7 +421,7 @@ namespace ApplicationUi
         /// fonction de la saisie de l'utilisateur.</remarks>
         /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
         /// <param name="e">Les données associées à l'événement de modification du texte.</param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerLotComposants();

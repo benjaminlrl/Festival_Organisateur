@@ -32,8 +32,7 @@ namespace ApplicationUi
             _serviceRole = new RoleService(context);
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
-            ChargerOrganisateurs();
-            ChargerRoles();
+            Raz_Zones();
             buttonModifier.Enabled = _organisateurSelectionne != null;
             buttonSupprimer.Enabled = _organisateurSelectionne != null;
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Ajouter") == false)
@@ -110,6 +109,8 @@ namespace ApplicationUi
             _organisateurSelectionne = null;
             buttonModifier.Enabled = _organisateurSelectionne != null;
             buttonSupprimer.Enabled = _organisateurSelectionne != null;
+            ChargerOrganisateurs();
+            ChargerRoles();
         }
 
         /// <summary>
