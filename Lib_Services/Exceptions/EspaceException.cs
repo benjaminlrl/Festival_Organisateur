@@ -9,7 +9,8 @@
         SuperficieInsuffisante = 3,
         SuperficieTropGrande = 4,
         CapaciteNegative = 5,
-        CapaciteTropGrande = 6
+        CapaciteTropGrande = 6,
+        NomExiste = 7,
     }
 
     public EspaceException(string message, int codeErreur) : base(message)

@@ -115,6 +115,11 @@ namespace Lib_Services.Services
             // Find utilise le cache du contexte s'il existe, sinon interroge la base.
             return _context.Espaces.Find(idEspace);
         }
+
+        public List<Espace> ObtenirParNom(string nom)
+        {
+            return _context.Espaces.Where(e => e.Nom.Equals(nom)).ToList();
+        }
         #endregion
         #region CUD
         /// <summary>
@@ -170,8 +175,8 @@ namespace Lib_Services.Services
                 .Count(e => 
                 e.Tournois == null 
                 || !e.Tournois.Any(t => 
-                    t.Statut == "Planifié"
-                    || t.Statut == "EnCours"));
+                    t.Statut.Equals("Planifié")
+                    || t.Statut.Equals("EnCours")));
         }
 
         /// <summary>
@@ -197,6 +202,10 @@ namespace Lib_Services.Services
             if (string.IsNullOrWhiteSpace(espace.Nom))
                 throw new EspaceException("Le nom est requis.",
                     (int)EspaceException.EspaceErreur.NomRequis);
+
+            if(!estModification && ObtenirParNom(espace.Nom).Count > 0)
+                throw new EspaceException("Le nom existe déjà.",
+                    (int)EspaceException.EspaceErreur.NomExiste);
 
             if (string.IsNullOrWhiteSpace(espace.Description))
                 throw new EspaceException("La description est requise.",
