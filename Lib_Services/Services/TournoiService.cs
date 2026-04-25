@@ -110,6 +110,15 @@ namespace Lib_Services.Services
                 .ToList();
         }
 
+        public List<Tournoi> ObtenirAvecNom(string nomEspace)
+        {
+            return _context.Tournois
+                .Include(t => t.Espace)
+                .Include(t => t.Jeu)
+                .Where(t => t.Nom.Equals(nomEspace))
+                .ToList();
+        }
+
         /// <summary>
         /// Récupère un tournoi par son identifiant avec l'espace associé.
         /// Retourne null si aucun tournoi n'est trouvé.
@@ -194,6 +203,11 @@ namespace Lib_Services.Services
         public void ValiderTournoi(Tournoi tournoi, bool estModification = false)
         {
             if (string.IsNullOrWhiteSpace(tournoi.Nom))
+                throw new TournoiException("Le nom est requis.",
+                    (int)TournoiException.TournoiErreur.NomRequis);
+            List<Tournoi> tournoiBdd = ObtenirAvecNom(tournoi.Nom);
+
+            if (!estModification && tournoiBdd.Count > 0)
                 throw new TournoiException("Le nom est requis.",
                     (int)TournoiException.TournoiErreur.NomRequis);
 
