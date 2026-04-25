@@ -22,10 +22,12 @@ namespace ApplicationUi
         private LotComposant? _lotComposantSelectionne = null;
         private LotComposant? unNouveauLotComposant;
         private readonly Organisateur _organisateurConnecte;
-        private List<Lot> listeLots;
+        private List<Lot>? listeLots;
         int? nouveauNumeroLot;
         string filtre;
         string ordreChamp = "ASC";
+        Lot? lotActuelle;
+        Lot? lotAncien;
 
         public UcLotComposants(Organisateur unOrganisateurConnecte)
         {
@@ -64,10 +66,12 @@ namespace ApplicationUi
             // On affiche et modifie l'affichage des colonnes du dataGrid
             dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
             dataGridLotComposants.Columns["Lot"].Visible = false;
+            dataGridLotComposants.Columns["NumeroLot"].Visible = false;
             dataGridLotComposants.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridLotComposants.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridLotComposants.Columns["Valeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridLotComposants.Columns["NumeroLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NomLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NomLot"].HeaderText = "Lot associé";
         }
 
         /// <summary>
@@ -81,6 +85,7 @@ namespace ApplicationUi
                 .ToList();
             dataGridLotComposants.DataSource = listeLotComposants;
             MEP_DataGrid();
+            ChargerStatistiques();
         }
 
         /// <summary>
@@ -139,6 +144,34 @@ namespace ApplicationUi
             else
             {
                 comboBoxLot.SelectedValue = lotComposant.NumeroLot;
+            }
+        }
+
+        /// <summary>
+        /// Permet de charger les statistiques liées aux lots composants, notamment le nombre total de composant 
+        /// et le nombre de composant non attribué (sans lot associé). 
+        /// Les statistiques sont affichées dans des labels dédiés, 
+        /// avec une indication visuelle (couleur) pour les composants non attribués.
+        /// Cette méthode est appelée après le chargement des composants pour garantir 
+        /// que les statistiques sont à jour.
+        /// </summary>
+        private void ChargerStatistiques()
+        {
+            // Un lot composant est considéré comme non attribués quand il dispose d'aucun lot associé
+            int nbComposantNonAttribue = _serviceLotComposant.Lister(filtre)
+                                    .Count(e => e.Lot == null);
+
+            labelStatComposantsTotal.Text = $"{_serviceLotComposant.Lister(filtre).Count()}";
+
+            if (nbComposantNonAttribue == 0)
+            {
+                labelStatComposantNonAttribuer.Text = "Aucun composant non attribué";
+                labelStatComposantNonAttribuer.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelStatComposantNonAttribuer.Text = $"Composants non attribués : {nbComposantNonAttribue}";
+                labelStatComposantNonAttribuer.ForeColor = Color.Green;
             }
         }
 
@@ -217,6 +250,15 @@ namespace ApplicationUi
             
             // On crée le lot composant en bdd
             _serviceLotComposant.Creer(unNouveauLotComposant);
+            // On ajoute sa valeur à la valeur totale du lot associé si il en a un
+            if (unNouveauLotComposant.NumeroLot != null)
+            {
+                lotActuelle = _serviceLot.Obtenir(unNouveauLotComposant.NumeroLot.Value);
+                lotActuelle.ValeurTotale += unNouveauLotComposant.Valeur;
+                _serviceLot.Modifier(lotActuelle);
+            }
+
+            MessageBox.Show("Le lot composant a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ChargerLotComposants();
             Raz_Zones();
         }
@@ -249,8 +291,40 @@ namespace ApplicationUi
             // Gestion du lot nullable
             nouveauNumeroLot = comboBoxLot.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
             if (nouveauNumeroLot != _lotComposantSelectionne.NumeroLot)
+            {
+                lotActuelle = nouveauNumeroLot.HasValue
+                    ? _serviceLot.Obtenir(nouveauNumeroLot.Value)
+                    : null;
+
+                lotAncien = _lotComposantSelectionne.NumeroLot.HasValue
+                    ? _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value)
+                    : null;
+
                 _lotComposantSelectionne.NumeroLot = nouveauNumeroLot;
 
+                // aucun lot -> un lot 
+                if (lotAncien == null && lotActuelle != null)
+                {
+                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                }
+                // un lot -> aucun lot
+                else if (lotActuelle == null && lotAncien != null)
+                {
+                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotAncien);
+                }
+                // un lot -> un autre lot
+                else if (lotActuelle != null && lotAncien != null)
+                {
+                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotAncien);
+                }
+            }
+
+            MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLotComposant.Modifier(_lotComposantSelectionne);
             ChargerLotComposants();
             Raz_Zones();
@@ -268,6 +342,16 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+            // On retire la valeur du lot composant si il a un lot associé
+            if (_lotComposantSelectionne.NumeroLot != null)
+            {
+                lotActuelle = _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value);
+                lotActuelle.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                _serviceLot.Modifier(lotActuelle);
+            }
+            MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero.Value);
             ChargerLotComposants();
             Raz_Zones();

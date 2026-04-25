@@ -230,6 +230,7 @@ namespace ApplicationUi
             }
 
             // On créé l'organisateur en bdd
+            MessageBox.Show("L'organisateur a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceOrganisateur.Creer(_unNouveauOrganisateur);
             ChargerOrganisateurs();
             Raz_Zones();
@@ -273,6 +274,7 @@ namespace ApplicationUi
             if ((int)comboBoxRole.SelectedValue != _organisateurSelectionne.IdRole)
                 _organisateurSelectionne.IdRole = (int)comboBoxRole.SelectedValue;
 
+            MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceOrganisateur.Modifier(_organisateurSelectionne);
             ChargerOrganisateurs();
             Raz_Zones();
@@ -301,6 +303,9 @@ namespace ApplicationUi
                 MessageBox.Show("Vous ne pouvez pas supprimer de compte Administrateur.\nVeuillez contacter un SuperAdmin.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+            MessageBox.Show("L'organisateur a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login);
             ChargerOrganisateurs();
             Raz_Zones();
