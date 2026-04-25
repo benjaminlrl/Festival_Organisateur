@@ -161,7 +161,6 @@ namespace ApplicationUi
                 MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
-
         private void ButtonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridTournois.CurrentRow == null || _tournoiSelectionne == null)
@@ -178,7 +177,27 @@ namespace ApplicationUi
             _tournoiSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
             _tournoiSelectionne.IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu;
 
-            ModifierTournoi();
+            try
+            {
+                _serviceTournoi.Modifier(_tournoiSelectionne);
+                MessageBox.Show("Le tournoi a bien été modifié.", "Modification ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (TournoiException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modifiation du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
         {
@@ -192,7 +211,8 @@ namespace ApplicationUi
                 return;
             }
 
-            SupprimerTournoi();
+            _serviceTournoi.Supprimer(_tournoiSelectionne.NumeroTournoi);
+            Raz_Zones();
         }
         #endregion
         private void DataGridTournois_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -235,7 +255,7 @@ namespace ApplicationUi
 
             AfficherBoutons();
         }
-        private void RadioButtonPlanifie_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonPlanifié_CheckedChanged(object sender, EventArgs e)
         {
             statutSelectionne = "Planifié";
         }
@@ -276,7 +296,7 @@ namespace ApplicationUi
             numericUpDownNbParticip.Enabled = false;
             numericUpDownDuree.Enabled = false;
             radioButtonEnCours.Enabled = false;
-            radioButtonPlanifie.Enabled = false;
+            radioButtonPlanifié.Enabled = false;
             radioButtonTermine.Enabled = false;
         }
 
@@ -313,7 +333,7 @@ namespace ApplicationUi
             numericUpDownNbParticip.Value = numericUpDownNbParticip.Minimum;
             numericUpDownDuree.Value = numericUpDownDuree.Minimum;
             radioButtonEnCours.Checked = false;
-            radioButtonPlanifie.Checked = false;
+            radioButtonPlanifie.Checked = true;
             radioButtonTermine.Checked = false;
             labelParticipantsInscrits.Visible = false;
 
@@ -378,65 +398,6 @@ namespace ApplicationUi
             foreach (DataGridViewColumn col in dataGrid.Columns)
             {
                 col.SortMode = DataGridViewColumnSortMode.Programmatic;
-            }
-        }
-
-        /// <summary>
-        /// Permet de modifier un tournoi en gérant les différentes exceptions qui peuvent survenir.
-        /// </summary>
-        private void ModifierTournoi()
-        {
-            try
-            {
-                _serviceTournoi.Modifier(_tournoiSelectionne!);
-                MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                Raz_Zones();
-            }            
-            catch (TournoiException ex)
-            {
-                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
-
-            }
-            catch (DbException ex)
-            {
-                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
-            }
-        }
-
-        /// <summary>
-        /// Permets de supprimer un tournoi en gérant les différentes exceptions qui peuvent survenir.
-        /// </summary>
-        private void SupprimerTournoi()
-        {
-            try
-            {
-                _serviceTournoi.Supprimer(_tournoiSelectionne!.NumeroTournoi);
-                MessageBox.Show("Le tournoi a bien été supprimé.", "Suppression",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Raz_Zones();
-            }
-            catch (TournoiException ex)
-            {
-                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                    MessageBox.Show(ex.Message);
-            }
-            catch (DbException ex)
-            {
-                Log.Error(ex, "Erreur technique lors de la suppression du tournoi.");
-                    MessageBox.Show("Erreur technique, réessayez plus tard.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Erreur inattendue lors de la suppression du tournoi.");
-                    MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         #endregion
