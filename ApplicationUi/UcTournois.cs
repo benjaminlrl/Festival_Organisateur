@@ -67,7 +67,7 @@ namespace ApplicationUi
             }
         }
 
-        #region Donées
+        #region Données
         private void ChargerTournois()
         {
             dataGridTournois.DataSource = null;
@@ -92,8 +92,10 @@ namespace ApplicationUi
             dataGridTournois.Columns["Espace"].Visible = false;
             dataGridTournois.Columns["IdJeu"].Visible = false;
             dataGridTournois.Columns["Jeu"].Visible = false;
+
             dataGridTournois.Columns["NomEspace"].HeaderText = "Espace";
             dataGridTournois.Columns["TitreJeu"].HeaderText = "Jeu";
+
             dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
         private void ChargerEspaces()
@@ -104,7 +106,9 @@ namespace ApplicationUi
             comboBoxEspace.ValueMember = "IdEspace";
         }
         #endregion
+
         #region Evènements
+
         #region Boutons
         private void ButtonAjouter_Click(object sender, EventArgs e)
         {
@@ -115,8 +119,8 @@ namespace ApplicationUi
                 NbParticipants = (int)numericUpDownNbParticip.Value,
                 DureePrevue = (int)numericUpDownDuree.Value,
                 Statut = statutSelectionne,
-                IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace,
-                IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
+                IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace,
+                IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
             };
 
             if (ValiderTournoi(tournoi, false))
@@ -139,8 +143,8 @@ namespace ApplicationUi
             _tournoiSelectionne.NbParticipants = (int)numericUpDownNbParticip.Value;
             _tournoiSelectionne.DureePrevue = (int)numericUpDownDuree.Value;
             _tournoiSelectionne.Statut = statutSelectionne;
-            _tournoiSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
-            _tournoiSelectionne.IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu;
+            _tournoiSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
+            _tournoiSelectionne.IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu;
 
             if (ValiderTournoi(_tournoiSelectionne, true))
             {
@@ -227,6 +231,7 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Validations
         /// <summary>
         /// Retourne un booléen indiquant si les informations de la participation sont valides ou non,
@@ -245,6 +250,7 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Méthodes
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 

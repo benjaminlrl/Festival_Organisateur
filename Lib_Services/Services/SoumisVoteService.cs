@@ -85,6 +85,8 @@ namespace Lib_Services.Services
             IEnumerable<Voter> query = _context.Voter
                 .Include(v => v.Jeu)
                 .Include(v => v.Plateforme)
+                .Where(v => !dateDebut.HasValue || v.DateVote >= dateDebut.Value)
+                .Where(v => !dateFin.HasValue || v.DateVote <= dateFin.Value)
                 .AsEnumerable() // Charge tout en mémoire pour que Include fonctionne avec GroupBy
                 .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binôme (jeu, plateforme)
                 .Select(g => new Voter
@@ -99,18 +101,13 @@ namespace Lib_Services.Services
             if (!string.IsNullOrWhiteSpace(filtre))
                 query = query.Where(v => v.Plateforme.Libelle.Contains(filtre)
                         || v.Jeu.Titre.Contains(filtre));
-            
-            if (dateDebut.HasValue && !dateFin.HasValue)
-                query = query.Where(v => (v.DateVote >= dateDebut.Value));
-
-            if (dateDebut.HasValue && dateFin.HasValue)
-                query = query.Where(v => (v.DateVote >= dateDebut.Value && v.DateVote <= dateFin.Value));
 
             query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "LibellePlateforme" => ordre == "ASC" ? query.OrderBy(v => v.Plateforme.Libelle) : query.OrderByDescending(v => v.Plateforme.Libelle),
                 "TitreJeu" => ordre == "ASC" ? query.OrderBy(v => v.Jeu.Titre) : query.OrderByDescending(v => v.Jeu.Titre),
+                "NbVotes" => ordre == "ASC" ? query.OrderBy(v => v.NbVotes) : query.OrderByDescending(v => v.NbVotes),
                 _ => query.OrderBy(v => v.Jeu.Titre) // valeur par défaut
             };
 
@@ -234,7 +231,7 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="soumisVote">Le SoumisVote à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false)
+        public List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification)
         {
             // liste des erreurs
             var erreurs = new List<string>();

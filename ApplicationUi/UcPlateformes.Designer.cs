@@ -201,7 +201,7 @@
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += ButtonModifier_Click;
+            buttonEffacer.Click += ButtonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -391,14 +391,8 @@
 
         private Panel panelForm;
         private TableLayoutPanel tableLayoutPanel;
-        private Label labelDescription;
-        private Label labelSuperficie;
-        private NumericUpDown numericUpDownCapaciteMaxi;
         private TextBox textBoxNom;
         private Label labelNom;
-        private Label labelCapaciteMaxi;
-        private NumericUpDown numericUpDownSuperficie;
-        private TextBox textBoxDescription;
         private Panel panelButtons;
         private GroupBox groupBox1;
         private Button buttonAjouter;

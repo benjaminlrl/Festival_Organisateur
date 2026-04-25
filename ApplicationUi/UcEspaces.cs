@@ -211,6 +211,7 @@ namespace ApplicationUi
         }
 
         #endregion  
+
         #region Evènements
         #region Boutons
         /// <summary>
@@ -352,6 +353,7 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region validations
         /// <summary>
         /// Retourne un booléen indiquant si les informations de l'espace sont valides ou non,
@@ -371,6 +373,7 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Méthodes
 
         /// <summary>

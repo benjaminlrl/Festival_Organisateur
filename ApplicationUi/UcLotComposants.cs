@@ -190,7 +190,7 @@ namespace ApplicationUi
         public bool LotComposantValide(LotComposant lotComposant)
         {
             var erreurs = _serviceLotComposant.ValiderLotComposant(lotComposant);
-            if (erreurs.Any())
+            if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;

@@ -10,14 +10,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+
 namespace ApplicationUi
 {
     public partial class UcVoter : UserControl
     {
         private readonly ITournoiService _serviceTournoi;
-        private readonly IOrganisateurService _serviceOrganisateur;
+        private readonly OrganisateurService _serviceOrganisateur;
         private readonly IJeuService _serviceJeu;
-        private readonly IVoterService _serviceVoter;
         private readonly IPlateformeService _servicePlateforme;
         private readonly ISoumisVoteService _serviceSoumisVote;
         private Jeu? _jeuSelectionne;
@@ -35,7 +35,6 @@ namespace ApplicationUi
             _serviceOrganisateur = new OrganisateurService(context);
             _serviceJeu = new JeuService(context);
             _servicePlateforme = new PlateformeService(context);
-            _serviceVoter = new VoterService(context);
             _serviceSoumisVote = new SoumisVoteService(context);
             _organisateurConnecte = unOrganisateurConnecte;
 
@@ -56,23 +55,26 @@ namespace ApplicationUi
 
             buttonEffacer.Text = " 🧽  Effacer";
 
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
+                DesactiverInputs();
                 
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
+                DesactiverInputs();
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Supprimer") == false)
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
+                DesactiverInputs();
             }
             
         }
 
-        #region Evènements
+        #region Données
         private void ChargerSoumisVotes()
         {
             dataGridSoumisVote.DataSource = null;
@@ -113,34 +115,6 @@ namespace ApplicationUi
             MEP_DataGridClassement();
         }
 
-        private void AfficherBoutons()
-        {
-            buttonAjouter.Enabled = _soumisVoteSelectionne == null;
-            buttonModifier.Enabled = _soumisVoteSelectionne != null;
-            buttonSupprimer.Enabled = _soumisVoteSelectionne != null;
-            buttonEffacer.Enabled = _soumisVoteSelectionne != null;
-
-            comboBoxJeu.Enabled = _soumisVoteSelectionne == null;
-            comboBoxPlateforme.Enabled = _soumisVoteSelectionne == null;
-        }
-
-        /// <summary>
-        /// Resets all tournament-related input fields and controls to their default values.
-        /// </summary>
-        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
-        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
-        /// controls are reset to indicate a planned tournament.</remarks>
-        private void Raz_Zones()
-        {
-            comboBoxJeu.SelectedItem = null;
-            textBoxDescription.Clear();
-            textBoxRecherche.Clear();
-            comboBoxPlateforme.SelectedItem = null;
-            _soumisVoteSelectionne = null;
-            dateTimePickerDateDebutVote.Value = DateTime.Now;
-            dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
-            AfficherBoutons();
-        }
         private void MEP_DataGridSoumisVote()
         {
             // Après avoir lié la DataSource, définir le SortMode de chaque colonne
@@ -187,49 +161,120 @@ namespace ApplicationUi
             dataGridClassement.Columns["LibellePlateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
-        private void dataGridClassement_CellClick(object sender, DataGridViewCellEventArgs e)
+        #endregion
+
+        #region Evènements
+
+        #region Boutons
+        public void ButtonAjouter_Click(object sender, EventArgs e)
         {
-            // on ne gère le clic que sur les lignes, pas sur les en-têtes
-            // Ignorer les clics sur l'en-tête (gérés pour le tri)
-            // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
-            //if (e.RowIndex < 0)
-            //{
-            //    // on né gère pas les cliques sur la première colonne
-            //    if (e.ColumnIndex < 1)
-            //        return;
+            // Validation de la sélection de l'espace et de la plateforme avant de créer le poste de jeu
+            if (comboBoxJeu.SelectedItem is not Jeu jeuSelectionne
+                || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
+            {
+                MessageBox.Show("Veuillez sélectionner une plateforme et un jeu.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            SoumisVote soumisVote = new ()
+            {
+                IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
+                IdPlateforme = (comboBoxPlateforme.SelectedItem as Plateforme).IdPlateforme,
+                Plateforme = plateformeSelectionne,
+                Jeu = jeuSelectionne,
+                DateFinVote = dateTimePickerDateFinVote.Value,
+                DateDebutVote = dateTimePickerDateDebutVote.Value,
 
-            //    var donnees = _serviceVoter.Lister(filtre);
+            };
+            if (ValiderSoumisVote(soumisVote, false))
+            {
+                _serviceSoumisVote.Creer(soumisVote);
+                _soumisVoteSelectionne = soumisVote;
+                
+            }
+        }
+        private void ButtonModifier_Click(object sender, EventArgs e)
+        {
+            if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
+            {
+                MessageBox.Show("Aucun soumisVote sélectionné", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            //    // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
-            //    // à des fonctions de sélection de clé
-            //    var map = new Dictionary<int, Func<Voter, object>>
-            //    {
-            //        {dataGridClassement.Columns["TitreJeu"].Index, v => v.TitreJeu},
-            //        {dataGridClassement.Columns["Plateforme"].Index, v => v.Plateforme},
-            //        {dataGridClassement.Columns["DateVote"].Index, v => v.DateVote},
-            //    };
+            _soumisVoteSelectionne.DateDebutVote = dateTimePickerDateDebutVote.Value;
+            _soumisVoteSelectionne.DateFinVote = dateTimePickerDateFinVote.Value;
+            if (ValiderSoumisVote(_soumisVoteSelectionne, true))
+            {
+                _serviceSoumisVote.Modifier(_soumisVoteSelectionne);
+                ChargerSoumisVotes();
+                AfficherBoutons();
+                Raz_Zones();
+            }
+        }
+        private void ButtonEffacer_Click(object sender, EventArgs e)
+        {
+            Raz_Zones();
+        }
+        private void ButtonSupprimer_Click(object sender, EventArgs e)
+        {
+            if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
+            {
+                MessageBox.Show("Aucun soumisVote sélectionné", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            //    if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
-            //        return;
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
 
-            //    dataGridClassement.DataSource = ordreChampVotes == "ASC"
-            //        ? donnees.OrderByDescending(keySelector).ToList()
-            //        : donnees.OrderBy(keySelector).ToList();
-            //    // permute l'ordre du champ
-            //    ordreChampVotes = ordreChampVotes == "ASC" ? "DESC" : "ASC";
-            //    MEP_DataGridClassement();
-            //    return;
-            //}
-
-            //_voterSelectionne = dataGridClassement.Rows[e.RowIndex].DataBoundItem as Voter;
-            //_soumisVoteSelectionne = _voterSelectionne?.Jeu;
-
-            //if (_soumisVoteSelectionne != null && _voterSelectionne != null)
-            //    RemplirFormulaire(_soumisVoteSelectionne);
+            _serviceSoumisVote.Supprimer(_soumisVoteSelectionne.IdJeu, _soumisVoteSelectionne.IdPlateforme);
+            _soumisVoteSelectionne = null;
+            ChargerJeux();
+            AfficherBoutons();
+            Raz_Zones();
 
         }
 
-        private void dataGridSoumisVote_CellClick(object sender, DataGridViewCellEventArgs e)
+        #endregion
+        private void AfficherBoutons()
+        {
+            buttonAjouter.Enabled = _soumisVoteSelectionne == null;
+            buttonModifier.Enabled = _soumisVoteSelectionne != null;
+            buttonSupprimer.Enabled = _soumisVoteSelectionne != null;
+            buttonEffacer.Enabled = _soumisVoteSelectionne != null;
+
+            comboBoxJeu.Enabled = _soumisVoteSelectionne == null;
+            comboBoxPlateforme.Enabled = _soumisVoteSelectionne == null;
+        }
+       
+        private void DataGridClassement_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // on ne gère pas les cliques sur la première colonne
+            if (e.ColumnIndex < 0)
+                return;
+
+            // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
+            // à des fonctions de sélection de clé
+            Dictionary<int, string> map = new()
+                {
+                    {dataGridClassement.Columns["NbVotes"].Index, "NbVotes"},
+                    {dataGridClassement.Columns["LibellePlateforme"].Index, "LibellePlateforme"},
+                    {dataGridClassement.Columns["TitreJeu"].Index, "TitreJeu"},
+                };
+
+            if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
+                return;
+
+            ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+            dataGridClassement.DataSource = _serviceSoumisVote.ListerClassmentJeuxVotes(filtre, colonne, ordreChamp);
+            dataGridClassement.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
+            MEP_DataGridClassement();
+
+            return;
+        }
+
+        private void DataGridSoumisVote_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
@@ -238,28 +283,25 @@ namespace ApplicationUi
                 if (e.ColumnIndex < 0)
                     return;
 
-                var donnees = _serviceSoumisVote.Lister(filtre);
-
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                var map = new Dictionary<int, Func<SoumisVote, object>>
+                Dictionary<int, string> map = new ()
                 {
-                    {dataGridSoumisVote.Columns["DateDebutVote"].Index, sv => sv.DateDebutVote},
-                    {dataGridSoumisVote.Columns["DateFinVote"].Index, sv => sv.DateFinVote},
-                    {dataGridSoumisVote.Columns["TitreJeu"].Index, sv => sv.DateFinVote},
-                    {dataGridSoumisVote.Columns["LibellePlateforme"].Index, sv => sv.DateFinVote},
+                    {dataGridSoumisVote.Columns["DateDebutVote"].Index, "DateDebutVote"},
+                    {dataGridSoumisVote.Columns["DateFinVote"].Index, "DateFinVote"},
+                    {dataGridSoumisVote.Columns["TitreJeu"].Index, "TitreJeu"},
+                    {dataGridSoumisVote.Columns["LibellePlateforme"].Index, "LibellePlateforme"},
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridSoumisVote.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
-                // permute l'ordre du champ
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
-                dataGridSoumisVote.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                dataGridSoumisVote.DataSource = _serviceTournoi.Lister(filtre, colonne, ordreChamp);
+                dataGridSoumisVote.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
                 MEP_DataGridSoumisVote();
                 return;
             }
@@ -268,6 +310,82 @@ namespace ApplicationUi
 
             if (_soumisVoteSelectionne != null)
                 RemplirFormulaire();
+        }
+
+        /// <summary>
+        /// Permet de filtrer les postes de jeu affichés dans le DataGrid en 
+        /// fonction du texte saisi dans la zone de recherche.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            filtre = textBoxRecherche.Text;
+            ChargerSoumisVotes();
+        }
+        private void ComboBoxPlateforme_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxPlateforme.SelectedItem == null)
+                return;
+
+            AfficherBoutons();
+        }
+
+        private void ComboBoxJeu_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxJeu.SelectedItem == null)
+            {
+                _jeuSelectionne = null;
+                return;
+            }
+
+            _jeuSelectionne = (Jeu)comboBoxJeu.SelectedItem;
+            textBoxDescription.Text = _jeuSelectionne.Description;
+
+            ChargerPlateforme();
+
+            AfficherBoutons();
+        }
+        #endregion
+
+        #region Validations
+        private bool ValiderSoumisVote(SoumisVote soumisvote, bool estModification)
+        {
+            var erreurs = _serviceSoumisVote.ValiderSoumisVote(soumisvote, estModification);
+            if (erreurs.Count > 0)
+            {
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
+        #region Méthodes
+
+        /// <summary>
+        /// Resets all tournament-related input fields and controls to their default values.
+        /// </summary>
+        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
+        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
+        /// controls are reset to indicate a planned tournament.</remarks>
+        private void Raz_Zones()
+        {
+            filtre = "";
+
+            _soumisVoteSelectionne = null;
+
+            comboBoxJeu.SelectedItem = null;
+            textBoxDescription.Clear();
+            textBoxRecherche.Clear();
+            comboBoxPlateforme.SelectedItem = null;
+            dateTimePickerDateDebutVote.Value = DateTime.Now;
+            dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
+
+            ChargerJeux();
+            ChargerSoumisVotes();
+
+            AfficherBoutons();
         }
 
         private void RemplirFormulaire()
@@ -284,115 +402,23 @@ namespace ApplicationUi
             textBoxDescription.Text = _soumisVoteSelectionne.Jeu.Description;
             dateTimePickerDateDebutVote.Value = _soumisVoteSelectionne.DateDebutVote;
             dateTimePickerDateFinVote.Value = _soumisVoteSelectionne.DateFinVote;
+
             AfficherBoutons();
         }
 
         /// <summary>
-        /// Permet de filtrer les postes de jeu affichés dans le DataGrid en 
-        /// fonction du texte saisi dans la zone de recherche.
+        /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
+        /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void DesactiverInputs()
         {
-            filtre = textBoxRecherche.Text;
-            ChargerSoumisVotes();
+            comboBoxJeu.Enabled = false;
+            textBoxDescription.Enabled = false;
+            textBoxRecherche.Enabled = false;
+            comboBoxPlateforme.Enabled = false;
+            dateTimePickerDateDebutVote.Enabled = false;
+            dateTimePickerDateFinVote.Enabled = false;
         }
         #endregion
-
-        #region Validations
-        private bool ValiderSoumisVote(SoumisVote soumisvote, bool estModification)
-        {
-            var erreurs = _serviceSoumisVote.ValiderSoumisVote(soumisvote, estModification);
-            if (erreurs.Any())
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-        #endregion
-
-        #region Boutons
-        public void buttonAjouter_Click(object sender, EventArgs e)
-        {
-
-            SoumisVote soumisVote = new SoumisVote
-            {
-                IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
-                IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme,
-                Plateforme = (Plateforme)comboBoxPlateforme.SelectedItem,
-                Jeu = (Jeu)comboBoxJeu.SelectedItem,
-                DateFinVote = dateTimePickerDateFinVote.Value,
-                DateDebutVote = dateTimePickerDateDebutVote.Value,
-
-            };
-            if (ValiderSoumisVote(soumisVote, false))
-            {
-                _serviceSoumisVote.Creer(soumisVote);
-                _soumisVoteSelectionne = soumisVote;
-                ChargerJeux();
-                ChargerSoumisVotes();
-                AfficherBoutons();
-            }
-        }
-        private void buttonModifier_Click(object sender, EventArgs e)
-        {
-            _soumisVoteSelectionne.DateDebutVote = dateTimePickerDateDebutVote.Value;
-            _soumisVoteSelectionne.DateFinVote = dateTimePickerDateFinVote.Value;
-            if (ValiderSoumisVote(_soumisVoteSelectionne, true))
-            {
-                _serviceSoumisVote.Modifier(_soumisVoteSelectionne);
-                ChargerSoumisVotes();
-                AfficherBoutons();
-                Raz_Zones();
-            }
-        }
-        private void buttonEffacer_Click(object sender, EventArgs e)
-        {
-            Raz_Zones();
-        }
-        private void buttonSupprimer_Click(object sender, EventArgs e)
-        {
-            if (dataGridSoumisVote.CurrentRow == null)
-                return;
-
-            if (_soumisVoteSelectionne == null)
-                return;
-            SoumisVote soumisVote = (SoumisVote)dataGridSoumisVote.CurrentRow.DataBoundItem;
-
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Validation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
-                return;
-
-            _serviceSoumisVote.Supprimer(_soumisVoteSelectionne.IdJeu, _soumisVoteSelectionne.IdPlateforme);
-            _soumisVoteSelectionne = null;
-            ChargerJeux();
-            AfficherBoutons();
-            Raz_Zones();
-
-        }
-
-        #endregion
-
-        private void comboBoxPlateforme_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxPlateforme.SelectedItem == null)
-                return;
-            AfficherBoutons();
-        }
-
-        private void comboBoxJeu_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxJeu.SelectedItem == null)
-            {
-                _jeuSelectionne = null;
-                return;
-            }
-               
-            _jeuSelectionne = (Jeu)comboBoxJeu.SelectedItem;
-            textBoxDescription.Text = _jeuSelectionne.Description;
-            ChargerPlateforme();
-            AfficherBoutons();
-        }
     }
 }

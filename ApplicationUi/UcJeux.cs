@@ -95,6 +95,7 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Evènements
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
@@ -104,7 +105,7 @@ namespace ApplicationUi
                 Titre = textBoxTitre.Text,
                 Description = textBoxDescription.Text,
                 Editeur = textBoxEditeur.Text,
-                Pegi = (int)comboBoxPegi.SelectedValue,
+                Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0,
                 Plateformes = checkedListBoxPlateforme.CheckedItems
                                   .Cast<Plateforme>()
                                   .ToList(),
@@ -129,7 +130,7 @@ namespace ApplicationUi
             _jeuSelectionne.Titre = textBoxTitre.Text;
             _jeuSelectionne.Description = textBoxDescription.Text; ;
             _jeuSelectionne.Editeur = textBoxEditeur.Text;
-            _jeuSelectionne.Pegi = (int)comboBoxPegi.SelectedValue;
+            _jeuSelectionne.Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0;
             _jeuSelectionne.Plateformes = checkedListBoxPlateforme.CheckedItems
                           .Cast<Plateforme>()
                           .ToList();
@@ -215,6 +216,7 @@ namespace ApplicationUi
             ChargerJeux();
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Retourne un booléen indiquant si les informations du jeu sont valides ou non,
@@ -233,6 +235,7 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Méthodes
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 

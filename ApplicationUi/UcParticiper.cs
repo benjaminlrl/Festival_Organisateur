@@ -18,9 +18,7 @@ namespace ApplicationUi
         private readonly ApplicationDbContext _context;
         private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
-        private readonly IEspaceService _serviceEspace;
         private readonly IParticiperService _serviceParticiper;
-        private readonly IPlateformeService _servicePlateforme;
         private readonly Organisateur _organisateurConnecte;
         private Participer? _participerSelectionne;
         private bool lotRemisSelectionne;
@@ -33,9 +31,7 @@ namespace ApplicationUi
             _context = new ApplicationDbContext();
             _serviceTournoi = new TournoiService(_context);
             _serviceOrganisateur = new OrganisateurService(_context);
-            _serviceEspace = new EspaceService(_context);
             _serviceParticiper = new ParticiperService(_context);
-            _servicePlateforme = new PlateformeService(_context);
 
             _organisateurConnecte = unOrganisateurConnecte;
             _participerSelectionne = null;
@@ -152,9 +148,10 @@ namespace ApplicationUi
             dataGridParticipations.Columns["DateHeureInscription"].HeaderText = "Date d'inscription";
         }
         #endregion
+
         #region Evènements
         #region Boutons
-        public void buttonAjouter_Click(object sender, EventArgs e)
+        public void ButtonAjouter_Click(object sender, EventArgs e)
         {
             Participer participer = new ()
             {
@@ -164,7 +161,7 @@ namespace ApplicationUi
                 Evaluation = trackBarEvaluation.Value,
                 DateHeureInscription = dateTimePickerDateHeureInscription.Value,
                 IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-                NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
+                NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi,
                 // TODO: voir conflit lucien
                 //NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
                 LotRemis = lotRemisSelectionne
@@ -177,7 +174,7 @@ namespace ApplicationUi
             }
 
         }
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void ButtonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
@@ -191,7 +188,7 @@ namespace ApplicationUi
             _participerSelectionne.Evaluation = trackBarEvaluation.Value;
             _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
             _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
-            _participerSelectionne.NumeroTournoi = ((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
+            _participerSelectionne.NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi;
             // TODO: voir conflit lucien
             // puisque NumeroTournoi est une clé primaire, elle ne peut pas être null
             //_participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
@@ -204,11 +201,11 @@ namespace ApplicationUi
                 Raz_Zones();
             }
         }
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void ButtonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
-        private void buttonSupprimer_Click(object sender, EventArgs e)
+        private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
@@ -223,7 +220,7 @@ namespace ApplicationUi
         }
 
         #endregion
-        private void dataGridParticipations_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridParticipations_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
@@ -267,21 +264,22 @@ namespace ApplicationUi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerParticipations();
         }
-        private void radioButtonLotRemisFalse_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonLotRemisFalse_CheckedChanged(object sender, EventArgs e)
         {
             lotRemisSelectionne = false;
         }
 
-        private void radioButtonLotRemisTrue_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonLotRemisTrue_CheckedChanged(object sender, EventArgs e)
         {
             lotRemisSelectionne = true;
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Retourne un booléen indiquant si les informations de la participation sont valides ou non,
@@ -300,6 +298,7 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Méthodes
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 

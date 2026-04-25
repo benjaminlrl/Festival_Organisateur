@@ -132,7 +132,7 @@ namespace ApplicationUi
         public bool MdpValide(string motDePasse)
         {
             var erreurs = _serviceOrganisateur.MdpValide(motDePasse);
-            if (erreurs.Any())
+            if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
@@ -148,7 +148,7 @@ namespace ApplicationUi
         public bool IdentifiantValide(string identifiant)
         {
             var erreurs = _serviceOrganisateur.IdentifiantValide(identifiant);
-            if (erreurs.Any())
+            if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;

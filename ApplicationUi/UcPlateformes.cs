@@ -18,8 +18,7 @@ namespace ApplicationUi
         private readonly ApplicationDbContext _context;
         private readonly IPlateformeService _servicePlateforme;
         private readonly IOrganisateurService _serviceOrganisateur;
-        private readonly IEspaceService _serviceEspace;
-        private Plateforme? _plateformeSelectionee = null;
+        private Plateforme? _plateformeSelectionee;
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
@@ -30,8 +29,9 @@ namespace ApplicationUi
             _context = new ApplicationDbContext();
             _serviceOrganisateur = new OrganisateurService(_context);
             _servicePlateforme = new PlateformeService(_context);
-            _serviceEspace = new EspaceService(_context);
+
             _organisateurConnecte = unOrganisateurConnecte;
+            _plateformeSelectionee = null;
 
             dataGridJeux.Visible = false;
             dataGridPostesJeu.Visible = false;
@@ -61,7 +61,7 @@ namespace ApplicationUi
             }
         }
 
-        #region Evènements
+        #region Données
         private void ChargerPlateformes()
         {
             dataGridPlateformes.DataSource = null;
@@ -87,30 +87,6 @@ namespace ApplicationUi
             MEP_DataGridJeux();
         }
 
-        /// <summary>
-        /// Resets all tournament-related input fields and controls to their default values.
-        /// </summary>
-        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
-        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
-        /// controls are reset to indicate a planned tournament.</remarks>
-        private void Raz_Zones()
-        {
-            textBoxNom.Clear();
-
-            
-            _plateformeSelectionee = null;
-
-            dataGridJeux.DataSource = null;
-            dataGridPostesJeu.DataSource = null;
-            dataGridJeux.Visible = false;
-            dataGridPostesJeu.Visible = false;
-
-            filtre = "";
-
-            ChargerPlateformes();
-
-            AfficherBoutons();
-        }
         private void MEP_DataGridPlateformes()
         {
             dataGridPlateformes.Columns["idPlateforme"].Visible = false;
@@ -143,96 +119,20 @@ namespace ApplicationUi
 
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
-
-        private void DataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
-            if (e.RowIndex < 0)
-            {
-                // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
-                // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new ()
-                {
-                    {dataGridPlateformes.Columns["Libelle"].Index, "Libelle"},
-                };
-
-                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
-                    return;
-
-                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
-
-                dataGridPlateformes.DataSource = _servicePlateforme.Lister(filtre, colonne, ordreChamp);
-                dataGridPlateformes.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
-                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
-
-                MEP_DataGridPlateformes();
-                return;
-            }
-
-            _plateformeSelectionee = dataGridPlateformes.Rows[e.RowIndex].DataBoundItem as Plateforme;
-
-            if (_plateformeSelectionee != null)
-                RemplirFormulaire();
-
-            AfficherBoutons();
-        }
-
-        private void RemplirFormulaire()
-        {
-            if (_plateformeSelectionee == null)
-                return;
-
-            textBoxNom.Text = _plateformeSelectionee.Libelle;
-
-            ChargerPostesJeu();
-            ChargerJeux();
-
-            AfficherBoutons();
-        }
         #endregion
 
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations de la plateforme sont valides ou non,
-        /// en fonction des règles métier définies dans le service Plateforme.
-        /// </summary>
-        /// <param name="plateforme">L'objet Plateforme à valider.</param>
-        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
-        /// <returns>Vraie si la plateforme est valide, sinon faux.</returns>
-        private bool ValiderPlateforme(Plateforme plateforme, bool estModification)
-        {
-            List<string> erreurs = _servicePlateforme.ValiderPlateforme(plateforme, estModification);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Permet de filtrer les résultats affichés dans la grille des plateformes 
-        /// en fonction du texte saisi dans la zone de recherche.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
-        {
-            filtre = textBoxRecherche.Text;
-            ChargerPlateformes();
-        }
-
-        #endregion
+        #region Évenements
 
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
-            Plateforme plateforme = new ()
+            Plateforme plateforme = new()
             {
                 Libelle = textBoxNom.Text
             };
 
-            if(ValiderPlateforme(plateforme, false)){
+            if (ValiderPlateforme(plateforme, false))
+            {
                 _servicePlateforme.Creer(plateforme);
                 MessageBox.Show("La plateforme a bien été ajoutée.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
@@ -274,7 +174,114 @@ namespace ApplicationUi
         }
         #endregion
 
+        private void DataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
+            if (e.RowIndex < 0)
+            {
+                // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
+                // à des fonctions de sélection de clé
+                Dictionary<int, string> map = new ()
+                {
+                    {dataGridPlateformes.Columns["Libelle"].Index, "Libelle"},
+                };
+
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
+                    return;
+
+                // permuter l'ordre de tri entre ASC et DESC
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                dataGridPlateformes.DataSource = _servicePlateforme.Lister(filtre, colonne, ordreChamp);
+                dataGridPlateformes.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
+                MEP_DataGridPlateformes();
+                return;
+            }
+
+            _plateformeSelectionee = dataGridPlateformes.Rows[e.RowIndex].DataBoundItem as Plateforme;
+
+            if (_plateformeSelectionee != null)
+                RemplirFormulaire();
+
+            AfficherBoutons();
+        }
+
+        /// <summary>
+        /// Permet de filtrer les résultats affichés dans la grille des plateformes 
+        /// en fonction du texte saisi dans la zone de recherche.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
+        {
+            filtre = textBoxRecherche.Text;
+            ChargerPlateformes();
+        }
+        #endregion
+
+        #region Validations
+        /// <summary>
+        /// Retourne un booléen indiquant si les informations de la plateforme sont valides ou non,
+        /// en fonction des règles métier définies dans le service Plateforme.
+        /// </summary>
+        /// <param name="plateforme">L'objet Plateforme à valider.</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
+        /// <returns>Vraie si la plateforme est valide, sinon faux.</returns>
+        private bool ValiderPlateforme(Plateforme plateforme, bool estModification)
+        {
+            List<string> erreurs = _servicePlateforme.ValiderPlateforme(plateforme, estModification);
+            if (erreurs.Count > 0)
+            {
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
         #region Méthodes
+
+        /// <summary>
+        /// Remplit les champs du formulaire avec les données de la plateforme sélectionnée
+        /// </summary>
+        private void RemplirFormulaire()
+        {
+            if (_plateformeSelectionee == null)
+                return;
+
+            textBoxNom.Text = _plateformeSelectionee.Libelle;
+
+            ChargerPostesJeu();
+            ChargerJeux();
+
+            AfficherBoutons();
+        }
+
+        /// <summary>
+        /// Remet a zéro toutes les zones du formulaire, 
+        /// réinitialise les variables de sélection et de filtre, 
+        /// recharge la liste des plateformes 
+        /// et met à jour l'affichage des boutons en conséquence.
+        /// </summary>
+        private void Raz_Zones()
+        {
+            textBoxNom.Clear();
+
+            _plateformeSelectionee = null;
+
+            dataGridJeux.DataSource = null;
+            dataGridPostesJeu.DataSource = null;
+            dataGridJeux.Visible = false;
+            dataGridPostesJeu.Visible = false;
+
+            filtre = "";
+
+            ChargerPlateformes();
+
+            AfficherBoutons();
+        }
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'une plateforme.
         /// </summary>

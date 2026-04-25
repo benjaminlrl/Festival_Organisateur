@@ -183,12 +183,18 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Évenements
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
-            Espace espaceSelectionne = (Espace)comboBoxEspace.SelectedItem;
-            Plateforme plateformeSelectionne = (Plateforme)comboBoxPlateforme.SelectedItem;
+            // Validation de la sélection de l'espace et de la plateforme avant de créer le poste de jeu
+            if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne 
+                || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
+            {
+                MessageBox.Show("Veuillez sélectionner une plateforme et un espace.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             PosteJeu posteJeu = new ()
             {
@@ -215,8 +221,8 @@ namespace ApplicationUi
                     return;
 
             _posteJeuSelectionne.Fonctionnel = fonctionnelSelectionne; // true ou false selon le choix de l'utilisateur
-            _posteJeuSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
-            _posteJeuSelectionne.IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme;
+            _posteJeuSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
+            _posteJeuSelectionne.IdPlateforme = (comboBoxPlateforme.SelectedItem as Plateforme).IdPlateforme;
 
             if (ValiderPosteJeu(_posteJeuSelectionne))
             {
@@ -308,6 +314,7 @@ namespace ApplicationUi
             ChargerPostesDeJeu();
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Retourne un booléen indiquant si les informations du poste de jeu sont valides ou non,
@@ -326,6 +333,7 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Méthodes
 
         /// <summary>
