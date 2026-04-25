@@ -38,7 +38,7 @@ namespace ApplicationUi
 
             filtre = "";
             buttonEffacer.Text = " 🧽  Effacer";
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
 
             ChargerPlateformes();
 

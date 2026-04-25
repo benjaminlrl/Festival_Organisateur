@@ -34,7 +34,7 @@ namespace ApplicationUi
             _jeuSelectionne = null;
 
             filtre = "";
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
             buttonEffacer.Text = " 🧽  Effacer";
 
             AfficherBoutons();

@@ -43,7 +43,7 @@ namespace ApplicationUi
             AfficherBoutons();
 
             filtre = "";
-            ordreChamp = "ASC";
+            ordreChamp = "DESC"; // pour qu'au premier clique sur une colonne, le tri soit dans l'ordre croissant
             buttonEffacer.Text = " 🧽  Effacer";
 
             ChargerTournois();
@@ -87,11 +87,20 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridTournois);
 
+            dataGridTournois.Columns["DateHeure"].DisplayIndex = 4;
+            dataGridTournois.Columns["Statut"].DisplayIndex = 3;
+            dataGridTournois.Columns["Nom"].DisplayIndex = 0;
+            dataGridTournois.Columns["NomEspace"].DisplayIndex = 1;
+            dataGridTournois.Columns["TitreJeu"].DisplayIndex = 2;
+
             dataGridTournois.Columns["NumeroTournoi"].Visible = false;
             dataGridTournois.Columns["IdEspace"].Visible = false;
             dataGridTournois.Columns["Espace"].Visible = false;
             dataGridTournois.Columns["IdJeu"].Visible = false;
             dataGridTournois.Columns["Jeu"].Visible = false;
+            dataGridTournois.Columns["NbParticipants"].Visible = false;
+            dataGridTournois.Columns["Lot"].Visible = false;
+            dataGridTournois.Columns["DureePrevue"].Visible = false;
 
             dataGridTournois.Columns["NomEspace"].HeaderText = "Espace";
             dataGridTournois.Columns["TitreJeu"].HeaderText = "Jeu";
@@ -184,11 +193,14 @@ namespace ApplicationUi
                     {dataGridTournois.Columns["DureePrevue"].Index, "DureePrevue"},
                     {dataGridTournois.Columns["Nom"].Index, "Nom"},
                     {dataGridTournois.Columns["Statut"].Index, "Statut"},
+                    {dataGridTournois.Columns["NomEspace"].Index, "NomEspace"},
+                    {dataGridTournois.Columns["TitreJeu"].Index, "TitreJeu"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
+                // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 dataGridTournois.DataSource = _serviceTournoi.Lister(filtre, colonne, ordreChamp);

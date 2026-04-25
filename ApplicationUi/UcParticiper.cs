@@ -40,7 +40,7 @@ namespace ApplicationUi
             AfficherBoutons();
 
             filtre = "";
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
             buttonEffacer.Text = " 🧽  Effacer";
 
             ChargerUtilisateurs();

@@ -24,7 +24,7 @@ namespace ApplicationUi
         private List<Lot>? listeLots;
         int? nouveauNumeroLot;
         string filtre;
-        string ordreChamp = "ASC";
+        string ordreChamp = "DESC";
         Lot? lotActuelle;
         Lot? lotAncien;
 

@@ -28,7 +28,7 @@ namespace ApplicationUi
         private List<LotComposant> listeLotComposantsDunLot;
         string filtre;
         int? nouveauNumeroTournoi;
-        string ordreChamp = "ASC";
+        string ordreChamp = "DESC";
 
         public UcLots(Organisateur unOrganisateurConnecte)
         {

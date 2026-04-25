@@ -21,7 +21,7 @@ namespace ApplicationUi
         private Organisateur? _unNouveauOrganisateur = null;
         private readonly Organisateur _organisateurConnecte;
         string filtre;
-        string ordreChamp = "ASC";
+        string ordreChamp = "DESC";
 
         public UcOrganisateurs(Organisateur unOrganisateurConnecte)
         {

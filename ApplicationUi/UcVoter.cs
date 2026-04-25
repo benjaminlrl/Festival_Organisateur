@@ -41,7 +41,7 @@ namespace ApplicationUi
             _soumisVoteSelectionne = null;
 
             filtre = "";
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
 
             dateTimePickerDateDebutVote.Value = DateTime.Now;
             dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);

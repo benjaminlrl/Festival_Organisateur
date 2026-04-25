@@ -49,7 +49,7 @@ namespace ApplicationUi
             dataGridTournois.Visible = _posteJeuSelectionne != null;
             buttonEffacer.Text = " 🧽  Effacer";
 
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
             filtre = "";
 
             ChargerPlateformes();

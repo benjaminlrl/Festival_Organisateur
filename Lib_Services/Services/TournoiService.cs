@@ -58,8 +58,8 @@ namespace Lib_Services.Services
                 "DureePrevue" => ordre == "ASC" ? query.OrderBy(t => t.DureePrevue) : query.OrderByDescending(t => t.DureePrevue),
                 "DateHeure" => ordre == "ASC" ? query.OrderBy(t => t.DateHeure) : query.OrderByDescending(t => t.DateHeure),
                 "Statut" => ordre == "ASC" ? query.OrderBy(t => t.Statut) : query.OrderByDescending(t => t.Statut),
-                "Espace" => ordre == "ASC" ? query.OrderBy(t => t.Espace.Nom) : query.OrderByDescending(t => t.Espace.Nom),
-                "Jeu" => ordre == "ASC" ? query.OrderBy(t => t.Jeu.Titre) : query.OrderByDescending(t => t.Jeu.Titre),
+                "NomEspace" => ordre == "ASC" ? query.OrderBy(t => t.Espace.Nom) : query.OrderByDescending(t => t.Espace.Nom),
+                "TitreJeu" => ordre == "ASC" ? query.OrderBy(t => t.Jeu.Titre) : query.OrderByDescending(t => t.Jeu.Titre),
                 "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(t => t.NumeroTournoi) : query.OrderByDescending(t => t.NumeroTournoi),
                 _ => query.OrderByDescending(t => t.NumeroTournoi) // valeur par défaut
             };

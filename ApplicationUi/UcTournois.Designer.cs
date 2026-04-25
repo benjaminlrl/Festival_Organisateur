@@ -111,6 +111,8 @@ namespace ApplicationUi
             // 
             // dataGridTournois
             // 
+            dataGridTournois.AllowUserToAddRows = false;
+            dataGridTournois.AllowUserToDeleteRows = false;
             dataGridTournois.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridTournois.BackgroundColor = Color.White;
             dataGridTournois.BorderStyle = BorderStyle.None;

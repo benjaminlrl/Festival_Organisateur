@@ -42,7 +42,7 @@ namespace ApplicationUi
             dataGridTournois.Visible = _espaceSelectionnee != null;
             buttonEffacer.Text = "🧽  Effacer";
 
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
             filtre = "";
 
             ChargerEspaces();
