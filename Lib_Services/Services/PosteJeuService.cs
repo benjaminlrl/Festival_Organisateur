@@ -18,7 +18,6 @@ namespace Lib_Services.Services
     {
         // Contexte Entity Framework 
         private readonly ApplicationDbContext _context;
-        private readonly IPlateformeService _servicePlateforme;
         private readonly IEspaceService _serviceEspace;
 
         /// <summary>
@@ -29,7 +28,6 @@ namespace Lib_Services.Services
         {
             _context = context;
             _serviceEspace = new EspaceService(context);
-            _servicePlateforme = new PlateformeService(context);
         }
         #region Lecture
 
