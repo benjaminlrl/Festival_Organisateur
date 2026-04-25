@@ -45,17 +45,17 @@ namespace ApplicationUi
 
             Raz_Zones();
 
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
                 DesactiverInputs();
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Modifier") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
                 DesactiverInputs();
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Supprimer") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
                 DesactiverInputs();

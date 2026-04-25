@@ -64,21 +64,15 @@ namespace Lib_Services.Interfaces
         /// Consulter - Modifier - Supprimer - Ajouter
         /// </summary>
         /// <returns>true si il a l'autorisation, sinon false.</returns>
-        bool estAutoriser(Organisateur organisateur, Organisateur.LesUC unUC, string action);
+        bool EstAutoriser(Organisateur organisateur, Organisateur.LesUC unUC, string action);
 
         /// <summary>
-        /// Permet de voir si un mot de passe est conformes aux règles de sécurité suivantes 
+        /// Permet de voir si un organisateur est conformes aux règles de sécurité suivantes
         /// </summary>
-        /// <param name="motDePasse"></param>
+        /// <param name="organisateur">Instance de <see cref="Organisateur"/> à créer.</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification (true) ou d'une création (false).</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
-        List<string> MdpValide(string motDePasse);
-
-        /// <summary>
-        /// Permet de voir si un identifiant est conformes aux règles de sécurité suivantes
-        /// </summary>
-        /// <param name="identifiant"></param>
-        /// <returns>la liste des msgs d'erreurs.</returns>
-        List<string> IdentifiantValide(string identifiant);
+        void ValiderOrganisateur(Organisateur organisateur, bool estModification = false);
         #endregion
     }
 }

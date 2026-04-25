@@ -46,15 +46,15 @@ namespace ApplicationUi
             DemarrageLotComposantsDunlot();
             boutonModifier.Enabled = _lotSelectionnee != null;
             boutonSupprimerLot.Enabled = _lotSelectionnee != null;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Ajouter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Ajouter") == false)
             {
                 boutonAjouterLot.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Modifier") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Modifier") == false)
             {
                 boutonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Supprimer") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Supprimer") == false)
             {
                 boutonSupprimerLot.Visible = false;
             }
@@ -417,7 +417,7 @@ namespace ApplicationUi
             // On oublie pas de mettre "estAttribue" à true si un tournoi est sélectionné (= le NumeroTournoi pas null)
             if (unNouveauLot.NumeroTournoi != null)
             {
-                _lotSelectionnee.EstAttribue = true;
+                unNouveauLot.EstAttribue = true;
             }
 
             try
