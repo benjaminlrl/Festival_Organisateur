@@ -406,6 +406,8 @@ namespace ApplicationUi
                 MessageBox.Show("Le Lot selectionné contient déjà ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            MessageBox.Show($"Le lot composant a bien été ajouté au lot {_lotSelectionnee.Libelle}.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero.Value;
             _serviceLotComposant.Modifier(_lotComposantSelectionnee);
             _lotSelectionnee.ValeurTotale += _lotComposantSelectionnee.Valeur;
@@ -450,6 +452,7 @@ namespace ApplicationUi
             }
 
             // On crée le lot composant en bdd
+            MessageBox.Show("Le lot composant a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLot.Creer(unNouveauLot);
             ChargerLots();
             Raz_Zones();
@@ -477,6 +480,11 @@ namespace ApplicationUi
                 MessageBox.Show("Le Lot selectionné ne contient pas ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (MessageBox.Show($"Êtes vous sûr de vouloir supprimer {_lotComposantDunLotSelectionnee.Libelle} du lot {_lotSelectionnee.Libelle} ?"
+            , "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+            MessageBox.Show($"Le lot composant {_lotComposantDunLotSelectionnee.Libelle} du lot {_lotSelectionnee.Libelle} a bien été supprimé."
+                , "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _lotComposantDunLotSelectionnee.NumeroLot = null;
             _serviceLotComposant.Modifier(_lotComposantDunLotSelectionnee);
             _lotSelectionnee.ValeurTotale -= _lotComposantDunLotSelectionnee.Valeur;
@@ -499,6 +507,9 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+            MessageBox.Show("Le lot a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLot.Supprimer(_lotSelectionnee.Numero.Value);
             ChargerLots();
             Raz_Zones();
@@ -536,6 +547,7 @@ namespace ApplicationUi
                 if (_lotSelectionnee.EstAttribue != true) // On modifie uniquement si le champ est pas déjà à true
                     _lotSelectionnee.EstAttribue = true;
             }
+            MessageBox.Show("Le lot a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLot.Modifier(_lotSelectionnee);
             ChargerLots();
             Raz_Zones();

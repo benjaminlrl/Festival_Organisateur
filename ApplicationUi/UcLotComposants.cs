@@ -22,7 +22,7 @@ namespace ApplicationUi
         private LotComposant? _lotComposantSelectionne = null;
         private LotComposant? unNouveauLotComposant;
         private readonly Organisateur _organisateurConnecte;
-        private List<Lot> listeLots;
+        private List<Lot>? listeLots;
         int? nouveauNumeroLot;
         string filtre;
         string ordreChamp = "ASC";
@@ -258,6 +258,7 @@ namespace ApplicationUi
                 _serviceLot.Modifier(lotActuelle);
             }
 
+            MessageBox.Show("Le lot composant a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ChargerLotComposants();
             Raz_Zones();
         }
@@ -323,6 +324,7 @@ namespace ApplicationUi
                 }
             }
 
+            MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLotComposant.Modifier(_lotComposantSelectionne);
             ChargerLotComposants();
             Raz_Zones();
@@ -340,13 +342,16 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
             // On retire la valeur du lot composant si il a un lot associé
-            if(_lotComposantSelectionne.NumeroLot != null)
+            if (_lotComposantSelectionne.NumeroLot != null)
             {
                 lotActuelle = _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value);
                 lotActuelle.ValeurTotale -= _lotComposantSelectionne.Valeur;
                 _serviceLot.Modifier(lotActuelle);
             }
+            MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero.Value);
             ChargerLotComposants();
             Raz_Zones();
