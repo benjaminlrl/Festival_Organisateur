@@ -26,7 +26,6 @@ namespace ApplicationUi
         private LotComposant? _lotComposantDunLotSelectionnee = null;
         private Lot? _lotSelectionnee = null;
         private Lot? unNouveauLot;
-        private List<Tournoi> listeTournoi;
         private List<LotComposant> listeLotComposants;
         private List<LotComposant> listeLotComposantsDunLot;
         string filtre;
