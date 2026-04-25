@@ -30,7 +30,8 @@ namespace ApplicationUi
             btnLotComposants = new Button();
             btnVoter = new Button();
             btnParticiper = new Button();
-            btnRetour = new Button();
+            boutonDeconnexion = new Button();
+            boutonQuitter = new Button();
             panelHeader = new Panel();
             lblTitre = new Label();
             panelContent = new Panel();
@@ -51,7 +52,8 @@ namespace ApplicationUi
             panelMenu.Controls.Add(btnLotComposants);
             panelMenu.Controls.Add(btnVoter);
             panelMenu.Controls.Add(btnParticiper);
-            panelMenu.Controls.Add(btnRetour);
+            panelMenu.Controls.Add(boutonDeconnexion);
+            panelMenu.Controls.Add(boutonQuitter);
             panelMenu.Dock = DockStyle.Left;
             panelMenu.FlowDirection = FlowDirection.TopDown;
             panelMenu.Location = new Point(0, 0);
@@ -248,22 +250,39 @@ namespace ApplicationUi
             btnParticiper.UseVisualStyleBackColor = false;
             btnParticiper.Click += btnParticiper_Click;
             // 
-            // btnRetour
+            // boutonDeconnexion
             // 
-            btnRetour.BackColor = Color.FromArgb(60, 60, 60);
-            btnRetour.FlatAppearance.BorderSize = 0;
-            btnRetour.FlatStyle = FlatStyle.Flat;
-            btnRetour.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            btnRetour.ForeColor = Color.White;
-            btnRetour.Image = Properties.Resources.deconnecter;
-            btnRetour.ImageAlign = ContentAlignment.MiddleLeft;
-            btnRetour.Location = new Point(3, 673);
-            btnRetour.Name = "btnRetour";
-            btnRetour.Size = new Size(197, 49);
-            btnRetour.TabIndex = 10;
-            btnRetour.Text = " Retour";
-            btnRetour.UseVisualStyleBackColor = false;
-            btnRetour.Click += btnRetour_Click;
+            boutonDeconnexion.BackColor = Color.Gray;
+            boutonDeconnexion.FlatAppearance.BorderSize = 0;
+            boutonDeconnexion.FlatStyle = FlatStyle.Flat;
+            boutonDeconnexion.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            boutonDeconnexion.ForeColor = Color.White;
+            boutonDeconnexion.Image = Properties.Resources.deconnecter;
+            boutonDeconnexion.ImageAlign = ContentAlignment.MiddleLeft;
+            boutonDeconnexion.Location = new Point(3, 673);
+            boutonDeconnexion.Name = "boutonDeconnexion";
+            boutonDeconnexion.Size = new Size(197, 49);
+            boutonDeconnexion.TabIndex = 10;
+            boutonDeconnexion.Text = "     Déconnexion";
+            boutonDeconnexion.UseVisualStyleBackColor = false;
+            boutonDeconnexion.Click += boutonDeconnexion_Click;
+            // 
+            // boutonQuitter
+            // 
+            boutonQuitter.BackColor = Color.FromArgb(60, 60, 60);
+            boutonQuitter.FlatAppearance.BorderSize = 0;
+            boutonQuitter.FlatStyle = FlatStyle.Flat;
+            boutonQuitter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            boutonQuitter.ForeColor = Color.White;
+            boutonQuitter.Image = Properties.Resources.deconnecter;
+            boutonQuitter.ImageAlign = ContentAlignment.MiddleLeft;
+            boutonQuitter.Location = new Point(3, 728);
+            boutonQuitter.Name = "boutonQuitter";
+            boutonQuitter.Size = new Size(197, 49);
+            boutonQuitter.TabIndex = 11;
+            boutonQuitter.Text = " Quitter";
+            boutonQuitter.UseVisualStyleBackColor = false;
+            boutonQuitter.Click += boutonQuitter_Click;
             // 
             // panelHeader
             // 
@@ -323,7 +342,7 @@ namespace ApplicationUi
         private Button btnEspaces;
         private Button btnPostes;
         private Button btnPlateformes;
-        private Button btnRetour ;
+        private Button boutonDeconnexion ;
         private Panel panelHeader;
         private Label lblTitre;
 
@@ -334,5 +353,6 @@ namespace ApplicationUi
         private Button btnLots;
         private Button btnVoter;
         private Button btnParticiper;
+        private Button boutonQuitter;
     }
 }

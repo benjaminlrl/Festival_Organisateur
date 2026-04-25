@@ -88,13 +88,15 @@ namespace ApplicationUi
         // ===============================
         // Actions Associées au Menu
         // ===============================
-        private void btnRetour_Click(object? sender, EventArgs e)
+        private void boutonDeconnexion_Click(object? sender, EventArgs e)
         {
-            //Application.Exit();
             var formAuth = new FormAuthentification();
             formAuth.Show();
             this.Hide();
-
+        }
+        private void boutonQuitter_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
         private void btnTournois_Click(object sender, EventArgs e)
         {
