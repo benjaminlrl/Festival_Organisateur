@@ -377,6 +377,8 @@ namespace ApplicationUi
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
             dataGridTournois.Visible = _posteJeuSelectionne != null;
 
+            comboBoxEspace.Enabled = _posteJeuSelectionne != null;
+
             filtre = "";
 
             // Recharger les postes de jeu pour réinitialiser la sélection et les statistiques
@@ -473,12 +475,15 @@ namespace ApplicationUi
         /// </summary>
         private void AfficherBoutons()
         {
+
             buttonAjouter.Enabled = _posteJeuSelectionne == null;
+            comboBoxEspace.Enabled = _posteJeuSelectionne == null;
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             buttonEffacer.Enabled = _posteJeuSelectionne != null;
+
         }
 
         /// <summary>

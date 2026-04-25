@@ -115,8 +115,9 @@ namespace Lib_Services.Services
         /// <returns>L'entité <see cref="PosteJeu"/> si trouvée ; sinon null.</returns>
         public PosteJeu? Obtenir(int idPosteJeu)
         {
-            // Find retourne null si l'entité n'existe pas dans le contexte/la base.
-            return _context.PostesJeu.Find(idPosteJeu);
+            // AsNoTracking pour éviter le suivi de l'entité dans le contexte,
+            // permet de vérifier la valeur actuelle en base sans risque de conflits avec des entités déjà suivies.
+            return _context.PostesJeu.AsNoTracking().FirstOrDefault(p => p.NumeroPoste.Equals(idPosteJeu));
         }
         
         /// <summary>
@@ -211,11 +212,27 @@ namespace Lib_Services.Services
                 throw new PosteJeuException("La plateforme associée est obligatoire.",
                     (int)PosteJeuException.PosteJeuErreur.PlateformeRequise);
 
-            if (!estModification 
-                && ReferenceExiste(posteJeu.Reference) != null
+            if (estModification)
+            {
+                PosteJeu? enBdd = Obtenir(posteJeu.NumeroPoste);
+
+                if (enBdd != null
+                    && posteJeu.IdEspace == enBdd.IdEspace
+                    && posteJeu.IdPlateforme == enBdd.IdPlateforme
+                    && posteJeu.Fonctionnel == enBdd.Fonctionnel
+                    && posteJeu.Reference == enBdd.Reference)
+                    throw new PosteJeuException("Aucune modification détectée pour ce poste de jeu.",
+                        (int)PosteJeuException.PosteJeuErreur.AucuneModification);
+
+                if(ReferenceExiste(posteJeu.Reference) != null
                 && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
                 throw new PosteJeuException("Un poste de jeu avec cette référence existe déjà.",
                     (int)PosteJeuException.PosteJeuErreur.ReferenceExistante);
+
+                if (enBdd != null && posteJeu.IdEspace != enBdd.IdEspace)
+                    throw new PosteJeuException("Un poste de jeu ne peut pas avoir un espace différent.",
+                    (int)PosteJeuException.PosteJeuErreur.EspaceDifferent);
+            }
         }
         #endregion
         #region Statistiques
@@ -293,16 +310,10 @@ namespace Lib_Services.Services
         /// <returns>L'objet poste d ejeu</returns>
         public PosteJeu? ObtenirDernierPosteJeuDunEspace(int idEspace)
         {
-            int numeroPoste = _context.PostesJeu
-                .Where(p => p.IdEspace == idEspace)
-                .Select(p => (int?)p.NumeroPoste)
-                .Max() ?? 0;
-
             return _context.PostesJeu
-                .FirstOrDefault(p => p.IdEspace == idEspace
-                                  && p.NumeroPoste == numeroPoste);
-
-
+                .Where(p => p.IdEspace == idEspace)
+                .OrderByDescending(p => p.NumeroPoste)
+                .FirstOrDefault();
         }
         #endregion
 
