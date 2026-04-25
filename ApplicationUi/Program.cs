@@ -16,25 +16,30 @@ namespace ApplicationUi
         [STAThread]
         static void Main()
         {
-            // Initialise la base si elle n'existe pas
-            using var context = new ApplicationDbContext();
-
-
-            // Applique toutes les migrations en attente
-            context.Database.Migrate();
-
-            // Création des services
-            var tournoiService = new TournoiService(context);
-            var espaceService = new EspaceService(context);
-            var organisateurService = new OrganisateurService(context);
-            var roleService = new RoleService(context);
-            var lotComposantService = new LotComposantService(context);
-            var lotService = new LotService(context);
-            var jeuService = new JeuService(context);
-
-            if (!context.Lots.Any())
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            try
             {
-                context.Lots.AddRange(new List<Lot>
+                // Initialise la base si elle n'existe pas
+                using var context = new ApplicationDbContext();
+
+
+                // Applique toutes les migrations en attente
+                context.Database.Migrate();
+
+                // Création des services
+                var tournoiService = new TournoiService(context);
+                var espaceService = new EspaceService(context);
+                var organisateurService = new OrganisateurService(context);
+                var roleService = new RoleService(context);
+                var lotComposantService = new LotComposantService(context);
+                var lotService = new LotService(context);
+                var jeuService = new JeuService(context);
+
+                if (!context.Lots.Any())
+                {
+                    context.Lots.AddRange(new List<Lot>
                 {
                     new Lot { Libelle = "Lot de jeux vidéo", RangAttribution = 1},
                     new Lot { Libelle = "Lot de casque", RangAttribution = 2},
@@ -43,11 +48,11 @@ namespace ApplicationUi
                     new Lot { Libelle = "Lot de clavier", RangAttribution = 2},
                     new Lot { Libelle = "Lot de manettes", RangAttribution = 3}
                 });
-            }
+                }
 
-            if (!context.LotComposants.Any())
-            {
-                context.LotComposants.AddRange(new List<LotComposant>
+                if (!context.LotComposants.Any())
+                {
+                    context.LotComposants.AddRange(new List<LotComposant>
                 {
                     new LotComposant { Libelle = "PS4", Description = "Console de jeu de type Playstation", Valeur = 250 },
                     new LotComposant { Libelle = "PS5", Description = "Console de jeu de type Playstation", Valeur = 350 },
@@ -61,11 +66,11 @@ namespace ApplicationUi
                     new LotComposant { Libelle = "Casque Razer Kraken", Description = "Casque gamer de marque Razer", Valeur = 60 },
                     new LotComposant { Libelle = "Casque HyperX Cloud 2", Description = "Casque gamer de marque HyperX", Valeur = 54 },
                 });
-            }
+                }
 
-            if (!context.Espaces.Any())
-            {
-                context.Espaces.AddRange(new List<Espace>
+                if (!context.Espaces.Any())
+                {
+                    context.Espaces.AddRange(new List<Espace>
                 {
                     new Espace { Nom = "Nintendo", Description = "Espace dédié aux jeux de switch", Superficie = 30, CapaciteMaxi = 30 },
                     new Espace { Nom = "X Box", Description = "Espace dédié aux jeux sur support Xbox One et Xbox", Superficie = 50, CapaciteMaxi = 40 },
@@ -91,12 +96,12 @@ namespace ApplicationUi
                     new Espace { Nom = "Board Games", Description = "Jeux de société modernes", Superficie = 40, CapaciteMaxi = 30 },
                     new Espace { Nom = "Kids Zone", Description = "Espace enfants avec jeux adaptés", Superficie = 35, CapaciteMaxi = 20 }
                 });
-            }
+                }
 
 
-            if (!context.Plateformes.Any())
-            {
-                context.Plateformes.AddRange(new List<Plateforme>
+                if (!context.Plateformes.Any())
+                {
+                    context.Plateformes.AddRange(new List<Plateforme>
                 {
                     new Plateforme { Libelle = "Nintendo 3DS" },
                     new Plateforme { Libelle = "Nintendo Switch" },
@@ -118,18 +123,18 @@ namespace ApplicationUi
                     new Plateforme { Libelle = "Stadia" },
                     new Plateforme { Libelle = "Steam Deck" },
                 });
-                context.SaveChanges();
-            }
+                    context.SaveChanges();
+                }
 
-            if (!context.PostesJeu.Any())
-            {
-                var espaces = context.Espaces.ToList();
-                var plateformes = context.Plateformes.ToList();
+                if (!context.PostesJeu.Any())
+                {
+                    var espaces = context.Espaces.ToList();
+                    var plateformes = context.Plateformes.ToList();
 
-                Espace E(string nom) => espaces.First(e => e.Nom == nom);
-                Plateforme P(string lib) => plateformes.First(p => p.Libelle == lib);
+                    Espace E(string nom) => espaces.First(e => e.Nom == nom);
+                    Plateforme P(string lib) => plateformes.First(p => p.Libelle == lib);
 
-                context.PostesJeu.AddRange(new List<PosteJeu>
+                    context.PostesJeu.AddRange(new List<PosteJeu>
                 {
                     // Nintendo
                     new PosteJeu { Reference = "PJ-NIN-001", Fonctionnel = true,  IdEspace = E("Nintendo").IdEspace, IdPlateforme = P("Nintendo Switch").IdPlateforme },
@@ -210,72 +215,72 @@ namespace ApplicationUi
                     new PosteJeu { Reference = "PJ-PTY-003", Fonctionnel = true,  IdEspace = E("Party Games").IdEspace, IdPlateforme = P("PlayStation 5").IdPlateforme },
                 });
 
-                context.SaveChanges();
-            }
+                    context.SaveChanges();
+                }
 
-            // Créé les rôles si pas déjà fait
-            if (!context.Roles.Any())
-            {
-                roleService.Creer(new Role
+                // Créé les rôles si pas déjà fait
+                if (!context.Roles.Any())
                 {
-                    Libelle = "Administrateur"
-                });
-                roleService.Creer(new Role
-                {
-                    Libelle = "Gestionnaire du stock"
-                });
-                roleService.Creer(new Role
-                {
-                    Libelle = "Gestionnaire de l'espace"
-                });
-                roleService.Creer(new Role
-                {
-                    Libelle = "Gestionnaire des tournois"
-                });
-            }
+                    roleService.Creer(new Role
+                    {
+                        Libelle = "Administrateur"
+                    });
+                    roleService.Creer(new Role
+                    {
+                        Libelle = "Gestionnaire du stock"
+                    });
+                    roleService.Creer(new Role
+                    {
+                        Libelle = "Gestionnaire de l'espace"
+                    });
+                    roleService.Creer(new Role
+                    {
+                        Libelle = "Gestionnaire des tournois"
+                    });
+                }
 
-            // Créé un utilisateur admin si pas déjà fait
-            if (!context.Organisateurs.Any())
-            {
-                organisateurService.Creer(new Organisateur
+                // Créé un utilisateur admin si pas déjà fait
+                if (!context.Organisateurs.Any())
                 {
-                    Login = "admin",
-                    motPasse = "SIO2026+",
-                    Mail = "mailSio2026@gmail.com",
-                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
-                });
+                    organisateurService.Creer(new Organisateur
+                    {
+                        Login = "admin",
+                        motPasse = "SIO2026+",
+                        Mail = "mailSio2026@gmail.com",
+                        IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
+                    });
 
-                organisateurService.Creer(new Organisateur
+                    organisateurService.Creer(new Organisateur
+                    {
+                        Login = "admin_stock",
+                        motPasse = "SIO2026+",
+                        Mail = "mailSio2026@gmail.com",
+                        IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire du stock").IdRole
+                    });
+
+                    organisateurService.Creer(new Organisateur
+                    {
+                        Login = "admin_espace",
+                        motPasse = "SIO2026+",
+                        Mail = "mailSio2026@gmail.com",
+                        IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire de l'espace").IdRole
+                    });
+
+                    organisateurService.Creer(new Organisateur
+                    {
+                        Login = "admin_tournois",
+                        motPasse = "SIO2026+",
+                        Mail = "mailSio2026@gmail.com",
+                        IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire des tournois").IdRole
+                    });
+                }
+
+                if (!context.Jeux.Any())
                 {
-                    Login = "admin_stock",
-                    motPasse = "SIO2026+",
-                    Mail = "mailSio2026@gmail.com",
-                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire du stock").IdRole
-                });
+                    var plateformes = context.Plateformes.ToList();
+                    Plateforme P(string lib) => plateformes.First(p => p.Libelle == lib);
 
-                organisateurService.Creer(new Organisateur
-                {
-                    Login = "admin_espace",
-                    motPasse = "SIO2026+",
-                    Mail = "mailSio2026@gmail.com",
-                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire de l'espace").IdRole
-                });
-
-                organisateurService.Creer(new Organisateur
-                {
-                    Login = "admin_tournois",
-                    motPasse = "SIO2026+",
-                    Mail = "mailSio2026@gmail.com",
-                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire des tournois").IdRole
-                });
-            }
-
-            if (!context.Jeux.Any())
-            {
-                var plateformes = context.Plateformes.ToList();
-                Plateforme P(string lib) => plateformes.First(p => p.Libelle == lib);
-
-                var jeux = new List<Jeu>
+                    var jeux = new List<Jeu>
                 {
                     // Nintendo
                     new Jeu { Titre = "Mario Kart 8 Deluxe",       Description = "Terminer les courses en première position en utilisant des objets pour ralentir les adversaires ou se protéger",                          Editeur = "Nintendo",          AnneeSortie = "2017", Pegi = 3,  DateSortie = new DateTime(2017, 04, 28),
@@ -373,35 +378,35 @@ namespace ApplicationUi
                         Plateformes = new List<Plateforme> { P("PC (Windows)"), P("PlayStation 4"), P("PlayStation 5"), P("Xbox One"), P("Xbox Series X/S"), P("Nintendo Switch"), P("Nintendo Switch 2"), P("iOS"), P("Android") } },
                 };
 
-                context.Jeux.AddRange(jeux);
-                context.SaveChanges();
+                    context.Jeux.AddRange(jeux);
+                    context.SaveChanges();
 
-            }
+                }
 
-            if (!context.Tournois.Any())
-            {
-                // Récupération des IDs espaces et jeux créés
-                var espaceNintendo = context.Espaces.First(e => e.Nom == "Nintendo");
-                var espaceXbox = context.Espaces.First(e => e.Nom == "X Box");
-                var espacePS = context.Espaces.First(e => e.Nom == "PlayStation");
-                var espaceFPS = context.Espaces.First(e => e.Nom == "FPS Arena");
-                var espaceMOBA = context.Espaces.First(e => e.Nom == "MOBA Zone");
-                var espaceFighting = context.Espaces.First(e => e.Nom == "Fighting Games");
-                var espaceSports = context.Espaces.First(e => e.Nom == "Sports Games");
-                var espaceEsport = context.Espaces.First(e => e.Nom == "Esport Arena");
+                if (!context.Tournois.Any())
+                {
+                    // Récupération des IDs espaces et jeux créés
+                    var espaceNintendo = context.Espaces.First(e => e.Nom == "Nintendo");
+                    var espaceXbox = context.Espaces.First(e => e.Nom == "X Box");
+                    var espacePS = context.Espaces.First(e => e.Nom == "PlayStation");
+                    var espaceFPS = context.Espaces.First(e => e.Nom == "FPS Arena");
+                    var espaceMOBA = context.Espaces.First(e => e.Nom == "MOBA Zone");
+                    var espaceFighting = context.Espaces.First(e => e.Nom == "Fighting Games");
+                    var espaceSports = context.Espaces.First(e => e.Nom == "Sports Games");
+                    var espaceEsport = context.Espaces.First(e => e.Nom == "Esport Arena");
 
-                var jeuMK = context.Jeux.First(j => j.Titre == "Mario Kart 8 Deluxe");
-                var jeuFortnite = context.Jeux.First(j => j.Titre == "Fortnite");
-                var jeuHalo = context.Jeux.First(j => j.Titre == "Halo Infinite");
-                var jeuValorant = context.Jeux.First(j => j.Titre == "Valorant");
-                var jeuLoL = context.Jeux.First(j => j.Titre == "League of Legends");
-                var jeuCS2 = context.Jeux.First(j => j.Titre == "Counter-Strike 2");
-                var jeuFC25 = context.Jeux.First(j => j.Titre == "EA Sports FC 25");
-                var jeuElden = context.Jeux.First(j => j.Titre == "Elden Ring");
-                var jeuSmash = context.Jeux.First(j => j.Titre == "Super Smash Bros. Ultimate");
-                var jeuMinecraft = context.Jeux.First(j => j.Titre == "Minecraft");
+                    var jeuMK = context.Jeux.First(j => j.Titre == "Mario Kart 8 Deluxe");
+                    var jeuFortnite = context.Jeux.First(j => j.Titre == "Fortnite");
+                    var jeuHalo = context.Jeux.First(j => j.Titre == "Halo Infinite");
+                    var jeuValorant = context.Jeux.First(j => j.Titre == "Valorant");
+                    var jeuLoL = context.Jeux.First(j => j.Titre == "League of Legends");
+                    var jeuCS2 = context.Jeux.First(j => j.Titre == "Counter-Strike 2");
+                    var jeuFC25 = context.Jeux.First(j => j.Titre == "EA Sports FC 25");
+                    var jeuElden = context.Jeux.First(j => j.Titre == "Elden Ring");
+                    var jeuSmash = context.Jeux.First(j => j.Titre == "Super Smash Bros. Ultimate");
+                    var jeuMinecraft = context.Jeux.First(j => j.Titre == "Minecraft");
 
-                context.Tournois.AddRange(new List<Tournoi>
+                    context.Tournois.AddRange(new List<Tournoi>
                 {
                     // Samedi 10h-20h — espaces différents, pas de chevauchement
                     new Tournoi { Nom = "Tournoi Mario Kart",         DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 16, DureePrevue = 20, Statut = "Terminé",  IdEspace = espaceNintendo.IdEspace, IdJeu = jeuMK.IdJeu },
@@ -418,15 +423,22 @@ namespace ApplicationUi
                     new Tournoi { Nom = "Tournoi Minecraft Build",   DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 12, DureePrevue = 50,  Statut = "Planifié", IdEspace = espaceXbox.IdEspace,    IdJeu = jeuMinecraft.IdJeu },
                 });
 
-                context.SaveChanges();
+                    context.SaveChanges();
+                }
+                // lancement du formulaire principal
+                ApplicationConfiguration.Initialize();
+                Application.Run(new FormAuthentification());
+
             }
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            // lancement du formulaire principal
-            ApplicationConfiguration.Initialize();
-            Application.Run(new FormAuthentification());
-            Log.CloseAndFlush();
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Crash au démarrage");
+                MessageBox.Show($"Erreur au démarrage : {ex.Message}");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
     }
 }
