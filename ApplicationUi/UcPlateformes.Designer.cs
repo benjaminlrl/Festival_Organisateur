@@ -184,7 +184,7 @@
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += buttonAjouter_Click;
+            buttonAjouter.Click += ButtonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -201,7 +201,7 @@
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += buttonModifier_Click;
+            buttonEffacer.Click += ButtonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -218,7 +218,7 @@
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonAjouter_Click;
+            buttonModifier.Click += ButtonAjouter_Click;
             // 
             // buttonSupprimer
             // 
@@ -235,7 +235,7 @@
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += buttonSupprimer_Click;
+            buttonSupprimer.Click += ButtonSupprimer_Click;
             // 
             // label1
             // 
@@ -264,7 +264,7 @@
             dataGridPlateformes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridPlateformes.Size = new Size(904, 329);
             dataGridPlateformes.TabIndex = 6;
-            dataGridPlateformes.CellClick += dataGridPlateformes_CellClick;
+            dataGridPlateformes.CellClick += DataGridPlateformes_CellClick;
             // 
             // tableLayoutPanel1
             // 
@@ -317,7 +317,7 @@
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(730, 31);
             textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // tableLayoutPanel3
             // 
@@ -391,14 +391,8 @@
 
         private Panel panelForm;
         private TableLayoutPanel tableLayoutPanel;
-        private Label labelDescription;
-        private Label labelSuperficie;
-        private NumericUpDown numericUpDownCapaciteMaxi;
         private TextBox textBoxNom;
         private Label labelNom;
-        private Label labelCapaciteMaxi;
-        private NumericUpDown numericUpDownSuperficie;
-        private TextBox textBoxDescription;
         private Panel panelButtons;
         private GroupBox groupBox1;
         private Button buttonAjouter;

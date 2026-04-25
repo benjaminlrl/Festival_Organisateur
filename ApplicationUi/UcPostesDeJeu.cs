@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
+using System.Windows.Forms.VisualStyles;
 
 namespace ApplicationUi
 {
@@ -43,7 +42,7 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             _posteJeuSelectionne = null;
 
-            AfficherBouttons();
+            AfficherBoutons();
 
             fonctionnelSelectionne = false;
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
@@ -60,17 +59,17 @@ namespace ApplicationUi
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
         }
@@ -184,12 +183,18 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Évenements
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
-            Espace espaceSelectionne = (Espace)comboBoxEspace.SelectedItem;
-            Plateforme plateformeSelectionne = (Plateforme)comboBoxPlateforme.SelectedItem;
+            // Validation de la sélection de l'espace et de la plateforme avant de créer le poste de jeu
+            if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne 
+                || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
+            {
+                MessageBox.Show("Veuillez sélectionner une plateforme et un espace.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             PosteJeu posteJeu = new ()
             {
@@ -216,8 +221,8 @@ namespace ApplicationUi
                     return;
 
             _posteJeuSelectionne.Fonctionnel = fonctionnelSelectionne; // true ou false selon le choix de l'utilisateur
-            _posteJeuSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
-            _posteJeuSelectionne.IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme;
+            _posteJeuSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
+            _posteJeuSelectionne.IdPlateforme = (comboBoxPlateforme.SelectedItem as Plateforme).IdPlateforme;
 
             if (ValiderPosteJeu(_posteJeuSelectionne))
             {
@@ -309,6 +314,7 @@ namespace ApplicationUi
             ChargerPostesDeJeu();
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Retourne un booléen indiquant si les informations du poste de jeu sont valides ou non,
@@ -327,13 +333,14 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Méthodes
 
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxReference.Enabled = false;
             comboBoxEspace.Enabled = false;
@@ -369,7 +376,7 @@ namespace ApplicationUi
             ChargerPlateformes();
             ChargerEspaces();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         private void RemplirFormulaire(PosteJeu posteJeu)
@@ -401,7 +408,7 @@ namespace ApplicationUi
             }
 
             StatutTounois();
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -456,7 +463,7 @@ namespace ApplicationUi
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _posteJeuSelectionne == null;
 

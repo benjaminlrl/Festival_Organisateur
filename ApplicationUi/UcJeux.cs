@@ -2,7 +2,14 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace ApplicationUi
 {
@@ -30,7 +37,7 @@ namespace ApplicationUi
             ordreChamp = "ASC";
             buttonEffacer.Text = " 🧽  Effacer";
 
-            AfficherBouttons();
+            AfficherBoutons();
 
             ChargerJeux();
             ChargerPlateformes();
@@ -39,17 +46,17 @@ namespace ApplicationUi
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
         }
@@ -88,6 +95,7 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Evènements
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
@@ -97,7 +105,7 @@ namespace ApplicationUi
                 Titre = textBoxTitre.Text,
                 Description = textBoxDescription.Text,
                 Editeur = textBoxEditeur.Text,
-                Pegi = (int)comboBoxPegi.SelectedValue,
+                Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0,
                 Plateformes = checkedListBoxPlateforme.CheckedItems
                                   .Cast<Plateforme>()
                                   .ToList(),
@@ -122,7 +130,7 @@ namespace ApplicationUi
             _jeuSelectionne.Titre = textBoxTitre.Text;
             _jeuSelectionne.Description = textBoxDescription.Text; ;
             _jeuSelectionne.Editeur = textBoxEditeur.Text;
-            _jeuSelectionne.Pegi = (int)comboBoxPegi.SelectedValue;
+            _jeuSelectionne.Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0;
             _jeuSelectionne.Plateformes = checkedListBoxPlateforme.CheckedItems
                           .Cast<Plateforme>()
                           .ToList();
@@ -193,7 +201,7 @@ namespace ApplicationUi
             if (_jeuSelectionne != null)
                 RemplirFormulaire();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -208,6 +216,7 @@ namespace ApplicationUi
             ChargerJeux();
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Retourne un booléen indiquant si les informations du jeu sont valides ou non,
@@ -226,12 +235,13 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Méthodes
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxTitre.Enabled = false;
             textBoxDescription.Enabled = false;
@@ -265,7 +275,7 @@ namespace ApplicationUi
             ChargerPlateformes();
             ChargerPegi();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -297,13 +307,13 @@ namespace ApplicationUi
 
             dateTimePickerDateSortie.Value = _jeuSelectionne.DateSortie;
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _jeuSelectionne == null;
 

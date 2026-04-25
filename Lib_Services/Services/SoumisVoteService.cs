@@ -34,10 +34,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="SoumisVote"/>.</returns>
-        public List<SoumisVote> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<SoumisVote> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<SoumisVote> query = _context.SoumisVotes
                 .Include(sv => sv.Plateforme)
@@ -49,7 +49,7 @@ namespace Lib_Services.Services
                         || sv.DateDebutVote.ToString().Contains(filtre)
                         || sv.DateFinVote.ToString().Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Libelle" => ordre == "ASC" ? query.OrderBy(sv => sv.Plateforme.Libelle) : query.OrderByDescending(sv => sv.Plateforme.Libelle),
@@ -74,17 +74,19 @@ namespace Lib_Services.Services
         /// 
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <param name="dateDebut">Optionnel, date de début de la période de vote</param>
         /// <param name="dateFin">Optionnel, date de fin de la période de vote</param>
         /// <returns>Liste d'objets <see cref="Voter"/>.</returns>
-        public List<Voter> ListerClassmentJeuxVotes(string filtre = "", string property = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null)
+        public List<Voter> ListerClassmentJeuxVotes(string filtre = "", string propriete = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null)
         {
             // IEnumerable si on utilise AsEnumerable() pour que le GroupBy soit traité en mémoire
             IEnumerable<Voter> query = _context.Voter
                 .Include(v => v.Jeu)
                 .Include(v => v.Plateforme)
+                .Where(v => !dateDebut.HasValue || v.DateVote >= dateDebut.Value)
+                .Where(v => !dateFin.HasValue || v.DateVote <= dateFin.Value)
                 .AsEnumerable() // Charge tout en mémoire pour que Include fonctionne avec GroupBy
                 .GroupBy(v => new { v.IdJeu, v.IdPlateforme }) // Groupe par binôme (jeu, plateforme)
                 .Select(g => new Voter
@@ -99,18 +101,13 @@ namespace Lib_Services.Services
             if (!string.IsNullOrWhiteSpace(filtre))
                 query = query.Where(v => v.Plateforme.Libelle.Contains(filtre)
                         || v.Jeu.Titre.Contains(filtre));
-            
-            if (dateDebut.HasValue && !dateFin.HasValue)
-                query = query.Where(v => (v.DateVote >= dateDebut.Value));
 
-            if (dateDebut.HasValue && dateFin.HasValue)
-                query = query.Where(v => (v.DateVote >= dateDebut.Value && v.DateVote <= dateFin.Value));
-
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "LibellePlateforme" => ordre == "ASC" ? query.OrderBy(v => v.Plateforme.Libelle) : query.OrderByDescending(v => v.Plateforme.Libelle),
                 "TitreJeu" => ordre == "ASC" ? query.OrderBy(v => v.Jeu.Titre) : query.OrderByDescending(v => v.Jeu.Titre),
+                "NbVotes" => ordre == "ASC" ? query.OrderBy(v => v.NbVotes) : query.OrderByDescending(v => v.NbVotes),
                 _ => query.OrderBy(v => v.Jeu.Titre) // valeur par défaut
             };
 
@@ -234,7 +231,7 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="soumisVote">Le SoumisVote à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false)
+        public List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification)
         {
             // liste des erreurs
             var erreurs = new List<string>();

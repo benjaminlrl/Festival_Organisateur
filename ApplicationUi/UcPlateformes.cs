@@ -9,57 +9,64 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Forms.VisualStyles;
 
 namespace ApplicationUi
 {
     public partial class UcPlateformes : UserControl
     {
+        private readonly ApplicationDbContext _context;
         private readonly IPlateformeService _servicePlateforme;
         private readonly IOrganisateurService _serviceOrganisateur;
-        private readonly IEspaceService _serviceEspace;
-        private Plateforme? _plateformeSelectionee = null;
+        private Plateforme? _plateformeSelectionee;
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
+
         public UcPlateformes(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            var context = new ApplicationDbContext();
-            _serviceOrganisateur = new OrganisateurService(context);
-            _servicePlateforme = new PlateformeService(context);
-            _serviceEspace = new EspaceService(context);
-            buttonModifier.Enabled = _plateformeSelectionee != null;
-            buttonSupprimer.Enabled = _plateformeSelectionee != null;
-            labelJeux.Visible = false;
+            _context = new ApplicationDbContext();
+            _serviceOrganisateur = new OrganisateurService(_context);
+            _servicePlateforme = new PlateformeService(_context);
+
+            _organisateurConnecte = unOrganisateurConnecte;
+            _plateformeSelectionee = null;
+
             dataGridJeux.Visible = false;
-            labelPostesJeu.Visible = false;
             dataGridPostesJeu.Visible = false;
+
             filtre = "";
             buttonEffacer.Text = " 🧽  Effacer";
             ordreChamp = "ASC";
-            _organisateurConnecte = unOrganisateurConnecte;
+
             ChargerPlateformes();
+
+            AfficherBoutons();
+
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
+                DesactiverInputs();
             }
         }
 
-        #region Evènements
+        #region Données
         private void ChargerPlateformes()
         {
             dataGridPlateformes.DataSource = null;
             dataGridPlateformes.DataSource = _servicePlateforme.Lister(filtre);
-            MEP_DataGrid();
+            MEP_DataGridPlateformes();
         }
 
         private void ChargerPostesJeu()
@@ -80,22 +87,7 @@ namespace ApplicationUi
             MEP_DataGridJeux();
         }
 
-        /// <summary>
-        /// Resets all tournament-related input fields and controls to their default values.
-        /// </summary>
-        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
-        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
-        /// controls are reset to indicate a planned tournament.</remarks>
-        private void Raz_Zones()
-        {
-            labelJeux.Visible = false;
-            dataGridJeux.Visible = false;
-            labelPostesJeu.Visible = false;
-            dataGridPostesJeu.Visible = false;
-            textBoxNom.Clear();
-        }
-        private void MEP_DataGrid()
-        // TODO: Modifier les données de la grille pour afficher les informations du poste de jeu 
+        private void MEP_DataGridPlateformes()
         {
             dataGridPlateformes.Columns["idPlateforme"].Visible = false;
             dataGridPlateformes.Columns["PostesJeu"].Visible = false;
@@ -107,12 +99,14 @@ namespace ApplicationUi
             dataGridJeux.Columns["Editeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
             dataGridJeux.Columns["Pegi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
             dataGridJeux.Columns["AnneeSortie"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
             dataGridJeux.Columns["IdJeu"].Visible = false;
             dataGridJeux.Columns["DateSortie"].Visible = false;
             dataGridJeux.Columns["Description"].Visible = false;
             dataGridJeux.Columns["Tournois"].Visible = false;
             dataGridJeux.Columns["Plateformes"].Visible = false;
         }
+
         private void MEP_DataGridPostesJeu()
         {
             dataGridPostesJeu.Columns["Espace"].Visible = false;
@@ -122,57 +116,96 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
             dataGridPostesJeu.Columns["NomEspace"].Visible = false;
             dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
+
             dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
+        #endregion
 
-        private void dataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
+        #region Évenements
+
+        #region Boutons
+        public void ButtonAjouter_Click(object sender, EventArgs e)
+        {
+            Plateforme plateforme = new()
+            {
+                Libelle = textBoxNom.Text
+            };
+
+            if (ValiderPlateforme(plateforme, false))
+            {
+                _servicePlateforme.Creer(plateforme);
+                MessageBox.Show("La plateforme a bien été ajoutée.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+        }
+        private void ButtonModifier_Click(object sender, EventArgs e)
+        {
+            if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
+            {
+                MessageBox.Show("Aucune plateforme sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            _plateformeSelectionee.Libelle = textBoxNom.Text;
+
+            if (ValiderPlateforme(_plateformeSelectionee, true))
+            {
+                _servicePlateforme.Modifier(_plateformeSelectionee);
+                MessageBox.Show("La plateforme a bien été modifiée.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+
+        }
+        private void ButtonEffacer_Click(object sender, EventArgs e)
+        {
+            Raz_Zones();
+        }
+
+        private void ButtonSupprimer_Click(object sender, EventArgs e)
+        {
+            if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
+            {
+                MessageBox.Show("Aucune plateforme sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            _servicePlateforme.Supprimer(_plateformeSelectionee.IdPlateforme);
+            Raz_Zones();
+
+        }
+        #endregion
+
+        private void DataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
             {
-                var donnees = _servicePlateforme.Lister(filtre);
-
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                var map = new Dictionary<int, Func<Plateforme, object>>
+                Dictionary<int, string> map = new ()
                 {
-                    {dataGridPlateformes.Columns["Libelle"].Index, p => p.Libelle},
+                    {dataGridPlateformes.Columns["Libelle"].Index, "Libelle"},
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridPlateformes.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
-
+                // permuter l'ordre de tri entre ASC et DESC
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
-                MEP_DataGrid();
+                dataGridPlateformes.DataSource = _servicePlateforme.Lister(filtre, colonne, ordreChamp);
+                dataGridPlateformes.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
+                MEP_DataGridPlateformes();
                 return;
             }
 
             _plateformeSelectionee = dataGridPlateformes.Rows[e.RowIndex].DataBoundItem as Plateforme;
 
             if (_plateformeSelectionee != null)
-                RemplirFormulaire(_plateformeSelectionee);
+                RemplirFormulaire();
 
-            buttonModifier.Enabled = _plateformeSelectionee != null;
-            buttonSupprimer.Enabled = _plateformeSelectionee != null;
-        }
-
-        private void RemplirFormulaire(Plateforme plateforme)
-        {
-            textBoxNom.Text = plateforme.Libelle;
-            ChargerPostesJeu();
-            ChargerJeux();
-        }
-        #endregion
-
-        #region Validations
-        private bool ValiderPLateforme()
-        {
-            return true;
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -181,85 +214,95 @@ namespace ApplicationUi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerPlateformes();
         }
-
         #endregion
 
-        #region Boutons
-        public void buttonAjouter_Click(object sender, EventArgs e)
+        #region Validations
+        /// <summary>
+        /// Retourne un booléen indiquant si les informations de la plateforme sont valides ou non,
+        /// en fonction des règles métier définies dans le service Plateforme.
+        /// </summary>
+        /// <param name="plateforme">L'objet Plateforme à valider.</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
+        /// <returns>Vraie si la plateforme est valide, sinon faux.</returns>
+        private bool ValiderPlateforme(Plateforme plateforme, bool estModification)
         {
-            List<string> erreurs = new List<string>();
-            var plateforme = new Plateforme
-            {
-                Libelle = textBoxNom.Text
-            };
-
-            erreurs = _servicePlateforme.ValiderPlateforme(plateforme);
-
-            if (erreurs.Count == 0)
-            {
-                _servicePlateforme.Creer(plateforme);
-                ChargerPlateformes();
-                Raz_Zones();
-            }
-            else
+            List<string> erreurs = _servicePlateforme.ValiderPlateforme(plateforme, estModification);
+            if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
-
+            return true;
         }
-        private void buttonModifier_Click(object sender, EventArgs e)
-        {
-            List<string> erreurs = new List<string>();
-            if (dataGridPlateformes.CurrentRow == null)
-                return;
+        #endregion
 
+        #region Méthodes
+
+        /// <summary>
+        /// Remplit les champs du formulaire avec les données de la plateforme sélectionnée
+        /// </summary>
+        private void RemplirFormulaire()
+        {
             if (_plateformeSelectionee == null)
                 return;
-            var plateforme = (Plateforme)dataGridPlateformes.CurrentRow.DataBoundItem;
 
-            _plateformeSelectionee.Libelle = textBoxNom.Text;
-            erreurs = _servicePlateforme.ValiderPlateforme(_plateformeSelectionee);
-            if (erreurs.Count == 0)
-            {
-                _servicePlateforme.Modifier(_plateformeSelectionee);
-                ChargerPlateformes();
-                Raz_Zones();
-            }
-            else
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            textBoxNom.Text = _plateformeSelectionee.Libelle;
 
+            ChargerPostesJeu();
+            ChargerJeux();
+
+            AfficherBoutons();
         }
-        private void buttonEffacer_Click(object sender, EventArgs e)
-        {
-            Raz_Zones();
-        }
-        private void buttonSupprimer_Click(object sender, EventArgs e)
-        {
-            if (dataGridPlateformes.CurrentRow == null)
-                return;
 
-            if (_plateformeSelectionee == null)
-                return;
-            var posteJeu = (PosteJeu)dataGridPlateformes.CurrentRow.DataBoundItem;
+        /// <summary>
+        /// Remet a zéro toutes les zones du formulaire, 
+        /// réinitialise les variables de sélection et de filtre, 
+        /// recharge la liste des plateformes 
+        /// et met à jour l'affichage des boutons en conséquence.
+        /// </summary>
+        private void Raz_Zones()
+        {
+            textBoxNom.Clear();
 
-            _servicePlateforme.Supprimer(_plateformeSelectionee.IdPlateforme);
             _plateformeSelectionee = null;
-            ChargerPlateformes();
-            Raz_Zones();
 
+            dataGridJeux.DataSource = null;
+            dataGridPostesJeu.DataSource = null;
+            dataGridJeux.Visible = false;
+            dataGridPostesJeu.Visible = false;
+
+            filtre = "";
+
+            ChargerPlateformes();
+
+            AfficherBoutons();
+        }
+        /// <summary>
+        /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'une plateforme.
+        /// </summary>
+        private void AfficherBoutons()
+        {
+            buttonAjouter.Enabled = _plateformeSelectionee == null;
+
+            // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
+            buttonModifier.Enabled = _plateformeSelectionee != null;
+            buttonSupprimer.Enabled = _plateformeSelectionee != null;
+            buttonEffacer.Enabled = _plateformeSelectionee != null;
+        }
+
+        /// <summary>
+        /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
+        /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
+        /// </summary>
+        private void DesactiverInputs()
+        {
+            textBoxNom.Enabled = false;
         }
         #endregion
-
-        private void dataGridPlateformes_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
     }
 }

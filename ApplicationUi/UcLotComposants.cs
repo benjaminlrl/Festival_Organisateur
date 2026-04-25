@@ -2,7 +2,6 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Forms.VisualStyles;
 
 namespace ApplicationUi
 {
@@ -191,7 +190,7 @@ namespace ApplicationUi
         public bool LotComposantValide(LotComposant lotComposant)
         {
             var erreurs = _serviceLotComposant.ValiderLotComposant(lotComposant);
-            if (erreurs.Any())
+            if (erreurs.Count > 0)
             {
                 MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;

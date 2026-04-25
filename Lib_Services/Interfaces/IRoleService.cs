@@ -26,10 +26,10 @@ namespace Lib_Services.Interfaces
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Role"/>.</returns>
-        List<Role> Lister(string filtre = "", string property = "", string ordre = "");
+        List<Role> Lister(string filtre = "", string propriete = "", string ordre = "");
         #endregion
         #region CUD
         /// <summary>
