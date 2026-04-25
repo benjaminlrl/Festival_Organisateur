@@ -147,7 +147,7 @@ namespace Lib_Services.Services
                 throw new PlateformeException("Le libellé est requis.",
                     (int)PlateformeException.PlateformeErreur.LibelleRequis);
 
-            if (estModification && plateforme.IdPlateforme <= 0)
+            if (estModification && plateforme.IdPlateforme < 0)
                 throw new PlateformeException("L'identifiant de la plateforme est invalide.",
                     (int)PlateformeException.PlateformeErreur.IdInvalide);
 

@@ -352,6 +352,8 @@ namespace ApplicationUi
             trackBarEvaluation.Value = trackBarEvaluation.Minimum;
 
             ChargerParticipations();
+            ChargerTournois();
+            ChargerUtilisateurs();
 
             AfficherBoutons();
         }

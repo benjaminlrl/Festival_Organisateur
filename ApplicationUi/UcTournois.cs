@@ -24,6 +24,7 @@ namespace ApplicationUi
         private readonly ITournoiService _serviceTournoi;
         private readonly IEspaceService _serviceEspace;
         private readonly IOrganisateurService _serviceOrganisateur;
+        private readonly IParticiperService _serviceParticiper;
         private readonly IJeuService _serviceJeu;
         private string statutSelectionne;
         private Tournoi? _tournoiSelectionne = null;
@@ -38,6 +39,7 @@ namespace ApplicationUi
             _serviceTournoi = new TournoiService(_context);
             _serviceEspace = new EspaceService(_context);
             _serviceJeu = new JeuService(_context);
+            _serviceParticiper = new ParticiperService(_context);
 
             _organisateurConnecte = unOrganisateurConnecte;
             _tournoiSelectionne = null;
@@ -327,6 +329,7 @@ namespace ApplicationUi
             radioButtonEnCours.Checked = false;
             radioButtonPlanifié.Checked = false;
             radioButtonTermine.Checked = false;
+            labelParticipantsInscrits.Visible = false;
 
             ChargerTournois();
             ChargerEspaces();
@@ -366,6 +369,10 @@ namespace ApplicationUi
             radioButtonPlanifié.Checked = _tournoiSelectionne.Statut == "Planifié";
             radioButtonEnCours.Checked = _tournoiSelectionne.Statut == "En cours";
             radioButtonTermine.Checked = _tournoiSelectionne.Statut == "Terminé";
+
+            labelParticipantsInscrits.Visible = true;
+            int nbParticipantsInscrits = _serviceParticiper.ObtenirNombreParticipantsParTournoi(_tournoiSelectionne.NumeroTournoi);
+            labelParticipantsInscrits.Text = $"Participants inscrits : {nbParticipantsInscrits} / {_tournoiSelectionne.NbParticipants}";
 
             AfficherBoutons();
         }
