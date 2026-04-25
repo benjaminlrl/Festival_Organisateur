@@ -49,6 +49,7 @@ namespace ApplicationUi
             buttonModifier = new Button();
             buttonSupprimer = new Button();
             label1 = new Label();
+            labelParticipantsInscrits = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridTournois).BeginInit();
@@ -473,6 +474,20 @@ namespace ApplicationUi
             label1.Name = "label1";
             label1.Size = new Size(0, 26);
             label1.TabIndex = 6;
+            // 
+            // labelParticipantsInscrits
+            // 
+            labelParticipantsInscrits.AutoSize = true;
+            labelParticipantsInscrits.BackColor = Color.DarkBlue;
+            labelParticipantsInscrits.Dock = DockStyle.Fill;
+            labelParticipantsInscrits.Font = new Font("Trebuchet MS", 10F, FontStyle.Bold);
+            labelParticipantsInscrits.ForeColor = Color.White;
+            labelParticipantsInscrits.Location = new Point(978, 105);
+            labelParticipantsInscrits.Name = "labelParticipantsInscrits";
+            labelParticipantsInscrits.Size = new Size(412, 41);
+            labelParticipantsInscrits.TabIndex = 19;
+            labelParticipantsInscrits.Text = "Participants inscrits : 0/10";
+            labelParticipantsInscrits.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // UcTournois
             // 
