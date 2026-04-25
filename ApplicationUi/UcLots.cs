@@ -45,19 +45,19 @@ namespace ApplicationUi
             ChargerTournoi();
             DemarrageLotComposants();
             DemarrageLotComposantsDunlot();
-            buttonModifier.Enabled = _lotSelectionnee != null;
-            buttonSupprimerLot.Enabled = _lotSelectionnee != null;
+            boutonModifier.Enabled = _lotSelectionnee != null;
+            boutonSupprimerLot.Enabled = _lotSelectionnee != null;
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Ajouter") == false)
             {
-                buttonAjouterLot.Visible = false;
+                boutonAjouterLot.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Modifier") == false)
             {
-                buttonModifier.Visible = false;
+                boutonModifier.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Supprimer") == false)
             {
-                buttonSupprimerLot.Visible = false;
+                boutonSupprimerLot.Visible = false;
             }
         }
 
@@ -284,8 +284,8 @@ namespace ApplicationUi
             textBoxRang.Clear();
             comboBoxTournoi.SelectedItem = null;
             _lotSelectionnee = null;
-            buttonModifier.Enabled = _lotSelectionnee != null;
-            buttonSupprimerLot.Enabled = _lotSelectionnee != null;
+            boutonModifier.Enabled = _lotSelectionnee != null;
+            boutonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace ApplicationUi
         /// et rafraîchit les DataGrids.
         /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant n'est pas déjà associé.
         /// </summary>
-        private void ButtonAjouterLotComposant_Click(object sender, EventArgs e)
+        private void BoutonAjouterLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
             {
@@ -414,7 +414,7 @@ namespace ApplicationUi
         /// Vérifie que les champs sont valides et que les règles métier sont respectées.
         /// Met à jour EstAttribue si un tournoi est sélectionné.
         /// </summary>
-        private void ButtonAjouterLot_Click(object sender, EventArgs e)
+        private void BoutonAjouterLot_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -454,7 +454,7 @@ namespace ApplicationUi
         /// et rafraîchit les DataGrids.
         /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant appartient bien au lot.
         /// </summary>
-        private void ButtonSupprimerLotComposant_Click(object sender, EventArgs e)
+        private void BoutonSupprimerLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
             {
@@ -489,7 +489,7 @@ namespace ApplicationUi
         /// <summary>
         /// Supprime le lot sélectionné après vérification qu'un lot est bien sélectionné.
         /// </summary>
-        private void ButtonSupprimerLot_Click(object sender, EventArgs e)
+        private void BoutonSupprimerLot_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
             // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
@@ -511,7 +511,7 @@ namespace ApplicationUi
         /// Met à jour uniquement les champs modifiés et gère le tournoi nullable.
         /// Met à jour EstAttribue si un tournoi est associé.
         /// </summary>
-        private void ButtonModifier_Click(object sender, EventArgs e)
+        private void BoutonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotSelectionnee == null)
@@ -547,7 +547,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void ButtonEffacer_Click(object sender, EventArgs e)
+        private void BoutonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -600,8 +600,8 @@ namespace ApplicationUi
                 ChargerLotComposants();
             }
 
-            buttonModifier.Enabled = _lotSelectionnee != null;
-            buttonSupprimerLot.Enabled = _lotSelectionnee != null;
+            boutonModifier.Enabled = _lotSelectionnee != null;
+            boutonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
 
         /// <summary>
@@ -710,5 +710,6 @@ namespace ApplicationUi
             }
         }
         #endregion
+
     }
 }

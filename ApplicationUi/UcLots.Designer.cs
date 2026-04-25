@@ -27,10 +27,10 @@ namespace ApplicationUi
             comboBoxTournoi = new ComboBox();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
-            buttonAjouterLot = new Button();
-            buttonEffacer = new Button();
-            buttonModifier = new Button();
-            buttonSupprimerLot = new Button();
+            boutonAjouterLot = new Button();
+            boutonEffacer = new Button();
+            boutonModifier = new Button();
+            boutonSupprimerLot = new Button();
             label1 = new Label();
             label2 = new Label();
             textBoxRecherche = new TextBox();
@@ -38,7 +38,7 @@ namespace ApplicationUi
             dataGridLotComposantsDunLot = new DataGridView();
             panel1 = new Panel();
             groupBox2 = new GroupBox();
-            buttonAjouterLotComposant = new Button();
+            boutonAjouterLotComposant = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             comboBoxLotComposant = new ComboBox();
             labelComposant = new Label();
@@ -46,7 +46,7 @@ namespace ApplicationUi
             label6 = new Label();
             panel3 = new Panel();
             groupBox3 = new GroupBox();
-            buttonSupprimerLotComposant = new Button();
+            boutonSupprimerLotComposant = new Button();
             tableLayoutPanel2 = new TableLayoutPanel();
             comboBoxLotComposantDunLot = new ComboBox();
             labelComposantDunLot = new Label();
@@ -190,10 +190,10 @@ namespace ApplicationUi
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(buttonAjouterLot);
-            groupBox1.Controls.Add(buttonEffacer);
-            groupBox1.Controls.Add(buttonModifier);
-            groupBox1.Controls.Add(buttonSupprimerLot);
+            groupBox1.Controls.Add(boutonAjouterLot);
+            groupBox1.Controls.Add(boutonEffacer);
+            groupBox1.Controls.Add(boutonModifier);
+            groupBox1.Controls.Add(boutonSupprimerLot);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
@@ -202,69 +202,69 @@ namespace ApplicationUi
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
             // 
-            // buttonAjouterLot
+            // boutonAjouterLot
             // 
-            buttonAjouterLot.BackColor = Color.FromArgb(76, 175, 80);
-            buttonAjouterLot.FlatAppearance.BorderSize = 0;
-            buttonAjouterLot.FlatStyle = FlatStyle.Flat;
-            buttonAjouterLot.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonAjouterLot.ForeColor = Color.White;
-            buttonAjouterLot.Location = new Point(270, 25);
-            buttonAjouterLot.Margin = new Padding(4);
-            buttonAjouterLot.Name = "buttonAjouterLot";
-            buttonAjouterLot.Size = new Size(150, 45);
-            buttonAjouterLot.TabIndex = 6;
-            buttonAjouterLot.Text = "➕  Ajouter";
-            buttonAjouterLot.UseVisualStyleBackColor = false;
-            buttonAjouterLot.Click += ButtonAjouterLot_Click;
+            boutonAjouterLot.BackColor = Color.FromArgb(76, 175, 80);
+            boutonAjouterLot.FlatAppearance.BorderSize = 0;
+            boutonAjouterLot.FlatStyle = FlatStyle.Flat;
+            boutonAjouterLot.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonAjouterLot.ForeColor = Color.White;
+            boutonAjouterLot.Location = new Point(270, 25);
+            boutonAjouterLot.Margin = new Padding(4);
+            boutonAjouterLot.Name = "boutonAjouterLot";
+            boutonAjouterLot.Size = new Size(150, 45);
+            boutonAjouterLot.TabIndex = 6;
+            boutonAjouterLot.Text = "➕  Ajouter";
+            boutonAjouterLot.UseVisualStyleBackColor = false;
+            boutonAjouterLot.Click += BoutonAjouterLot_Click;
             // 
-            // buttonEffacer
+            // boutonEffacer
             // 
-            buttonEffacer.BackColor = Color.MediumPurple;
-            buttonEffacer.FlatAppearance.BorderSize = 0;
-            buttonEffacer.FlatStyle = FlatStyle.Flat;
-            buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonEffacer.ForeColor = Color.White;
-            buttonEffacer.Location = new Point(70, 25);
-            buttonEffacer.Margin = new Padding(4);
-            buttonEffacer.Name = "buttonEffacer";
-            buttonEffacer.Size = new Size(150, 45);
-            buttonEffacer.TabIndex = 3;
-            buttonEffacer.Text = " \U0001f9fd  Effacer";
-            buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += ButtonEffacer_Click;
+            boutonEffacer.BackColor = Color.MediumPurple;
+            boutonEffacer.FlatAppearance.BorderSize = 0;
+            boutonEffacer.FlatStyle = FlatStyle.Flat;
+            boutonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonEffacer.ForeColor = Color.White;
+            boutonEffacer.Location = new Point(70, 25);
+            boutonEffacer.Margin = new Padding(4);
+            boutonEffacer.Name = "boutonEffacer";
+            boutonEffacer.Size = new Size(150, 45);
+            boutonEffacer.TabIndex = 3;
+            boutonEffacer.Text = " \U0001f9fd  Effacer";
+            boutonEffacer.UseVisualStyleBackColor = false;
+            boutonEffacer.Click += BoutonEffacer_Click;
             // 
-            // buttonModifier
+            // boutonModifier
             // 
-            buttonModifier.BackColor = Color.FromArgb(33, 150, 243);
-            buttonModifier.FlatAppearance.BorderSize = 0;
-            buttonModifier.FlatStyle = FlatStyle.Flat;
-            buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(470, 25);
-            buttonModifier.Margin = new Padding(4);
-            buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(150, 45);
-            buttonModifier.TabIndex = 4;
-            buttonModifier.Text = "✏️    Modifier";
-            buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += ButtonModifier_Click;
+            boutonModifier.BackColor = Color.FromArgb(33, 150, 243);
+            boutonModifier.FlatAppearance.BorderSize = 0;
+            boutonModifier.FlatStyle = FlatStyle.Flat;
+            boutonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonModifier.ForeColor = Color.White;
+            boutonModifier.Location = new Point(470, 25);
+            boutonModifier.Margin = new Padding(4);
+            boutonModifier.Name = "boutonModifier";
+            boutonModifier.Size = new Size(150, 45);
+            boutonModifier.TabIndex = 4;
+            boutonModifier.Text = "✏️    Modifier";
+            boutonModifier.UseVisualStyleBackColor = false;
+            boutonModifier.Click += BoutonModifier_Click;
             // 
-            // buttonSupprimerLot
+            // boutonSupprimerLot
             // 
-            buttonSupprimerLot.BackColor = Color.FromArgb(244, 67, 54);
-            buttonSupprimerLot.FlatAppearance.BorderSize = 0;
-            buttonSupprimerLot.FlatStyle = FlatStyle.Flat;
-            buttonSupprimerLot.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonSupprimerLot.ForeColor = Color.White;
-            buttonSupprimerLot.Location = new Point(670, 25);
-            buttonSupprimerLot.Margin = new Padding(4);
-            buttonSupprimerLot.Name = "buttonSupprimerLot";
-            buttonSupprimerLot.Size = new Size(162, 45);
-            buttonSupprimerLot.TabIndex = 5;
-            buttonSupprimerLot.Text = "🗑️    Supprimer";
-            buttonSupprimerLot.UseVisualStyleBackColor = false;
-            buttonSupprimerLot.Click += ButtonSupprimerLot_Click;
+            boutonSupprimerLot.BackColor = Color.FromArgb(244, 67, 54);
+            boutonSupprimerLot.FlatAppearance.BorderSize = 0;
+            boutonSupprimerLot.FlatStyle = FlatStyle.Flat;
+            boutonSupprimerLot.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonSupprimerLot.ForeColor = Color.White;
+            boutonSupprimerLot.Location = new Point(670, 25);
+            boutonSupprimerLot.Margin = new Padding(4);
+            boutonSupprimerLot.Name = "boutonSupprimerLot";
+            boutonSupprimerLot.Size = new Size(162, 45);
+            boutonSupprimerLot.TabIndex = 5;
+            boutonSupprimerLot.Text = "🗑️    Supprimer";
+            boutonSupprimerLot.UseVisualStyleBackColor = false;
+            boutonSupprimerLot.Click += BoutonSupprimerLot_Click;
             // 
             // label1
             // 
@@ -345,7 +345,7 @@ namespace ApplicationUi
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(buttonAjouterLotComposant);
+            groupBox2.Controls.Add(boutonAjouterLotComposant);
             groupBox2.Location = new Point(10, 125);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(229, 82);
@@ -353,21 +353,21 @@ namespace ApplicationUi
             groupBox2.TabStop = false;
             groupBox2.Text = "⚡ Actions";
             // 
-            // buttonAjouterLotComposant
+            // boutonAjouterLotComposant
             // 
-            buttonAjouterLotComposant.BackColor = Color.FromArgb(76, 175, 80);
-            buttonAjouterLotComposant.FlatAppearance.BorderSize = 0;
-            buttonAjouterLotComposant.FlatStyle = FlatStyle.Flat;
-            buttonAjouterLotComposant.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonAjouterLotComposant.ForeColor = Color.White;
-            buttonAjouterLotComposant.Location = new Point(28, 25);
-            buttonAjouterLotComposant.Margin = new Padding(4);
-            buttonAjouterLotComposant.Name = "buttonAjouterLotComposant";
-            buttonAjouterLotComposant.Size = new Size(186, 45);
-            buttonAjouterLotComposant.TabIndex = 6;
-            buttonAjouterLotComposant.Text = "➕  Ajouter au lot";
-            buttonAjouterLotComposant.UseVisualStyleBackColor = false;
-            buttonAjouterLotComposant.Click += ButtonAjouterLotComposant_Click;
+            boutonAjouterLotComposant.BackColor = Color.FromArgb(76, 175, 80);
+            boutonAjouterLotComposant.FlatAppearance.BorderSize = 0;
+            boutonAjouterLotComposant.FlatStyle = FlatStyle.Flat;
+            boutonAjouterLotComposant.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonAjouterLotComposant.ForeColor = Color.White;
+            boutonAjouterLotComposant.Location = new Point(28, 25);
+            boutonAjouterLotComposant.Margin = new Padding(4);
+            boutonAjouterLotComposant.Name = "boutonAjouterLotComposant";
+            boutonAjouterLotComposant.Size = new Size(186, 45);
+            boutonAjouterLotComposant.TabIndex = 6;
+            boutonAjouterLotComposant.Text = "➕  Ajouter au lot";
+            boutonAjouterLotComposant.UseVisualStyleBackColor = false;
+            boutonAjouterLotComposant.Click += BoutonAjouterLotComposant_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -441,7 +441,7 @@ namespace ApplicationUi
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(buttonSupprimerLotComposant);
+            groupBox3.Controls.Add(boutonSupprimerLotComposant);
             groupBox3.Location = new Point(10, 125);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(245, 82);
@@ -449,21 +449,21 @@ namespace ApplicationUi
             groupBox3.TabStop = false;
             groupBox3.Text = "⚡ Actions";
             // 
-            // buttonSupprimerLotComposant
+            // boutonSupprimerLotComposant
             // 
-            buttonSupprimerLotComposant.BackColor = Color.FromArgb(244, 67, 54);
-            buttonSupprimerLotComposant.FlatAppearance.BorderSize = 0;
-            buttonSupprimerLotComposant.FlatStyle = FlatStyle.Flat;
-            buttonSupprimerLotComposant.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonSupprimerLotComposant.ForeColor = Color.White;
-            buttonSupprimerLotComposant.Location = new Point(15, 25);
-            buttonSupprimerLotComposant.Margin = new Padding(4);
-            buttonSupprimerLotComposant.Name = "buttonSupprimerLotComposant";
-            buttonSupprimerLotComposant.Size = new Size(223, 45);
-            buttonSupprimerLotComposant.TabIndex = 7;
-            buttonSupprimerLotComposant.Text = "🗑️    Supprimer du lot";
-            buttonSupprimerLotComposant.UseVisualStyleBackColor = false;
-            buttonSupprimerLotComposant.Click += ButtonSupprimerLotComposant_Click;
+            boutonSupprimerLotComposant.BackColor = Color.FromArgb(244, 67, 54);
+            boutonSupprimerLotComposant.FlatAppearance.BorderSize = 0;
+            boutonSupprimerLotComposant.FlatStyle = FlatStyle.Flat;
+            boutonSupprimerLotComposant.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonSupprimerLotComposant.ForeColor = Color.White;
+            boutonSupprimerLotComposant.Location = new Point(15, 25);
+            boutonSupprimerLotComposant.Margin = new Padding(4);
+            boutonSupprimerLotComposant.Name = "boutonSupprimerLotComposant";
+            boutonSupprimerLotComposant.Size = new Size(223, 45);
+            boutonSupprimerLotComposant.TabIndex = 7;
+            boutonSupprimerLotComposant.Text = "🗑️    Supprimer du lot";
+            boutonSupprimerLotComposant.UseVisualStyleBackColor = false;
+            boutonSupprimerLotComposant.Click += BoutonSupprimerLotComposant_Click;
             // 
             // tableLayoutPanel2
             // 
@@ -698,10 +698,10 @@ namespace ApplicationUi
         private Label labelTournoi;
         private Panel panelButtons;
         private GroupBox groupBox1;
-        private Button buttonAjouterLot;
-        private Button buttonEffacer;
-        private Button buttonModifier;
-        private Button buttonSupprimerLot;
+        private Button boutonAjouterLot;
+        private Button boutonEffacer;
+        private Button boutonModifier;
+        private Button boutonSupprimerLot;
         private Label label1;
         private Label label2;
         private TextBox textBoxRecherche;
@@ -712,13 +712,13 @@ namespace ApplicationUi
         private TableLayoutPanel tableLayoutPanel1;
         private Label labelComposant;
         private GroupBox groupBox2;
-        private Button buttonAjouterLotComposant;
+        private Button boutonAjouterLotComposant;
         private Panel panel2;
         private Label label6;
         private ComboBox comboBoxLotComposant;
         private Panel panel3;
         private GroupBox groupBox3;
-        private Button buttonSupprimerLotComposant;
+        private Button boutonSupprimerLotComposant;
         private TableLayoutPanel tableLayoutPanel2;
         private ComboBox comboBoxLotComposantDunLot;
         private Label labelComposantDunLot;

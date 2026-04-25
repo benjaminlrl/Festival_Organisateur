@@ -39,20 +39,20 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
             Raz_Zones();
-            buttonModifier.Enabled = _lotComposantSelectionne != null;
-            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            boutonModifier.Enabled = _lotComposantSelectionne != null;
+            boutonSupprimer.Enabled = _lotComposantSelectionne != null;
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Ajouter") == false)
             {
-                buttonAjouter.Visible = false;
+                boutonAjouter.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Modifier") == false)
             {
-                buttonModifier.Visible = false;
+                boutonModifier.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Supprimer") == false)
             {
-                buttonSupprimer.Visible = false;
+                boutonSupprimer.Visible = false;
             }
         }
 
@@ -122,8 +122,8 @@ namespace ApplicationUi
             textBoxValeur.Clear();
             comboBoxLot.SelectedItem = null;
             _lotComposantSelectionne = null;
-            buttonModifier.Enabled = _lotComposantSelectionne != null;
-            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            boutonModifier.Enabled = _lotComposantSelectionne != null;
+            boutonSupprimer.Enabled = _lotComposantSelectionne != null;
             ChargerStatistiques();
             ChargerLotComposants();
             ChargerLots();
@@ -228,7 +228,7 @@ namespace ApplicationUi
         /// Crée un nouveau lot composant avec les données saisies dans le formulaire.
         /// Vérifie que les champs sont valides et que les règles métier sont respectées.
         /// </summary>
-        private void ButtonAjouter_Click(object sender, EventArgs e)
+        private void BoutonAjouter_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -270,7 +270,7 @@ namespace ApplicationUi
         /// Modifie le lot composant sélectionné avec les nouvelles valeurs saisies dans le formulaire.
         /// Met à jour uniquement les champs modifiés et gère le lot nullable.
         /// </summary>
-        private void ButtonModifier_Click(object sender, EventArgs e)
+        private void BoutonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotComposantSelectionne == null)
@@ -336,7 +336,7 @@ namespace ApplicationUi
         /// <summary>
         /// Supprime le lot composant sélectionné après vérification qu'un lot composant est bien sélectionné.
         /// </summary>
-        private void ButtonSupprimer_Click(object sender, EventArgs e)
+        private void BoutonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
             // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
@@ -363,7 +363,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void ButtonEffacer_Click(object sender, EventArgs e)
+        private void BoutonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -410,8 +410,8 @@ namespace ApplicationUi
             if (_lotComposantSelectionne != null)
                 RemplirFormulaire(_lotComposantSelectionne);
 
-            buttonModifier.Enabled = _lotComposantSelectionne != null;
-            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            boutonModifier.Enabled = _lotComposantSelectionne != null;
+            boutonSupprimer.Enabled = _lotComposantSelectionne != null;
         }
 
         /// <summary>
