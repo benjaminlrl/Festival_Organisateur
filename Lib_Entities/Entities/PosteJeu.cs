@@ -67,7 +67,7 @@ namespace Lib_Entities.Entities
         /// </summary>
         public void SetReference(Espace espace, int numeroPoste)
         {
-            Reference = $"PJ-{espace.Nom.Substring(0, 3).ToUpper()}-{numeroPoste:D2}";
+            Reference = $"PJ-{espace.Nom.Substring(0, 3).ToUpper()}-{numeroPoste:D3}";
         }
     }
 }

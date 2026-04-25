@@ -203,10 +203,6 @@ namespace ApplicationUi
                 IdEspace = espaceSelectionne.IdEspace
             };
 
-            // Formattage de la référence du poste"
-            posteJeu.SetReference(espaceSelectionne, _servicePosteJeu.
-                NombrePostesJeuEspacePlateforme(espaceSelectionne.IdEspace, plateformeSelectionne.IdPlateforme) + 1);
-
             try
             {
                 _servicePosteJeu.Creer(posteJeu);
@@ -315,7 +311,7 @@ namespace ApplicationUi
             _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
 
             if (_posteJeuSelectionne != null)
-                RemplirFormulaire(_posteJeuSelectionne);
+                RemplirFormulaire();
 
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
@@ -368,6 +364,7 @@ namespace ApplicationUi
         /// controls are reset to indicate a planned tournament.</remarks>
         private void Raz_Zones()
         {
+            textBoxReference.ReadOnly = true;
             textBoxReference.Clear();
 
             comboBoxPlateforme.SelectedItem = _posteJeuSelectionne != null;
@@ -390,7 +387,7 @@ namespace ApplicationUi
             AfficherBoutons();
         }
 
-        private void RemplirFormulaire(PosteJeu posteJeu)
+        private void RemplirFormulaire()
         {
             if (_posteJeuSelectionne == null)
             {
@@ -398,18 +395,18 @@ namespace ApplicationUi
                 return;
             }
 
-            textBoxReference.Text = posteJeu.Reference;
+            textBoxReference.Text = _posteJeuSelectionne.Reference;
 
             // ComboBox Espace
-            comboBoxEspace.SelectedItem = posteJeu.Espace;
-            comboBoxEspace.SelectedValue = posteJeu.IdEspace;
+            comboBoxEspace.SelectedItem = _posteJeuSelectionne.Espace;
+            comboBoxEspace.SelectedValue = _posteJeuSelectionne.IdEspace;
 
             // ComboBox Plateforme
-            comboBoxPlateforme.SelectedItem = posteJeu.Plateforme;
-            comboBoxPlateforme.SelectedValue = posteJeu.IdPlateforme;
+            comboBoxPlateforme.SelectedItem = _posteJeuSelectionne.Plateforme;
+            comboBoxPlateforme.SelectedValue = _posteJeuSelectionne.IdPlateforme;
 
             // Fonctionnel (RadioButtons)
-            if (posteJeu.Fonctionnel)
+            if (_posteJeuSelectionne.Fonctionnel)
             {
                 radioButtonFonctionnelTrue.Checked = true;
             }
@@ -476,7 +473,7 @@ namespace ApplicationUi
         /// </summary>
         private void AfficherBoutons()
         {
-            buttonAjouter.Enabled = _posteJeuSelectionne == null;
+            buttonAjouter.Enabled = _posteJeuSelectionne != null;
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _posteJeuSelectionne != null;

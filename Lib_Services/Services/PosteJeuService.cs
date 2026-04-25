@@ -137,6 +137,15 @@ namespace Lib_Services.Services
         /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> à créer.</param>
         public void Creer(PosteJeu posteJeu)
         {
+            // Récupère le numéro le plus élevé dans cet espace
+            int numeroPoste = _context.PostesJeu
+                .Where(p => p.IdEspace == posteJeu.IdEspace)
+                .Select(p => p.NumeroPoste)
+                .DefaultIfEmpty(0)
+                .Max() + 1;
+
+            posteJeu.SetReference(posteJeu.Espace, numeroPoste);
+
             ValiderPosteJeu(posteJeu, false);
             // Ajout à l'ensemble suivi d'un commit via SaveChanges.
             _context.PostesJeu.Add(posteJeu);
@@ -241,6 +250,17 @@ namespace Lib_Services.Services
                         || p.Plateforme.Libelle.Contains(filtre));
 
             return query.Count();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idEspace"></param>
+        /// <returns></returns>
+        public int NombrePostesJeuEspace(int idEspace)
+        {
+            return _context.PostesJeu
+                .Where(p => p.IdEspace == idEspace)
+                .Count();
         }
 
         /// <summary>
