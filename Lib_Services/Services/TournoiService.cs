@@ -185,9 +185,10 @@ namespace Lib_Services.Services
         /// <summary>
         /// Permet de vérifier les propriétés associés a un tournoi.
         /// </summary>
-        /// <param name="jeu">Le jeu à valider</param>
+        /// <param name="tournoi">Le tournoi à valider</param>
+        /// <param name="estModification">Indique si c'est une modification ou une création</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderTournoi(Tournoi tournoi)
+        public List<string> ValiderTournoi(Tournoi tournoi, bool estModification)
         {
             // liste des erreurs
             var erreurs = new List<string>();

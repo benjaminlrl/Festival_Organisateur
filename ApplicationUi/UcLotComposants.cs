@@ -434,7 +434,7 @@ namespace ApplicationUi
         /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
         /// </summary>
         /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
-        private void DesactiverTrieAutomatique(DataGridView dataGrid)
+        static void DesactiverTrieAutomatique(DataGridView dataGrid)
         {
             foreach (DataGridViewColumn col in dataGrid.Columns)
             {

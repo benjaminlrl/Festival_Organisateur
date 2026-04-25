@@ -77,7 +77,7 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="jeu">Le jeu à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderTournoi(Tournoi tournoi);
+        List<string> ValiderTournoi(Tournoi tournoi, bool estModification);
         #endregion
     }
 }
