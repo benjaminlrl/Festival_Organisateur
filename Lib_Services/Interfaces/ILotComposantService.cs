@@ -17,10 +17,10 @@ namespace Lib_Services.Interfaces
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        List<LotComposant> Lister(string filtre = "", string property = "", string ordre = "");
+        List<LotComposant> Lister(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
         /// Retourne la liste complète des lots composants contenant le numero du lot passé en paramètre
@@ -28,7 +28,7 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="numero">numero du lot qu'on cherche</param>
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        List<LotComposant> ListerParNumeroDunLot(int numero, string property = "", string ordre = "");
+        List<LotComposant> ListerParNumeroDunLot(int numero, string propriete = "", string ordre = "");
 
         /// <summary>
         /// Récupère un lotcomposant par son numero.
@@ -65,8 +65,9 @@ namespace Lib_Services.Interfaces
         /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes
         /// </summary>
         /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification (true) ou d'une création (false).</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
-        public List<string> ValiderLotComposant(LotComposant lotComposant);
+        void ValiderLotComposant(LotComposant lotComposant, bool estModification = false);
         #endregion
     }
 }

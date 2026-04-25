@@ -2,17 +2,16 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using System.Windows.Forms.VisualStyles;
+using Serilog;
 namespace ApplicationUi
 {
     public partial class UcLots : UserControl
@@ -30,7 +29,7 @@ namespace ApplicationUi
         private List<LotComposant> listeLotComposantsDunLot;
         string filtre;
         int? nouveauNumeroTournoi;
-        string ordreChamp = "ASC";
+        string ordreChamp = "DESC";
 
         public UcLots(Organisateur unOrganisateurConnecte)
         {
@@ -337,21 +336,6 @@ namespace ApplicationUi
         #endregion
 
         #region Validations
-        /// <summary>
-        /// Permet de voir si un lot est conformes aux règles de sécurité suivantes 
-        /// </summary>
-        /// <param name="lot">Instance de <see cref="Lot"/> à créer.</param>>
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool LotValide(Lot lot)
-        {
-            var erreurs = _serviceLot.ValiderLot(lot);
-            if (erreurs.Any())
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
 
         /// <summary>
         /// Permet de voir si les champs du formulaire ne sont pas vides
@@ -436,17 +420,29 @@ namespace ApplicationUi
                 _lotSelectionnee.EstAttribue = true;
             }
 
-            // On check si le lot composant est valide
-            if (LotValide(unNouveauLot) == false)
+            try
             {
-                return;
+                // on crée le lot en base
+                _serviceLot.Creer(unNouveauLot);
+                MessageBox.Show("Le lot a bien été créé.", "Création", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerLots();
+                Raz_Zones();
             }
-
-            // On crée le lot composant en bdd
-            MessageBox.Show("Le lot composant a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceLot.Creer(unNouveauLot);
-            ChargerLots();
-            Raz_Zones();
+            catch (LotException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la création du lot.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         /// <summary>
@@ -519,11 +515,6 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            // On check si le lot composant est valide
-            if (LotValide(_lotSelectionnee) == false)
-            {
-                return;
-            }
 
             // Modifiée seulement les valeurs qui ont été modifiées
             if (textBoxLibelle.Text != "" || _lotSelectionnee.Libelle != textBoxLibelle.Text)
@@ -538,10 +529,30 @@ namespace ApplicationUi
                 if (_lotSelectionnee.EstAttribue != true) // On modifie uniquement si le champ est pas déjà à true
                     _lotSelectionnee.EstAttribue = true;
             }
-            MessageBox.Show("Le lot a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceLot.Modifier(_lotSelectionnee);
-            ChargerLots();
-            Raz_Zones();
+
+            try
+            {
+                // on modifie le lot en base
+                _serviceLot.Modifier(unNouveauLot);
+                MessageBox.Show("Le lot a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerLots();
+                Raz_Zones();
+            }
+            catch (LotException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du lot.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         /// <summary>

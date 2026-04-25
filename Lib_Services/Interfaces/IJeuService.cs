@@ -17,10 +17,10 @@ namespace Lib_Services.Interfaces
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Jeu"/>.</returns>
-        List<Jeu> Lister(string filtre = "", string property = "", string ordre = "");
+        List<Jeu> Lister(string filtre = "", string propriete = "", string ordre = "");
         Jeu? Obtenir(int idJeu);
         #endregion
         #region CUD
@@ -33,8 +33,9 @@ namespace Lib_Services.Interfaces
         /// Permet de vérifier les propriétés associés a un jeu.
         /// </summary>
         /// <param name="jeu">Le jeu à valider</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
         /// <returns></returns>
-        List<string> ValiderJeu(Jeu jeu);
+        void ValiderJeu(Jeu jeu, bool estModification = false);
         #endregion
     }
 }

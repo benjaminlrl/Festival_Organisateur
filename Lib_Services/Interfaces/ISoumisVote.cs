@@ -17,10 +17,10 @@ namespace Lib_Services.Interfaces
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="SoumisVote"/>.</returns>
-        public List<SoumisVote> Lister(string filtre = "", string property = "", string ordre = "");
+        List<SoumisVote> Lister(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
         ///  Retourne la liste complète des roles présents en base, 
@@ -34,12 +34,12 @@ namespace Lib_Services.Interfaces
         /// 
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <param name="dateDebut">Optionnel, date de début de la période de vote</param>
         /// <param name="dateFin">Optionnel, date de fin de la période de vote</param>
         /// <returns>Liste d'objets <see cref="Voter"/>.</returns>
-        public List<Voter> ListerClassmentJeuxVotes(string filtre = "", string property = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null);
+        List<Voter> ListerClassmentJeuxVotes(string filtre = "", string propriete = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null);
 
         /// <summary>
         /// Retourne un SoumisVote identifié par l'id du jeu et l'id de la plateforme.
@@ -75,11 +75,12 @@ namespace Lib_Services.Interfaces
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a une SoumisVote.
+        /// Permet de valider les données d'un SoumisVote avant création ou modification.
         /// </summary>
-        /// <param name="soumisVote">Le SoumisVote à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification);
+        /// <param name="soumisVote">SoumisVote à valider</param>
+        /// <param name="estModification">Indique si c'est une modification ou une création</param>
+        /// <exception cref="SoumisVoteException">Exception si les données du SoumisVote sont invalides</exception>
+        void ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false);
         #endregion
     }
 }

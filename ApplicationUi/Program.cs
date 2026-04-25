@@ -3,6 +3,7 @@ using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System;
 
 namespace ApplicationUi
@@ -419,10 +420,13 @@ namespace ApplicationUi
 
                 context.SaveChanges();
             }
-
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             // lancement du formulaire principal
             ApplicationConfiguration.Initialize();
             Application.Run(new FormAuthentification());
+            Log.CloseAndFlush();
         }
     }
 }

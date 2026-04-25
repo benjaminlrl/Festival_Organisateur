@@ -133,7 +133,7 @@
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(888, 31);
             textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // tableLayoutPanel1
             // 
@@ -237,7 +237,7 @@
             radioButtonLotRemisTrue.TabStop = true;
             radioButtonLotRemisTrue.Text = "Oui";
             radioButtonLotRemisTrue.UseVisualStyleBackColor = true;
-            radioButtonLotRemisTrue.CheckedChanged += radioButtonLotRemisTrue_CheckedChanged;
+            radioButtonLotRemisTrue.CheckedChanged += RadioButtonLotRemisTrue_CheckedChanged;
             // 
             // radioButtonLotRemisFalse
             // 
@@ -249,7 +249,7 @@
             radioButtonLotRemisFalse.TabStop = true;
             radioButtonLotRemisFalse.Text = "Non";
             radioButtonLotRemisFalse.UseVisualStyleBackColor = true;
-            radioButtonLotRemisFalse.CheckedChanged += radioButtonLotRemisFalse_CheckedChanged;
+            radioButtonLotRemisFalse.CheckedChanged += RadioButtonLotRemisFalse_CheckedChanged;
             // 
             // numericUpDownRang
             // 
@@ -447,7 +447,7 @@
             buttonAjouter.TabIndex = 6;
             buttonAjouter.Text = "➕  Ajouter";
             buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += buttonAjouter_Click;
+            buttonAjouter.Click += ButtonAjouter_Click;
             // 
             // buttonEffacer
             // 
@@ -463,7 +463,7 @@
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += buttonEffacer_Click;
+            buttonEffacer.Click += ButtonEffacer_Click;
             // 
             // buttonModifier
             // 
@@ -479,7 +479,7 @@
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonModifier_Click;
+            buttonModifier.Click += ButtonModifier_Click;
             // 
             // buttonSupprimer
             // 
@@ -495,7 +495,7 @@
             buttonSupprimer.TabIndex = 5;
             buttonSupprimer.Text = "🗑️    Supprimer";
             buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += buttonSupprimer_Click;
+            buttonSupprimer.Click += ButtonSupprimer_Click;
             // 
             // dataGridParticipations
             // 
@@ -512,7 +512,7 @@
             dataGridParticipations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridParticipations.Size = new Size(1256, 428);
             dataGridParticipations.TabIndex = 4;
-            dataGridParticipations.CellClick += dataGridParticipations_CellClick;
+            dataGridParticipations.CellClick += DataGridParticipations_CellClick;
             // 
             // tableLayoutPanel2
             // 

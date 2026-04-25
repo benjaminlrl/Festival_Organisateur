@@ -1,18 +1,19 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -24,11 +25,10 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IJeuService _serviceJeu;
-        private string statutSelectionne = "Planifié";
+        private string statutSelectionne;
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
         private string ordreChamp;
-
 
         public UcTournois(Organisateur unOrganisateurConnecte)
         {
@@ -41,35 +41,32 @@ namespace ApplicationUi
 
             _organisateurConnecte = unOrganisateurConnecte;
             _tournoiSelectionne = null;
-
-            AfficherBouttons();
+            statutSelectionne = "Planifié";
 
             filtre = "";
-            ordreChamp = "ASC";
+            ordreChamp = "DESC"; // pour qu'au premier clique sur une colonne, le tri soit dans l'ordre croissant
             buttonEffacer.Text = " 🧽  Effacer";
 
-            ChargerTournois();
-            ChargerEspaces();
-            ChargerJeux();           
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
         }
 
-        #region Donées
+        #region Données
         private void ChargerTournois()
         {
             dataGridTournois.DataSource = null;
@@ -89,13 +86,24 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridTournois);
 
+            dataGridTournois.Columns["DateHeure"].DisplayIndex = 4;
+            dataGridTournois.Columns["Statut"].DisplayIndex = 3;
+            dataGridTournois.Columns["Nom"].DisplayIndex = 0;
+            dataGridTournois.Columns["NomEspace"].DisplayIndex = 1;
+            dataGridTournois.Columns["TitreJeu"].DisplayIndex = 2;
+
             dataGridTournois.Columns["NumeroTournoi"].Visible = false;
             dataGridTournois.Columns["IdEspace"].Visible = false;
             dataGridTournois.Columns["Espace"].Visible = false;
             dataGridTournois.Columns["IdJeu"].Visible = false;
             dataGridTournois.Columns["Jeu"].Visible = false;
+            dataGridTournois.Columns["NbParticipants"].Visible = false;
+            dataGridTournois.Columns["Lot"].Visible = false;
+            dataGridTournois.Columns["DureePrevue"].Visible = false;
+
             dataGridTournois.Columns["NomEspace"].HeaderText = "Espace";
             dataGridTournois.Columns["TitreJeu"].HeaderText = "Jeu";
+
             dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
         private void ChargerEspaces()
@@ -106,7 +114,9 @@ namespace ApplicationUi
             comboBoxEspace.ValueMember = "IdEspace";
         }
         #endregion
+
         #region Evènements
+
         #region Boutons
         private void ButtonAjouter_Click(object sender, EventArgs e)
         {
@@ -117,15 +127,30 @@ namespace ApplicationUi
                 NbParticipants = (int)numericUpDownNbParticip.Value,
                 DureePrevue = (int)numericUpDownDuree.Value,
                 Statut = statutSelectionne,
-                IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace,
-                IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu,
+                IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace,
+                IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
             };
 
-            if (ValiderTournoi(tournoi, false))
+            try
             {
                 _serviceTournoi.Creer(tournoi);
                 MessageBox.Show("Le tournoi a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (TournoiException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonModifier_Click(object sender, EventArgs e)
@@ -141,14 +166,29 @@ namespace ApplicationUi
             _tournoiSelectionne.NbParticipants = (int)numericUpDownNbParticip.Value;
             _tournoiSelectionne.DureePrevue = (int)numericUpDownDuree.Value;
             _tournoiSelectionne.Statut = statutSelectionne;
-            _tournoiSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
-            _tournoiSelectionne.IdJeu = ((Jeu)comboBoxJeu.SelectedItem).IdJeu;
+            _tournoiSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
+            _tournoiSelectionne.IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu;
 
-            if (ValiderTournoi(_tournoiSelectionne, true))
+            try
             {
                 _serviceTournoi.Modifier(_tournoiSelectionne);
-                MessageBox.Show("Le tournoi a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Le tournoi a bien été modifié.", "Modification ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (TournoiException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modifiation du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -182,11 +222,14 @@ namespace ApplicationUi
                     {dataGridTournois.Columns["DureePrevue"].Index, "DureePrevue"},
                     {dataGridTournois.Columns["Nom"].Index, "Nom"},
                     {dataGridTournois.Columns["Statut"].Index, "Statut"},
+                    {dataGridTournois.Columns["NomEspace"].Index, "NomEspace"},
+                    {dataGridTournois.Columns["TitreJeu"].Index, "TitreJeu"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
+                // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 dataGridTournois.DataSource = _serviceTournoi.Lister(filtre, colonne, ordreChamp);
@@ -202,7 +245,7 @@ namespace ApplicationUi
             if (_tournoiSelectionne != null)
                 RemplirFormulaire();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
         private void RadioButtonPlanifié_CheckedChanged(object sender, EventArgs e)
         {
@@ -229,30 +272,13 @@ namespace ApplicationUi
         }
 
         #endregion
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations de la participation sont valides ou non,
-        /// en fonction des règles métier définies dans le service Participer.
-        /// </summary>
-        /// <param name="tournoi">L'objet Tournoi à valider.</param>
-        /// <returns>Vraie si le tournoi est valide, sinon faux.</returns>
-        private bool ValiderTournoi(Tournoi tournoi, bool estModification)
-        {
-            List<string> erreurs = _serviceTournoi.ValiderTournoi(tournoi, estModification);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-        #endregion
+
         #region Méthodes
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxNom.Enabled = false;
 
@@ -269,7 +295,7 @@ namespace ApplicationUi
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _tournoiSelectionne == null;
 
@@ -306,7 +332,7 @@ namespace ApplicationUi
             ChargerEspaces();
             ChargerJeux();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -341,7 +367,7 @@ namespace ApplicationUi
             radioButtonEnCours.Checked = _tournoiSelectionne.Statut == "En cours";
             radioButtonTermine.Checked = _tournoiSelectionne.Statut == "Terminé";
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>

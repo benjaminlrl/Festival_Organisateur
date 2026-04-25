@@ -33,10 +33,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Organisateur"/>.</returns>
-        public List<Organisateur> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Organisateur> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Organisateur> query = _context.Organisateurs
                 .Include(o => o.Role);
@@ -45,7 +45,7 @@ namespace Lib_Services.Services
                 || o.Mail.Contains(filtre)
                 || o.NomRole.Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Login" => ordre == "ASC" ? query.OrderBy(o => o.Login) : query.OrderByDescending(o => o.Login),
@@ -221,7 +221,7 @@ namespace Lib_Services.Services
         public List<string> MdpValide(string motDePasse)
         {
             // liste des erreurs
-            var erreurs = new List<string>();
+            List<string> erreurs = [];
 
             if(string.IsNullOrWhiteSpace(motDePasse))
             {
@@ -258,7 +258,7 @@ namespace Lib_Services.Services
         public List<string> IdentifiantValide(string identifiant)
         {
             // liste des erreurs
-            var erreurs = new List<string>();
+            List<string> erreurs = [];
 
             if (string.IsNullOrWhiteSpace(identifiant))
             {

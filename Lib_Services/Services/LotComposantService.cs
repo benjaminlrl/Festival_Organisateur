@@ -33,10 +33,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        public List<LotComposant> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<LotComposant> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<LotComposant> query = _context.LotComposants
                 .Include(lc => lc.Lot);
@@ -48,7 +48,7 @@ namespace Lib_Services.Services
                 || lc.Numero.ToString().Contains(filtre)
                 || lc.Lot.Libelle.Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Libelle" => ordre == "ASC" ? query.OrderBy(lc => lc.Libelle) : query.OrderByDescending(lc => lc.Libelle),
@@ -71,16 +71,16 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="numero">Numero du lot associé au composant</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Lot"/>.</returns>
-        public List<LotComposant> ListerParNumeroDunLot(int numero, string property = "", string ordre = "")
+        public List<LotComposant> ListerParNumeroDunLot(int numero, string propriete = "", string ordre = "")
         {
             IQueryable<LotComposant> query = _context.LotComposants
                         .Where(lc => lc.Lot.Numero.Equals(numero))
                         .Include(lc => lc.Lot);
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Libelle" => ordre == "ASC" ? query.OrderBy(lc => lc.Libelle) : query.OrderByDescending(lc => lc.Libelle),
@@ -110,6 +110,7 @@ namespace Lib_Services.Services
         /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
         public void Creer(LotComposant lotComposant)
         {
+            ValiderLotComposant(lotComposant, false);
             // Ajout de l'entité au contexte puis persistance immédiate.
             _context.LotComposants.Add(lotComposant);
             _context.SaveChanges();
@@ -122,6 +123,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="LotComposant"/>.</param>
         public void Modifier(LotComposant lotComposant)
         {
+            ValiderLotComposant(lotComposant, true);
             _context.LotComposants.Update(lotComposant);
             _context.SaveChanges();
         }
@@ -142,32 +144,28 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes
+        /// Valide les propriétés d'une instance de <see cref="LotComposant"/> avant sa création ou sa modification.
         /// </summary>
-        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
-        /// <returns>la liste des msgs d'erreurs.</returns>
-        public List<string> ValiderLotComposant(LotComposant lotComposant)
+        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à valider.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <exception cref="LotComposantException">Exception levée si une validation échoue.</exception>
+        public void ValiderLotComposant(LotComposant lotComposant, bool estModification = false)
         {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
             if (string.IsNullOrWhiteSpace(lotComposant.Libelle))
-            {
-                erreurs.Add("Le libelle ne peut pas être vide.");
-            }
-            if(lotComposant.Libelle.Length > 50)
-            {
-                erreurs.Add("Le libelle ne peut pas faire plus de 20 charactères.");
-            }
+                throw new LotComposantException("Le libellé ne peut pas être vide.",
+                    (int)LotComposantException.LotComposantErreur.LibelleRequis);
+
+            if (lotComposant.Libelle.Length > 50)
+                throw new LotComposantException("Le libellé ne peut pas dépasser 50 caractères.",
+                    (int)LotComposantException.LotComposantErreur.LibelleTropLong);
+
             if (lotComposant.Valeur < 0)
-            {
-                erreurs.Add("La valeur doit être positive.");
-            }
-            if (lotComposant.Description.Length > 150)
-            {
-                erreurs.Add("La description ne peut pas faire plus de 150 charactères.");
-            }
-            return erreurs;
+                throw new LotComposantException("La valeur doit être positive.",
+                    (int)LotComposantException.LotComposantErreur.ValeurNegative);
+
+            if (!string.IsNullOrEmpty(lotComposant.Description) && lotComposant.Description.Length > 150)
+                throw new LotComposantException("La description ne peut pas dépasser 150 caractères.",
+                    (int)LotComposantException.LotComposantErreur.DescriptionTropLongue);
         }
     }
 }

@@ -2,7 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -27,29 +37,25 @@ namespace ApplicationUi
             _jeuSelectionne = null;
 
             filtre = "";
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
             buttonEffacer.Text = " 🧽  Effacer";
 
-            AfficherBouttons();
-
-            ChargerJeux();
-            ChargerPlateformes();
-            ChargerPegi();
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
         }
@@ -88,6 +94,7 @@ namespace ApplicationUi
         }
 
         #endregion
+
         #region Evènements
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
@@ -97,17 +104,32 @@ namespace ApplicationUi
                 Titre = textBoxTitre.Text,
                 Description = textBoxDescription.Text,
                 Editeur = textBoxEditeur.Text,
-                Pegi = (int)comboBoxPegi.SelectedValue,
+                Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0,
                 Plateformes = checkedListBoxPlateforme.CheckedItems
                                   .Cast<Plateforme>()
                                   .ToList(),
                 DateSortie = dateTimePickerDateSortie.Value
             };
-            if (ValiderJeu(jeu))
+            try
             {
                 _serviceJeu.Creer(jeu);
-                ChargerJeux();
+                MessageBox.Show("Le jeu a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -122,17 +144,32 @@ namespace ApplicationUi
             _jeuSelectionne.Titre = textBoxTitre.Text;
             _jeuSelectionne.Description = textBoxDescription.Text; ;
             _jeuSelectionne.Editeur = textBoxEditeur.Text;
-            _jeuSelectionne.Pegi = (int)comboBoxPegi.SelectedValue;
+            _jeuSelectionne.Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0;
             _jeuSelectionne.Plateformes = checkedListBoxPlateforme.CheckedItems
                           .Cast<Plateforme>()
                           .ToList();
             _jeuSelectionne.DateSortie = dateTimePickerDateSortie.Value;
 
-            if (ValiderJeu(_jeuSelectionne))
+            try
             {
                 _serviceJeu.Modifier(_jeuSelectionne);
-                ChargerJeux();
+                MessageBox.Show("Le jeu a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -156,7 +193,6 @@ namespace ApplicationUi
         }
 
         #endregion
-
         private void DataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
@@ -193,7 +229,7 @@ namespace ApplicationUi
             if (_jeuSelectionne != null)
                 RemplirFormulaire();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -208,30 +244,13 @@ namespace ApplicationUi
             ChargerJeux();
         }
         #endregion
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations du jeu sont valides ou non,
-        /// en fonction des règles métier définies dans le service Jeu.
-        /// </summary>
-        /// <param name="jeu">L'objet Jeu à valider.</param>
-        /// <returns>Vraie si le jeu est valide, sinon faux.</returns>
-        private bool ValiderJeu(Jeu jeu)
-        {
-            List<string> erreurs = _serviceJeu.ValiderJeu(jeu);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-        #endregion
+
         #region Méthodes
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxTitre.Enabled = false;
             textBoxDescription.Enabled = false;
@@ -265,7 +284,7 @@ namespace ApplicationUi
             ChargerPlateformes();
             ChargerPegi();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -297,13 +316,13 @@ namespace ApplicationUi
 
             dateTimePickerDateSortie.Value = _jeuSelectionne.DateSortie;
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _jeuSelectionne == null;
 

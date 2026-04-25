@@ -1,5 +1,6 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using static Lib_Entities.Entities.Jeu;
@@ -31,10 +32,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Tournoi"/>.</returns>
-        public List<Tournoi> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Tournoi> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Tournoi> query = _context.Tournois
                 .Include(t => t.Espace)
@@ -50,7 +51,7 @@ namespace Lib_Services.Services
                     || t.Espace.Nom.Contains(filtre)
                     || t.Jeu.Titre.Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Nom" => ordre == "ASC" ? query.OrderBy(t => t.Nom) : query.OrderByDescending(t => t.Nom),
@@ -58,8 +59,8 @@ namespace Lib_Services.Services
                 "DureePrevue" => ordre == "ASC" ? query.OrderBy(t => t.DureePrevue) : query.OrderByDescending(t => t.DureePrevue),
                 "DateHeure" => ordre == "ASC" ? query.OrderBy(t => t.DateHeure) : query.OrderByDescending(t => t.DateHeure),
                 "Statut" => ordre == "ASC" ? query.OrderBy(t => t.Statut) : query.OrderByDescending(t => t.Statut),
-                "Espace" => ordre == "ASC" ? query.OrderBy(t => t.Espace.Nom) : query.OrderByDescending(t => t.Espace.Nom),
-                "Jeu" => ordre == "ASC" ? query.OrderBy(t => t.Jeu.Titre) : query.OrderByDescending(t => t.Jeu.Titre),
+                "NomEspace" => ordre == "ASC" ? query.OrderBy(t => t.Espace.Nom) : query.OrderByDescending(t => t.Espace.Nom),
+                "TitreJeu" => ordre == "ASC" ? query.OrderBy(t => t.Jeu.Titre) : query.OrderByDescending(t => t.Jeu.Titre),
                 "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(t => t.NumeroTournoi) : query.OrderByDescending(t => t.NumeroTournoi),
                 _ => query.OrderByDescending(t => t.NumeroTournoi) // valeur par défaut
             };
@@ -131,6 +132,7 @@ namespace Lib_Services.Services
         /// <param name="tournoi">Instance du tournoi à créer.</param>
         public void Creer(Tournoi tournoi)
         {
+            ValiderTournoi(tournoi, false);
             // Ajout et sauvegarde immédiate. 
             _context.Tournois.Add(tournoi);
             _context.SaveChanges();
@@ -142,6 +144,7 @@ namespace Lib_Services.Services
         /// <param name="tournoi">Instance modifiée du tournoi</param>
         public void Modifier(Tournoi tournoi)
         {
+            ValiderTournoi(tournoi, true);
             // Update attache l'entité et marque toutes les propriétés comme modifiées.
             _context.Tournois.Update(tournoi);
             _context.SaveChanges();
@@ -183,48 +186,44 @@ namespace Lib_Services.Services
             return true;
         }
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un tournoi.
+        /// Permet de valider les données d'un tournoi avant création ou modification.
         /// </summary>
-        /// <param name="tournoi">Le tournoi à valider</param>
+        /// <param name="tournoi">Tournoi à valider</param>
         /// <param name="estModification">Indique si c'est une modification ou une création</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderTournoi(Tournoi tournoi, bool estModification)
+        /// <exception cref="TournoiException">Exception si les données du tournoi sont invalides</exception>
+        public void ValiderTournoi(Tournoi tournoi, bool estModification = false)
         {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
             if (string.IsNullOrWhiteSpace(tournoi.Nom))
-                erreurs.Add("Le nom est requis.");
+                throw new TournoiException("Le nom est requis.",
+                    (int)TournoiException.TournoiErreur.NomRequis);
 
             if (tournoi.IdJeu <= 0)
-                erreurs.Add("Un jeu est requis.");
+                throw new TournoiException("Un jeu est requis.",
+                    (int)TournoiException.TournoiErreur.JeuRequis);
 
             if (tournoi.IdEspace <= 0)
-                erreurs.Add("Un espace est requis.");
+                throw new TournoiException("Un espace est requis.",
+                    (int)TournoiException.TournoiErreur.EspaceRequis);
 
-            if (tournoi.NbParticipants < 0)
-                erreurs.Add("Le nombre de participants ne doit pas être inférieur à zéro.");
+            if (tournoi.NbParticipants <= 0)
+                throw new TournoiException("Le nombre de participants doit être supérieur à zéro.",
+                    (int)TournoiException.TournoiErreur.NbParticipantsInvalide);
 
-            if (tournoi.Statut == null)
-                erreurs.Add("Le tournoi dois avoir un statut défini.");
+            if (string.IsNullOrWhiteSpace(tournoi.Statut))
+                throw new TournoiException("Le tournoi doit avoir un statut défini.",
+                    (int)TournoiException.TournoiErreur.StatutRequis);
 
-            // Deux tournois sont en cours en même temps si :
-            // - Leurs date et heure de début sont égales
-            // - La date et heure de début d'un tournoi est comprise entre le début et la fin d'un autre tournoi
             if (Lister("").Any(t => t.NumeroTournoi != tournoi.NumeroTournoi
                                 && t.IdEspace == tournoi.IdEspace
                                 && ((t.Statut == "En cours" && tournoi.Statut == "En cours")
-                                    // Si un planifié chevauche un en cours
-                                    || (tournoi.DateHeure >= t.DateHeure 
-                                        && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue))
-                                        )))
-                erreurs.Add("Un autre tournoi est déjà en cours à cette période.");
+                                    || (tournoi.DateHeure >= t.DateHeure
+                                        && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue)))))
+                throw new TournoiException("Un autre tournoi est déjà en cours à cette période.",
+                    (int)TournoiException.TournoiErreur.ConflitHoraire);
 
             if (!ValiderHoraire(tournoi.DateHeure))
-                erreurs.Add("Les horraires ne sont pas valides. \nSamedi : 10h - 20h\nDimanche : 10h - 18h");
-
-
-            return erreurs;
+                throw new TournoiException("Les horaires ne sont pas valides.\nSamedi : 10h - 20h\nDimanche : 10h - 18h",
+                    (int)TournoiException.TournoiErreur.HoraireInvalide);
         }
         #endregion
     }

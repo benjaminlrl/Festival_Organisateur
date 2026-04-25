@@ -2,6 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Common;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -28,31 +39,29 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             _espaceSelectionnee = null;
 
-            AfficherBouttons();
-
             labelStatutTournoi.Visible = _espaceSelectionnee != null;
             dataGridTournois.Visible = _espaceSelectionnee != null;
             buttonEffacer.Text = "🧽  Effacer";
 
-            ordreChamp = "ASC";
+            ordreChamp = "DESC";
             filtre = "";
 
-            ChargerEspaces();
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
         }
 
@@ -224,11 +233,26 @@ namespace ApplicationUi
                 Superficie = (int)numericUpDownSuperficie.Value,
             };
 
-            if (ValiderEspace(espace))
+            try
             {
                 _serviceEspace.Creer(espace);
                 MessageBox.Show("L'espace a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (EspaceException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de l'espace.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
 
@@ -252,11 +276,26 @@ namespace ApplicationUi
             _espaceSelectionnee.CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value;
             _espaceSelectionnee.Superficie = (int)numericUpDownSuperficie.Value;
 
-            if (ValiderEspace(_espaceSelectionnee))
+            try
             {
                 _serviceEspace.Modifier(_espaceSelectionnee);
                 MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (EspaceException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -328,7 +367,7 @@ namespace ApplicationUi
             if (_espaceSelectionnee != null)
                 RemplirFormulaire();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -346,33 +385,13 @@ namespace ApplicationUi
 
         #endregion
 
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations de l'espace sont valides ou non,
-        /// en fonction des règles métier définies dans le service Espace.
-        /// </summary>
-        /// <param name="espace">L'objet Espace à valider.</param>
-        /// <returns>Vraie si l'espace est valide, sinon faux.</returns>
-        private bool ValiderEspace(Espace espace)
-        {
-            var erreurs = _serviceEspace.ValiderEspace(espace);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        #endregion
-
         #region Méthodes
 
         /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxNom.Enabled = false;
             textBoxDescription.Enabled = false;
@@ -455,7 +474,7 @@ namespace ApplicationUi
             // Recharger les espaces pour réinitialiser la sélection et les statistiques
             ChargerEspaces();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -482,13 +501,13 @@ namespace ApplicationUi
 
             ChargerPostesJeu();
             StatutTournois();
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _espaceSelectionnee == null;
 

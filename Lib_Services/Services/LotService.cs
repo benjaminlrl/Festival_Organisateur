@@ -35,10 +35,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Lot"/>.</returns>
-        public List<Lot> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Lot> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Lot> query = _context.Lots
                         .Include(l => l.LotComposant)
@@ -52,7 +52,7 @@ namespace Lib_Services.Services
                         || l.Tournoi.Nom.Contains(filtre)
                         || l.LotComposant.Any(lc => lc.Libelle.Contains(filtre)));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Libelle" => ordre == "ASC" ? query.OrderBy(l => l.Libelle) : query.OrderByDescending(l => l.Libelle),
@@ -86,6 +86,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance de <see cref="Lot"/> à créer.</param>
         public void Creer(Lot lot)
         {
+            ValiderLot(lot, false);
             // Ajout de l'entité au contexte puis persistance immédiate.
             _context.Lots.Add(lot);
             _context.SaveChanges();
@@ -98,6 +99,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Lot"/>.</param>
         public void Modifier(Lot lot)
         {
+            ValiderLot(lot, true);
             _context.Lots.Update(lot);
             _context.SaveChanges();
         }
@@ -120,28 +122,24 @@ namespace Lib_Services.Services
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de voir si un lot est conformes aux règles de sécurité suivantes
+        /// Valide les propriétés d'une instance de <see cref="Lot"/> avant sa création ou sa modification.
         /// </summary>
-        /// <param name="lot">Instance de <see cref="Lot"/> à créer.</param>
-        /// <returns>la liste des msgs d'erreurs.</returns>
-        public List<string> ValiderLot(Lot lot)
+        /// <param name="lot">Instance de <see cref="Lot"/> à valider.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <exception cref="LotException">Exception levée si une validation échoue.</exception>
+        public void ValiderLot(Lot lot, bool estModification = false)
         {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
             if (string.IsNullOrWhiteSpace(lot.Libelle))
-            {
-                erreurs.Add("Le libelle ne peut pas être vide.");
-            }
+                throw new LotException("Le libellé ne peut pas être vide.",
+                    (int)LotException.LotErreur.LibelleRequis);
+
             if (lot.Libelle.Length > 50)
-            {
-                erreurs.Add("Le libelle ne peut pas faire plus de 20 charactères.");
-            }
+                throw new LotException("Le libellé ne peut pas dépasser 50 caractères.",
+                    (int)LotException.LotErreur.LibelleTropLong);
+
             if (lot.RangAttribution < 0)
-            {
-                erreurs.Add("Le rang ne peut pas être négatif");
-            }
-            return erreurs;
+                throw new LotException("Le rang ne peut pas être négatif.",
+                    (int)LotException.LotErreur.RangNegatif);
         }
         #endregion
     }
