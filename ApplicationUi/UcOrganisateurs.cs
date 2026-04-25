@@ -31,21 +31,20 @@ namespace ApplicationUi
             _serviceRole = new RoleService(context);
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
-            ChargerOrganisateurs();
-            ChargerRoles();
-            buttonModifier.Enabled = _organisateurSelectionne != null;
-            buttonSupprimer.Enabled = _organisateurSelectionne != null;
+            Raz_Zones();
+            boutonModifier.Enabled = _organisateurSelectionne != null;
+            boutonSupprimer.Enabled = _organisateurSelectionne != null;
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Ajouter") == false)
             {
-                buttonAjouter.Visible = false;
+                boutonAjouter.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Modifier") == false)
             {
-                buttonModifier.Visible = false;
+                boutonModifier.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Supprimer") == false)
             {
-                buttonSupprimer.Visible = false;
+                boutonSupprimer.Visible = false;
             }
         }
 
@@ -71,6 +70,9 @@ namespace ApplicationUi
         /// </summary>
         private void MEP_DataGrid()
         {
+            // On affiche et modifie l'affichage des colonnes du dataGrid
+            DesactiverTrieAutomatique(dataGridOrganisateurs);
+
             dataGridOrganisateurs.Columns["IdRole"].Visible = false;
             dataGridOrganisateurs.Columns["Login"].DisplayIndex = 0;
             dataGridOrganisateurs.Columns["Mail"].DisplayIndex = 1;
@@ -104,8 +106,10 @@ namespace ApplicationUi
             textBoxMotDePasse.Clear();
             comboBoxRole.SelectedItem = null;
             _organisateurSelectionne = null;
-            buttonModifier.Enabled = _organisateurSelectionne != null;
-            buttonSupprimer.Enabled = _organisateurSelectionne != null;
+            boutonModifier.Enabled = _organisateurSelectionne != null;
+            boutonSupprimer.Enabled = _organisateurSelectionne != null;
+            ChargerOrganisateurs();
+            ChargerRoles();
         }
 
         /// <summary>
@@ -193,7 +197,7 @@ namespace ApplicationUi
         /// Vérifie que les champs sont valides, que le login n'existe pas déjà,
         /// et que l'identifiant et le mot de passe respectent les règles de validation.
         /// </summary>
-        private void ButtonAjouter_Click(object sender, EventArgs e)
+        private void BoutonAjouter_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -240,7 +244,7 @@ namespace ApplicationUi
         /// Vérifie que les champs sont valides et que le login n'a pas été modifié.
         /// Le mot de passe est hashé via BCrypt avant d'être sauvegardé.
         /// </summary>
-        private void ButtonModifier_Click(object sender, EventArgs e)
+        private void BoutonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un organisateur à modifier
             if (_organisateurSelectionne == null)
@@ -283,7 +287,7 @@ namespace ApplicationUi
         /// Supprime l'organisateur sélectionné après vérification.
         /// Empêche la suppression de son propre compte et des comptes Administrateur.
         /// </summary>
-        private void ButtonSupprimer_Click(object sender, EventArgs e)
+        private void BoutonSupprimer_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un organisateur à supprimé
             // On check s'il essaye pas de supprimer l'organisateur connecté
@@ -313,7 +317,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void ButtonEffacer_Click(object sender, EventArgs e)
+        private void BoutonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -328,13 +332,16 @@ namespace ApplicationUi
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
-                var map = new Dictionary<int, string>
+                // ordonner sur les champs login, mail et nom de rôle
+                Dictionary<int, string> map = new()
                 {
                     { dataGridOrganisateurs.Columns["Login"].Index, "Login" },
                     { dataGridOrganisateurs.Columns["Mail"].Index, "Mail" },
                     { dataGridOrganisateurs.Columns["NomRole"].Index, "NomRole" }
                 };
 
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
@@ -343,6 +350,8 @@ namespace ApplicationUi
 
                 // Appliquer le tri
                 dataGridOrganisateurs.DataSource = _serviceOrganisateur.Lister("admin", colonne, ordreChamp);
+                dataGridOrganisateurs.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGrid();
                 return;
@@ -354,8 +363,8 @@ namespace ApplicationUi
             if (_organisateurSelectionne != null)
                 RemplirFormulaire(_organisateurSelectionne);
 
-            buttonModifier.Enabled = _organisateurSelectionne != null;
-            buttonSupprimer.Enabled = _organisateurSelectionne != null;
+            boutonModifier.Enabled = _organisateurSelectionne != null;
+            boutonSupprimer.Enabled = _organisateurSelectionne != null;
         }
 
         /// <summary>
@@ -372,6 +381,17 @@ namespace ApplicationUi
 
         }
 
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        private void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
         #endregion
     }
 }

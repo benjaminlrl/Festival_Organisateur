@@ -29,10 +29,10 @@ namespace ApplicationUi
             comboBoxRole = new ComboBox();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
-            buttonAjouter = new Button();
-            buttonEffacer = new Button();
-            buttonModifier = new Button();
-            buttonSupprimer = new Button();
+            boutonAjouter = new Button();
+            boutonEffacer = new Button();
+            boutonModifier = new Button();
+            boutonSupprimer = new Button();
             label1 = new Label();
             dataGridOrganisateurs = new DataGridView();
             label2 = new Label();
@@ -173,10 +173,10 @@ namespace ApplicationUi
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(buttonAjouter);
-            groupBox1.Controls.Add(buttonEffacer);
-            groupBox1.Controls.Add(buttonModifier);
-            groupBox1.Controls.Add(buttonSupprimer);
+            groupBox1.Controls.Add(boutonAjouter);
+            groupBox1.Controls.Add(boutonEffacer);
+            groupBox1.Controls.Add(boutonModifier);
+            groupBox1.Controls.Add(boutonSupprimer);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
@@ -185,69 +185,69 @@ namespace ApplicationUi
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
             // 
-            // buttonAjouter
+            // boutonAjouter
             // 
-            buttonAjouter.BackColor = Color.FromArgb(76, 175, 80);
-            buttonAjouter.FlatAppearance.BorderSize = 0;
-            buttonAjouter.FlatStyle = FlatStyle.Flat;
-            buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(270, 25);
-            buttonAjouter.Margin = new Padding(4);
-            buttonAjouter.Name = "buttonAjouter";
-            buttonAjouter.Size = new Size(150, 45);
-            buttonAjouter.TabIndex = 6;
-            buttonAjouter.Text = "➕  Ajouter";
-            buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += ButtonAjouter_Click;
+            boutonAjouter.BackColor = Color.FromArgb(76, 175, 80);
+            boutonAjouter.FlatAppearance.BorderSize = 0;
+            boutonAjouter.FlatStyle = FlatStyle.Flat;
+            boutonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonAjouter.ForeColor = Color.White;
+            boutonAjouter.Location = new Point(270, 25);
+            boutonAjouter.Margin = new Padding(4);
+            boutonAjouter.Name = "boutonAjouter";
+            boutonAjouter.Size = new Size(150, 45);
+            boutonAjouter.TabIndex = 6;
+            boutonAjouter.Text = "➕  Ajouter";
+            boutonAjouter.UseVisualStyleBackColor = false;
+            boutonAjouter.Click += BoutonAjouter_Click;
             // 
-            // buttonEffacer
+            // boutonEffacer
             // 
-            buttonEffacer.BackColor = Color.MediumPurple;
-            buttonEffacer.FlatAppearance.BorderSize = 0;
-            buttonEffacer.FlatStyle = FlatStyle.Flat;
-            buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonEffacer.ForeColor = Color.White;
-            buttonEffacer.Location = new Point(70, 25);
-            buttonEffacer.Margin = new Padding(4);
-            buttonEffacer.Name = "buttonEffacer";
-            buttonEffacer.Size = new Size(150, 45);
-            buttonEffacer.TabIndex = 3;
-            buttonEffacer.Text = " \U0001f9fd  Effacer";
-            buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += ButtonEffacer_Click;
+            boutonEffacer.BackColor = Color.MediumPurple;
+            boutonEffacer.FlatAppearance.BorderSize = 0;
+            boutonEffacer.FlatStyle = FlatStyle.Flat;
+            boutonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonEffacer.ForeColor = Color.White;
+            boutonEffacer.Location = new Point(70, 25);
+            boutonEffacer.Margin = new Padding(4);
+            boutonEffacer.Name = "boutonEffacer";
+            boutonEffacer.Size = new Size(150, 45);
+            boutonEffacer.TabIndex = 3;
+            boutonEffacer.Text = " \U0001f9fd  Effacer";
+            boutonEffacer.UseVisualStyleBackColor = false;
+            boutonEffacer.Click += BoutonEffacer_Click;
             // 
-            // buttonModifier
+            // boutonModifier
             // 
-            buttonModifier.BackColor = Color.FromArgb(33, 150, 243);
-            buttonModifier.FlatAppearance.BorderSize = 0;
-            buttonModifier.FlatStyle = FlatStyle.Flat;
-            buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(470, 25);
-            buttonModifier.Margin = new Padding(4);
-            buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(150, 45);
-            buttonModifier.TabIndex = 4;
-            buttonModifier.Text = "✏️    Modifier";
-            buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += ButtonModifier_Click;
+            boutonModifier.BackColor = Color.FromArgb(33, 150, 243);
+            boutonModifier.FlatAppearance.BorderSize = 0;
+            boutonModifier.FlatStyle = FlatStyle.Flat;
+            boutonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonModifier.ForeColor = Color.White;
+            boutonModifier.Location = new Point(470, 25);
+            boutonModifier.Margin = new Padding(4);
+            boutonModifier.Name = "boutonModifier";
+            boutonModifier.Size = new Size(150, 45);
+            boutonModifier.TabIndex = 4;
+            boutonModifier.Text = "✏️    Modifier";
+            boutonModifier.UseVisualStyleBackColor = false;
+            boutonModifier.Click += BoutonModifier_Click;
             // 
-            // buttonSupprimer
+            // boutonSupprimer
             // 
-            buttonSupprimer.BackColor = Color.FromArgb(244, 67, 54);
-            buttonSupprimer.FlatAppearance.BorderSize = 0;
-            buttonSupprimer.FlatStyle = FlatStyle.Flat;
-            buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(670, 25);
-            buttonSupprimer.Margin = new Padding(4);
-            buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(162, 45);
-            buttonSupprimer.TabIndex = 5;
-            buttonSupprimer.Text = "🗑️    Supprimer";
-            buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += ButtonSupprimer_Click;
+            boutonSupprimer.BackColor = Color.FromArgb(244, 67, 54);
+            boutonSupprimer.FlatAppearance.BorderSize = 0;
+            boutonSupprimer.FlatStyle = FlatStyle.Flat;
+            boutonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonSupprimer.ForeColor = Color.White;
+            boutonSupprimer.Location = new Point(670, 25);
+            boutonSupprimer.Margin = new Padding(4);
+            boutonSupprimer.Name = "boutonSupprimer";
+            boutonSupprimer.Size = new Size(162, 45);
+            boutonSupprimer.TabIndex = 5;
+            boutonSupprimer.Text = "🗑️    Supprimer";
+            boutonSupprimer.UseVisualStyleBackColor = false;
+            boutonSupprimer.Click += BoutonSupprimer_Click;
             // 
             // label1
             // 
@@ -299,7 +299,7 @@ namespace ApplicationUi
             // 
             AutoScaleDimensions = new SizeF(7F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(227, 242, 253);
+            BackColor = Color.DarkSalmon;
             Controls.Add(textBoxRecherche);
             Controls.Add(label2);
             Controls.Add(panelForm);
@@ -333,10 +333,10 @@ namespace ApplicationUi
         private Label labelRole;
         private Panel panelButtons;
         private GroupBox groupBox1;
-        private Button buttonAjouter;
-        private Button buttonEffacer;
-        private Button buttonModifier;
-        private Button buttonSupprimer;
+        private Button boutonAjouter;
+        private Button boutonEffacer;
+        private Button boutonModifier;
+        private Button boutonSupprimer;
         private Label label1;
         private DataGridView dataGridOrganisateurs;
         private Label label2;

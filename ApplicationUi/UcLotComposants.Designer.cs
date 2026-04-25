@@ -29,10 +29,10 @@ namespace ApplicationUi
             comboBoxLot = new ComboBox();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
-            buttonAjouter = new Button();
-            buttonEffacer = new Button();
-            buttonModifier = new Button();
-            buttonSupprimer = new Button();
+            boutonAjouter = new Button();
+            boutonEffacer = new Button();
+            boutonModifier = new Button();
+            boutonSupprimer = new Button();
             label1 = new Label();
             dataGridLotComposants = new DataGridView();
             label2 = new Label();
@@ -92,7 +92,7 @@ namespace ApplicationUi
             labelLibelle.Location = new Point(4, 0);
             labelLibelle.Margin = new Padding(4, 0, 4, 0);
             labelLibelle.Name = "labelLibelle";
-            labelLibelle.Size = new Size(86, 23);
+            labelLibelle.Size = new Size(67, 17);
             labelLibelle.TabIndex = 0;
             labelLibelle.Text = "Libelle * :";
             // 
@@ -103,7 +103,7 @@ namespace ApplicationUi
             labelDescription.Location = new Point(223, 0);
             labelDescription.Margin = new Padding(4, 0, 4, 0);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(125, 23);
+            labelDescription.Size = new Size(97, 17);
             labelDescription.TabIndex = 1;
             labelDescription.Text = "Description * :";
             // 
@@ -114,7 +114,7 @@ namespace ApplicationUi
             labelValeur.Location = new Point(442, 0);
             labelValeur.Margin = new Padding(4, 0, 4, 0);
             labelValeur.Name = "labelValeur";
-            labelValeur.Size = new Size(167, 23);
+            labelValeur.Size = new Size(132, 17);
             labelValeur.TabIndex = 2;
             labelValeur.Text = "Valeur (en euros) * :";
             // 
@@ -125,7 +125,7 @@ namespace ApplicationUi
             labelLot.Location = new Point(661, 0);
             labelLot.Margin = new Padding(4, 0, 4, 0);
             labelLot.Name = "labelLot";
-            labelLot.Size = new Size(119, 23);
+            labelLot.Size = new Size(94, 17);
             labelLot.TabIndex = 3;
             labelLot.Text = "Lot associé * :";
             // 
@@ -135,7 +135,7 @@ namespace ApplicationUi
             textBoxLibelle.Margin = new Padding(4);
             textBoxLibelle.Name = "textBoxLibelle";
             textBoxLibelle.PlaceholderText = "Ex: Playstation 5";
-            textBoxLibelle.Size = new Size(210, 27);
+            textBoxLibelle.Size = new Size(210, 23);
             textBoxLibelle.TabIndex = 0;
             // 
             // textBoxDescription
@@ -144,7 +144,7 @@ namespace ApplicationUi
             textBoxDescription.Margin = new Padding(4);
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Console de jeu de type Playstation";
-            textBoxDescription.Size = new Size(210, 27);
+            textBoxDescription.Size = new Size(210, 23);
             textBoxDescription.TabIndex = 1;
             // 
             // textBoxValeur
@@ -153,7 +153,7 @@ namespace ApplicationUi
             textBoxValeur.Margin = new Padding(4);
             textBoxValeur.Name = "textBoxValeur";
             textBoxValeur.PlaceholderText = "Ex: 300";
-            textBoxValeur.Size = new Size(210, 27);
+            textBoxValeur.Size = new Size(210, 23);
             textBoxValeur.TabIndex = 2;
             // 
             // comboBoxLot
@@ -162,7 +162,7 @@ namespace ApplicationUi
             comboBoxLot.Location = new Point(661, 39);
             comboBoxLot.Margin = new Padding(4);
             comboBoxLot.Name = "comboBoxLot";
-            comboBoxLot.Size = new Size(210, 31);
+            comboBoxLot.Size = new Size(210, 26);
             comboBoxLot.TabIndex = 3;
             // 
             // panelButtons
@@ -177,10 +177,10 @@ namespace ApplicationUi
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(buttonAjouter);
-            groupBox1.Controls.Add(buttonEffacer);
-            groupBox1.Controls.Add(buttonModifier);
-            groupBox1.Controls.Add(buttonSupprimer);
+            groupBox1.Controls.Add(boutonAjouter);
+            groupBox1.Controls.Add(boutonEffacer);
+            groupBox1.Controls.Add(boutonModifier);
+            groupBox1.Controls.Add(boutonSupprimer);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
@@ -189,69 +189,69 @@ namespace ApplicationUi
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
             // 
-            // buttonAjouter
+            // boutonAjouter
             // 
-            buttonAjouter.BackColor = Color.FromArgb(76, 175, 80);
-            buttonAjouter.FlatAppearance.BorderSize = 0;
-            buttonAjouter.FlatStyle = FlatStyle.Flat;
-            buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(270, 25);
-            buttonAjouter.Margin = new Padding(4);
-            buttonAjouter.Name = "buttonAjouter";
-            buttonAjouter.Size = new Size(150, 45);
-            buttonAjouter.TabIndex = 6;
-            buttonAjouter.Text = "➕  Ajouter";
-            buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += buttonAjouter_Click;
+            boutonAjouter.BackColor = Color.FromArgb(76, 175, 80);
+            boutonAjouter.FlatAppearance.BorderSize = 0;
+            boutonAjouter.FlatStyle = FlatStyle.Flat;
+            boutonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonAjouter.ForeColor = Color.White;
+            boutonAjouter.Location = new Point(270, 25);
+            boutonAjouter.Margin = new Padding(4);
+            boutonAjouter.Name = "boutonAjouter";
+            boutonAjouter.Size = new Size(150, 45);
+            boutonAjouter.TabIndex = 6;
+            boutonAjouter.Text = "➕  Ajouter";
+            boutonAjouter.UseVisualStyleBackColor = false;
+            boutonAjouter.Click += BoutonAjouter_Click;
             // 
-            // buttonEffacer
+            // boutonEffacer
             // 
-            buttonEffacer.BackColor = Color.MediumPurple;
-            buttonEffacer.FlatAppearance.BorderSize = 0;
-            buttonEffacer.FlatStyle = FlatStyle.Flat;
-            buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonEffacer.ForeColor = Color.White;
-            buttonEffacer.Location = new Point(70, 25);
-            buttonEffacer.Margin = new Padding(4);
-            buttonEffacer.Name = "buttonEffacer";
-            buttonEffacer.Size = new Size(150, 45);
-            buttonEffacer.TabIndex = 3;
-            buttonEffacer.Text = " \U0001f9fd  Effacer";
-            buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += buttonEffacer_Click;
+            boutonEffacer.BackColor = Color.MediumPurple;
+            boutonEffacer.FlatAppearance.BorderSize = 0;
+            boutonEffacer.FlatStyle = FlatStyle.Flat;
+            boutonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonEffacer.ForeColor = Color.White;
+            boutonEffacer.Location = new Point(70, 25);
+            boutonEffacer.Margin = new Padding(4);
+            boutonEffacer.Name = "boutonEffacer";
+            boutonEffacer.Size = new Size(150, 45);
+            boutonEffacer.TabIndex = 3;
+            boutonEffacer.Text = " \U0001f9fd  Effacer";
+            boutonEffacer.UseVisualStyleBackColor = false;
+            boutonEffacer.Click += BoutonEffacer_Click;
             // 
-            // buttonModifier
+            // boutonModifier
             // 
-            buttonModifier.BackColor = Color.FromArgb(33, 150, 243);
-            buttonModifier.FlatAppearance.BorderSize = 0;
-            buttonModifier.FlatStyle = FlatStyle.Flat;
-            buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(470, 25);
-            buttonModifier.Margin = new Padding(4);
-            buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(150, 45);
-            buttonModifier.TabIndex = 4;
-            buttonModifier.Text = "✏️    Modifier";
-            buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += buttonModifier_Click;
+            boutonModifier.BackColor = Color.FromArgb(33, 150, 243);
+            boutonModifier.FlatAppearance.BorderSize = 0;
+            boutonModifier.FlatStyle = FlatStyle.Flat;
+            boutonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonModifier.ForeColor = Color.White;
+            boutonModifier.Location = new Point(470, 25);
+            boutonModifier.Margin = new Padding(4);
+            boutonModifier.Name = "boutonModifier";
+            boutonModifier.Size = new Size(150, 45);
+            boutonModifier.TabIndex = 4;
+            boutonModifier.Text = "✏️    Modifier";
+            boutonModifier.UseVisualStyleBackColor = false;
+            boutonModifier.Click += BoutonModifier_Click;
             // 
-            // buttonSupprimer
+            // boutonSupprimer
             // 
-            buttonSupprimer.BackColor = Color.FromArgb(244, 67, 54);
-            buttonSupprimer.FlatAppearance.BorderSize = 0;
-            buttonSupprimer.FlatStyle = FlatStyle.Flat;
-            buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(670, 25);
-            buttonSupprimer.Margin = new Padding(4);
-            buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(162, 45);
-            buttonSupprimer.TabIndex = 5;
-            buttonSupprimer.Text = "🗑️    Supprimer";
-            buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += buttonSupprimer_Click;
+            boutonSupprimer.BackColor = Color.FromArgb(244, 67, 54);
+            boutonSupprimer.FlatAppearance.BorderSize = 0;
+            boutonSupprimer.FlatStyle = FlatStyle.Flat;
+            boutonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            boutonSupprimer.ForeColor = Color.White;
+            boutonSupprimer.Location = new Point(670, 25);
+            boutonSupprimer.Margin = new Padding(4);
+            boutonSupprimer.Name = "boutonSupprimer";
+            boutonSupprimer.Size = new Size(162, 45);
+            boutonSupprimer.TabIndex = 5;
+            boutonSupprimer.Text = "🗑️    Supprimer";
+            boutonSupprimer.UseVisualStyleBackColor = false;
+            boutonSupprimer.Click += BoutonSupprimer_Click;
             // 
             // label1
             // 
@@ -259,7 +259,7 @@ namespace ApplicationUi
             label1.Location = new Point(0, 0);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 23);
+            label1.Size = new Size(0, 18);
             label1.TabIndex = 6;
             // 
             // dataGridLotComposants
@@ -276,7 +276,7 @@ namespace ApplicationUi
             dataGridLotComposants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridLotComposants.Size = new Size(900, 434);
             dataGridLotComposants.TabIndex = 2;
-            dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
+            dataGridLotComposants.CellClick += DataGridLotComposants_CellClick;
             // 
             // label2
             // 
@@ -285,7 +285,7 @@ namespace ApplicationUi
             label2.Location = new Point(119, 275);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(112, 25);
+            label2.Size = new Size(89, 20);
             label2.TabIndex = 4;
             label2.Text = "Recherche :";
             // 
@@ -295,9 +295,9 @@ namespace ApplicationUi
             textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.PlaceholderText = "Ex: Xbox";
-            textBoxRecherche.Size = new Size(574, 27);
+            textBoxRecherche.Size = new Size(574, 23);
             textBoxRecherche.TabIndex = 5;
-            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
+            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
             // 
             // groupBoxStatsEspaces
             // 
@@ -347,9 +347,9 @@ namespace ApplicationUi
             // 
             // UcLotComposants
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
+            AutoScaleDimensions = new SizeF(7F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(227, 242, 253);
+            BackColor = Color.CornflowerBlue;
             Controls.Add(groupBoxStatsEspaces);
             Controls.Add(textBoxRecherche);
             Controls.Add(label2);
@@ -385,10 +385,10 @@ namespace ApplicationUi
         private Label labelLot;
         private Panel panelButtons;
         private GroupBox groupBox1;
-        private Button buttonAjouter;
-        private Button buttonEffacer;
-        private Button buttonModifier;
-        private Button buttonSupprimer;
+        private Button boutonAjouter;
+        private Button boutonEffacer;
+        private Button boutonModifier;
+        private Button boutonSupprimer;
         private Label label1;
         private DataGridView dataGridLotComposants;
         private Label label2;

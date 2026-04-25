@@ -40,24 +40,21 @@ namespace ApplicationUi
             listeLots = new List<Lot>();
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
-
-            ChargerLotComposants();
-            ChargerLots();
-
-            buttonModifier.Enabled = _lotComposantSelectionne != null;
-            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            Raz_Zones();
+            boutonModifier.Enabled = _lotComposantSelectionne != null;
+            boutonSupprimer.Enabled = _lotComposantSelectionne != null;
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Ajouter") == false)
             {
-                buttonAjouter.Visible = false;
+                boutonAjouter.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Modifier") == false)
             {
-                buttonModifier.Visible = false;
+                boutonModifier.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Supprimer") == false)
             {
-                buttonSupprimer.Visible = false;
+                boutonSupprimer.Visible = false;
             }
         }
 
@@ -110,11 +107,9 @@ namespace ApplicationUi
             comboBoxLot.DataSource = null;
 
             listeLots = new List<Lot>();
-            listeLots.Add(new Lot { Numero = null, Libelle = "Aucun" });
             listeLots.AddRange(lots);
 
             comboBoxLot.DataSource = listeLots;
-            comboBoxLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         /// <summary>
@@ -129,8 +124,11 @@ namespace ApplicationUi
             textBoxValeur.Clear();
             comboBoxLot.SelectedItem = null;
             _lotComposantSelectionne = null;
-            buttonModifier.Enabled = _lotComposantSelectionne != null;
-            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            boutonModifier.Enabled = _lotComposantSelectionne != null;
+            boutonSupprimer.Enabled = _lotComposantSelectionne != null;
+            ChargerStatistiques();
+            ChargerLotComposants();
+            ChargerLots();
         }
 
         /// <summary>
@@ -144,7 +142,7 @@ namespace ApplicationUi
             textBoxLibelle.Text = lotComposant.Libelle;
             textBoxDescription.Text = lotComposant.Description;
             textBoxValeur.Text = lotComposant.Valeur.ToString();
-            if(lotComposant.NumeroLot == null)
+            if (lotComposant.NumeroLot == null)
             {
                 comboBoxLot.SelectedValue = "Aucun";
             }
@@ -190,7 +188,7 @@ namespace ApplicationUi
         /// Crée un nouveau lot composant avec les données saisies dans le formulaire.
         /// Vérifie que les champs sont valides et que les règles métier sont respectées.
         /// </summary>
-        private void buttonAjouter_Click(object sender, EventArgs e)
+        private void BoutonAjouter_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -243,7 +241,7 @@ namespace ApplicationUi
         /// Modifie le lot composant sélectionné avec les nouvelles valeurs saisies dans le formulaire.
         /// Met à jour uniquement les champs modifiés et gère le lot nullable.
         /// </summary>
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void BoutonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotComposantSelectionne == null)
@@ -322,7 +320,7 @@ namespace ApplicationUi
         /// <summary>
         /// Supprime le lot composant sélectionné après vérification qu'un lot composant est bien sélectionné.
         /// </summary>
-        private void buttonSupprimer_Click(object sender, EventArgs e)
+        private void BoutonSupprimer_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
             // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
@@ -341,7 +339,7 @@ namespace ApplicationUi
                 _serviceLot.Modifier(lotActuelle);
             }
             MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero.Value);
+            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero);
             ChargerLotComposants();
             Raz_Zones();
         }
@@ -349,7 +347,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void BoutonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -359,29 +357,33 @@ namespace ApplicationUi
         /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
         /// Si le clic est sur une cellule, sélectionne le lot composant et remplit le formulaire.
         /// </summary>
-        private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero, libelle, description et valeur
-                var donnees = _serviceLotComposant.Lister(filtre);
-                var map = new Dictionary<int, Func<LotComposant, object>>
+                Dictionary<int, string> map = new()
                 {
-                    { dataGridLotComposants.Columns["Numero"].Index, lc => lc.Numero },
-                    { dataGridLotComposants.Columns["Libelle"].Index, lc => lc.Libelle },
-                    { dataGridLotComposants.Columns["Description"].Index, lc => lc.Description },
-                    { dataGridLotComposants.Columns["Valeur"].Index, lc => lc.Valeur }
+                    { dataGridLotComposants.Columns["Numero"].Index, "Numero" },
+                    { dataGridLotComposants.Columns["Libelle"].Index, "Libelle" },
+                    { dataGridLotComposants.Columns["Description"].Index, "Description" },
+                    { dataGridLotComposants.Columns["Valeur"].Index, "Valeur" }
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
-                // Appliquer le tri
-                dataGridLotComposants.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
+
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
+                dataGridLotComposants.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
                 MEP_DataGridLotComposants();
                 return;
             }
@@ -392,8 +394,8 @@ namespace ApplicationUi
             if (_lotComposantSelectionne != null)
                 RemplirFormulaire(_lotComposantSelectionne);
 
-            buttonModifier.Enabled = _lotComposantSelectionne != null;
-            buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            boutonModifier.Enabled = _lotComposantSelectionne != null;
+            boutonSupprimer.Enabled = _lotComposantSelectionne != null;
         }
 
         /// <summary>
@@ -403,10 +405,11 @@ namespace ApplicationUi
         /// fonction de la saisie de l'utilisateur.</remarks>
         /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
         /// <param name="e">Les données associées à l'événement de modification du texte.</param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerLotComposants();
+            ChargerStatistiques();
         }
 
         #endregion

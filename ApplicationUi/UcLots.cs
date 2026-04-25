@@ -44,19 +44,19 @@ namespace ApplicationUi
             ChargerTournoi();
             DemarrageLotComposants();
             DemarrageLotComposantsDunlot();
-            buttonModifier.Enabled = _lotSelectionnee != null;
-            buttonSupprimerLot.Enabled = _lotSelectionnee != null;
+            boutonModifier.Enabled = _lotSelectionnee != null;
+            boutonSupprimerLot.Enabled = _lotSelectionnee != null;
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Ajouter") == false)
             {
-                buttonAjouterLot.Visible = false;
+                boutonAjouterLot.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Modifier") == false)
             {
-                buttonModifier.Visible = false;
+                boutonModifier.Visible = false;
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Supprimer") == false)
             {
-                buttonSupprimerLot.Visible = false;
+                boutonSupprimerLot.Visible = false;
             }
         }
 
@@ -72,6 +72,7 @@ namespace ApplicationUi
             // Ici on affiche et modifie l'affichage des colonnes du dataGrid
             if (unFormulaire == "Lots")
             {
+                DesactiverTrieAutomatique(dataGridLots);
                 dataGridLots.Columns["Numero"].DisplayIndex = 0;
                 dataGridLots.Columns["LotComposant"].Visible = false;
                 dataGridLots.Columns["NumeroTournoi"].Visible = false;
@@ -85,6 +86,7 @@ namespace ApplicationUi
             }
             else if (unFormulaire == "LotComposants")
             {
+                DesactiverTrieAutomatique(dataGridLotComposants);
                 dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
                 dataGridLotComposants.Columns["Lot"].Visible = false;
                 dataGridLotComposants.Columns["NumeroLot"].Visible = false;
@@ -95,6 +97,7 @@ namespace ApplicationUi
             }
             else if (unFormulaire == "LotComposantsDunLot")
             {
+                DesactiverTrieAutomatique(dataGridLotComposantsDunLot);
                 dataGridLotComposantsDunLot.Columns["Numero"].DisplayIndex = 0;
                 dataGridLotComposantsDunLot.Columns["Lot"].Visible = false;
                 dataGridLotComposantsDunLot.Columns["NumeroLot"].Visible = false;
@@ -169,7 +172,7 @@ namespace ApplicationUi
         {
             // On charge les lots composants du lot selectionné dans le dataGrid
             dataGridLotComposantsDunLot.DataSource = null;
-            var listeLotComposantsDunLotCharger = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value)
+            var listeLotComposantsDunLotCharger = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero)
                 .Where(t => t.NumeroLot != null) // On affiche que les lots composants qui sont associés à un lot
                 .ToList();
             dataGridLotComposantsDunLot.DataSource = listeLotComposantsDunLotCharger;
@@ -208,12 +211,8 @@ namespace ApplicationUi
             // On met les stats à 0 au démarrage du formulaire
             labelStatsComposantDunLotTotal.Text = "0";
 
-            // On ajoute un lot composant avec le libelle "Aucun"
             listeLotComposantsDunLot = new List<LotComposant>();
-            listeLotComposantsDunLot.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
-
             comboBoxLotComposantDunLot.DataSource = listeLotComposantsDunLot;
-            comboBoxLotComposantDunLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         /// <summary>
@@ -229,11 +228,8 @@ namespace ApplicationUi
             comboBoxLotComposant.ValueMember = "Numero";
             comboBoxLotComposant.DataSource = null;
 
-            // On ajoute un lot composant avec le libelle "Aucun"
             listeLotComposants = new List<LotComposant>();
-            listeLotComposants.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
             comboBoxLotComposant.DataSource = listeLotComposants;
-            comboBoxLotComposant.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         /// <summary>
@@ -286,13 +282,9 @@ namespace ApplicationUi
             textBoxLibelle.Clear();
             textBoxRang.Clear();
             comboBoxTournoi.SelectedItem = null;
-            //comboBoxLotComposant.SelectedItem = null;
-            //comboBoxLotComposantDunLot.SelectedItem = null;
             _lotSelectionnee = null;
-            //_lotComposantSelectionnee = null;
-            //_lotComposantDunLotSelectionnee = null;
-            buttonModifier.Enabled = _lotSelectionnee != null;
-            buttonSupprimerLot.Enabled = _lotSelectionnee != null;
+            boutonModifier.Enabled = _lotSelectionnee != null;
+            boutonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
 
         /// <summary>
@@ -372,7 +364,7 @@ namespace ApplicationUi
         /// et rafraîchit les DataGrids.
         /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant n'est pas déjà associé.
         /// </summary>
-        private void buttonAjouterLotComposant_Click(object sender, EventArgs e)
+        private void BoutonAjouterLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
             {
@@ -384,14 +376,14 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero.Value)
+            if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero)
             {
                 MessageBox.Show("Le Lot selectionné contient déjà ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             MessageBox.Show($"Le lot composant a bien été ajouté au lot {_lotSelectionnee.Libelle}.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero.Value;
+            _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero;
             _serviceLotComposant.Modifier(_lotComposantSelectionnee);
             _lotSelectionnee.ValeurTotale += _lotComposantSelectionnee.Valeur;
             _serviceLot.Modifier(_lotSelectionnee);
@@ -406,7 +398,7 @@ namespace ApplicationUi
         /// Vérifie que les champs sont valides et que les règles métier sont respectées.
         /// Met à jour EstAttribue si un tournoi est sélectionné.
         /// </summary>
-        private void buttonAjouterLot_Click(object sender, EventArgs e)
+        private void BoutonAjouterLot_Click(object sender, EventArgs e)
         {
             // On check si les champs sont vides
             if (ChampVide() == false)
@@ -458,7 +450,7 @@ namespace ApplicationUi
         /// et rafraîchit les DataGrids.
         /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant appartient bien au lot.
         /// </summary>
-        private void buttonSupprimerLotComposant_Click(object sender, EventArgs e)
+        private void BoutonSupprimerLotComposant_Click(object sender, EventArgs e)
         {
             if (_lotSelectionnee == null)
             {
@@ -470,7 +462,7 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero.Value)
+            if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero)
             {
                 MessageBox.Show("Le Lot selectionné ne contient pas ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -493,7 +485,7 @@ namespace ApplicationUi
         /// <summary>
         /// Supprime le lot sélectionné après vérification qu'un lot est bien sélectionné.
         /// </summary>
-        private void buttonSupprimerLot_Click(object sender, EventArgs e)
+        private void BoutonSupprimerLot_Click(object sender, EventArgs e)
         {
             // On check si un orgnisateur est sélectionné, puis on le supprime
             // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
@@ -505,7 +497,7 @@ namespace ApplicationUi
             if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
             MessageBox.Show("Le lot a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceLot.Supprimer(_lotSelectionnee.Numero.Value);
+            _serviceLot.Supprimer(_lotSelectionnee.Numero);
             ChargerLots();
             Raz_Zones();
         }
@@ -515,7 +507,7 @@ namespace ApplicationUi
         /// Met à jour uniquement les champs modifiés et gère le tournoi nullable.
         /// Met à jour EstAttribue si un tournoi est associé.
         /// </summary>
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void BoutonModifier_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotSelectionnee == null)
@@ -566,7 +558,7 @@ namespace ApplicationUi
         /// <summary>
         /// Remet le formulaire à vide sans sauvegarder les modifications.
         /// </summary>
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void BoutonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
@@ -577,13 +569,13 @@ namespace ApplicationUi
         /// Si le clic est sur une cellule, sélectionne le lot, remplit le formulaire
         /// et charge les lots composants associés.
         /// </summary>
-        private void dataGridLots_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLots_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero, libelle, valeur totale, rang attribution et est attribue
-                var map = new Dictionary<int, string>
+                Dictionary<int, string> map = new()
                 {
                     { dataGridLots.Columns["Numero"].Index, "Numero"},
                     { dataGridLots.Columns["Libelle"].Index, "Libelle" },
@@ -597,9 +589,13 @@ namespace ApplicationUi
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridLots.DataSource = _serviceLot.Lister(filtre, colonne, ordreChamp);
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLots.DataSource = _serviceLot.Lister(filtre, colonne, ordreChamp);
+                dataGridLots.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGrid("Lots");
                 return;
@@ -615,8 +611,8 @@ namespace ApplicationUi
                 ChargerLotComposants();
             }
 
-            buttonModifier.Enabled = _lotSelectionnee != null;
-            buttonSupprimerLot.Enabled = _lotSelectionnee != null;
+            boutonModifier.Enabled = _lotSelectionnee != null;
+            boutonSupprimerLot.Enabled = _lotSelectionnee != null;
         }
 
         /// <summary>
@@ -624,24 +620,31 @@ namespace ApplicationUi
         /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
         /// Si le clic est sur une cellule, sélectionne le lot composant et remplit la ComboBox.
         /// </summary>
-        private void dataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLotComposants_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero et libelle
-                var map = new Dictionary<int,string>
+                Dictionary<int, string> map = new()
                 {
                     { dataGridLotComposants.Columns["Numero"].Index, "Numero" },
                     { dataGridLotComposants.Columns["Libelle"].Index, "Libelle" }
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var colonne))
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
-                // Appliquer le tri
-                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
+
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
+                dataGridLotComposants.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
                 MEP_DataGrid("LotComposants");
                 return;
             }
@@ -658,24 +661,30 @@ namespace ApplicationUi
         /// Si le clic est sur un en-tête de colonne, trie les données par ordre ASC ou DESC.
         /// Si le clic est sur une cellule, sélectionne le lot composant et remplit la ComboBox.
         /// </summary>
-        private void dataGridLotComposantsDunLot_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridLotComposantsDunLot_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero et libelle
-                var map = new Dictionary<int, string>
+                Dictionary<int, string> map = new()
                 {
                     { dataGridLotComposantsDunLot.Columns["Numero"].Index, "Numero" },
                     { dataGridLotComposantsDunLot.Columns["Libelle"].Index, "Libelle"}
                 };
-                // Appliquer le tri
-                if (!map.TryGetValue(e.ColumnIndex, out var colonne))
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
-                // Inverser l’ordre
-                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value,colonne, ordreChamp);
 
+                // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotComposantDunLotSelectionnee.Numero, colonne, ordreChamp);
+                dataGridLotComposantsDunLot.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
                 MEP_DataGrid("LotComposantsDunLot");
                 return;
             }
@@ -694,12 +703,24 @@ namespace ApplicationUi
         /// fonction de la saisie de l'utilisateur.</remarks>
         /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
         /// <param name="e">Les données associées à l'événement de modification du texte.</param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerLots();
         }
 
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        private void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
         #endregion
+
     }
 }
