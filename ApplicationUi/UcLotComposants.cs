@@ -41,6 +41,7 @@ namespace ApplicationUi
 
             ChargerLotComposants();
             ChargerLots();
+            ChargerStatistiques();
 
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
@@ -108,11 +109,9 @@ namespace ApplicationUi
             comboBoxLot.DataSource = null;
 
             listeLots = new List<Lot>();
-            listeLots.Add(new Lot { Numero = null, Libelle = "Aucun" });
             listeLots.AddRange(lots);
 
             comboBoxLot.DataSource = listeLots;
-            comboBoxLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         /// <summary>
@@ -129,6 +128,7 @@ namespace ApplicationUi
             _lotComposantSelectionne = null;
             buttonModifier.Enabled = _lotComposantSelectionne != null;
             buttonSupprimer.Enabled = _lotComposantSelectionne != null;
+            ChargerStatistiques();
         }
 
         /// <summary>
@@ -357,7 +357,7 @@ namespace ApplicationUi
                 _serviceLot.Modifier(lotActuelle);
             }
             MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero.Value);
+            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero);
             ChargerLotComposants();
             Raz_Zones();
         }
@@ -381,23 +381,27 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero, libelle, description et valeur
-                var donnees = _serviceLotComposant.Lister(filtre);
-                var map = new Dictionary<int, Func<LotComposant, object>>
+                Dictionary<int, string> map = new()
                 {
-                    { dataGridLotComposants.Columns["Numero"].Index, lc => lc.Numero },
-                    { dataGridLotComposants.Columns["Libelle"].Index, lc => lc.Libelle },
-                    { dataGridLotComposants.Columns["Description"].Index, lc => lc.Description },
-                    { dataGridLotComposants.Columns["Valeur"].Index, lc => lc.Valeur }
+                    { dataGridLotComposants.Columns["Numero"].Index, "Numero" },
+                    { dataGridLotComposants.Columns["Libelle"].Index, "Libelle" },
+                    { dataGridLotComposants.Columns["Description"].Index, "Description" },
+                    { dataGridLotComposants.Columns["Valeur"].Index, "Valeur" }
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
-                // Appliquer le tri
-                dataGridLotComposants.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
+
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
+                dataGridLotComposants.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
                 MEP_DataGridLotComposants();
                 return;
             }
@@ -423,11 +427,9 @@ namespace ApplicationUi
         {
             filtre = textBoxRecherche.Text;
             ChargerLotComposants();
+            ChargerStatistiques();
         }
 
-        #endregion
-
-        #region Méthodes
         /// <summary>
         /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
         /// </summary>

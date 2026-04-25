@@ -73,6 +73,7 @@ namespace ApplicationUi
             // Ici on affiche et modifie l'affichage des colonnes du dataGrid
             if (unFormulaire == "Lots")
             {
+                DesactiverTrieAutomatique(dataGridLots);
                 dataGridLots.Columns["Numero"].DisplayIndex = 0;
                 dataGridLots.Columns["LotComposant"].Visible = false;
                 dataGridLots.Columns["NumeroTournoi"].Visible = false;
@@ -86,6 +87,7 @@ namespace ApplicationUi
             }
             else if (unFormulaire == "LotComposants")
             {
+                DesactiverTrieAutomatique(dataGridLotComposants);
                 dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
                 dataGridLotComposants.Columns["Lot"].Visible = false;
                 dataGridLotComposants.Columns["NumeroLot"].Visible = false;
@@ -96,6 +98,7 @@ namespace ApplicationUi
             }
             else if (unFormulaire == "LotComposantsDunLot")
             {
+                DesactiverTrieAutomatique(dataGridLotComposantsDunLot);
                 dataGridLotComposantsDunLot.Columns["Numero"].DisplayIndex = 0;
                 dataGridLotComposantsDunLot.Columns["Lot"].Visible = false;
                 dataGridLotComposantsDunLot.Columns["NumeroLot"].Visible = false;
@@ -170,7 +173,7 @@ namespace ApplicationUi
         {
             // On charge les lots composants du lot selectionné dans le dataGrid
             dataGridLotComposantsDunLot.DataSource = null;
-            var listeLotComposantsDunLotCharger = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value)
+            var listeLotComposantsDunLotCharger = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero)
                 .Where(t => t.NumeroLot != null) // On affiche que les lots composants qui sont associés à un lot
                 .ToList();
             dataGridLotComposantsDunLot.DataSource = listeLotComposantsDunLotCharger;
@@ -209,12 +212,8 @@ namespace ApplicationUi
             // On met les stats à 0 au démarrage du formulaire
             labelStatsComposantDunLotTotal.Text = "0";
 
-            // On ajoute un lot composant avec le libelle "Aucun"
             listeLotComposantsDunLot = new List<LotComposant>();
-            listeLotComposantsDunLot.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
-
             comboBoxLotComposantDunLot.DataSource = listeLotComposantsDunLot;
-            comboBoxLotComposantDunLot.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         /// <summary>
@@ -230,11 +229,8 @@ namespace ApplicationUi
             comboBoxLotComposant.ValueMember = "Numero";
             comboBoxLotComposant.DataSource = null;
 
-            // On ajoute un lot composant avec le libelle "Aucun"
             listeLotComposants = new List<LotComposant>();
-            listeLotComposants.Add(new LotComposant { Numero = null, Libelle = "Aucun" });
             comboBoxLotComposant.DataSource = listeLotComposants;
-            comboBoxLotComposant.SelectedIndex = 0; // sélectionne "Aucun" par défaut
         }
 
         /// <summary>
@@ -400,14 +396,14 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero.Value)
+            if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero)
             {
                 MessageBox.Show("Le Lot selectionné contient déjà ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             MessageBox.Show($"Le lot composant a bien été ajouté au lot {_lotSelectionnee.Libelle}.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero.Value;
+            _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero;
             _serviceLotComposant.Modifier(_lotComposantSelectionnee);
             _lotSelectionnee.ValeurTotale += _lotComposantSelectionnee.Valeur;
             _serviceLot.Modifier(_lotSelectionnee);
@@ -474,7 +470,7 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero.Value)
+            if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero)
             {
                 MessageBox.Show("Le Lot selectionné ne contient pas ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -509,7 +505,7 @@ namespace ApplicationUi
             if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
             MessageBox.Show("Le lot a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceLot.Supprimer(_lotSelectionnee.Numero.Value);
+            _serviceLot.Supprimer(_lotSelectionnee.Numero);
             ChargerLots();
             Raz_Zones();
         }
@@ -572,7 +568,7 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero, libelle, valeur totale, rang attribution et est attribue
-                var map = new Dictionary<int, string>
+                Dictionary<int, string> map = new()
                 {
                     { dataGridLots.Columns["Numero"].Index, "Numero"},
                     { dataGridLots.Columns["Libelle"].Index, "Libelle" },
@@ -586,9 +582,13 @@ namespace ApplicationUi
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridLots.DataSource = _serviceLot.Lister(filtre, colonne, ordreChamp);
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLots.DataSource = _serviceLot.Lister(filtre, colonne, ordreChamp);
+                dataGridLots.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGrid("Lots");
                 return;
@@ -619,18 +619,25 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero et libelle
-                var map = new Dictionary<int,string>
+                Dictionary<int, string> map = new()
                 {
                     { dataGridLotComposants.Columns["Numero"].Index, "Numero" },
                     { dataGridLotComposants.Columns["Libelle"].Index, "Libelle" }
                 };
 
-                if (!map.TryGetValue(e.ColumnIndex, out var colonne))
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
-                // Appliquer le tri
-                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
+
                 // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
+                dataGridLotComposants.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
                 MEP_DataGrid("LotComposants");
                 return;
             }
@@ -653,18 +660,24 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // ordonner sur les champs numero et libelle
-                var map = new Dictionary<int, string>
+                Dictionary<int, string> map = new()
                 {
                     { dataGridLotComposantsDunLot.Columns["Numero"].Index, "Numero" },
                     { dataGridLotComposantsDunLot.Columns["Libelle"].Index, "Libelle"}
                 };
-                // Appliquer le tri
-                if (!map.TryGetValue(e.ColumnIndex, out var colonne))
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
-                // Inverser l’ordre
-                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero.Value,colonne, ordreChamp);
 
+                // Inverser l’ordre
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                // Appliquer le tri
+                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotComposantDunLotSelectionnee.Numero, colonne, ordreChamp);
+                dataGridLotComposantsDunLot.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+
                 MEP_DataGrid("LotComposantsDunLot");
                 return;
             }
@@ -689,6 +702,17 @@ namespace ApplicationUi
             ChargerLots();
         }
 
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        private void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
         #endregion
     }
 }

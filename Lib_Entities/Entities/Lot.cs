@@ -58,7 +58,7 @@ namespace Lib_Entities.Entities
         /// <summary>
         /// id du lot.
         /// </summary>
-        public int? Numero { get; set; }
+        public int Numero { get; set; }
 
     }
 }

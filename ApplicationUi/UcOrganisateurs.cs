@@ -72,6 +72,9 @@ namespace ApplicationUi
         /// </summary>
         private void MEP_DataGrid()
         {
+            // On affiche et modifie l'affichage des colonnes du dataGrid
+            DesactiverTrieAutomatique(dataGridOrganisateurs);
+
             dataGridOrganisateurs.Columns["IdRole"].Visible = false;
             dataGridOrganisateurs.Columns["Login"].DisplayIndex = 0;
             dataGridOrganisateurs.Columns["Mail"].DisplayIndex = 1;
@@ -329,13 +332,16 @@ namespace ApplicationUi
             // Ignorer les clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
-                var map = new Dictionary<int, string>
+                // ordonner sur les champs login, mail et nom de rôle
+                Dictionary<int, string> map = new()
                 {
                     { dataGridOrganisateurs.Columns["Login"].Index, "Login" },
                     { dataGridOrganisateurs.Columns["Mail"].Index, "Mail" },
                     { dataGridOrganisateurs.Columns["NomRole"].Index, "NomRole" }
                 };
 
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
@@ -344,6 +350,8 @@ namespace ApplicationUi
 
                 // Appliquer le tri
                 dataGridOrganisateurs.DataSource = _serviceOrganisateur.Lister("admin", colonne, ordreChamp);
+                dataGridOrganisateurs.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGrid();
                 return;
@@ -373,6 +381,17 @@ namespace ApplicationUi
 
         }
 
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        private void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
         #endregion
     }
 }

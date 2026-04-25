@@ -63,19 +63,6 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Retourne la liste complète des lots composants contenant le numero du lot passé en paramètre
-        /// Exécute immédiatement la requête via <c>ToList()</c>.
-        /// </summary>
-        /// <param name="numero">numero du lot qu'on cherche</param>
-        /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        public List<LotComposant> ListerParNumeroDunLot(int numero)
-        {
-            return _context.LotComposants
-                .Where(lc => lc.Lot.Numero.Equals(numero))
-                .Include(lc => lc.Lot)
-                .ToList();
-        }
-        /// <summary>
         ///  Retourne la liste complète des lots présents en base, 
         ///  avec possibilité de filtrer
         ///  
