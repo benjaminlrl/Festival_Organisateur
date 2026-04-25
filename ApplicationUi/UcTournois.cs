@@ -40,15 +40,11 @@ namespace ApplicationUi
             _tournoiSelectionne = null;
             statutSelectionne = "Planifié";
 
-            AfficherBoutons();
-
             filtre = "";
             ordreChamp = "DESC"; // pour qu'au premier clique sur une colonne, le tri soit dans l'ordre croissant
             buttonEffacer.Text = " 🧽  Effacer";
 
-            ChargerTournois();
-            ChargerEspaces();
-            ChargerJeux();           
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
             {

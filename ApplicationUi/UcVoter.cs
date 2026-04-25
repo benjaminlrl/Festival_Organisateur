@@ -46,12 +46,7 @@ namespace ApplicationUi
             dateTimePickerDateDebutVote.Value = DateTime.Now;
             dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
 
-            ChargerClassement();
-            ChargerJeux();
-            ChargerPlateforme();
-            ChargerSoumisVotes();
-
-            AfficherBoutons();
+            Raz_Zones();
 
             buttonEffacer.Text = " 🧽  Effacer";
 
@@ -384,7 +379,7 @@ namespace ApplicationUi
 
             ChargerJeux();
             ChargerSoumisVotes();
-
+            ChargerClassement();
             AfficherBoutons();
         }
 

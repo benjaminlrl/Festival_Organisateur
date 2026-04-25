@@ -42,8 +42,6 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             _posteJeuSelectionne = null;
 
-            AfficherBoutons();
-
             fonctionnelSelectionne = false;
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
             dataGridTournois.Visible = _posteJeuSelectionne != null;
@@ -52,9 +50,7 @@ namespace ApplicationUi
             ordreChamp = "DESC";
             filtre = "";
 
-            ChargerPlateformes();
-            ChargerEspaces();
-            ChargerPostesDeJeu();
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {

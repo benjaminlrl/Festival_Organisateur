@@ -37,11 +37,7 @@ namespace ApplicationUi
             ordreChamp = "DESC";
             buttonEffacer.Text = " 🧽  Effacer";
 
-            AfficherBoutons();
-
-            ChargerJeux();
-            ChargerPlateformes();
-            ChargerPegi();
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {

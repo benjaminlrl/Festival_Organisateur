@@ -36,8 +36,6 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             _espaceSelectionnee = null;
 
-            AfficherBoutons();
-
             labelStatutTournoi.Visible = _espaceSelectionnee != null;
             dataGridTournois.Visible = _espaceSelectionnee != null;
             buttonEffacer.Text = "🧽  Effacer";
@@ -45,7 +43,7 @@ namespace ApplicationUi
             ordreChamp = "DESC";
             filtre = "";
 
-            ChargerEspaces();
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {

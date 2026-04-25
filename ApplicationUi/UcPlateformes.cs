@@ -40,9 +40,7 @@ namespace ApplicationUi
             buttonEffacer.Text = " 🧽  Effacer";
             ordreChamp = "DESC";
 
-            ChargerPlateformes();
-
-            AfficherBoutons();
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
             {

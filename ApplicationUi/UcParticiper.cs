@@ -37,15 +37,11 @@ namespace ApplicationUi
             _participerSelectionne = null;
             lotRemisSelectionne = false;
 
-            AfficherBoutons();
-
             filtre = "";
             ordreChamp = "DESC";
             buttonEffacer.Text = " 🧽  Effacer";
 
-            ChargerUtilisateurs();
-            ChargerTournois();
-            ChargerParticipations();
+            Raz_Zones();
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
