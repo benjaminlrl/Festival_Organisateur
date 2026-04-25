@@ -1,15 +1,19 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -180,11 +184,27 @@ namespace ApplicationUi
                 DateDebutVote = dateTimePickerDateDebutVote.Value,
 
             };
-            if (ValiderSoumisVote(soumisVote, false))
+
+            try
             {
                 _serviceSoumisVote.Creer(soumisVote);
-                _soumisVoteSelectionne = soumisVote;
-                
+                MessageBox.Show("Le soumisVote a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (SoumisVoteException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonModifier_Click(object sender, EventArgs e)
@@ -197,12 +217,26 @@ namespace ApplicationUi
 
             _soumisVoteSelectionne.DateDebutVote = dateTimePickerDateDebutVote.Value;
             _soumisVoteSelectionne.DateFinVote = dateTimePickerDateFinVote.Value;
-            if (ValiderSoumisVote(_soumisVoteSelectionne, true))
+            try
             {
                 _serviceSoumisVote.Modifier(_soumisVoteSelectionne);
-                ChargerSoumisVotes();
-                AfficherBoutons();
+                MessageBox.Show("Le soumisVote a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (SoumisVoteException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -340,19 +374,6 @@ namespace ApplicationUi
             ChargerPlateforme();
 
             AfficherBoutons();
-        }
-        #endregion
-
-        #region Validations
-        private bool ValiderSoumisVote(SoumisVote soumisvote, bool estModification)
-        {
-            var erreurs = _serviceSoumisVote.ValiderSoumisVote(soumisvote, estModification);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
         }
         #endregion
 

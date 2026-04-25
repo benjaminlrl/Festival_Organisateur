@@ -55,8 +55,9 @@ namespace Lib_Services.Interfaces
         /// Permet de voir si un lot est conformes aux règles de sécurité suivantes
         /// </summary>
         /// <param name="lot">Instance de <see cref="Lot"/> à créer.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification (true) ou une création (false).</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
-        List<string> ValiderLot(Lot lot);
+        void ValiderLot(Lot lot, bool estModification = false);
         #endregion
     }
 }

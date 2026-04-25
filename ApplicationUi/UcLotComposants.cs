@@ -2,14 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -181,48 +184,6 @@ namespace ApplicationUi
 
         #endregion
 
-        #region Validations
-        /// <summary>
-        /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes 
-        /// </summary>
-        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>>
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool LotComposantValide(LotComposant lotComposant)
-        {
-            var erreurs = _serviceLotComposant.ValiderLotComposant(lotComposant);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-        /// <summary>
-        /// Permet de voir si tout les champs d'un lot composant ne sont pas vides
-        /// </summary>
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool ChampVide()
-        {
-            if (string.IsNullOrWhiteSpace(textBoxLibelle.Text))
-            {
-                MessageBox.Show("Le Libelle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
-            {
-                MessageBox.Show("La Description ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
-            {
-                MessageBox.Show("La Valeur ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        #endregion
-
         #region Evènements
 
         /// <summary>
@@ -246,25 +207,36 @@ namespace ApplicationUi
                 NumeroLot = comboBoxLot.SelectedValue != null ? (int)comboBoxLot.SelectedValue : null
             };
 
-            // On check si le lot composant est valide
-            if (LotComposantValide(unNouveauLotComposant) == false)
+            try
             {
-                return;
-            }
-            
-            // On crée le lot composant en bdd
-            _serviceLotComposant.Creer(unNouveauLotComposant);
-            // On ajoute sa valeur à la valeur totale du lot associé si il en a un
-            if (unNouveauLotComposant.NumeroLot != null)
-            {
-                lotActuelle = _serviceLot.Obtenir(unNouveauLotComposant.NumeroLot.Value);
-                lotActuelle.ValeurTotale += unNouveauLotComposant.Valeur;
-                _serviceLot.Modifier(lotActuelle);
-            }
+                _serviceLotComposant.Creer(unNouveauLotComposant);
+                // On ajoute sa valeur à la valeur totale du lot associé si il en a un
+                if (unNouveauLotComposant.NumeroLot != null)
+                {
+                    lotActuelle = _serviceLot.Obtenir(unNouveauLotComposant.NumeroLot.Value);
+                    lotActuelle.ValeurTotale += unNouveauLotComposant.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                }
 
-            MessageBox.Show("Le lot composant a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            ChargerLotComposants();
-            Raz_Zones();
+                MessageBox.Show("Le lot composant a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerLotComposants();
+                Raz_Zones();
+            }
+            catch (LotComposantException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du lot composant.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         /// <summary>
@@ -277,11 +249,6 @@ namespace ApplicationUi
             if (_lotComposantSelectionne == null)
             {
                 MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            // On check si le lot composant est valide
-            if (LotComposantValide(_lotComposantSelectionne) == false)
-            {
                 return;
             }
 
@@ -306,32 +273,50 @@ namespace ApplicationUi
 
                 _lotComposantSelectionne.NumeroLot = nouveauNumeroLot;
 
-                // aucun lot -> un lot 
-                if (lotAncien == null && lotActuelle != null)
+                try
                 {
-                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
-                    _serviceLot.Modifier(lotActuelle);
+                    // aucun lot -> un lot 
+                    if (lotAncien == null && lotActuelle != null)
+                    {
+                        lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
+                        _serviceLot.Modifier(lotActuelle);
+                    }
+                    // un lot -> aucun lot
+                    else if (lotActuelle == null && lotAncien != null)
+                    {
+                        lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                        _serviceLot.Modifier(lotAncien);
+                    }
+                    // un lot -> un autre lot
+                    else if (lotActuelle != null && lotAncien != null)
+                    {
+                        lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
+                        _serviceLot.Modifier(lotActuelle);
+                        lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                        _serviceLot.Modifier(lotAncien);
+                    }
+                    _serviceLotComposant.Modifier(_lotComposantSelectionne);
+                    MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ChargerLotComposants();
+                    Raz_Zones();
                 }
-                // un lot -> aucun lot
-                else if (lotActuelle == null && lotAncien != null)
+                catch (LotComposantException ex)
                 {
-                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
-                    _serviceLot.Modifier(lotAncien);
+                    Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                    MessageBox.Show(ex.Message);
                 }
-                // un lot -> un autre lot
-                else if (lotActuelle != null && lotAncien != null)
+                catch (DbException ex)
                 {
-                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
-                    _serviceLot.Modifier(lotActuelle);
-                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
-                    _serviceLot.Modifier(lotAncien);
+                    Log.Error(ex, "Une erreur technique est survenue lors de la modification du lot composant.");
+                    MessageBox.Show("Erreur technique, réessayez plus tard.");
                 }
-            }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Une erreur inattendue est survenue.");
+                    MessageBox.Show("Une erreur inattendue est survenue.");
+                }
 
-            MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceLotComposant.Modifier(_lotComposantSelectionne);
-            ChargerLotComposants();
-            Raz_Zones();
+            }
         }
 
         /// <summary>
@@ -426,6 +411,31 @@ namespace ApplicationUi
 
         #endregion
 
+        #region Validations
+        /// <summary>
+        /// Permet de voir si tout les champs d'un lot composant ne sont pas vides
+        /// </summary>
+        /// <returns>true si tout est respectés, sinon false.</returns>
+        public bool ChampVide()
+        {
+            if (string.IsNullOrWhiteSpace(textBoxLibelle.Text))
+            {
+                MessageBox.Show("Le Libelle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
+            {
+                MessageBox.Show("La Description ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
+            {
+                MessageBox.Show("La Valeur ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+        #endregion
         #region Méthodes
         /// <summary>
         /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.

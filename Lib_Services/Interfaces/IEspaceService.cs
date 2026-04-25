@@ -78,8 +78,9 @@ namespace Lib_Services.Interfaces
         /// Permet de vérifier les propriétés associés a un espace.
         /// </summary>
         /// <param name="espace">L'esapce à valider</param>
+        /// <param name="estModification"
         /// <returns>Liste de <see cref="string"/> correspondants aux erreurs, ou vide</returns>
-        List<string> ValiderEspace(Espace espace);
+        void ValiderEspace(Espace espace, bool estModification = false);
         #endregion
         #region Statistiques
 

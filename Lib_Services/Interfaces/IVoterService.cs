@@ -63,11 +63,12 @@ namespace Lib_Services.Interfaces
         #region Validations
 
         /// <summary>
-        /// Permet de vérifier les propriétés associés a une Vote.
+        /// Valide les propriétés associées à un vote.
         /// </summary>
-        /// <param name="vote">La Vote à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderVote(Voter vote);
+        /// <param name="vote">Vote à valider</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification.</param>
+        /// <exception cref="VoteException">Exception si les données du vote sont invalides</exception>
+        void ValiderVote(Voter vote, bool estModification = false);
         #endregion
     }
 }

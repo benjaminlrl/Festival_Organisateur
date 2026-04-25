@@ -2,14 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -107,11 +110,26 @@ namespace ApplicationUi
                                   .ToList(),
                 DateSortie = dateTimePickerDateSortie.Value
             };
-            if (ValiderJeu(jeu))
+            try
             {
                 _serviceJeu.Creer(jeu);
-                ChargerJeux();
+                MessageBox.Show("Le jeu a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -132,11 +150,26 @@ namespace ApplicationUi
                           .ToList();
             _jeuSelectionne.DateSortie = dateTimePickerDateSortie.Value;
 
-            if (ValiderJeu(_jeuSelectionne))
+            try
             {
                 _serviceJeu.Modifier(_jeuSelectionne);
-                ChargerJeux();
+                MessageBox.Show("Le jeu a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -160,7 +193,6 @@ namespace ApplicationUi
         }
 
         #endregion
-
         private void DataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
@@ -210,25 +242,6 @@ namespace ApplicationUi
         {
             filtre = textBoxRecherche.Text;
             ChargerJeux();
-        }
-        #endregion
-
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations du jeu sont valides ou non,
-        /// en fonction des règles métier définies dans le service Jeu.
-        /// </summary>
-        /// <param name="jeu">L'objet Jeu à valider.</param>
-        /// <returns>Vraie si le jeu est valide, sinon faux.</returns>
-        private bool ValiderJeu(Jeu jeu)
-        {
-            List<string> erreurs = _serviceJeu.ValiderJeu(jeu);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
         }
         #endregion
 

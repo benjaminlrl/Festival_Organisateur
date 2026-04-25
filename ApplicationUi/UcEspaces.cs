@@ -2,14 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -230,11 +233,26 @@ namespace ApplicationUi
                 Superficie = (int)numericUpDownSuperficie.Value,
             };
 
-            if (ValiderEspace(espace))
+            try
             {
                 _serviceEspace.Creer(espace);
                 MessageBox.Show("L'espace a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (EspaceException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de l'espace.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
 
@@ -258,11 +276,26 @@ namespace ApplicationUi
             _espaceSelectionnee.CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value;
             _espaceSelectionnee.Superficie = (int)numericUpDownSuperficie.Value;
 
-            if (ValiderEspace(_espaceSelectionnee))
+            try
             {
                 _serviceEspace.Modifier(_espaceSelectionnee);
                 MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (EspaceException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -348,26 +381,6 @@ namespace ApplicationUi
         {
             filtre = textBoxRecherche.Text;
             ChargerEspaces();
-        }
-
-        #endregion
-
-        #region validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations de l'espace sont valides ou non,
-        /// en fonction des règles métier définies dans le service Espace.
-        /// </summary>
-        /// <param name="espace">L'objet Espace à valider.</param>
-        /// <returns>Vraie si l'espace est valide, sinon faux.</returns>
-        private bool ValiderEspace(Espace espace)
-        {
-            var erreurs = _serviceEspace.ValiderEspace(espace);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
         }
 
         #endregion

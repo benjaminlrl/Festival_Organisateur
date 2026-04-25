@@ -73,11 +73,12 @@ namespace Lib_Services.Interfaces
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un tournoi.
+        /// Permet de valider les données d'un tournoi avant création ou modification.
         /// </summary>
-        /// <param name="jeu">Le jeu à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderTournoi(Tournoi tournoi, bool estModification);
+        /// <param name="tournoi">Tournoi à valider</param>
+        /// <param name="estModification">Indique si c'est une modification ou une création</param>
+        /// <exception cref="TournoiException">Exception si les données du tournoi sont invalides</exception>
+        void ValiderTournoi(Tournoi tournoi, bool estModification = false);
         #endregion
     }
 }

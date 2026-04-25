@@ -137,6 +137,7 @@ namespace Lib_Services.Services
         /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> à créer.</param>
         public void Creer(PosteJeu posteJeu)
         {
+            ValiderPosteJeu(posteJeu, false);
             // Ajout à l'ensemble suivi d'un commit via SaveChanges.
             _context.PostesJeu.Add(posteJeu);
             _context.SaveChanges();
@@ -148,6 +149,7 @@ namespace Lib_Services.Services
         /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> contenant les valeurs mises à jour.</param>
         public void Modifier(PosteJeu posteJeu)
         {
+            ValiderPosteJeu(posteJeu, true);
             // Marque l'entité comme modifiée puis enregistre les changements.
             _context.PostesJeu.Update(posteJeu);
             _context.SaveChanges();
@@ -169,31 +171,32 @@ namespace Lib_Services.Services
         }
         #endregion
         #region Validations
-        // TODO: AJouter un formalisme gérer dans le setter de l'entité PosteJeu pour normaliser le nommage des références des Postes de Jeu en fonction de l'espace, la plateforme et le numéro du poste.
 
         /// <summary>
-        /// Valide les données d'un poste de jeu avant création ou modification.
+        /// 
         /// </summary>
-        /// <param name="posteJeu">Le poste de jeu concerné</param>
-        /// <returns>La liste des erreurs de type <see cref="string"/></returns>
-        public List<string> ValiderPosteJeu(PosteJeu posteJeu)
+        /// <param name="posteJeu"></param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification.</param>
+        /// <exception cref="PosteJeuException"></exception>
+        public void ValiderPosteJeu(PosteJeu posteJeu, bool estModification = false)
         {
-            var erreurs = new List<string>();
             if (string.IsNullOrWhiteSpace(posteJeu.Reference))
-                erreurs.Add("La référence du poste de jeu est obligatoire.");
+                throw new PosteJeuException("La référence du poste de jeu est obligatoire.",
+                    (int)PosteJeuException.PosteJeuErreur.ReferenceRequise);
 
             if (posteJeu.IdEspace <= 0)
-                erreurs.Add("L'espace associé est obligatoire.");
+                throw new PosteJeuException("L'espace associé est obligatoire.",
+                    (int)PosteJeuException.PosteJeuErreur.EspaceRequis);
 
             if (posteJeu.IdPlateforme <= 0)
-                erreurs.Add("La plateforme associée est obligatoire.");
+                throw new PosteJeuException("La plateforme associée est obligatoire.",
+                    (int)PosteJeuException.PosteJeuErreur.PlateformeRequise);
 
-            if(posteJeu.Fonctionnel != true && posteJeu.Fonctionnel != false)
-                erreurs.Add("Le champ Fonctionnel doit être un booléen.");
-
-            if(ReferenceExiste(posteJeu.Reference) != null && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
-                erreurs.Add("Un poste de jeu avec cette référence existe déjà.");
-            return erreurs;
+            if (!estModification 
+                && ReferenceExiste(posteJeu.Reference) != null
+                && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
+                throw new PosteJeuException("Un poste de jeu avec cette référence existe déjà.",
+                    (int)PosteJeuException.PosteJeuErreur.ReferenceExistante);
         }
         #endregion
         #region Statistiques

@@ -84,6 +84,7 @@ namespace Lib_Services.Services
         public void Creer(Jeu jeu)
         {
             jeu.AnneeSortie = jeu.DateSortie.Year.ToString();// année de sortie calculée
+            ValiderJeu(jeu, false);
             _context.Jeux.Add(jeu);
             _context.SaveChanges();
         }
@@ -96,6 +97,7 @@ namespace Lib_Services.Services
         {
             // Marque l'entité comme modifiée puis sauvegarde.
             jeu.AnneeSortie = jeu.DateSortie.Year.ToString(); // année de sortie calculée
+            ValiderJeu(jeu, true);
             _context.Jeux.Update(jeu);
             _context.SaveChanges();
         }
@@ -120,37 +122,40 @@ namespace Lib_Services.Services
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un jeu.
+        /// Valide les propriétés d'une instance de <see cref="Jeu"/> avant sa création ou sa modification.
         /// </summary>
-        /// <param name="jeu">Le jeu à valider</param>
-        /// <returns></returns>
-        public List<string> ValiderJeu(Jeu jeu)
+        /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
+        public void ValiderJeu(Jeu jeu, bool estModification = false)
         {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
             if (string.IsNullOrWhiteSpace(jeu.Titre))
-                erreurs.Add("Le titre est requis.");
+                throw new JeuException("Le titre est requis.",
+                    (int)JeuException.JeuErreur.TitreRequis);
 
             if (string.IsNullOrWhiteSpace(jeu.Description))
-                erreurs.Add("La description est requise.");
-
-            if (string.IsNullOrWhiteSpace(jeu.Editeur))
-                erreurs.Add("L'éditeur est requis.");
-
-            if (string.IsNullOrWhiteSpace(jeu.DateSortie.ToString()))
-                erreurs.Add("La date de sortie est requise.");
+                throw new JeuException("La description est requise.",
+                    (int)JeuException.JeuErreur.DescriptionRequise);
 
             if (jeu.Description.Length > 500)
-                erreurs.Add("La description ne peut pas dépasser 500 caractères.");
+                throw new JeuException("La description ne peut pas dépasser 500 caractères.",
+                    (int)JeuException.JeuErreur.DescriptionTropLongue);
+
+            if (string.IsNullOrWhiteSpace(jeu.Editeur))
+                throw new JeuException("L'éditeur est requis.",
+                    (int)JeuException.JeuErreur.EditeurRequis);
+
+            if (jeu.DateSortie == default)
+                throw new JeuException("La date de sortie est requise.",
+                    (int)JeuException.JeuErreur.DateSortieRequise);
 
             if (!Enum.IsDefined(typeof(ConstanteService.PEGI), jeu.Pegi))
-                erreurs.Add("Le PEGI sélectionné est invalide.");
+                throw new JeuException("Le PEGI sélectionné est invalide.",
+                    (int)JeuException.JeuErreur.PegiInvalide);
 
             if (Lister(jeu.Titre).Any(j => j.Titre == jeu.Titre && j.IdJeu != jeu.IdJeu))
-                erreurs.Add("Un autre jeu avec ce titre existe déjà.");
-           
-            return erreurs;
+                throw new JeuException("Un autre jeu avec ce titre existe déjà.",
+                    (int)JeuException.JeuErreur.TitreExistant);
         }
         #endregion
     }

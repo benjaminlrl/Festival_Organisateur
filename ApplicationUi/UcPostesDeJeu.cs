@@ -1,15 +1,19 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -203,11 +207,26 @@ namespace ApplicationUi
             posteJeu.SetReference(espaceSelectionne, _servicePosteJeu.
                 NombrePostesJeuEspacePlateforme(espaceSelectionne.IdEspace, plateformeSelectionne.IdPlateforme) + 1);
 
-            if (ValiderPosteJeu(posteJeu))
+            try
             {
                 _servicePosteJeu.Creer(posteJeu);
                 MessageBox.Show("Le poste de jeu a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (PosteJeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du poste de jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -220,11 +239,26 @@ namespace ApplicationUi
             _posteJeuSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
             _posteJeuSelectionne.IdPlateforme = (comboBoxPlateforme.SelectedItem as Plateforme).IdPlateforme;
 
-            if (ValiderPosteJeu(_posteJeuSelectionne))
+            try
             {
                 _servicePosteJeu.Modifier(_posteJeuSelectionne);
                 MessageBox.Show("Le poste de jeu a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (PosteJeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du poste de jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -308,25 +342,6 @@ namespace ApplicationUi
         {
             filtre = textBoxRecherche.Text;
             ChargerPostesDeJeu();
-        }
-        #endregion
-
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations du poste de jeu sont valides ou non,
-        /// en fonction des règles métier définies dans le service Espace.
-        /// </summary>
-        /// <param name="posteJeu">L'objet PosteJeu à valider.</param>
-        /// <returns>Vraie si le le poste de jeu est valide, sinon faux.</returns>
-        private bool ValiderPosteJeu(PosteJeu posteJeu)
-        {
-            List<string> erreurs = _servicePosteJeu.ValiderPosteJeu(posteJeu);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
         }
         #endregion
 

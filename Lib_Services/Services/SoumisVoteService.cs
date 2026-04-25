@@ -1,6 +1,7 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
+using Lib_Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -141,8 +142,7 @@ namespace Lib_Services.Services
         /// <param name="soumisVote">Objet <see cref="SoumisVote"/> à ajouter.</param>
         public void Creer(SoumisVote soumisVote)
         {
-            if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null)
-                return;
+            ValiderSoumisVote(soumisVote, false);
             _context.SoumisVotes.Add(soumisVote);
             _context.SaveChanges();
         }
@@ -153,6 +153,7 @@ namespace Lib_Services.Services
         /// <param name="soumisVote">Objet <see cref="SoumisVote"/> contenant les valeurs mises à jour.</param>
         public void Modifier(SoumisVote soumisVote)
         {
+            ValiderSoumisVote(soumisVote, true);
             // Marque l'entité comme modifiée puis sauvegarde.
             _context.SoumisVotes.Update(soumisVote);
             _context.SaveChanges();
@@ -227,42 +228,42 @@ namespace Lib_Services.Services
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a une SoumisVote.
+        /// Permet de valider les données d'un SoumisVote avant création ou modification.
         /// </summary>
-        /// <param name="soumisVote">Le SoumisVote à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification)
+        /// <param name="soumisVote">SoumisVote à valider</param>
+        /// <param name="estModification">Indique si c'est une modification ou une création</param>
+        /// <exception cref="SoumisVoteException">Exception si les données du SoumisVote sont invalides</exception>
+        public void ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false)
         {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
             if (_jeuService.Obtenir(soumisVote.IdJeu) == null)
-                erreurs.Add("Le jeu associé n'existe pas.");
+                throw new SoumisVoteException("Le jeu associé n'existe pas.",
+                    (int)SoumisVoteException.SoumisVoteErreur.JeuInexistant);
 
             if (_plateformeService.Obtenir(soumisVote.IdPlateforme) == null)
-                erreurs.Add("La plateforme associée n'existe pas.");
+                throw new SoumisVoteException("La plateforme associée n'existe pas.",
+                    (int)SoumisVoteException.SoumisVoteErreur.PlateformeInexistante);
 
             if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null && !estModification)
-                erreurs.Add("Une autre SoumisVote existe déjà.");
+                throw new SoumisVoteException("Une autre SoumisVote existe déjà.",
+                    (int)SoumisVoteException.SoumisVoteErreur.DoublonSoumisVote);
 
-            // compare la bdd et le soumisVote modif
-            SoumisVote? _enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
-            if (_enBdd != null && _enBdd.DateDebutVote == soumisVote.DateDebutVote
-                && _enBdd.DateFinVote == soumisVote.DateFinVote)
-                erreurs.Add("Aucune modification détectée.");
+            SoumisVote? enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
+            if (enBdd != null && enBdd.DateDebutVote == soumisVote.DateDebutVote
+                && enBdd.DateFinVote == soumisVote.DateFinVote)
+                throw new SoumisVoteException("Aucune modification détectée.",
+                    (int)SoumisVoteException.SoumisVoteErreur.AucuneModification);
 
-            // Contrôles des dates
             if (soumisVote.DateDebutVote >= soumisVote.DateFinVote)
-                erreurs.Add("La date de début doit être antérieure à la date de fin.");
+                throw new SoumisVoteException("La date de début doit être antérieure à la date de fin.",
+                    (int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin);
 
-            // Vérifier que les dates ne sont pas dans le passé
-            if (soumisVote.DateDebutVote.Day < DateTime.Now.Day)
-                erreurs.Add("La date de début doit être dans le futur.");
+            if (soumisVote.DateDebutVote < DateTime.Now)
+                throw new SoumisVoteException("La date de début doit être dans le futur.",
+                    (int)SoumisVoteException.SoumisVoteErreur.DateDebutDansLePasse);
 
-            if (soumisVote.DateFinVote.Day < DateTime.Now.Day)
-                erreurs.Add("La date de fin doit être dans le futur.");
-
-            return erreurs;
+            if (soumisVote.DateFinVote < DateTime.Now)
+                throw new SoumisVoteException("La date de fin doit être dans le futur.",
+                    (int)SoumisVoteException.SoumisVoteErreur.DateFinDansLePasse);
         }
         #endregion
     }

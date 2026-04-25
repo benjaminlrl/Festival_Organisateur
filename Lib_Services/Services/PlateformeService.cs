@@ -1,6 +1,7 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
+using Lib_Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -98,6 +99,7 @@ namespace Lib_Services.Services
         /// <param name="plateforme">Objet <see cref="Plateforme"/> à ajouter.</param>
         public void Creer(Plateforme plateforme)
         {
+            ValiderPlateforme(plateforme, false);
             _context.Plateformes.Add(plateforme);
             _context.SaveChanges();
         }
@@ -108,6 +110,7 @@ namespace Lib_Services.Services
         /// <param name="plateforme">Objet <see cref="Plateforme"/> contenant les valeurs mises à jour.</param>
         public void Modifier(Plateforme plateforme)
         {
+            ValiderPlateforme(plateforme, true);
             // Marque l'entité comme modifiée puis sauvegarde.
             _context.Plateformes.Update(plateforme);
             _context.SaveChanges();
@@ -133,26 +136,25 @@ namespace Lib_Services.Services
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a une plateforme.
+        /// Valide les données d'une plateforme avant création ou modification.
         /// </summary>
-        /// <param name="plateforme">La plateforme à valider</param>
+        /// <param name="plateforme">Plateforme à valider</param>
         /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderPlateforme(Plateforme plateforme, bool estModification)
+        /// <exception cref="PlateformeException">Exception levée en cas de validation échouée</exception>
+        public void ValiderPlateforme(Plateforme plateforme, bool estModification = false)
         {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
             if (string.IsNullOrWhiteSpace(plateforme.Libelle))
-                erreurs.Add("Le libellé est requis.");
+                throw new PlateformeException("Le libellé est requis.",
+                    (int)PlateformeException.PlateformeErreur.LibelleRequis);
 
-            if (plateforme.IdPlateforme <= 0)
-                erreurs.Add("Une plateforme est requise.");
+            if (estModification && plateforme.IdPlateforme <= 0)
+                throw new PlateformeException("L'identifiant de la plateforme est invalide.",
+                    (int)PlateformeException.PlateformeErreur.IdInvalide);
 
-            if (Lister(plateforme.Libelle).Any(p => p.Libelle == plateforme.Libelle && p.IdPlateforme != plateforme.IdPlateforme))
-                erreurs.Add("Une autre plateforme avec ce libellé existe déjà.");
-
-            return erreurs;
+            if (Lister(plateforme.Libelle).Any(p => p.Libelle == plateforme.Libelle
+                && p.IdPlateforme != plateforme.IdPlateforme))
+                throw new PlateformeException("Une autre plateforme avec ce libellé existe déjà.",
+                    (int)PlateformeException.PlateformeErreur.LibelleExistant);
         }
         #endregion
     }

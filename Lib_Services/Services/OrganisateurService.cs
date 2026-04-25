@@ -221,7 +221,7 @@ namespace Lib_Services.Services
         public List<string> MdpValide(string motDePasse)
         {
             // liste des erreurs
-            var erreurs = new List<string>();
+            List<string> erreurs = [];
 
             if(string.IsNullOrWhiteSpace(motDePasse))
             {
@@ -258,7 +258,7 @@ namespace Lib_Services.Services
         public List<string> IdentifiantValide(string identifiant)
         {
             // liste des erreurs
-            var erreurs = new List<string>();
+            List<string> erreurs = [];
 
             if (string.IsNullOrWhiteSpace(identifiant))
             {
