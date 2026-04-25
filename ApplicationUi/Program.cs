@@ -243,6 +243,30 @@ namespace ApplicationUi
                     Mail = "mailSio2026@gmail.com",
                     IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Administrateur").IdRole
                 });
+
+                organisateurService.Creer(new Organisateur
+                {
+                    Login = "admin_stock",
+                    motPasse = "SIO2026+",
+                    Mail = "mailSio2026@gmail.com",
+                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire du stock").IdRole
+                });
+
+                organisateurService.Creer(new Organisateur
+                {
+                    Login = "admin_espace",
+                    motPasse = "SIO2026+",
+                    Mail = "mailSio2026@gmail.com",
+                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire de l'espace").IdRole
+                });
+
+                organisateurService.Creer(new Organisateur
+                {
+                    Login = "admin_tournois",
+                    motPasse = "SIO2026+",
+                    Mail = "mailSio2026@gmail.com",
+                    IdRole = context.Roles.FirstOrDefault(r => r.Libelle == "Gestionnaire des tournois").IdRole
+                });
             }
 
             if (!context.Jeux.Any())

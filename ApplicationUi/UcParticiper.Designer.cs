@@ -258,7 +258,6 @@
             numericUpDownRang.Location = new Point(369, 39);
             numericUpDownRang.Margin = new Padding(4);
             numericUpDownRang.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
-            numericUpDownRang.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownRang.Name = "numericUpDownRang";
             numericUpDownRang.Size = new Size(175, 31);
             numericUpDownRang.TabIndex = 37;

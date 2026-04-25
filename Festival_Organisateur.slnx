@@ -1,9 +1,7 @@
 <Solution>
-  <Project Path="ApplicationUI.TestUnits/ApplicationUI.TestUnits.csproj" Id="d0ceb64e-972d-4453-8e9f-bfa98a8b4894">
-    <Build Solution="Debug|*" Project="false" />
-  </Project>
   <Project Path="ApplicationUi/ApplicationUi.csproj" />
   <Project Path="Lib_Entities/Lib_Entities.csproj" />
   <Project Path="Lib_Metier/Lib_Metier.csproj" />
   <Project Path="Lib_Services/Lib_Services.csproj" />
+  <Project Path="ServiceTests/ServiceTests.csproj" Id="c40e1ac9-9719-4d08-bd2d-97f62af87758" />
 </Solution>

@@ -4,6 +4,7 @@ using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using static Lib_Entities.Entities.Jeu;
 
@@ -21,32 +22,47 @@ namespace Lib_Services.Services
             _context = context;
         }
 
+        #region Lecture
+
         /// <summary>
-        /// Retourne toutes les plateformes présentes dans la base de données.
-        /// Si un filtre est fourni, retourne uniquement 
-        /// les jeux dont le contenu correspond au filter
+        ///  Retourne la liste complète des jeux présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <param name="filtre">Optionnel : titre à filtrer.</param>
-        /// <returns>Liste de <see cref="Plateforme"/>.</returns>
-        public List<Jeu> Lister(string filtre = "")
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="Jeu"/>.</returns>
+        public List<Jeu> Lister(string filtre = "", string property = "", string ordre = "")
         {
-            // Utilise le DbSet Plateformes pour matérialiser la collection en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Jeux
-                     .Include(j => j.Plateformes)
-                     .Include(j => j.Tournois)
-                     .ToList();
-            return
-                _context.Jeux
+            IQueryable<Jeu> query = _context.Jeux
                 .Include(j => j.Plateformes)
-                .Include(j => j.Tournois)
-                .Where(j => j.Titre.Contains(filtre)
+                .Include(j => j.Tournois);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(j => j.Titre.Contains(filtre)
                 || j.Description.Contains(filtre)
                 || j.Editeur.Contains(filtre)
                 || j.AnneeSortie.Contains(filtre)
                 || j.DateSortie.ToString().Contains(filtre)
-                || j.Pegi.ToString().Contains(filtre))
-                .ToList();
+                || j.Pegi.ToString().Contains(filtre));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Titre" => ordre == "ASC" ? query.OrderBy(j => j.Titre) : query.OrderByDescending(j => j.Titre),
+                "Description" => ordre == "ASC" ? query.OrderBy(j => j.Description) : query.OrderByDescending(j => j.Description),
+                "Editeur" => ordre == "ASC" ? query.OrderBy(j => j.Editeur) : query.OrderByDescending(j => j.Editeur),
+                "AnneeSortie" => ordre == "ASC" ? query.OrderBy(j => j.AnneeSortie) : query.OrderByDescending(j => j.AnneeSortie),
+                "DateSortie" => ordre == "ASC" ? query.OrderBy(j => j.DateSortie) : query.OrderByDescending(j => j.DateSortie),
+                "Pegi" => ordre == "ASC" ? query.OrderBy(j => j.Pegi) : query.OrderByDescending(j => j.Pegi),
+                _ => query.OrderByDescending(j => j.IdJeu) // valeur par défaut
+            };
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -59,7 +75,8 @@ namespace Lib_Services.Services
             // Find retourne null si l'entité n'existe pas.
             return _context.Jeux.Find(idJeu);
         }
-
+        #endregion
+        #region CUD
         /// <summary>
         /// Crée un nouveau jeu et persiste la modification.
         /// </summary>
@@ -100,7 +117,8 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
+        #endregion
+        #region Validations
         /// <summary>
         /// Permet de vérifier les propriétés associés a un jeu.
         /// </summary>
@@ -134,5 +152,6 @@ namespace Lib_Services.Services
            
             return erreurs;
         }
+        #endregion
     }
 }

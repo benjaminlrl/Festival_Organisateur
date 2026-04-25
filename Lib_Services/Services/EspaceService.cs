@@ -4,7 +4,9 @@ using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace Lib_Services.Services
 {
@@ -14,7 +16,7 @@ namespace Lib_Services.Services
     public class EspaceService : IEspaceService
     {
         private readonly ApplicationDbContext _context;
-
+       
         /// <summary>
         /// Initialise une nouvelle instance de <see cref="EspaceService"/>.
         /// </summary>
@@ -23,29 +25,83 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
-
+        #region Lecture
         /// <summary>
-        /// Retourne la liste complète des espaces présents en base.
-        /// Charge également les postes de jeu associés à chaque espace.
-        /// Si un filtre est fourni, retourne les espaces 
-        /// dont le nom ou la description correspond au filtre.
+        ///  Retourne la liste complète des espaces présents en base, 
+        ///  avec possibilité de filtrer par nom ou description.
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="colonne">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Espace"/>.</returns>
-        public List<Espace> Lister(string filtre = "")
+        public List<Espace> Lister(string filtre = "", string colonne = "", string ordre = "")
         {
-            // ToList force l'exécution de la requête et charge les entités en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Espaces
-                .Include(e => e.PostesJeu)
+            IQueryable<Espace> query = _context.Espaces
                 .Include(e => e.Tournois)
+                .Include(e => e.PostesJeu);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(e =>
+                    e.Nom.Contains(filtre) ||
+                    e.Description.Contains(filtre));
+
+            query = colonne switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Nom" => ordre == "ASC" ? query.OrderBy(e => e.Nom) : query.OrderByDescending(e => e.Nom),
+                "Description" => ordre == "ASC" ? query.OrderBy(e => e.Description) : query.OrderByDescending(e => e.Description),
+                "Superficie" => ordre == "ASC" ? query.OrderBy(e => e.Superficie) : query.OrderByDescending(e => e.Superficie),
+                "CapaciteMaxi" => ordre == "ASC" ? query.OrderBy(e => e.CapaciteMaxi) : query.OrderByDescending(e => e.CapaciteMaxi),
+                "IdEspace" => ordre == "ASC" ? query.OrderBy(e => e.IdEspace) : query.OrderByDescending(e => e.IdEspace),
+                _ => query.OrderByDescending(e => e.IdEspace) // valeur par défaut
+            };
+
+            return query.ToList();
+        }
+
+        /// <summary>
+        /// Retourne la liste complète des espaces disponibles présents en base.
+        /// Un espace est considéré comme disponible si aucun tournois planifié ou en cours y est associé.
+        /// 
+        /// Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="filtre"></param>
+        /// <returns>Liste d'objets <see cref="Espace"/> disponibles</returns>
+        public List<Espace> ListerEspacesDisponibles(string filtre = "", string colonne = "Nom", string ordre = "ASC")
+        {
+            return Lister(filtre, colonne, ordre)
+                .Where(e =>
+                    e.Tournois == null 
+                    || !e.Tournois.Any(t => 
+                        t.Statut == "Planifié" 
+                        || t.Statut == "EnCours"))
                 .ToList();
-            return
-                _context.Espaces
-                .Include(e => e.PostesJeu)
-                .Include(e => e.Tournois)
-                .Where(e => e.Nom.Contains(filtre)
-                    || e.Description.Contains(filtre))
+        }
+
+        /// <summary>
+        /// Retourne la liste complète des espaces disponibles présents en base.
+        /// Un espace est considéré comme disponible si un tournois planifié ou en cours y est associé.
+        /// 
+        /// Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="filtre"></param>
+        /// <returns>Liste d'objets <see cref="Espace"/> indisponibles<returns>
+        public List<Espace> ListerEspacesIndisponibles(string filtre = "", string colonne = "Nom", string ordre = "ASC")
+        {
+            return Lister(filtre, colonne, ordre)
+                .Where(e =>
+                    e.Tournois == null
+                    || e.Tournois.Any(t =>
+                        t.Statut == "Planifié"
+                        || t.Statut == "EnCours"))
                 .ToList();
         }
 
@@ -59,7 +115,8 @@ namespace Lib_Services.Services
             // Find utilise le cache du contexte s'il existe, sinon interroge la base.
             return _context.Espaces.Find(idEspace);
         }
-
+        #endregion
+        #region CUD
         /// <summary>
         /// Crée un nouvel espace en base.
         /// Appelle immédiatement <c>SaveChanges()</c> pour persister l'entité.
@@ -97,16 +154,45 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
+        #endregion
+        #region statistiques
+        /// <summary>
+        /// Retourne le nombre d'espaces disponibales en fonction du filtre.
+        /// Un espace est considéré comme disponible si aucun tournoi planifié ou en cours n'est associé à cet espace.
+        /// </summary>
+        /// <param name="filtre">Filtre optionnel pour rechercher des espaces spécifiques.</param>
+        /// <returns><see cref="int"/>Nombre d'espaces disponibles.</returns>
+        public int CompterEspacesDisponibles(string filtre = "")
+        {
+            return Lister(filtre)
+                .Count(e => 
+                e.Tournois == null 
+                || !e.Tournois.Any(t => 
+                    t.Statut == "Planifié"
+                    || t.Statut == "EnCours"));
+        }
+
+        /// <summary>
+        /// Retourne le nombres d'espaces total en fonction du filtre.
+        /// </summary>
+        /// <param name="filtre">Filtre optionnel pour rechercher des espaces spécifiques.</param>
+        /// <returns><see cref="int"/>Nombre total d'espaces.</returns>
+        public int CompterEspacesTotal(string filtre = "")
+        {
+            return Lister(filtre).Count;
+        }
+        #endregion
+        #region Validations
 
         /// <summary>
         /// Permet de vérifier les propriétés associés a un espace.
         /// </summary>
         /// <param name="espace">L'esapce à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
+        /// <returns>Liste de <see cref="string"/> correspondants aux erreurs, ou vide</returns>
         public List<string> ValiderEspace(Espace espace)
         {
             // liste des erreurs
-            var erreurs = new List<string>();
+            List<string> erreurs = [];
 
             if (string.IsNullOrWhiteSpace(espace.Nom))
                 erreurs.Add("Le nom est requis.");
@@ -128,6 +214,7 @@ namespace Lib_Services.Services
 
             return erreurs;
         }
+        #endregion
     }
 
 }

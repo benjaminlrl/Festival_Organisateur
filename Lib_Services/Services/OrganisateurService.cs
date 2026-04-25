@@ -23,25 +23,38 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
-
+        #region Lecture
         /// <summary>
-        /// Retourne la liste complète des organisateur présents en base.
-        /// Exécute immédiatement la requête via <c>ToList()</c>.
+        ///  Retourne la liste complète des organisateurs présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Login, Mail, NomRole) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Organisateur"/>.</returns>
-        public List<Organisateur> Lister(string filtre = "")
+        public List<Organisateur> Lister(string filtre = "", string property = "", string ordre = "")
         {
-            // Include(t => t.Role) pour éviter le chargement paresseux lors de l'affichage.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Organisateurs
-                     .Include(r => r.Role)
-                     .ToList();
-            return
-                _context.Organisateurs
-                .Include(r => r.Role)
-                .Where(r => r.Login.Contains(filtre))
-                .ToList();
+            IQueryable<Organisateur> query = _context.Organisateurs
+                .Include(o => o.Role);
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(o => o.Login.Contains(filtre)
+                || o.Mail.Contains(filtre)
+                || o.NomRole.Contains(filtre));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Login" => ordre == "ASC" ? query.OrderBy(o => o.Login) : query.OrderByDescending(o => o.Login),
+                "Mail" => ordre == "ASC" ? query.OrderBy(o => o.Mail) : query.OrderByDescending(o => o.Mail),
+                "NomRole" => ordre == "ASC" ? query.OrderBy(o => o.NomRole) : query.OrderByDescending(o => o.NomRole),
+                _ => query.OrderByDescending(o => o.Login) // valeur par défaut
+            };
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -49,12 +62,14 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="Login">Login de l'organisateur cherché.</param>
         /// <returns>L'entité <see cref="Organisateur"/> si trouvée, sinon null.</returns>
-        public Organisateur? Obtenir(string Login)
+        public Organisateur? Obtenir(string login)
         {
             return _context.Organisateurs
                            .Include(o => o.Role)
-                           .FirstOrDefault(o => o.Login == Login);
+                           .FirstOrDefault(o => o.Login == login);
         }
+        #endregion
+        #region CUD
 
         /// <summary>
         /// Crée un nouvel organisateur en base.
@@ -64,6 +79,7 @@ namespace Lib_Services.Services
         public void Creer(Organisateur organisateur)
         {
             // Ajout de l'entité au contexte puis persistance immédiate.
+
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);
             _context.Organisateurs.Add(organisateur);
@@ -84,18 +100,19 @@ namespace Lib_Services.Services
         /// <summary>
         /// Supprime un organisateur identifié par son login s'il existe.
         /// </summary>
-        /// <param name="Login">Login de l'organisateur à supprimer.</param>
-        public void Supprimer(string Login)
+        /// <param name="login">login de l'organisateur à supprimer.</param>
+        public void Supprimer(string login)
         {
             // Recherche de l'entité (utilise le cache si possible).
-            var organisateur = _context.Organisateurs.Find(Login);
+            var organisateur = _context.Organisateurs.Find(login);
             if (organisateur != null)
             {
                 _context.Organisateurs.Remove(organisateur);
                 _context.SaveChanges();
             }
         }
-
+        #endregion
+        #region Validations
         /// <summary>
         /// Vérifie si les informations d'identification fournies correspondent à un organisateur existant.
         /// </summary>
@@ -253,6 +270,7 @@ namespace Lib_Services.Services
             }
             return erreurs;
         }
+        #endregion
     }
 
 }

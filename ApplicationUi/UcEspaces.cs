@@ -17,43 +17,55 @@ namespace ApplicationUi
     public partial class UcEspaces : UserControl
     {
         private readonly IEspaceService _serviceEspace;
+        private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
-        private Espace? _espaceSelectionee = null;
+        private readonly Organisateur _organisateurConnecte;
+        private Espace? _espaceSelectionnee;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
         private string filtre;
-        // Champ pour suivre l'ordre de tri actuel sur la colonne Nom
+        // Champ pour stocker l'ordre de tri actuel sur la propriété de l'espace (ASC ou DESC)
+        // et l'utiliser lors du rechargement des espaces
         private string ordreChamp;
-        private readonly Organisateur _organisateurConnecte;
         public UcEspaces(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
             _serviceOrganisateur = new OrganisateurService(context);
             _serviceEspace = new EspaceService(context);
-            buttonModifier.Enabled = _espaceSelectionee != null;
-            buttonSupprimer.Enabled = _espaceSelectionee != null;
-            labelStatutTournoi.Visible = false;
-            dataGridTournois.Visible = false;
+            _serviceTournoi = new TournoiService(context);
+
+            _organisateurConnecte = unOrganisateurConnecte;
+            _espaceSelectionnee = null;
+
+            AfficherBouttons();
+
+            labelStatutTournoi.Visible = _espaceSelectionnee != null;
+            dataGridTournois.Visible = _espaceSelectionnee != null;
             buttonEffacer.Text = "🧽  Effacer";
+
             ordreChamp = "ASC";
             filtre = "";
-            _organisateurConnecte = unOrganisateurConnecte;
+
             ChargerEspaces();
+
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
+                DisabledInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
+                DisabledInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
+                DisabledInputs();
             }
         }
 
-        #region Evènements
+        #region Données
         /// <summary>
         /// Charge les espaces depuis la base de données et les affiche dans le DataGridView.
         /// </summary>
@@ -62,82 +74,59 @@ namespace ApplicationUi
         {
             dataGridEspaces.DataSource = null;
             dataGridEspaces.DataSource = _serviceEspace.Lister(filtre);
-            MEP_DataGrid();
+            MEP_DataGridEspaces();
             ChargerStatistiques();
         }
 
         /// <summary>
-        /// Charge les postes de jeux de l'espace selectionnee
+        /// Charge les postes de jeux de l'espace selectionne
         /// </summary>
         private void ChargerPostesJeu()
         {
-            dataGridPostesJeu.DataSource = null;
-            dataGridPostesJeu.DataSource = _espaceSelectionee.PostesJeu.ToList();
-            MEP_DataGridPostesJeu();
-        }
-        private void ChargerTournois(ICollection<Tournoi> tournoisEspace)
-        {
-            dataGridTournois.DataSource = null;
-            dataGridTournois.DataSource = tournoisEspace?.ToList();
-            if (tournoisEspace != null)
+            // Si l'espace est null, on ne fait rien
+            if (_espaceSelectionnee == null)
             {
-
-                MEP_DataGridTournois();
+                dataGridPostesJeu.DataSource = null;
+                dataGridPostesJeu.Visible = true;
+                return;
+            }
+            // Si il n'y a aucun poste de jeu associé à l'espace, on affiche un message et on masque le datagrid
+            if (_espaceSelectionnee.PostesJeu.Count <= 0)
+            {
+                labelPostesJeu.Text = "Aucun poste de jeu associé";
+                dataGridPostesJeu.Visible = false;
             }
             else
             {
-                dataGridTournois.Visible = false;
-            }
-        }
-
-        /// <summary>
-        /// Permet de déterminer d'afficher une indication visuelle sur les tournois associés à l'espace sélectionné, en fonction de leur statut (en cours, planifié ou aucun tournoi).
-        /// </summary>
-        private void StatutTounois()
-        {
-            var tournois = _espaceSelectionee.Tournois ?? new List<Tournoi>();
-
-            var enCours = tournois
-                .Where(t => t.Statut == "EnCours")
-                .OrderBy(t => t.DateHeure)
-                .ToList();
-
-            if (enCours.Any())
-            {
-                labelStatutTournoi.Text = "Tournoi en cours";
-                labelStatutTournoi.ForeColor = Color.Maroon;
-                labelStatutTournoi.BackColor = Color.FromArgb(255, 128, 128);
-
-                ChargerTournois(enCours);
-            }
-            else
-            {
-                var futurs = tournois
-                    .Where(t => t.Statut == "Planifié")
-                    .OrderBy(t => t.DateHeure)
-                    .ToList();
-
-                if (futurs.Any())
-                {
-                    labelStatutTournoi.Text = futurs.Count > 1
-                        ? "Tournois programmés"
-                        : "Tournoi programmé";
-
-                    labelStatutTournoi.ForeColor = Color.Chocolate;
-                    labelStatutTournoi.BackColor = Color.FromArgb(255, 224, 192);
-
-                    ChargerTournois(futurs);
-                }
+                // Si il y a un ou plusieurs postes de jeu associés à l'espace,
+                // on affiche le nombre de postes de jeu associés et on affiche le datagrid
+                if (_espaceSelectionnee.PostesJeu.Count > 1)
+                    labelPostesJeu.Text = "Postes de jeu associés";
                 else
-                {
-                    labelStatutTournoi.Text = "Espace libre";
-                    labelStatutTournoi.ForeColor = Color.DarkGreen;
-                    labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
-                    ChargerTournois(null);
-                }
+                    labelPostesJeu.Text = "Poste de jeu associé";
+
+                dataGridPostesJeu.Visible = true;
+                dataGridPostesJeu.DataSource = _espaceSelectionnee.PostesJeu.ToList();
+                MEP_DataGridPostesJeu();
+            }
+        }
+        /// <summary>
+        /// Permet de charger les tournois associés à l'espace sélectionné et d'afficher une indication visuelle
+        /// du statut de ces tournois (en cours, planifié ou aucun tournoi).
+        /// </summary>
+        /// <param name="tournoisEspace">La liste des tournois de l'espace</param>
+        private void ChargerTournois(ICollection<Tournoi>? tournoisEspace)
+        {
+            if (tournoisEspace == null)
+            {
+                dataGridTournois.DataSource = null;
+                dataGridTournois.Visible = false;
+                return;
             }
 
-            labelStatutTournoi.Visible = true;
+            dataGridTournois.DataSource = tournoisEspace.ToList();
+            dataGridTournois.Visible = true;
+            MEP_DataGridTournois();
         }
 
         /// <summary>
@@ -150,16 +139,10 @@ namespace ApplicationUi
         /// </summary>
         private void ChargerStatistiques()
         {
-            DateTime current = DateTime.Now;
             // Un espace libre est un espace qui n'a pas de tournoi futur associé ou dont tous les tournois sont terminés
-            int nbEspacesLibres = _serviceEspace.Lister(filtre)
-                                                .Count(e =>
-                                                    e.Tournois == null ||
-                                                    !e.Tournois.Any(t =>
-                                                        t.Statut == "Planifié"
-                                                        || t.Statut == "EnCours"));
-
-            labelStatEspacesTotal.Text = $"{_serviceEspace.Lister(filtre).Count()}";
+            int nbEspacesLibres = _serviceEspace.CompterEspacesDisponibles(filtre);
+            int nbEspacesTotal = _serviceEspace.CompterEspacesTotal(filtre);
+            labelStatEspacesTotal.Text = $"{nbEspacesTotal}";
 
             if (nbEspacesLibres == 0)
             {
@@ -173,34 +156,20 @@ namespace ApplicationUi
             }
         }
 
-
-        /// <summary>
-        /// Resets all tournament-related input fields and controls to their default values.
-        /// </summary>
-        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
-        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
-        /// controls are reset to indicate a planned tournament.</remarks>
-        private void Raz_Zones()
-        {
-            textBoxNom.Clear();
-            textBoxDescription.Clear();
-            numericUpDownCapaciteMaxi.Value = numericUpDownCapaciteMaxi.Minimum;
-            numericUpDownSuperficie.Value = numericUpDownSuperficie.Minimum;
-            filtre = "";
-            labelStatutTournoi.Visible = false;
-        }
-        private void MEP_DataGrid()
+        private void MEP_DataGridEspaces()
         {
             dataGridEspaces.Columns["idEspace"].Visible = false;
             dataGridEspaces.Columns["Tournois"].Visible = false;
             dataGridEspaces.Columns["PostesJeu"].Visible = false;
+            dataGridEspaces.Columns["Capacitemaxi"].Visible = false;
+            dataGridEspaces.Columns["Superficie"].Visible = false;
+
             dataGridEspaces.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridEspaces.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void MEP_DataGridPostesJeu()
         {
-            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridPostesJeu.Columns["Fonctionnel"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
             dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
             dataGridPostesJeu.Columns["Plateforme"].Visible = false;
@@ -208,6 +177,9 @@ namespace ApplicationUi
             dataGridPostesJeu.Columns["IdEspace"].Visible = false;
             dataGridPostesJeu.Columns["Espace"].Visible = false;
             dataGridPostesJeu.Columns["NomEspace"].Visible = false;
+
+            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridPostesJeu.Columns["Fonctionnel"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void MEP_DataGridTournois()
@@ -222,7 +194,6 @@ namespace ApplicationUi
             dataGridTournois.Columns["NomEspace"].Visible = false;
             dataGridTournois.Columns["TitreJeu"].Visible = false;
             dataGridTournois.Columns["Statut"].Visible = false;
-            dataGridTournois.Columns["Statut"].Visible = false;
             dataGridTournois.Columns["DureePrevue"].Visible = false;
             dataGridTournois.Columns["Lot"].Visible = false;
 
@@ -234,72 +205,8 @@ namespace ApplicationUi
             dataGridTournois.Columns["Nom"].DisplayIndex = 1;
         }
 
-        private void dataGridEspaces_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Ignorer les clics sur l'en-tête (gérés pour le tri)
-            if (e.RowIndex < 0)
-            {   // ordonner sur les champs descriptions, superficie, capaciteMaxi
-                var donnees = _serviceEspace.Lister(filtre);
-                var map = new Dictionary<int, Func<Espace, object>>
-                {
-                    {dataGridEspaces.Columns["Nom"].Index, e => e.Nom },
-                    {dataGridEspaces.Columns["Description"].Index, e => e.Description},
-                    {dataGridEspaces.Columns["Superficie"].Index, e => e.Superficie},
-                    {dataGridEspaces.Columns["CapaciteMaxi"].Index, e => e.CapaciteMaxi},
-                };
-                if (!map.TryGetValue(e.ColumnIndex, out var keySelector))
-                    return;
-                // Appliquer le tri
-                dataGridEspaces.DataSource = ordreChamp == "ASC"
-                    ? donnees.OrderByDescending(keySelector).ToList()
-                    : donnees.OrderBy(keySelector).ToList();
-
-                // Inverser l’ordre
-                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
-
-                MEP_DataGrid();
-                return;
-            }
-
-            // Ne pas recharger le DataSource lors d'un clic sur une cellule : cela réinitialise la sélection
-            _espaceSelectionee = dataGridEspaces.Rows[e.RowIndex].DataBoundItem as Espace;
-
-            if (_espaceSelectionee != null)
-                RemplirFormulaire(_espaceSelectionee);
-
-            buttonModifier.Enabled = _espaceSelectionee != null;
-            buttonSupprimer.Enabled = _espaceSelectionee != null;
-        }
-
-        /// <summary>
-        /// Remplit les champs du formulaire avec les informations de l'espace spécifié.
-        /// </summary>
-        /// <remarks>Cette méthode met à jour les contrôles du formulaire pour refléter les propriétés de
-        /// l'espace fourni. Elle doit être appelée lors de l'affichage ou de la modification d'un espace
-        /// existant.</remarks>
-        /// <param name="espace">L'objet Espace contenant les données à afficher dans le formulaire. Ne doit pas être null.</param>
-        private void RemplirFormulaire(Espace espace)
-        {
-            textBoxNom.Text = espace.Nom;
-            textBoxDescription.Text = espace.Description;
-            numericUpDownCapaciteMaxi.Value = espace.CapaciteMaxi;
-            numericUpDownSuperficie.Value = espace.Superficie;
-            ChargerPostesJeu();
-            StatutTounois();
-        }
-        #endregion
-        #region validations
-        private bool ValiderEspace(Espace espace)
-        {
-            var erreurs = _serviceEspace.ValiderEspace(espace);
-            if (erreurs.Any())
-            {
-                MessageBox.Show(string.Join("\n", erreurs));
-                return false;
-            }
-            return true;
-        }
-        #endregion
+        #endregion  
+        #region Evènements
         #region Boutons
         /// <summary>
         /// Gère l'événement de clic sur le bouton d'ajout pour créer un nouvel espace à partir des informations saisies
@@ -309,9 +216,9 @@ namespace ApplicationUi
         /// validation échoue, aucun espace n'est ajouté.</remarks>
         /// <param name="sender">L'objet à l'origine de l'événement, généralement le bouton Ajouter.</param>
         /// <param name="e">Les données d'événement associées au clic du bouton.</param>
-        public void buttonAjouter_Click(object sender, EventArgs e)
+        private void ButtonAjouter_Click(object sender, EventArgs e)
         {
-            var espace = new Espace
+            Espace espace = new()
             {
                 Nom = textBoxNom.Text,
                 Description = textBoxDescription.Text,
@@ -320,13 +227,13 @@ namespace ApplicationUi
             };
 
             if (ValiderEspace(espace))
-            {                
+            {
                 _serviceEspace.Creer(espace);
-                ChargerEspaces();
+                MessageBox.Show("L'espace a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-
         }
+
         /// <summary>
         /// Gère l'événement de clic sur le bouton de modification pour appliquer les changements apportés à l'espace
         /// sélectionné.
@@ -336,37 +243,35 @@ namespace ApplicationUi
         /// effectué si aucune ligne n'est sélectionnée ou si aucun espace n'est sélectionné.</remarks>
         /// <param name="sender">L'objet à l'origine de l'événement, généralement le bouton Modifier.</param>
         /// <param name="e">Les données d'événement associées au clic sur le bouton.</param>
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void ButtonModifier_Click(object sender, EventArgs e)
         {
-            if (dataGridEspaces.CurrentRow == null)
+            // Si aucune ligne n'est sélectionnée, ne rien faire
+            if (dataGridEspaces.CurrentRow == null || _espaceSelectionnee == null)
                 return;
 
-            if (_espaceSelectionee == null)
-                return;
-            var espace = (Espace)dataGridEspaces.CurrentRow.DataBoundItem;
+            _espaceSelectionnee.Nom = textBoxNom.Text;
+            _espaceSelectionnee.Description = textBoxDescription.Text;
+            _espaceSelectionnee.CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value;
+            _espaceSelectionnee.Superficie = (int)numericUpDownSuperficie.Value;
 
-            _espaceSelectionee.Nom = textBoxNom.Text;
-            _espaceSelectionee.Description = textBoxDescription.Text;
-            _espaceSelectionee.CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value;
-            _espaceSelectionee.Superficie = (int)numericUpDownSuperficie.Value;
-
-            if (ValiderEspace(_espaceSelectionee))
+            if (ValiderEspace(_espaceSelectionnee))
             {
-                _serviceEspace.Modifier(_espaceSelectionee);
-                ChargerEspaces();
+                _serviceEspace.Modifier(_espaceSelectionnee);
+                MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-           
+
         }
         /// <summary>
         /// Gère l'événement de clic sur le bouton Effacer et réinitialise les zones de saisie du formulaire.
         /// </summary>
         /// <param name="sender">L'objet à l'origine de l'événement, généralement le bouton Effacer.</param>
         /// <param name="e">Les données d'événement associées au clic sur le bouton.</param>
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void ButtonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
+
         /// <summary>
         /// Gère l'événement de clic sur le bouton de suppression pour retirer l'espace sélectionné de la liste.
         /// </summary>
@@ -375,21 +280,53 @@ namespace ApplicationUi
         /// réinitialisées.</remarks>
         /// <param name="sender">L'objet source de l'événement, généralement le bouton de suppression.</param>
         /// <param name="e">Les données d'événement associées au clic sur le bouton.</param>
-        private void buttonSupprimer_Click(object sender, EventArgs e)
+        private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
-            if (dataGridEspaces.CurrentRow == null)
+            // Si aucune ligne n'est sélectionnée, ne rien faire
+            if (dataGridEspaces.CurrentRow == null || _espaceSelectionnee == null)
                 return;
 
-            if (_espaceSelectionee == null)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
-            var espace = (Espace)dataGridEspaces.CurrentRow.DataBoundItem;
 
-            _serviceEspace.Supprimer(_espaceSelectionee.IdEspace);
-            _espaceSelectionee = null;
-            ChargerEspaces();
+            _serviceEspace.Supprimer(_espaceSelectionnee.IdEspace);
+            MessageBox.Show("L'espace a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Raz_Zones();
-
         }
+        #endregion 
+
+        private void DataGridEspaces_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Gestion des clics sur l'en-tête (gérés pour le tri)
+            if (e.RowIndex < 0)
+            {
+                // Association des index avec les propriétés de l'objet
+                var map = new Dictionary<int, string>
+                {
+                    { dataGridEspaces.Columns["Nom"].Index,          "Nom" },
+                    { dataGridEspaces.Columns["Description"].Index,  "Description" },
+                    { dataGridEspaces.Columns["Superficie"].Index,   "Superficie" },
+                    { dataGridEspaces.Columns["CapaciteMaxi"].Index, "CapaciteMaxi" },
+                };
+                // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
+                // sinon récupérer le nom de la propriété associée à la colonne cliquée
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
+                    return;
+
+                dataGridEspaces.DataSource = _serviceEspace.Lister(filtre, colonne, ordreChamp);
+                // permutation de l'ordre stocké
+                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+                MEP_DataGridEspaces();
+                return;
+            }
+
+            // Ne pas recharger le DataSource lors d'un clic sur une cellule : cela réinitialise la sélection
+            _espaceSelectionnee = dataGridEspaces.Rows[e.RowIndex].DataBoundItem as Espace;
+
+            if (_espaceSelectionnee != null)
+                RemplirFormulaire();
+        }
+
         /// <summary>
         /// Gère l'événement déclenché lorsque le texte de la zone de recherche est modifié.
         /// </summary>
@@ -397,32 +334,164 @@ namespace ApplicationUi
         /// fonction de la saisie de l'utilisateur.</remarks>
         /// <param name="sender">L'objet source de l'événement, généralement la zone de texte de recherche.</param>
         /// <param name="e">Les données associées à l'événement de modification du texte.</param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerEspaces();
         }
 
         #endregion
-
-        private void buttonPostesJeu_Click(object sender, EventArgs e)
+        #region validations
+        /// <summary>
+        /// Retourne un booléen indiquant si les informations de l'espace sont valides ou non,
+        /// en fonction des règles métier définies dans le service Espace.
+        /// </summary>
+        /// <param name="espace">L'objet Espace à valider.</param>
+        /// <returns>Vraie si l'espace est valide, sinon faux.</returns>
+        private bool ValiderEspace(Espace espace)
         {
-
+            var erreurs = _serviceEspace.ValiderEspace(espace);
+            if (erreurs.Count > 0)
+            {
+                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
+        #endregion
+        #region Méthodes
 
+        /// <summary>
+        /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
+        /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
+        /// </summary>
+        private void DisabledInputs()
+        {
+            textBoxNom.Enabled = false;
+            textBoxDescription.Enabled = false;
+            numericUpDownCapaciteMaxi.Enabled = false;
+            numericUpDownSuperficie.Enabled = false;
         }
 
-        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Permet de déterminer d'afficher une indication visuelle sur les tournois associés à l'espace sélectionné, 
+        /// en fonction de leur statut (en cours, planifié ou aucun tournoi).
+        /// </summary>
+        private void StatutTournois()
         {
+            if (_espaceSelectionnee == null)
+            {
+                labelStatutTournoi.Visible = _espaceSelectionnee != null;
+                return;
+            }
 
+            labelStatutTournoi.Visible = _espaceSelectionnee != null; 
+
+            List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee.IdEspace);
+            List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee.IdEspace);
+
+            if (enCours.Count > 0)
+            {
+                labelStatutTournoi.Text = "Tournoi en cours";
+                labelStatutTournoi.ForeColor = Color.Maroon;
+                labelStatutTournoi.BackColor = Color.FromArgb(255, 128, 128);
+
+                ChargerTournois(enCours);
+            }
+            else
+            {
+                if (futurs.Count > 0)
+                {
+                    labelStatutTournoi.Text = futurs.Count > 1
+                        ? "Tournois programmés"
+                        : "Tournoi programmé";
+
+                    labelStatutTournoi.ForeColor = Color.Chocolate;
+                    labelStatutTournoi.BackColor = Color.FromArgb(255, 224, 192);
+
+                    ChargerTournois(futurs);
+                }
+                // Si il n'y a ni tournoi en cours ni tournoi planifié, alors l'espace est considéré comme libre
+                else
+                {
+                    labelStatutTournoi.Text = "Espace libre";
+                    labelStatutTournoi.ForeColor = Color.DarkGreen;
+                    labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
+                    ChargerTournois(null);
+                }
+            }
         }
 
-        private void dataGridEspaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        /// <summary>
+        /// Resets all tournament-related input fields and controls to their default values.
+        /// </summary>
+        /// <remarks>Use this method to clear the current tournament selection and prepare the form for
+        /// entering a new tournament. All user input fields are cleared or set to their minimum values, and the status
+        /// controls are reset to indicate a planned tournament.</remarks>
+        private void Raz_Zones()
         {
+            textBoxNom.Clear();
+            textBoxDescription.Clear();
 
+            numericUpDownCapaciteMaxi.Value = numericUpDownCapaciteMaxi.Minimum;
+            numericUpDownSuperficie.Value = numericUpDownSuperficie.Minimum;
+
+            filtre = "";
+
+            // Réinitialiser la sélection de l'espace
+            _espaceSelectionnee = null;
+
+            labelStatutTournoi.Visible = _espaceSelectionnee != null;
+            dataGridPostesJeu.Visible = _espaceSelectionnee != null;
+            dataGridTournois.Visible = _espaceSelectionnee != null;
+
+            // Recharger les espaces pour réinitialiser la sélection et les statistiques
+            ChargerEspaces();
+
+            AfficherBouttons();
         }
+
+        /// <summary>
+        /// Remplit les champs du formulaire avec les informations de l'espace spécifié.
+        /// </summary>
+        /// <remarks>Cette méthode met à jour les contrôles du formulaire pour refléter les propriétés de
+        /// l'espace fourni. Elle doit être appelée lors de l'affichage ou de la modification d'un espace
+        /// existant.</remarks>
+        private void RemplirFormulaire()
+        {
+            if (_espaceSelectionnee == null)
+            {
+                MessageBox.Show("Aucun espace sélectionné.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            textBoxNom.Text = _espaceSelectionnee.Nom;
+            textBoxDescription.Text = _espaceSelectionnee.Description;
+            numericUpDownCapaciteMaxi.Value = _espaceSelectionnee.CapaciteMaxi;
+            numericUpDownSuperficie.Value = _espaceSelectionnee.Superficie;
+
+            dataGridPostesJeu.Visible = _espaceSelectionnee != null;
+            dataGridTournois.Visible = _espaceSelectionnee != null;
+
+            ChargerPostesJeu();
+            StatutTournois();
+            AfficherBouttons();
+        }
+
+        /// <summary>
+        /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
+        /// </summary>
+        private void AfficherBouttons()
+        {
+            buttonAjouter.Enabled = _espaceSelectionnee == null;
+
+            // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
+            buttonModifier.Enabled = _espaceSelectionnee != null;
+            buttonSupprimer.Enabled = _espaceSelectionnee != null;
+            buttonEffacer.Enabled = _espaceSelectionnee != null;
+        }
+        #endregion
+
     }
 }

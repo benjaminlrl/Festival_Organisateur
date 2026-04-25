@@ -24,29 +24,47 @@ namespace Lib_Services.Services
             _context = context;
         }
 
+        #region Lectures
+
         /// <summary>
-        /// Retourne la liste complète des lots composants présents en base.
-        /// Exécute immédiatement la requête via <c>ToList()</c>.
+        ///  Retourne la liste complète des lots présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Lot"/>.</returns>
-        public List<Lot> Lister(string filtre = "")
+        public List<Lot> Lister(string filtre = "", string property = "", string ordre = "")
         {
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Lots
-                     .Include(t => t.LotComposant)
-                     .Include(t => t.Tournoi)
-                     .ToList();
-            return _context.Lots
-                .Where(t => t.Libelle.Contains(filtre)
-                        || t.ValeurTotale.ToString().Contains(filtre)
-                        || t.RangAttribution.ToString().Contains(filtre)
-                        || t.Numero.ToString().Contains(filtre)
-                        || t.Tournoi.Nom.Contains(filtre)
-                        || t.LotComposant.Any(lc => lc.Libelle.Contains(filtre)))
-                .Include(t => t.LotComposant)
-                .Include(t => t.Tournoi)
-                .ToList();
+            IQueryable<Lot> query = _context.Lots
+                        .Include(l => l.LotComposant)
+                        .Include(l => l.Tournoi);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(l => l.Libelle.Contains(filtre)
+                        || l.ValeurTotale.ToString().Contains(filtre)
+                        || l.RangAttribution.ToString().Contains(filtre)
+                        || l.Numero.ToString().Contains(filtre)
+                        || l.Tournoi.Nom.Contains(filtre)
+                        || l.LotComposant.Any(lc => lc.Libelle.Contains(filtre)));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Libelle" => ordre == "ASC" ? query.OrderBy(l => l.Libelle) : query.OrderByDescending(l => l.Libelle),
+                "ValeurTotale" => ordre == "ASC" ? query.OrderBy(l => l.ValeurTotale) : query.OrderByDescending(l => l.ValeurTotale),
+                "RangAttribution" => ordre == "ASC" ? query.OrderBy(l => l.RangAttribution) : query.OrderByDescending(l => l.RangAttribution),
+                "Numero" => ordre == "ASC" ? query.OrderBy(l => l.Numero) : query.OrderByDescending(l => l.Numero),
+                "Tournoi" => ordre == "ASC" ? query.OrderBy(l => l.Tournoi) : query.OrderByDescending(l => l.Tournoi),
+                "LotComposant" => ordre == "ASC" ? query.OrderBy(l => l.LotComposant) : query.OrderByDescending(l => l.LotComposant),
+                _ => query.OrderByDescending(l => l.Numero) // valeur par défaut
+            };
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -59,7 +77,8 @@ namespace Lib_Services.Services
             return _context.Lots
                            .FirstOrDefault(o => o.Numero == numero);
         }
-
+        #endregion
+        #region CUD
         /// <summary>
         /// Crée un nouveau Lot en base
         /// Appelle immédiatement <c>SaveChanges()</c> pour persister l'entité.
@@ -98,12 +117,14 @@ namespace Lib_Services.Services
             }
         }
 
+        #endregion
+        #region Validations
         /// <summary>
         /// Permet de voir si un lot est conformes aux règles de sécurité suivantes
         /// </summary>
         /// <param name="lot">Instance de <see cref="Lot"/> à créer.</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
-        public List<string> LotValide(Lot lot)
+        public List<string> ValiderLot(Lot lot)
         {
             // liste des erreurs
             var erreurs = new List<string>();
@@ -122,5 +143,6 @@ namespace Lib_Services.Services
             }
             return erreurs;
         }
+        #endregion
     }
 }

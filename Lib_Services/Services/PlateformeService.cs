@@ -24,7 +24,7 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
-
+        #region Lecture
         /// <summary>
         /// Retourne toutes les plateformes présentes dans la base de données.
         /// Si un filtre est fourni, retourne uniquement 
@@ -49,6 +49,38 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
+        ///  Retourne la liste complète des jeux présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="Plateforme"/>.</returns>
+        public List<Plateforme> Lister(string filtre = "", string property = "", string ordre = "")
+        {
+            IQueryable<Plateforme> query = _context.Plateformes
+                .Include(p => p.PostesJeu)
+                .Include(p => p.Jeux);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(p => p.Libelle.Contains(filtre));
+
+            query = property switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "Libelle" => ordre == "ASC" ? query.OrderBy(p => p.Libelle) : query.OrderByDescending(p => p.Libelle),
+                "IdPlateforme" => ordre == "ASC" ? query.OrderBy(p => p.IdPlateforme) : query.OrderByDescending(p => p.IdPlateforme),
+                _ => query.OrderByDescending(p => p.IdPlateforme) // valeur par défaut
+            };
+
+            return query.ToList();
+        }
+
+        /// <summary>
         /// Récupère une plateforme par son identifiant.
         /// </summary>
         /// <param name="idPlateforme">Identifiant de la plateforme recherchée.</param>
@@ -58,7 +90,8 @@ namespace Lib_Services.Services
             // Find retourne null si l'entité n'existe pas.
             return _context.Plateformes.Find(idPlateforme);
         }
-
+        #endregion
+        #region CUD
         /// <summary>
         /// Crée une nouvelle plateforme et persiste la modification.
         /// </summary>
@@ -97,7 +130,8 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
-
+        #endregion
+        #region Validations
         /// <summary>
         /// Permet de vérifier les propriétés associés a une plateforme.
         /// </summary>
@@ -119,6 +153,6 @@ namespace Lib_Services.Services
 
             return erreurs;
         }
-
+        #endregion
     }
 }
