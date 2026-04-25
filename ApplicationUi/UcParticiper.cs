@@ -143,11 +143,7 @@ namespace ApplicationUi
         }
         private void MEP_DataGridParticipations()
         {
-            // Après avoir lié la DataSource, définir le SortMode de chaque colonne
-            foreach (DataGridViewColumn col in dataGridParticipations.Columns)
-            {
-                col.SortMode = DataGridViewColumnSortMode.Programmatic;
-            }
+            DesactiverTrieAutomatique(dataGridParticipations);
 
             dataGridParticipations.Columns["Tournoi"].Visible = false;
             dataGridParticipations.Columns["NumeroTournoi"].Visible = false;
@@ -235,7 +231,7 @@ namespace ApplicationUi
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new Dictionary<int, string>
+                Dictionary<int, string> map = new ()
                 {
                     {dataGridParticipations.Columns["IdUser"].Index, "IdUser"},
                     {dataGridParticipations.Columns["NomTournoi"].Index, "NomTournoi"},
@@ -402,6 +398,18 @@ namespace ApplicationUi
             buttonModifier.Enabled = _participerSelectionne != null;
             buttonSupprimer.Enabled = _participerSelectionne != null;
             buttonEffacer.Enabled = _participerSelectionne != null;
+        }
+
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        static void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
         }
         #endregion
     }

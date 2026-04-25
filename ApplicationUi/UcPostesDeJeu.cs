@@ -147,11 +147,7 @@ namespace ApplicationUi
 
         private void MEP_DataGridPostesJeu()
         {
-            // Après avoir lié la DataSource, définir le SortMode de chaque colonne
-            foreach (DataGridViewColumn col in dataGridPostesJeu.Columns)
-            {
-                col.SortMode = DataGridViewColumnSortMode.Programmatic;
-            }
+            DesactiverTrieAutomatique(dataGridPostesJeu);
 
             dataGridPostesJeu.Columns["Espace"].Visible = false;
             dataGridPostesJeu.Columns["IdEspace"].Visible = false;
@@ -201,6 +197,7 @@ namespace ApplicationUi
                 IdPlateforme = plateformeSelectionne.IdPlateforme,
                 IdEspace = espaceSelectionne.IdEspace
             };
+
             // Formattage de la référence du poste"
             posteJeu.SetReference(espaceSelectionne, _servicePosteJeu.
                 NombrePostesJeuEspacePlateforme(espaceSelectionne.IdEspace, plateformeSelectionne.IdPlateforme) + 1);
@@ -208,7 +205,7 @@ namespace ApplicationUi
             if (ValiderPosteJeu(posteJeu))
             {
                 _servicePosteJeu.Creer(posteJeu);
-                ChargerPostesDeJeu();
+                MessageBox.Show("Le poste de jeu a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
 
@@ -218,7 +215,6 @@ namespace ApplicationUi
             if (dataGridPostesJeu.CurrentRow == null || _posteJeuSelectionne == null)
                     return;
 
-            _posteJeuSelectionne.Reference = textBoxReference.Text;
             _posteJeuSelectionne.Fonctionnel = fonctionnelSelectionne; // true ou false selon le choix de l'utilisateur
             _posteJeuSelectionne.IdEspace = ((Espace)comboBoxEspace.SelectedItem).IdEspace;
             _posteJeuSelectionne.IdPlateforme = ((Plateforme)comboBoxPlateforme.SelectedItem).IdPlateforme;
@@ -239,10 +235,11 @@ namespace ApplicationUi
             if (dataGridPostesJeu.CurrentRow == null || _posteJeuSelectionne == null)
                 return;
 
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Validation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Supression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
 
             _servicePosteJeu.Supprimer(_posteJeuSelectionne.NumeroPoste);
+            MessageBox.Show("Le poste de jeu a bien été supprimé.", "Supression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Raz_Zones();
 
         }
@@ -250,24 +247,24 @@ namespace ApplicationUi
         #endregion
         private void DataGridPostesJeu_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // on ne gère le clic que sur les lignes, pas sur les en-têtes
-            // Ignorer les clics sur l'en-tête (gérés pour le tri)
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
             {
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new Dictionary<int, string>
+                Dictionary<int, string> map = new ()
                 {
                     {dataGridPostesJeu.Columns["Reference"].Index, "Reference"},
                     {dataGridPostesJeu.Columns["Fonctionnel"].Index, "Fonctionnel"},
                     {dataGridPostesJeu.Columns["NomEspace"].Index, "NomEspace"},
                     {dataGridPostesJeu.Columns["Nomplateforme"].Index, "NomPlateforme"},
                 };
+
                 // Vérifie si l'index de la colonne est associé a une propriété
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
-                    return;                
+                    return; 
+                
                 // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
@@ -467,6 +464,18 @@ namespace ApplicationUi
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             buttonEffacer.Enabled = _posteJeuSelectionne != null;
+        }
+
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        static void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
         }
         #endregion
     }

@@ -6,14 +6,6 @@ namespace Lib_Entities.Entities
 {
     public class Jeu
     {
-        public enum PEGI
-        {
-            Pegi3 = 3,
-            Pegi7 = 7,
-            Pegi12 = 12,
-            Pegi16 = 16,
-            Pegi18 = 18
-        }
         /// <summary>
         /// Numéro.
         /// </summary>

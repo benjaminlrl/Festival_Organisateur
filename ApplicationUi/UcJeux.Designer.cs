@@ -30,7 +30,6 @@
         {
             label2 = new Label();
             textBoxRecherche = new TextBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
@@ -54,7 +53,6 @@
             buttonSupprimer = new Button();
             label1 = new Label();
             dataGridJeux = new DataGridView();
-            tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
@@ -67,7 +65,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(3, 0);
+            label2.Location = new Point(40, 263);
             label2.Name = "label2";
             label2.Size = new Size(131, 30);
             label2.TabIndex = 1;
@@ -75,52 +73,38 @@
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(218, 3);
+            textBoxRecherche.Location = new Point(177, 262);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(928, 31);
             textBoxRecherche.TabIndex = 0;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.7640457F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.2359543F));
-            tableLayoutPanel2.Controls.Add(label2, 0, 0);
-            tableLayoutPanel2.Controls.Add(textBoxRecherche, 1, 0);
-            tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(3, 276);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1151, 32);
-            tableLayoutPanel2.TabIndex = 9;
-            // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.49249F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
-            tableLayoutPanel1.Controls.Add(dataGridJeux, 0, 2);
+            tableLayoutPanel1.Controls.Add(dataGridJeux, 0, 1);
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 83.80567F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1943321F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 310F));
-            tableLayoutPanel1.Size = new Size(1157, 622);
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 44.0492477F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 55.9507523F));
+            tableLayoutPanel1.Size = new Size(1157, 731);
             tableLayoutPanel1.TabIndex = 8;
             // 
             // panelForm
             // 
             panelForm.BackColor = Color.White;
+            panelForm.Controls.Add(label2);
             panelForm.Controls.Add(tableLayoutPanel);
+            panelForm.Controls.Add(textBoxRecherche);
             panelForm.Controls.Add(panelButtons);
+            panelForm.Dock = DockStyle.Fill;
             panelForm.Location = new Point(4, 3);
             panelForm.Margin = new Padding(4, 3, 4, 3);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(1149, 253);
+            panelForm.Size = new Size(1149, 316);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel
@@ -377,13 +361,13 @@
             dataGridJeux.BorderStyle = BorderStyle.None;
             dataGridJeux.ColumnHeadersHeight = 34;
             dataGridJeux.Dock = DockStyle.Fill;
-            dataGridJeux.Location = new Point(4, 314);
+            dataGridJeux.Location = new Point(4, 325);
             dataGridJeux.Margin = new Padding(4, 3, 4, 3);
             dataGridJeux.Name = "dataGridJeux";
             dataGridJeux.ReadOnly = true;
             dataGridJeux.RowHeadersWidth = 62;
             dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridJeux.Size = new Size(1149, 305);
+            dataGridJeux.Size = new Size(1149, 403);
             dataGridJeux.TabIndex = 6;
             dataGridJeux.CellClick += dataGridJeux_CellClick;
             // 
@@ -394,11 +378,10 @@
             BackColor = Color.FromArgb(255, 192, 128);
             Controls.Add(tableLayoutPanel1);
             Name = "UcJeux";
-            Size = new Size(1431, 622);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
+            Size = new Size(1457, 794);
             tableLayoutPanel1.ResumeLayout(false);
             panelForm.ResumeLayout(false);
+            panelForm.PerformLayout();
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             panelButtons.ResumeLayout(false);
@@ -411,7 +394,6 @@
         #endregion
         private Label label2;
         private TextBox textBoxRecherche;
-        private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel1;
         private Panel panelForm;
         private TableLayoutPanel tableLayoutPanel;
