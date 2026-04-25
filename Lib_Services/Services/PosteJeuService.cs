@@ -2,9 +2,11 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Lib_Services.Services
 {
@@ -16,8 +18,8 @@ namespace Lib_Services.Services
     {
         // Contexte Entity Framework 
         private readonly ApplicationDbContext _context;
-        private readonly IPlateformeService _plateformeService;
-        private readonly IEspaceService _espaceService;
+        private readonly IPlateformeService _servicePlateforme;
+        private readonly IEspaceService _serviceEspace;
 
         /// <summary>
         /// Constructeur .
@@ -26,8 +28,8 @@ namespace Lib_Services.Services
         public PosteJeuService(ApplicationDbContext context)
         {
             _context = context;
-            _espaceService = new EspaceService(context);
-            _plateformeService = new PlateformeService(context);
+            _serviceEspace = new EspaceService(context);
+            _servicePlateforme = new PlateformeService(context);
         }
         #region Lecture
 
@@ -137,14 +139,24 @@ namespace Lib_Services.Services
         /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> à créer.</param>
         public void Creer(PosteJeu posteJeu)
         {
-            // Récupère le numéro le plus élevé dans cet espace
-            int numeroPoste = _context.PostesJeu
-                .Where(p => p.IdEspace == posteJeu.IdEspace)
-                .Select(p => p.NumeroPoste)
-                .DefaultIfEmpty(0)
-                .Max() + 1;
+            Espace? espace = _serviceEspace.Obtenir(posteJeu.IdEspace) ?? throw new Exception("Espace inconnu");
 
-            posteJeu.SetReference(posteJeu.Espace, numeroPoste);
+            // récupère le poste de jeu avec le numéro de poste le plus haut
+            // Récupéré le numéro associé a sa référence,
+            // +1
+            PosteJeu? dernierPoste = ObtenirDernierPosteJeuDunEspace(posteJeu.IdEspace);
+
+            int numeroPoste = dernierPoste != null
+                ? int.Parse(dernierPoste.Reference.Substring(dernierPoste.Reference.Length - 3, 3)) +1
+                : 1;
+
+            posteJeu.SetReference(espace, numeroPoste);
+
+            while (ReferenceExiste(posteJeu.Reference) != null)
+            {
+                numeroPoste++;
+                posteJeu.SetReference(espace, numeroPoste);
+            }
 
             ValiderPosteJeu(posteJeu, false);
             // Ajout à l'ensemble suivi d'un commit via SaveChanges.
@@ -274,6 +286,25 @@ namespace Lib_Services.Services
             return _context.PostesJeu
                 .Where(p => p.IdEspace == idEspace && p.IdPlateforme == idPlateforme)
                 .Count();
+        }
+
+        /// <summary>
+        /// Récupère le poste de jeu d'un espace avec le plus haut numéro de poste
+        /// </summary>
+        /// <param name="idEspace">Id de l'espace du poste de jeu</param>
+        /// <returns>L'objet poste d ejeu</returns>
+        public PosteJeu? ObtenirDernierPosteJeuDunEspace(int idEspace)
+        {
+            int numeroPoste = _context.PostesJeu
+                .Where(p => p.IdEspace == idEspace)
+                .Select(p => (int?)p.NumeroPoste)
+                .Max() ?? 0;
+
+            return _context.PostesJeu
+                .FirstOrDefault(p => p.IdEspace == idEspace
+                                  && p.NumeroPoste == numeroPoste);
+
+
         }
         #endregion
 
