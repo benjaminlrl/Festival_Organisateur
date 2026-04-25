@@ -2,14 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -162,11 +165,27 @@ namespace ApplicationUi
                 //NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
                 LotRemis = lotRemisSelectionne
             };
-            if (ValiderParticipation(participer, false))
+
+            try
             {
                 _serviceParticiper.Creer(participer);
                 MessageBox.Show("La participation a bien été ajoutée.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (ParticiperException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de la participation.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -190,11 +209,26 @@ namespace ApplicationUi
             //_participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
             _participerSelectionne.LotRemis = lotRemisSelectionne;
 
-            if (ValiderParticipation(_participerSelectionne, true))
+            try
             {
                 _serviceParticiper.Modifier(_participerSelectionne);
                 MessageBox.Show("La participation a bien été modifiée.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (ParticiperException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de la participation.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -273,25 +307,6 @@ namespace ApplicationUi
         private void RadioButtonLotRemisTrue_CheckedChanged(object sender, EventArgs e)
         {
             lotRemisSelectionne = true;
-        }
-        #endregion
-
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations de la participation sont valides ou non,
-        /// en fonction des règles métier définies dans le service Participer.
-        /// </summary>
-        /// <param name="participer">L'objet Participer à valider.</param>
-        /// <returns>Vraie si la participation est valide, sinon faux.</returns>
-        private bool ValiderParticipation(Participer participer, bool estModification)
-        {
-            List<string> erreurs = _serviceParticiper.ValiderParticipation(participer, estModification);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
         }
         #endregion
 

@@ -1,108 +1,109 @@
 ﻿using Lib_Entities.Entities;
+using Lib_Services.Interfaces;
 using Lib_Services.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.Services
+[TestClass]
+public class EspaceServiceValidationTests
 {
-    [TestClass]
-    public class EspaceServiceValidationTests
+    private readonly IEspaceService _service = new EspaceService(null!);
+
+    // =========================================================================
+    // Cas nominal
+    // =========================================================================
+
+    [TestMethod]
+    public void EspaceValide_AucuneException()
     {
-        private readonly EspaceService _service = new EspaceService(null!);
+        Espace espace = new () { Nom = "Salle Alpha", Description = "Une description", Superficie = 30, CapaciteMaxi = 20 };
+        // ne doit pas throw
+        _service.ValiderEspace(espace);
+    }
 
-        // =========================================================================
-        // Cas nominal
-        // =========================================================================
+    // =========================================================================
+    // Nom
+    // =========================================================================
 
-        [TestMethod]
-        public void EspaceValide_RetourneAucuneErreur()
-        {
-            var espace = new Espace { Nom = "Salle Alpha", Description = "Une description", Superficie = 30, CapaciteMaxi = 20 };
-            Assert.IsEmpty(_service.ValiderEspace(espace));
-        }
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("   ")]
+    public void NomVideOuBlanc_ThrowEspaceException(string nom)
+    {
+        Espace espace = new () { Nom = nom, Description = "Une description", Superficie = 20, CapaciteMaxi = 10 };
+        EspaceException ex = Assert.ThrowsException<EspaceException>(() => _service.ValiderEspace(espace));
+        Assert.AreEqual("Le nom est requis.", ex.Message);
+        Assert.AreEqual((int)EspaceException.EspaceErreur.NomRequis, ex.CodeErreur);
+    }
 
-        // =========================================================================
-        // Nom
-        // =========================================================================
+    // =========================================================================
+    // Description
+    // =========================================================================
 
-        [TestMethod]
-        [DataRow("")]
-        [DataRow("   ")]
-        public void NomVideOuBlanc_RetourneErreur(string nom)
-        {
-            var espace = new Espace { Nom = nom, Description = "Une description", Superficie = 20, CapaciteMaxi = 10 };
-            CollectionAssert.Contains(_service.ValiderEspace(espace), "Le nom est requis.");
-        }
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("   ")]
+    public void DescriptionVideOuBlanche_ThrowEspaceException(string description)
+    {
+        Espace espace = new () { Nom = "Salle Alpha", Description = description, Superficie = 20, CapaciteMaxi = 10 };
+        EspaceException ex = Assert.ThrowsException<EspaceException>(() => _service.ValiderEspace(espace));
+        Assert.AreEqual("La description est requise.", ex.Message);
+        Assert.AreEqual((int)EspaceException.EspaceErreur.DescriptionRequise, ex.CodeErreur);
+    }
 
-        // =========================================================================
-        // Description
-        // =========================================================================
+    // =========================================================================
+    // Superficie
+    // =========================================================================
 
-        [TestMethod]
-        [DataRow("")]
-        [DataRow("   ")]
-        public void DescriptionVideOuBlanche_RetourneErreur(string description)
-        {
-            var espace = new Espace { Nom = "Salle Alpha", Description = description, Superficie = 20, CapaciteMaxi = 10 };
-            CollectionAssert.Contains(_service.ValiderEspace(espace), "La description est requise.");
-        }
+    [TestMethod]
+    [DataRow(8)]
+    public void SuperficieTropPetite_ThrowEspaceException(int superficie)
+    {
+        Espace espace = new () { Nom = "Salle Alpha", Description = "Une description", Superficie = superficie, CapaciteMaxi = 10 };
+        EspaceException ex = Assert.ThrowsException<EspaceException>(() => _service.ValiderEspace(espace));
+        Assert.AreEqual((int)EspaceException.EspaceErreur.SuperficieInsuffisante, ex.CodeErreur);
+    }
 
-        // =========================================================================
-        // Superficie
-        // =========================================================================
+    [TestMethod]
+    [DataRow(61)]
+    public void SuperficieTropGrande_ThrowEspaceException(int superficie)
+    {
+        Espace espace = new () { Nom = "Salle Alpha", Description = "Une description", Superficie = superficie, CapaciteMaxi = 10 };
+        EspaceException ex = Assert.ThrowsException<EspaceException>(() => _service.ValiderEspace(espace));
+        Assert.AreEqual((int)EspaceException.EspaceErreur.SuperficieTropGrande, ex.CodeErreur);
+    }
 
-        [TestMethod]
-        [DataRow(8)]
-        [DataRow(61)]
-        public void SuperficieHorsLimites_RetourneErreur(int superficie)
-        {
-            var espace = new Espace { Nom = "Salle Alpha", Description = "Une description", Superficie = superficie, CapaciteMaxi = 10 };
-            Assert.IsTrue(_service.ValiderEspace(espace).Any(e => e.Contains("superficie")));
-        }
+    [TestMethod]
+    [DataRow(9)]
+    [DataRow(60)]
+    public void SuperficieLimites_AucuneException(int superficie)
+    {
+        Espace espace = new () { Nom = "Salle Alpha", Description = "Une description", Superficie = superficie, CapaciteMaxi = 10 };
+        // ne doit pas throw
+        _service.ValiderEspace(espace);
+    }
 
-        [TestMethod]
-        [DataRow(9)]
-        [DataRow(60)]
-        public void SuperficieLimites_RetourneAucuneErreurSuperficie(int superficie)
-        {
-            var espace = new Espace { Nom = "Salle Alpha", Description = "Une description", Superficie = superficie, CapaciteMaxi = 10 };
-            Assert.IsFalse(_service.ValiderEspace(espace).Any(e => e.Contains("superficie")));
-        }
+    // =========================================================================
+    // CapaciteMaxi
+    // =========================================================================
 
-        // =========================================================================
-        // CapaciteMaxi
-        // =========================================================================
+    [TestMethod]
+    [DataRow(-1)]
+    [DataRow(-100)]
+    public void CapaciteMaxiNegative_ThrowEspaceException(int capacite)
+    {
+        Espace espace = new () { Nom = "Salle Alpha", Description = "Une description", Superficie = 20, CapaciteMaxi = capacite };
+        EspaceException ex = Assert.ThrowsException<EspaceException>(() => _service.ValiderEspace(espace));
+        Assert.AreEqual("La capacité maximale doit être positive.", ex.Message);
+        Assert.AreEqual((int)EspaceException.EspaceErreur.CapaciteNegative, ex.CodeErreur);
+    }
 
-        [TestMethod]
-        [DataRow(-1)]
-        [DataRow(-100)]
-        public void CapaciteMaxiNegative_RetourneErreur(int capacite)
-        {
-            var espace = new Espace { Nom = "Salle Alpha", Description = "Une description", Superficie = 20, CapaciteMaxi = capacite };
-            CollectionAssert.Contains(_service.ValiderEspace(espace), "La capacité maximale doit être positive.");
-        }
-
-        [TestMethod]
-        [DataRow(51)]
-        [DataRow(100)]
-        public void CapaciteMaxiSuperieure50_RetourneErreur(int capacite)
-        {
-            var espace = new Espace { Nom = "Salle Alpha", Description = "Une description", Superficie = 20, CapaciteMaxi = capacite };
-            CollectionAssert.Contains(_service.ValiderEspace(espace), "La superficie ne peut pas être supérieur à 50.");
-        }
-
-        // =========================================================================
-        // Erreurs multiples
-        // =========================================================================
-
-        [TestMethod]
-        public void ToutesLesProprietesInvalides_RetourneToutesLesErreurs()
-        {
-            var espace = new Espace { Nom = "", Description = "", Superficie = 0, CapaciteMaxi = -1 };
-            var erreurs = _service.ValiderEspace(espace);
-            CollectionAssert.Contains(erreurs, "Le nom est requis.");
-            CollectionAssert.Contains(erreurs, "La description est requise.");
-            CollectionAssert.Contains(erreurs, "La superficie ne peut pas être inférieur à 9.");
-            CollectionAssert.Contains(erreurs, "La capacité maximale doit être positive.");
-        }
+    [TestMethod]
+    [DataRow(51)]
+    [DataRow(100)]
+    public void CapaciteMaxiSuperieure50_ThrowEspaceException(int capacite)
+    {
+        Espace espace = new () { Nom = "Salle Alpha", Description = "Une description", Superficie = 20, CapaciteMaxi = capacite };
+        EspaceException ex = Assert.ThrowsException<EspaceException>(() => _service.ValiderEspace(espace));
+        Assert.AreEqual("La capacité maximale ne peut pas être supérieure à 50.", ex.Message);
+        Assert.AreEqual((int)EspaceException.EspaceErreur.CapaciteTropGrande, ex.CodeErreur);
     }
 }

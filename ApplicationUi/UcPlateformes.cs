@@ -2,14 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -129,11 +132,26 @@ namespace ApplicationUi
                 Libelle = textBoxNom.Text
             };
 
-            if (ValiderPlateforme(plateforme, false))
+            try
             {
                 _servicePlateforme.Creer(plateforme);
                 MessageBox.Show("La plateforme a bien été ajoutée.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (PlateformeException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de la plateforme.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonModifier_Click(object sender, EventArgs e)
@@ -145,11 +163,26 @@ namespace ApplicationUi
             }
             _plateformeSelectionee.Libelle = textBoxNom.Text;
 
-            if (ValiderPlateforme(_plateformeSelectionee, true))
+            try
             {
                 _servicePlateforme.Modifier(_plateformeSelectionee);
                 MessageBox.Show("La plateforme a bien été modifiée.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (PlateformeException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de la plateforme.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
         }
@@ -216,26 +249,6 @@ namespace ApplicationUi
         {
             filtre = textBoxRecherche.Text;
             ChargerPlateformes();
-        }
-        #endregion
-
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations de la plateforme sont valides ou non,
-        /// en fonction des règles métier définies dans le service Plateforme.
-        /// </summary>
-        /// <param name="plateforme">L'objet Plateforme à valider.</param>
-        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
-        /// <returns>Vraie si la plateforme est valide, sinon faux.</returns>
-        private bool ValiderPlateforme(Plateforme plateforme, bool estModification)
-        {
-            List<string> erreurs = _servicePlateforme.ValiderPlateforme(plateforme, estModification);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
         }
         #endregion
 

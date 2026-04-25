@@ -1,16 +1,19 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -128,11 +131,26 @@ namespace ApplicationUi
                 IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
             };
 
-            if (ValiderTournoi(tournoi, false))
+            try
             {
                 _serviceTournoi.Creer(tournoi);
                 MessageBox.Show("Le tournoi a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (TournoiException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonModifier_Click(object sender, EventArgs e)
@@ -151,11 +169,26 @@ namespace ApplicationUi
             _tournoiSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
             _tournoiSelectionne.IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu;
 
-            if (ValiderTournoi(_tournoiSelectionne, true))
+            try
             {
                 _serviceTournoi.Modifier(_tournoiSelectionne);
-                MessageBox.Show("Le tournoi a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Le tournoi a bien été modifié.", "Modification ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (TournoiException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modifiation du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -238,25 +271,6 @@ namespace ApplicationUi
             ChargerTournois();
         }
 
-        #endregion
-
-        #region Validations
-        /// <summary>
-        /// Retourne un booléen indiquant si les informations de la participation sont valides ou non,
-        /// en fonction des règles métier définies dans le service Participer.
-        /// </summary>
-        /// <param name="tournoi">L'objet Tournoi à valider.</param>
-        /// <returns>Vraie si le tournoi est valide, sinon faux.</returns>
-        private bool ValiderTournoi(Tournoi tournoi, bool estModification)
-        {
-            List<string> erreurs = _serviceTournoi.ValiderTournoi(tournoi, estModification);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
         #endregion
 
         #region Méthodes

@@ -124,6 +124,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance de <see cref="Espace"/> à créer.</param>
         public void Creer(Espace espace)
         {
+            ValiderEspace(espace, false);    
             // Ajout de l'entité au contexte puis persistance immédiate.
             _context.Espaces.Add(espace);
             _context.SaveChanges();
@@ -136,6 +137,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Espace"/>.</param>
         public void Modifier(Espace espace)
         {
+            ValiderEspace(espace, true);    
             _context.Espaces.Update(espace);
             _context.SaveChanges();
         }
@@ -185,34 +187,36 @@ namespace Lib_Services.Services
         #region Validations
 
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un espace.
+        /// Valide les propriétés d'une instance de <see cref="Espace"/> avant sa création ou sa modification.
         /// </summary>
-        /// <param name="espace">L'esapce à valider</param>
-        /// <returns>Liste de <see cref="string"/> correspondants aux erreurs, ou vide</returns>
-        public List<string> ValiderEspace(Espace espace)
+        /// <param name="espace">Instance de <see cref="Espace"/> à valider.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <exception cref="EspaceException">Exception levée si une validation échoue.</exception>
+        public void ValiderEspace(Espace espace, bool estModification = false)
         {
-            // liste des erreurs
-            List<string> erreurs = [];
-
             if (string.IsNullOrWhiteSpace(espace.Nom))
-                erreurs.Add("Le nom est requis.");
+                throw new EspaceException("Le nom est requis.",
+                    (int)EspaceException.EspaceErreur.NomRequis);
 
             if (string.IsNullOrWhiteSpace(espace.Description))
-                erreurs.Add("La description est requise.");
+                throw new EspaceException("La description est requise.",
+                    (int)EspaceException.EspaceErreur.DescriptionRequise);
 
             if (espace.Superficie < 9)
-                erreurs.Add("La superficie ne peut pas être inférieur à 9.");
+                throw new EspaceException("La superficie ne peut pas être inférieure à 9.",
+                    (int)EspaceException.EspaceErreur.SuperficieInsuffisante);
 
             if (espace.Superficie > 60)
-                erreurs.Add("La superficie ne peut pas être supérieur à 60.");
+                throw new EspaceException("La superficie ne peut pas être supérieure à 60.",
+                    (int)EspaceException.EspaceErreur.SuperficieTropGrande);
 
             if (espace.CapaciteMaxi < 0)
-                erreurs.Add("La capacité maximale doit être positive.");
+                throw new EspaceException("La capacité maximale doit être positive.",
+                    (int)EspaceException.EspaceErreur.CapaciteNegative);
 
             if (espace.CapaciteMaxi > 50)
-                erreurs.Add("La superficie ne peut pas être supérieur à 50.");
-
-            return erreurs;
+                throw new EspaceException("La capacité maximale ne peut pas être supérieure à 50.",
+                    (int)EspaceException.EspaceErreur.CapaciteTropGrande);
         }
         #endregion
     }

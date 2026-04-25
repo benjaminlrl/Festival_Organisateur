@@ -33,8 +33,9 @@ namespace Lib_Services.Interfaces
         /// Permet de vérifier les propriétés associés a un jeu.
         /// </summary>
         /// <param name="jeu">Le jeu à valider</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
         /// <returns></returns>
-        List<string> ValiderJeu(Jeu jeu);
+        void ValiderJeu(Jeu jeu, bool estModification = false);
         #endregion
     }
 }

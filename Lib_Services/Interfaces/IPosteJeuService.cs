@@ -75,8 +75,9 @@ namespace Lib_Services.Interfaces
         /// Valide les données d'un poste de jeu avant création ou modification.
         /// </summary>
         /// <param name="posteJeu">Le poste de jeu concerné</param>
+        /// <param name="estModification">Indique si la validation est pour une modification (true) ou une création (false)</param>
         /// <returns>La liste des erreurs de type <see cref="string"/></returns>
-        List<string> ValiderPosteJeu(PosteJeu posteJeu);
+        void ValiderPosteJeu(PosteJeu posteJeu, bool estModification = false);
         #endregion
         #region Statistiques
         /// <summary>

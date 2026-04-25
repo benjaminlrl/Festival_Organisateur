@@ -56,7 +56,7 @@ namespace Lib_Services.Interfaces
         /// <param name="plateforme">La plateforme à valider</param>
         /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderPlateforme(Plateforme plateforme, bool estModification);
+        void ValiderPlateforme(Plateforme plateforme, bool estModification = false);
         #endregion
     }
 }

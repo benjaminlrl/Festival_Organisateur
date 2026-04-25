@@ -75,11 +75,12 @@ namespace Lib_Services.Interfaces
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a une SoumisVote.
+        /// Permet de valider les données d'un SoumisVote avant création ou modification.
         /// </summary>
-        /// <param name="soumisVote">Le SoumisVote à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderSoumisVote(SoumisVote soumisVote, bool estModification);
+        /// <param name="soumisVote">SoumisVote à valider</param>
+        /// <param name="estModification">Indique si c'est une modification ou une création</param>
+        /// <exception cref="SoumisVoteException">Exception si les données du SoumisVote sont invalides</exception>
+        void ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false);
         #endregion
     }
 }

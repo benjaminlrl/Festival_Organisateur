@@ -30,6 +30,7 @@ namespace Lib_Services.Interfaces
         Participer? Obtenir(int idUser, int numeroTournoi);
 
         #endregion
+
         #region CUD
 
         /// <summary>
@@ -53,6 +54,7 @@ namespace Lib_Services.Interfaces
         /// <param name="numeroTournoi">Numero du tournoi associé à la participation à supprimer.</param>
         void Supprimer(int idUser, int numeroTournoi);
         #endregion
+
         #region Statistiques
         /// <summary>
         /// Permet de récupérer le podium Par tournoi
@@ -75,13 +77,14 @@ namespace Lib_Services.Interfaces
         /// <returns>La moyenne des évaluations pour le tournoi spécifié. Retourne 0,0 si aucune évaluation n'est disponible.</returns>
         double? ObtenirMoyenneEvaluationParTournoi(int numeroTournoi);
         #endregion
+
         #region Validations
         /// <summary>
         /// Permet de vérifier les propriétés associés a une plateforme.
         /// </summary>
         /// <param name="participer">La participation à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderParticipation(Participer participer, bool estModification);
+        void ValiderParticipation(Participer participer, bool estModification = false);
         #endregion
     }
 }

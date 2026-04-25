@@ -1,5 +1,6 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -81,6 +82,7 @@ namespace Lib_Services.Services
         /// <param name="Vote">Objet <see cref="Voter"/> à ajouter.</param>
         public void Creer(Voter vote)
         {
+            ValiderVote(vote);
             _context.Voter.Add(vote);
             _context.SaveChanges();
         }
@@ -91,6 +93,7 @@ namespace Lib_Services.Services
         /// <param name="Vote">Objet <see cref="Voter"/> contenant les valeurs mises à jour.</param>
         public void Modifier(Voter vote)
         {
+            ValiderVote(vote);
             // Marque l'entité comme modifiée puis sauvegarde.
             _context.Voter.Update(vote);
             _context.SaveChanges();
@@ -118,27 +121,23 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Permet de vérifier les propriétés associés a une Vote.
+        /// Valide les propriétés associées à un vote.
         /// </summary>
-        /// <param name="vote">La Vote à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderVote(Voter vote)
+        /// <param name="vote">Vote à valider</param>
+        /// <param name="estModification">Indique si le vote est en cours de modification</param>
+        /// <exception cref="VoteException">Exception si les données du vote sont invalides</exception>
+        public void ValiderVote(Voter vote, bool estModification = false)
         {
-            // liste des erreurs
-            var erreurs = new List<string>();
-
             if (vote.IdUser <= 0)
-                erreurs.Add("L'identifiant de l'utilisateur doit être supérieur à zéro.");
+                throw new VoteException("L'identifiant de l'utilisateur doit être supérieur à zéro.", (int)VoteException.VoteErreur.UtilisateurInvalide);
 
             // L'utilisateur ne peut pas voter plus de NB_VOTES_MAX fois pour un même jeu sur une même plateforme.
             if (_context.Voter.Count(v => v.IdUser == vote.IdUser) >= nbVotesMax)
-                erreurs.Add($"Vous ne pouvez pas voter plus de {nbVotesMax} fois");
+                throw new VoteException("Vous avez atteint le nombre maximum de votes.", (int)VoteException.VoteErreur.NbVotesMax);
 
             // Si l'utilisateur a déjà voté pour ce jeu sur cette plateforme, il ne peut pas voter à nouveau.
             if (Obtenir(vote.IdJeu, vote.IdPlateforme, vote.IdUser) != null)
-                erreurs.Add($"Vous avez déjà voter pour ce mot !");
-
-            return erreurs;
+                throw new VoteException("Vous avez déjà voté pour ce jeu sur cette plateforme.", (int)VoteException.VoteErreur.DejaVote);
         }
 
     }
