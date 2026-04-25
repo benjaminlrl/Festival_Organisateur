@@ -2,15 +2,6 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 
 namespace ApplicationUi
 {
@@ -158,6 +149,8 @@ namespace ApplicationUi
 
         private void MEP_DataGridEspaces()
         {
+            DesactiverTrieAutomatique(dataGridEspaces);
+
             dataGridEspaces.Columns["idEspace"].Visible = false;
             dataGridEspaces.Columns["Tournois"].Visible = false;
             dataGridEspaces.Columns["PostesJeu"].Visible = false;
@@ -170,6 +163,8 @@ namespace ApplicationUi
 
         private void MEP_DataGridPostesJeu()
         {
+            DesactiverTrieAutomatique(dataGridPostesJeu);
+
             dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
             dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
             dataGridPostesJeu.Columns["Plateforme"].Visible = false;
@@ -184,6 +179,8 @@ namespace ApplicationUi
 
         private void MEP_DataGridTournois()
         {
+            DesactiverTrieAutomatique(dataGridTournois);
+
             dataGridTournois.Visible = true;
             dataGridTournois.Columns["NumeroTournoi"].Visible = false;
             dataGridTournois.Columns["IdEspace"].Visible = false;
@@ -301,7 +298,7 @@ namespace ApplicationUi
             if (e.RowIndex < 0)
             {
                 // Association des index avec les propriétés de l'objet
-                var map = new Dictionary<int, string>
+                Dictionary<int, string> map = new ()
                 {
                     { dataGridEspaces.Columns["Nom"].Index,          "Nom" },
                     { dataGridEspaces.Columns["Description"].Index,  "Description" },
@@ -313,9 +310,13 @@ namespace ApplicationUi
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                     return;
 
-                dataGridEspaces.DataSource = _serviceEspace.Lister(filtre, colonne, ordreChamp);
                 // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+
+                dataGridEspaces.DataSource = _serviceEspace.Lister(filtre, colonne, ordreChamp);
+                dataGridEspaces.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                
                 MEP_DataGridEspaces();
                 return;
             }
@@ -325,6 +326,8 @@ namespace ApplicationUi
 
             if (_espaceSelectionnee != null)
                 RemplirFormulaire();
+
+            AfficherBouttons();
         }
 
         /// <summary>
@@ -386,7 +389,7 @@ namespace ApplicationUi
                 return;
             }
 
-            labelStatutTournoi.Visible = _espaceSelectionnee != null; 
+            labelStatutTournoi.Visible = _espaceSelectionnee != null;
 
             List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee.IdEspace);
             List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee.IdEspace);
@@ -491,7 +494,18 @@ namespace ApplicationUi
             buttonSupprimer.Enabled = _espaceSelectionnee != null;
             buttonEffacer.Enabled = _espaceSelectionnee != null;
         }
-        #endregion
 
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        static void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
+        #endregion
     }
 }
