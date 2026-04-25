@@ -24,6 +24,7 @@ namespace Lib_Services.Services
             _context = context;
         }
 
+        #region Lectures
         /// <summary>
         ///  Retourne la liste complète des jeux présents en base, 
         ///  avec possibilité de filtrer
@@ -102,7 +103,9 @@ namespace Lib_Services.Services
             return _context.LotComposants
                            .FirstOrDefault(lc => lc.Numero == numero);
         }
+        #endregion
 
+        #region CUD
         /// <summary>
         /// Crée un nouvel lotcomposant en base
         /// Appelle immédiatement <c>SaveChanges()</c> pour persister l'entité.
@@ -142,7 +145,9 @@ namespace Lib_Services.Services
                 _context.SaveChanges();
             }
         }
+        #endregion
 
+        #region Validations
         /// <summary>
         /// Valide les propriétés d'une instance de <see cref="LotComposant"/> avant sa création ou sa modification.
         /// </summary>
@@ -151,10 +156,6 @@ namespace Lib_Services.Services
         /// <exception cref="LotComposantException">Exception levée si une validation échoue.</exception>
         public void ValiderLotComposant(LotComposant lotComposant, bool estModification = false)
         {
-            if (string.IsNullOrWhiteSpace(lotComposant.Libelle))
-                throw new LotComposantException("Le libellé ne peut pas être vide.",
-                    (int)LotComposantException.LotComposantErreur.LibelleRequis);
-
             if (lotComposant.Libelle.Length > 50)
                 throw new LotComposantException("Le libellé ne peut pas dépasser 50 caractères.",
                     (int)LotComposantException.LotComposantErreur.LibelleTropLong);
@@ -167,5 +168,6 @@ namespace Lib_Services.Services
                 throw new LotComposantException("La description ne peut pas dépasser 150 caractères.",
                     (int)LotComposantException.LotComposantErreur.DescriptionTropLongue);
         }
+        #endregion
     }
 }

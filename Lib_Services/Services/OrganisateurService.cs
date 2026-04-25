@@ -23,6 +23,7 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
+
         #region Lecture
         /// <summary>
         ///  Retourne la liste complète des organisateurs présents en base, 
@@ -69,6 +70,7 @@ namespace Lib_Services.Services
                            .FirstOrDefault(o => o.Login == login);
         }
         #endregion
+
         #region CUD
 
         /// <summary>
@@ -78,6 +80,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance de <see cref="Organisateur"/> à créer.</param>
         public void Creer(Organisateur organisateur)
         {
+            ValiderOrganisateur(organisateur, false);
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);
             _context.Organisateurs.Add(organisateur);
@@ -91,6 +94,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Organisateur"/>.</param>
         public void Modifier(Organisateur organisateur)
         {
+            ValiderOrganisateur(organisateur, true);
             _context.Organisateurs.Update(organisateur);
             _context.SaveChanges();
         }
@@ -110,6 +114,7 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Vérifie si les informations d'identification fournies correspondent à un organisateur existant.
@@ -247,7 +252,7 @@ namespace Lib_Services.Services
                 throw new OrganisateurException("Le mot de passe doit contenir au moin 1 caractère spécial.",
                     (int)OrganisateurException.OrganisateurErreur.MdpPasDeCaractereSpecial);
 
-            if(_context.Organisateurs.Any(o => o.Login == organisateur.Login))
+            if(!estModification && _context.Organisateurs.Any(o => o.Login == organisateur.Login))
                 throw new OrganisateurException("Un organisateur avec ce login existe déjà.",
                     (int)OrganisateurException.OrganisateurErreur.LoginExistant);
         }

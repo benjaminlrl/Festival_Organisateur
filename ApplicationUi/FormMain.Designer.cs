@@ -30,7 +30,7 @@ namespace ApplicationUi
             btnLotComposants = new Button();
             btnVoter = new Button();
             btnParticiper = new Button();
-            btnQuitter = new Button();
+            btnRetour = new Button();
             panelHeader = new Panel();
             lblTitre = new Label();
             panelContent = new Panel();
@@ -51,12 +51,12 @@ namespace ApplicationUi
             panelMenu.Controls.Add(btnLotComposants);
             panelMenu.Controls.Add(btnVoter);
             panelMenu.Controls.Add(btnParticiper);
-            panelMenu.Controls.Add(btnQuitter);
+            panelMenu.Controls.Add(btnRetour);
             panelMenu.Dock = DockStyle.Left;
             panelMenu.FlowDirection = FlowDirection.TopDown;
             panelMenu.Location = new Point(0, 0);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(200, 661);
+            panelMenu.Size = new Size(200, 736);
             panelMenu.TabIndex = 2;
             panelMenu.WrapContents = false;
             // 
@@ -204,7 +204,7 @@ namespace ApplicationUi
             btnLotComposants.Location = new Point(0, 477);
             btnLotComposants.Margin = new Padding(0, 7, 0, 3);
             btnLotComposants.Name = "btnLotComposants";
-            btnLotComposants.Size = new Size(197, 68);
+            btnLotComposants.Size = new Size(203, 68);
             btnLotComposants.TabIndex = 7;
             btnLotComposants.Text = "      Composant des lots";
             btnLotComposants.UseVisualStyleBackColor = false;
@@ -248,22 +248,22 @@ namespace ApplicationUi
             btnParticiper.UseVisualStyleBackColor = false;
             btnParticiper.Click += btnParticiper_Click;
             // 
-            // btnQuitter
+            // btnRetour
             // 
-            btnQuitter.BackColor = Color.FromArgb(60, 60, 60);
-            btnQuitter.FlatAppearance.BorderSize = 0;
-            btnQuitter.FlatStyle = FlatStyle.Flat;
-            btnQuitter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            btnQuitter.ForeColor = Color.White;
-            btnQuitter.Image = Properties.Resources.deconnecter;
-            btnQuitter.ImageAlign = ContentAlignment.MiddleLeft;
-            btnQuitter.Location = new Point(3, 673);
-            btnQuitter.Name = "btnQuitter";
-            btnQuitter.Size = new Size(200, 49);
-            btnQuitter.TabIndex = 10;
-            btnQuitter.Text = "  Quitter";
-            btnQuitter.UseVisualStyleBackColor = false;
-            btnQuitter.Click += btnQuitter_Click;
+            btnRetour.BackColor = Color.FromArgb(60, 60, 60);
+            btnRetour.FlatAppearance.BorderSize = 0;
+            btnRetour.FlatStyle = FlatStyle.Flat;
+            btnRetour.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            btnRetour.ForeColor = Color.White;
+            btnRetour.Image = Properties.Resources.deconnecter;
+            btnRetour.ImageAlign = ContentAlignment.MiddleLeft;
+            btnRetour.Location = new Point(3, 673);
+            btnRetour.Name = "btnRetour";
+            btnRetour.Size = new Size(197, 49);
+            btnRetour.TabIndex = 10;
+            btnRetour.Text = " Retour";
+            btnRetour.UseVisualStyleBackColor = false;
+            btnRetour.Click += btnRetour_Click;
             // 
             // panelHeader
             // 
@@ -293,7 +293,7 @@ namespace ApplicationUi
             panelContent.Dock = DockStyle.Fill;
             panelContent.Location = new Point(200, 49);
             panelContent.Name = "panelContent";
-            panelContent.Size = new Size(872, 612);
+            panelContent.Size = new Size(872, 687);
             panelContent.TabIndex = 0;
             // 
             // FormMain
@@ -301,7 +301,7 @@ namespace ApplicationUi
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 246, 248);
-            ClientSize = new Size(1072, 661);
+            ClientSize = new Size(1072, 736);
             ControlBox = false;
             Controls.Add(panelContent);
             Controls.Add(panelHeader);
@@ -323,7 +323,7 @@ namespace ApplicationUi
         private Button btnEspaces;
         private Button btnPostes;
         private Button btnPlateformes;
-        private Button btnQuitter ;
+        private Button btnRetour ;
         private Panel panelHeader;
         private Label lblTitre;
 

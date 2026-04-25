@@ -237,7 +237,7 @@ namespace ApplicationUi
                 if (textBoxMail.Text != "" || _organisateurSelectionne.Mail != textBoxMail.Text)
                     _organisateurSelectionne.Mail = textBoxMail.Text;
                 if (textBoxMotDePasse.Text != "" || _organisateurSelectionne.motPasse != textBoxMotDePasse.Text)
-                    _organisateurSelectionne.motPasse = BCrypt.Net.BCrypt.HashPassword(textBoxMotDePasse.Text); // on oublie pas de hashé via BCrypt
+                    _organisateurSelectionne.motPasse = textBoxMotDePasse.Text;
                 if ((int)comboBoxRole.SelectedValue != _organisateurSelectionne.IdRole)
                     _organisateurSelectionne.IdRole = (int)comboBoxRole.SelectedValue;
 
