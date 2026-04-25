@@ -53,7 +53,14 @@ namespace ApplicationUi
             panel4 = new Panel();
             label4 = new Label();
             tableLayoutPanel3 = new TableLayoutPanel();
+            groupBox4 = new GroupBox();
+            labelStatsComposantDunLotTotal = new Label();
+            labelTitreComposantDunLot = new Label();
             dataGridLots = new DataGridView();
+            groupBoxStatsEspaces = new GroupBox();
+            labelStatLotNonAttribue = new Label();
+            labelStatLotsTotal = new Label();
+            labelTitreLot = new Label();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
@@ -69,7 +76,9 @@ namespace ApplicationUi
             tableLayoutPanel2.SuspendLayout();
             panel4.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
+            groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridLots).BeginInit();
+            groupBoxStatsEspaces.SuspendLayout();
             SuspendLayout();
             // 
             // panelForm
@@ -83,7 +92,7 @@ namespace ApplicationUi
             panelForm.Location = new Point(4, 4);
             panelForm.Margin = new Padding(4);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(907, 307);
+            panelForm.Size = new Size(906, 264);
             panelForm.TabIndex = 1;
             // 
             // tableLayoutPanel
@@ -116,7 +125,7 @@ namespace ApplicationUi
             labelLibelle.Location = new Point(4, 0);
             labelLibelle.Margin = new Padding(4, 0, 4, 0);
             labelLibelle.Name = "labelLibelle";
-            labelLibelle.Size = new Size(67, 17);
+            labelLibelle.Size = new Size(86, 23);
             labelLibelle.TabIndex = 0;
             labelLibelle.Text = "Libelle * :";
             // 
@@ -127,7 +136,7 @@ namespace ApplicationUi
             labelRang.Location = new Point(270, 0);
             labelRang.Margin = new Padding(4, 0, 4, 0);
             labelRang.Name = "labelRang";
-            labelRang.Size = new Size(57, 17);
+            labelRang.Size = new Size(74, 23);
             labelRang.TabIndex = 1;
             labelRang.Text = "Rang * :";
             // 
@@ -137,7 +146,7 @@ namespace ApplicationUi
             textBoxLibelle.Margin = new Padding(4);
             textBoxLibelle.Name = "textBoxLibelle";
             textBoxLibelle.PlaceholderText = "Ex: Lot de clavier";
-            textBoxLibelle.Size = new Size(210, 23);
+            textBoxLibelle.Size = new Size(210, 27);
             textBoxLibelle.TabIndex = 0;
             // 
             // textBoxRang
@@ -146,7 +155,7 @@ namespace ApplicationUi
             textBoxRang.Margin = new Padding(4);
             textBoxRang.Name = "textBoxRang";
             textBoxRang.PlaceholderText = "1,2,3...";
-            textBoxRang.Size = new Size(210, 23);
+            textBoxRang.Size = new Size(210, 27);
             textBoxRang.TabIndex = 4;
             // 
             // labelTournoi
@@ -156,7 +165,7 @@ namespace ApplicationUi
             labelTournoi.Location = new Point(536, 0);
             labelTournoi.Margin = new Padding(4, 0, 4, 0);
             labelTournoi.Name = "labelTournoi";
-            labelTournoi.Size = new Size(122, 17);
+            labelTournoi.Size = new Size(153, 23);
             labelTournoi.TabIndex = 3;
             labelTournoi.Text = "Tournoi associé * :";
             // 
@@ -166,7 +175,7 @@ namespace ApplicationUi
             comboBoxTournoi.Location = new Point(536, 39);
             comboBoxTournoi.Margin = new Padding(4);
             comboBoxTournoi.Name = "comboBoxTournoi";
-            comboBoxTournoi.Size = new Size(210, 26);
+            comboBoxTournoi.Size = new Size(210, 31);
             comboBoxTournoi.TabIndex = 3;
             // 
             // panelButtons
@@ -263,27 +272,27 @@ namespace ApplicationUi
             label1.Location = new Point(0, 0);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 18);
+            label1.Size = new Size(0, 23);
             label1.TabIndex = 6;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(80, 250);
+            label2.Location = new Point(53, 226);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(89, 20);
+            label2.Size = new Size(112, 25);
             label2.TabIndex = 4;
             label2.Text = "Recherche :";
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(207, 249);
+            textBoxRecherche.Location = new Point(182, 226);
             textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.PlaceholderText = "Ex: Clavier";
-            textBoxRecherche.Size = new Size(574, 23);
+            textBoxRecherche.Size = new Size(574, 27);
             textBoxRecherche.TabIndex = 5;
             textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
@@ -294,13 +303,13 @@ namespace ApplicationUi
             dataGridLotComposants.BorderStyle = BorderStyle.None;
             dataGridLotComposants.ColumnHeadersHeight = 34;
             dataGridLotComposants.Dock = DockStyle.Fill;
-            dataGridLotComposants.Location = new Point(919, 319);
+            dataGridLotComposants.Location = new Point(918, 276);
             dataGridLotComposants.Margin = new Padding(4);
             dataGridLotComposants.Name = "dataGridLotComposants";
             dataGridLotComposants.ReadOnly = true;
             dataGridLotComposants.RowHeadersWidth = 62;
             dataGridLotComposants.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLotComposants.Size = new Size(273, 385);
+            dataGridLotComposants.Size = new Size(259, 329);
             dataGridLotComposants.TabIndex = 6;
             dataGridLotComposants.CellClick += dataGridLotComposants_CellClick;
             // 
@@ -311,13 +320,13 @@ namespace ApplicationUi
             dataGridLotComposantsDunLot.BorderStyle = BorderStyle.None;
             dataGridLotComposantsDunLot.ColumnHeadersHeight = 34;
             dataGridLotComposantsDunLot.Dock = DockStyle.Fill;
-            dataGridLotComposantsDunLot.Location = new Point(1200, 319);
+            dataGridLotComposantsDunLot.Location = new Point(1185, 276);
             dataGridLotComposantsDunLot.Margin = new Padding(4);
             dataGridLotComposantsDunLot.Name = "dataGridLotComposantsDunLot";
             dataGridLotComposantsDunLot.ReadOnly = true;
             dataGridLotComposantsDunLot.RowHeadersWidth = 62;
             dataGridLotComposantsDunLot.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLotComposantsDunLot.Size = new Size(254, 385);
+            dataGridLotComposantsDunLot.Size = new Size(297, 329);
             dataGridLotComposantsDunLot.TabIndex = 7;
             dataGridLotComposantsDunLot.CellClick += dataGridLotComposantsDunLot_CellClick;
             // 
@@ -327,10 +336,11 @@ namespace ApplicationUi
             panel1.Controls.Add(groupBox2);
             panel1.Controls.Add(tableLayoutPanel1);
             panel1.Controls.Add(panel2);
-            panel1.Location = new Point(919, 4);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(918, 4);
             panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(271, 210);
+            panel1.Size = new Size(259, 264);
             panel1.TabIndex = 2;
             // 
             // groupBox2
@@ -384,7 +394,7 @@ namespace ApplicationUi
             comboBoxLotComposant.Location = new Point(4, 39);
             comboBoxLotComposant.Margin = new Padding(4);
             comboBoxLotComposant.Name = "comboBoxLotComposant";
-            comboBoxLotComposant.Size = new Size(210, 26);
+            comboBoxLotComposant.Size = new Size(210, 31);
             comboBoxLotComposant.TabIndex = 4;
             // 
             // labelComposant
@@ -394,7 +404,7 @@ namespace ApplicationUi
             labelComposant.Location = new Point(4, 0);
             labelComposant.Margin = new Padding(4, 0, 4, 0);
             labelComposant.Name = "labelComposant";
-            labelComposant.Size = new Size(139, 17);
+            labelComposant.Size = new Size(180, 23);
             labelComposant.TabIndex = 0;
             labelComposant.Text = "Composant de Lot * :";
             // 
@@ -413,7 +423,7 @@ namespace ApplicationUi
             label6.Location = new Point(0, 0);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(0, 18);
+            label6.Size = new Size(0, 23);
             label6.TabIndex = 6;
             // 
             // panel3
@@ -422,10 +432,11 @@ namespace ApplicationUi
             panel3.Controls.Add(groupBox3);
             panel3.Controls.Add(tableLayoutPanel2);
             panel3.Controls.Add(panel4);
-            panel3.Location = new Point(1200, 4);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(1185, 4);
             panel3.Margin = new Padding(4);
             panel3.Name = "panel3";
-            panel3.Size = new Size(254, 210);
+            panel3.Size = new Size(297, 264);
             panel3.TabIndex = 8;
             // 
             // groupBox3
@@ -479,7 +490,7 @@ namespace ApplicationUi
             comboBoxLotComposantDunLot.Location = new Point(4, 39);
             comboBoxLotComposantDunLot.Margin = new Padding(4);
             comboBoxLotComposantDunLot.Name = "comboBoxLotComposantDunLot";
-            comboBoxLotComposantDunLot.Size = new Size(210, 26);
+            comboBoxLotComposantDunLot.Size = new Size(210, 31);
             comboBoxLotComposantDunLot.TabIndex = 4;
             // 
             // labelComposantDunLot
@@ -489,7 +500,7 @@ namespace ApplicationUi
             labelComposantDunLot.Location = new Point(4, 0);
             labelComposantDunLot.Margin = new Padding(4, 0, 4, 0);
             labelComposantDunLot.Name = "labelComposantDunLot";
-            labelComposantDunLot.Size = new Size(214, 17);
+            labelComposantDunLot.Size = new Size(163, 35);
             labelComposantDunLot.TabIndex = 0;
             labelComposantDunLot.Text = "Composant du Lot selectionné * :";
             // 
@@ -508,31 +519,70 @@ namespace ApplicationUi
             label4.Location = new Point(0, 0);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(0, 18);
+            label4.Size = new Size(0, 23);
             label4.TabIndex = 6;
             // 
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.ColumnCount = 3;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 76.51007F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.489933F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 261F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 77.3978348F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22.602169F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 304F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Controls.Add(groupBox4, 2, 2);
             tableLayoutPanel3.Controls.Add(panelForm, 0, 0);
             tableLayoutPanel3.Controls.Add(panel1, 1, 0);
             tableLayoutPanel3.Controls.Add(panel3, 2, 0);
             tableLayoutPanel3.Controls.Add(dataGridLotComposantsDunLot, 2, 1);
-            tableLayoutPanel3.Controls.Add(dataGridLots, 0, 1);
             tableLayoutPanel3.Controls.Add(dataGridLotComposants, 1, 1);
+            tableLayoutPanel3.Controls.Add(dataGridLots, 0, 1);
+            tableLayoutPanel3.Controls.Add(groupBoxStatsEspaces, 0, 2);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(0, 0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 2;
+            tableLayoutPanel3.RowCount = 3;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 44.6327667F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 55.3672333F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 307F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 260F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Size = new Size(1458, 708);
+            tableLayoutPanel3.Size = new Size(1486, 870);
             tableLayoutPanel3.TabIndex = 9;
+            // 
+            // groupBox4
+            // 
+            groupBox4.BackColor = Color.White;
+            groupBox4.Controls.Add(labelStatsComposantDunLotTotal);
+            groupBox4.Controls.Add(labelTitreComposantDunLot);
+            groupBox4.Dock = DockStyle.Fill;
+            groupBox4.Location = new Point(1184, 613);
+            groupBox4.Margin = new Padding(3, 4, 3, 4);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Padding = new Padding(3, 4, 3, 4);
+            groupBox4.Size = new Size(299, 253);
+            groupBox4.TabIndex = 10;
+            groupBox4.TabStop = false;
+            // 
+            // labelStatsComposantDunLotTotal
+            // 
+            labelStatsComposantDunLotTotal.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
+            labelStatsComposantDunLotTotal.ForeColor = Color.FromArgb(255, 152, 0);
+            labelStatsComposantDunLotTotal.Location = new Point(1, 95);
+            labelStatsComposantDunLotTotal.Name = "labelStatsComposantDunLotTotal";
+            labelStatsComposantDunLotTotal.Size = new Size(297, 60);
+            labelStatsComposantDunLotTotal.TabIndex = 1;
+            labelStatsComposantDunLotTotal.Text = "12";
+            labelStatsComposantDunLotTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelTitreComposantDunLot
+            // 
+            labelTitreComposantDunLot.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTitreComposantDunLot.ForeColor = Color.FromArgb(100, 100, 100);
+            labelTitreComposantDunLot.Location = new Point(0, 55);
+            labelTitreComposantDunLot.Name = "labelTitreComposantDunLot";
+            labelTitreComposantDunLot.Size = new Size(293, 27);
+            labelTitreComposantDunLot.TabIndex = 0;
+            labelTitreComposantDunLot.Text = "🏢 COMPOSANTS DU LOT";
+            labelTitreComposantDunLot.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // dataGridLots
             // 
@@ -541,26 +591,73 @@ namespace ApplicationUi
             dataGridLots.BorderStyle = BorderStyle.None;
             dataGridLots.ColumnHeadersHeight = 34;
             dataGridLots.Dock = DockStyle.Fill;
-            dataGridLots.Location = new Point(4, 319);
+            dataGridLots.Location = new Point(4, 276);
             dataGridLots.Margin = new Padding(4);
             dataGridLots.Name = "dataGridLots";
             dataGridLots.ReadOnly = true;
             dataGridLots.RowHeadersWidth = 62;
             dataGridLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridLots.Size = new Size(907, 385);
+            dataGridLots.Size = new Size(906, 329);
             dataGridLots.TabIndex = 2;
             dataGridLots.CellClick += dataGridLots_CellClick;
             // 
+            // groupBoxStatsEspaces
+            // 
+            groupBoxStatsEspaces.BackColor = Color.White;
+            groupBoxStatsEspaces.Controls.Add(labelStatLotNonAttribue);
+            groupBoxStatsEspaces.Controls.Add(labelStatLotsTotal);
+            groupBoxStatsEspaces.Controls.Add(labelTitreLot);
+            groupBoxStatsEspaces.Dock = DockStyle.Fill;
+            groupBoxStatsEspaces.Location = new Point(3, 613);
+            groupBoxStatsEspaces.Margin = new Padding(3, 4, 3, 4);
+            groupBoxStatsEspaces.Name = "groupBoxStatsEspaces";
+            groupBoxStatsEspaces.Padding = new Padding(3, 4, 3, 4);
+            groupBoxStatsEspaces.Size = new Size(908, 253);
+            groupBoxStatsEspaces.TabIndex = 9;
+            groupBoxStatsEspaces.TabStop = false;
+            // 
+            // labelStatLotNonAttribue
+            // 
+            labelStatLotNonAttribue.Font = new Font("Segoe UI", 9.75F);
+            labelStatLotNonAttribue.Location = new Point(1, 172);
+            labelStatLotNonAttribue.Name = "labelStatLotNonAttribue";
+            labelStatLotNonAttribue.Size = new Size(907, 27);
+            labelStatLotNonAttribue.TabIndex = 2;
+            labelStatLotNonAttribue.Text = "Lots non attribués : 8";
+            labelStatLotNonAttribue.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelStatLotsTotal
+            // 
+            labelStatLotsTotal.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
+            labelStatLotsTotal.ForeColor = Color.FromArgb(255, 152, 0);
+            labelStatLotsTotal.Location = new Point(1, 79);
+            labelStatLotsTotal.Name = "labelStatLotsTotal";
+            labelStatLotsTotal.Size = new Size(907, 60);
+            labelStatLotsTotal.TabIndex = 1;
+            labelStatLotsTotal.Text = "12";
+            labelStatLotsTotal.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelTitreLot
+            // 
+            labelTitreLot.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            labelTitreLot.ForeColor = Color.FromArgb(100, 100, 100);
+            labelTitreLot.Location = new Point(1, 24);
+            labelTitreLot.Name = "labelTitreLot";
+            labelTitreLot.Size = new Size(907, 27);
+            labelTitreLot.TabIndex = 0;
+            labelTitreLot.Text = "🏢 LOTS";
+            labelTitreLot.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // UcLots
             // 
-            AutoScaleDimensions = new SizeF(7F, 18F);
+            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(227, 242, 253);
             Controls.Add(tableLayoutPanel3);
             Font = new Font("Trebuchet MS", 10F);
             Margin = new Padding(4);
             Name = "UcLots";
-            Size = new Size(1458, 708);
+            Size = new Size(1486, 870);
             panelForm.ResumeLayout(false);
             panelForm.PerformLayout();
             tableLayoutPanel.ResumeLayout(false);
@@ -583,7 +680,9 @@ namespace ApplicationUi
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
+            groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridLots).EndInit();
+            groupBoxStatsEspaces.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -626,5 +725,12 @@ namespace ApplicationUi
         private Label label4;
         private TableLayoutPanel tableLayoutPanel3;
         private DataGridView dataGridLots;
+        private GroupBox groupBoxStatsEspaces;
+        private Label labelStatLotNonAttribue;
+        private Label labelStatLotsTotal;
+        private Label labelTitreLot;
+        private GroupBox groupBox4;
+        private Label labelStatsComposantDunLotTotal;
+        private Label labelTitreComposantDunLot;
     }
 }
