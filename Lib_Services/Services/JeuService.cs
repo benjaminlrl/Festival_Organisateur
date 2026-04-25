@@ -33,10 +33,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Jeu"/>.</returns>
-        public List<Jeu> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Jeu> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Jeu> query = _context.Jeux
                 .Include(j => j.Plateformes)
@@ -50,7 +50,7 @@ namespace Lib_Services.Services
                 || j.DateSortie.ToString().Contains(filtre)
                 || j.Pegi.ToString().Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Titre" => ordre == "ASC" ? query.OrderBy(j => j.Titre) : query.OrderByDescending(j => j.Titre),

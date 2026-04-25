@@ -50,10 +50,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Role"/>.</returns>
-        public List<Role> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Role> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Role> query = _context.Roles
                 .Include(r => r.Organisateurs);
@@ -61,7 +61,7 @@ namespace Lib_Services.Services
             if (!string.IsNullOrWhiteSpace(filtre))
                 query = query.Where(r => r.Libelle.Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Libelle" => ordre == "ASC" ? query.OrderBy(r => r.Libelle) : query.OrderByDescending(r => r.Libelle),

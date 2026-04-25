@@ -34,10 +34,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="SoumisVote"/>.</returns>
-        public List<SoumisVote> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<SoumisVote> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<SoumisVote> query = _context.SoumisVotes
                 .Include(sv => sv.Plateforme)
@@ -49,7 +49,7 @@ namespace Lib_Services.Services
                         || sv.DateDebutVote.ToString().Contains(filtre)
                         || sv.DateFinVote.ToString().Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Libelle" => ordre == "ASC" ? query.OrderBy(sv => sv.Plateforme.Libelle) : query.OrderByDescending(sv => sv.Plateforme.Libelle),
@@ -74,12 +74,12 @@ namespace Lib_Services.Services
         /// 
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <param name="dateDebut">Optionnel, date de début de la période de vote</param>
         /// <param name="dateFin">Optionnel, date de fin de la période de vote</param>
         /// <returns>Liste d'objets <see cref="Voter"/>.</returns>
-        public List<Voter> ListerClassmentJeuxVotes(string filtre = "", string property = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null)
+        public List<Voter> ListerClassmentJeuxVotes(string filtre = "", string propriete = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null)
         {
             // IEnumerable si on utilise AsEnumerable() pour que le GroupBy soit traité en mémoire
             IEnumerable<Voter> query = _context.Voter
@@ -106,7 +106,7 @@ namespace Lib_Services.Services
             if (dateDebut.HasValue && dateFin.HasValue)
                 query = query.Where(v => (v.DateVote >= dateDebut.Value && v.DateVote <= dateFin.Value));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "LibellePlateforme" => ordre == "ASC" ? query.OrderBy(v => v.Plateforme.Libelle) : query.OrderByDescending(v => v.Plateforme.Libelle),

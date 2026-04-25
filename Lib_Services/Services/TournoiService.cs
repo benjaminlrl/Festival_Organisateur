@@ -31,10 +31,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Tournoi"/>.</returns>
-        public List<Tournoi> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Tournoi> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Tournoi> query = _context.Tournois
                 .Include(t => t.Espace)
@@ -50,7 +50,7 @@ namespace Lib_Services.Services
                     || t.Espace.Nom.Contains(filtre)
                     || t.Jeu.Titre.Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Nom" => ordre == "ASC" ? query.OrderBy(t => t.Nom) : query.OrderByDescending(t => t.Nom),

@@ -2,6 +2,14 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace ApplicationUi
 {
@@ -28,7 +36,7 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             _espaceSelectionnee = null;
 
-            AfficherBouttons();
+            AfficherBoutons();
 
             labelStatutTournoi.Visible = _espaceSelectionnee != null;
             dataGridTournois.Visible = _espaceSelectionnee != null;
@@ -42,17 +50,17 @@ namespace ApplicationUi
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
         }
 
@@ -327,7 +335,7 @@ namespace ApplicationUi
             if (_espaceSelectionnee != null)
                 RemplirFormulaire();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -369,7 +377,7 @@ namespace ApplicationUi
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxNom.Enabled = false;
             textBoxDescription.Enabled = false;
@@ -452,7 +460,7 @@ namespace ApplicationUi
             // Recharger les espaces pour réinitialiser la sélection et les statistiques
             ChargerEspaces();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -479,13 +487,13 @@ namespace ApplicationUi
 
             ChargerPostesJeu();
             StatutTournois();
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _espaceSelectionnee == null;
 

@@ -2,7 +2,6 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,8 +10,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace ApplicationUi
 {
@@ -24,11 +22,10 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IJeuService _serviceJeu;
-        private string statutSelectionne = "Planifié";
+        private string statutSelectionne;
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
         private string ordreChamp;
-
 
         public UcTournois(Organisateur unOrganisateurConnecte)
         {
@@ -41,8 +38,9 @@ namespace ApplicationUi
 
             _organisateurConnecte = unOrganisateurConnecte;
             _tournoiSelectionne = null;
+            statutSelectionne = "Planifié";
 
-            AfficherBouttons();
+            AfficherBoutons();
 
             filtre = "";
             ordreChamp = "ASC";
@@ -55,17 +53,17 @@ namespace ApplicationUi
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
         }
 
@@ -202,7 +200,7 @@ namespace ApplicationUi
             if (_tournoiSelectionne != null)
                 RemplirFormulaire();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
         private void RadioButtonPlanifié_CheckedChanged(object sender, EventArgs e)
         {
@@ -252,7 +250,7 @@ namespace ApplicationUi
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxNom.Enabled = false;
 
@@ -269,7 +267,7 @@ namespace ApplicationUi
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _tournoiSelectionne == null;
 
@@ -306,7 +304,7 @@ namespace ApplicationUi
             ChargerEspaces();
             ChargerJeux();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -341,7 +339,7 @@ namespace ApplicationUi
             radioButtonEnCours.Checked = _tournoiSelectionne.Statut == "En cours";
             radioButtonTermine.Checked = _tournoiSelectionne.Statut == "Terminé";
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>

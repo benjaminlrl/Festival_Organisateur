@@ -36,10 +36,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Participer"/>.</returns>
-        public List<Participer> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Participer> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Participer> query = _context.Participer
                 .Include(p => p.Tournoi);
@@ -51,7 +51,7 @@ namespace Lib_Services.Services
                 || (p.Commentaire ?? "").Contains(filtre)
                 || p.DateHeureInscription.ToString().Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(p => p.NumeroTournoi) : query.OrderByDescending(p => p.NumeroTournoi),

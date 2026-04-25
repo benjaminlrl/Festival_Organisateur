@@ -9,7 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
+using System.Windows.Forms.VisualStyles;
 namespace ApplicationUi
 {
     public partial class UcVoter : UserControl
@@ -51,13 +51,15 @@ namespace ApplicationUi
             ChargerJeux();
             ChargerPlateforme();
             ChargerSoumisVotes();
-            AfficherBouttons();
+
+            AfficherBoutons();
 
             buttonEffacer.Text = " 🧽  Effacer";
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
+                
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Modifier") == false)
             {
@@ -111,7 +113,7 @@ namespace ApplicationUi
             MEP_DataGridClassement();
         }
 
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _soumisVoteSelectionne == null;
             buttonModifier.Enabled = _soumisVoteSelectionne != null;
@@ -137,7 +139,7 @@ namespace ApplicationUi
             _soumisVoteSelectionne = null;
             dateTimePickerDateDebutVote.Value = DateTime.Now;
             dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
-            AfficherBouttons();
+            AfficherBoutons();
         }
         private void MEP_DataGridSoumisVote()
         {
@@ -282,7 +284,7 @@ namespace ApplicationUi
             textBoxDescription.Text = _soumisVoteSelectionne.Jeu.Description;
             dateTimePickerDateDebutVote.Value = _soumisVoteSelectionne.DateDebutVote;
             dateTimePickerDateFinVote.Value = _soumisVoteSelectionne.DateFinVote;
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -331,7 +333,7 @@ namespace ApplicationUi
                 _soumisVoteSelectionne = soumisVote;
                 ChargerJeux();
                 ChargerSoumisVotes();
-                AfficherBouttons();
+                AfficherBoutons();
             }
         }
         private void buttonModifier_Click(object sender, EventArgs e)
@@ -342,7 +344,7 @@ namespace ApplicationUi
             {
                 _serviceSoumisVote.Modifier(_soumisVoteSelectionne);
                 ChargerSoumisVotes();
-                AfficherBouttons();
+                AfficherBoutons();
                 Raz_Zones();
             }
         }
@@ -365,7 +367,7 @@ namespace ApplicationUi
             _serviceSoumisVote.Supprimer(_soumisVoteSelectionne.IdJeu, _soumisVoteSelectionne.IdPlateforme);
             _soumisVoteSelectionne = null;
             ChargerJeux();
-            AfficherBouttons();
+            AfficherBoutons();
             Raz_Zones();
 
         }
@@ -376,7 +378,7 @@ namespace ApplicationUi
         {
             if (comboBoxPlateforme.SelectedItem == null)
                 return;
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         private void comboBoxJeu_SelectedIndexChanged(object sender, EventArgs e)
@@ -390,7 +392,7 @@ namespace ApplicationUi
             _jeuSelectionne = (Jeu)comboBoxJeu.SelectedItem;
             textBoxDescription.Text = _jeuSelectionne.Description;
             ChargerPlateforme();
-            AfficherBouttons();
+            AfficherBoutons();
         }
     }
 }

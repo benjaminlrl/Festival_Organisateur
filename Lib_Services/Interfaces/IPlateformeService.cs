@@ -20,7 +20,7 @@ namespace Lib_Services.Interfaces
         /// <param name="property">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Plateforme"/>.</returns>
-        List<Plateforme> Lister(string filtre = "", string property = "", string ordre = "");
+        List<Plateforme> Lister(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
         /// Récupère une plateforme par son identifiant.
@@ -54,8 +54,9 @@ namespace Lib_Services.Interfaces
         /// Permet de vérifier les propriétés associés a une plateforme.
         /// </summary>
         /// <param name="plateforme">La plateforme à valider</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        List<string> ValiderPlateforme(Plateforme plateforme);
+        List<string> ValiderPlateforme(Plateforme plateforme, bool estModification);
         #endregion
     }
 }

@@ -124,7 +124,6 @@ namespace ApplicationUi
             dataGridTournois.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridTournois.Size = new Size(1393, 383);
             dataGridTournois.TabIndex = 2;
-            dataGridTournois.VirtualMode = true;
             dataGridTournois.CellClick += DataGridTournois_CellClick;
             // 
             // panelForm

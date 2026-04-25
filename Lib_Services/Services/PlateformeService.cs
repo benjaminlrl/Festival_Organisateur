@@ -57,10 +57,10 @@ namespace Lib_Services.Services
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Plateforme"/>.</returns>
-        public List<Plateforme> Lister(string filtre = "", string property = "", string ordre = "")
+        public List<Plateforme> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Plateforme> query = _context.Plateformes
                 .Include(p => p.PostesJeu)
@@ -69,7 +69,7 @@ namespace Lib_Services.Services
             if (!string.IsNullOrWhiteSpace(filtre))
                 query = query.Where(p => p.Libelle.Contains(filtre));
 
-            query = property switch
+            query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Libelle" => ordre == "ASC" ? query.OrderBy(p => p.Libelle) : query.OrderByDescending(p => p.Libelle),
@@ -136,8 +136,9 @@ namespace Lib_Services.Services
         /// Permet de vérifier les propriétés associés a une plateforme.
         /// </summary>
         /// <param name="plateforme">La plateforme à valider</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
-        public List<string> ValiderPlateforme(Plateforme plateforme)
+        public List<string> ValiderPlateforme(Plateforme plateforme, bool estModification)
         {
             // liste des erreurs
             var erreurs = new List<string>();

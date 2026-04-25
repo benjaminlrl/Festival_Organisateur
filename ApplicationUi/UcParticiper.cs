@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
+using System.Windows.Forms.VisualStyles;
 
 namespace ApplicationUi
 {
@@ -42,7 +41,7 @@ namespace ApplicationUi
             _participerSelectionne = null;
             lotRemisSelectionne = false;
 
-            AfficherBouttons();
+            AfficherBoutons();
 
             filtre = "";
             ordreChamp = "ASC";
@@ -55,17 +54,17 @@ namespace ApplicationUi
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
-                DisabledInputs();
+                DesactiverInputs();
             }
         }
         #region Données
@@ -259,7 +258,7 @@ namespace ApplicationUi
             if (_participerSelectionne != null)
                 RemplirFormulaire();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -306,7 +305,7 @@ namespace ApplicationUi
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
-        private void DisabledInputs()
+        private void DesactiverInputs()
         {
             textBoxCommentaire.Enabled = false;
             comboBoxUtilisateur.Enabled = false;
@@ -344,7 +343,7 @@ namespace ApplicationUi
 
             ChargerParticipations();
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
@@ -384,13 +383,13 @@ namespace ApplicationUi
                 lotRemisSelectionne = false;
             }
 
-            AfficherBouttons();
+            AfficherBoutons();
         }
 
         /// <summary>
         /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
         /// </summary>
-        private void AfficherBouttons()
+        private void AfficherBoutons()
         {
             buttonAjouter.Enabled = _participerSelectionne == null;
 

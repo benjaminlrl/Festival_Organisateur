@@ -17,10 +17,10 @@ namespace Lib_Services.Interfaces
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
-        /// <param name="property">Optionnel, propriété de trie</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        List<LotComposant> Lister(string filtre = "", string property = "", string ordre = "");
+        List<LotComposant> Lister(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
         /// Retourne la liste complète des lots composants contenant le numero du lot passé en paramètre
@@ -28,7 +28,7 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="numero">numero du lot qu'on cherche</param>
         /// <returns>Liste d'objets <see cref="LotComposant"/>.</returns>
-        List<LotComposant> ListerParNumeroDunLot(int numero, string property = "", string ordre = "");
+        List<LotComposant> ListerParNumeroDunLot(int numero, string propriete = "", string ordre = "");
 
         /// <summary>
         /// Récupère un lotcomposant par son numero.
