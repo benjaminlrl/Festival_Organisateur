@@ -8,7 +8,6 @@ namespace ApplicationUi
 {
     public partial class UcJeux : UserControl
     {
-        private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IJeuService _serviceJeu;
         private readonly IPlateformeService _servicePlateforme;
@@ -20,7 +19,6 @@ namespace ApplicationUi
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
-            _serviceTournoi = new TournoiService(context);
             _serviceOrganisateur = new OrganisateurService(context);
             _serviceJeu = new JeuService(context);
             _servicePlateforme = new PlateformeService(context);
@@ -92,7 +90,7 @@ namespace ApplicationUi
         #endregion
         #region Evènements
         #region Boutons
-        public void buttonAjouter_Click(object sender, EventArgs e)
+        public void ButtonAjouter_Click(object sender, EventArgs e)
         {
             Jeu jeu = new ()
             {
@@ -113,7 +111,7 @@ namespace ApplicationUi
             }
 
         }
-        private void buttonModifier_Click(object sender, EventArgs e)
+        private void ButtonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridJeux.CurrentRow == null)
                 return;
@@ -138,11 +136,11 @@ namespace ApplicationUi
             }
 
         }
-        private void buttonEffacer_Click(object sender, EventArgs e)
+        private void ButtonEffacer_Click(object sender, EventArgs e)
         {
             Raz_Zones();
         }
-        private void buttonSupprimer_Click(object sender, EventArgs e)
+        private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
             if (dataGridJeux.CurrentRow == null)
                 return;
@@ -159,7 +157,7 @@ namespace ApplicationUi
 
         #endregion
 
-        private void dataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
             if (e.RowIndex < 0)
@@ -204,7 +202,7 @@ namespace ApplicationUi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void textBoxRecherche_TextChanged(object sender, EventArgs e)
+        private void TextBoxRecherche_TextChanged(object sender, EventArgs e)
         {
             filtre = textBoxRecherche.Text;
             ChargerJeux();

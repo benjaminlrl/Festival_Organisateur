@@ -144,7 +144,7 @@ namespace Lib_Services.Services
             if (jeu.Description.Length > 500)
                 erreurs.Add("La description ne peut pas dépasser 500 caractères.");
 
-            if (!Enum.IsDefined(typeof(PEGI), jeu.Pegi))
+            if (!Enum.IsDefined(typeof(ConstanteService.PEGI), jeu.Pegi))
                 erreurs.Add("Le PEGI sélectionné est invalide.");
 
             if (Lister(jeu.Titre).Any(j => j.Titre == jeu.Titre && j.IdJeu != jeu.IdJeu))

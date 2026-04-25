@@ -16,6 +16,7 @@ namespace ApplicationUi
 {
     public partial class UcParticiper : UserControl
     {
+        private readonly ApplicationDbContext _context;
         private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IEspaceService _serviceEspace;
@@ -30,12 +31,12 @@ namespace ApplicationUi
         public UcParticiper(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            var context = new ApplicationDbContext();
-            _serviceTournoi = new TournoiService(context);
-            _serviceOrganisateur = new OrganisateurService(context);
-            _serviceEspace = new EspaceService(context);
-            _serviceParticiper = new ParticiperService(context);
-            _servicePlateforme = new PlateformeService(context);
+            _context = new ApplicationDbContext();
+            _serviceTournoi = new TournoiService(_context);
+            _serviceOrganisateur = new OrganisateurService(_context);
+            _serviceEspace = new EspaceService(_context);
+            _serviceParticiper = new ParticiperService(_context);
+            _servicePlateforme = new PlateformeService(_context);
 
             _organisateurConnecte = unOrganisateurConnecte;
             _participerSelectionne = null;
@@ -259,7 +260,6 @@ namespace ApplicationUi
                 RemplirFormulaire();
 
             AfficherBouttons();
-
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace ApplicationUi
         }
 
         /// <summary>
-        /// Remplit les champs du formulaire avec les informations de l'espace spécifié.
+        /// Remplit les champs du formulaire avec les informations de la participation spécifiée.
         /// </summary>
         /// <remarks>Cette méthode met à jour les contrôles du formulaire pour refléter les propriétés de
         /// la participation fournie. Elle doit être appelée lors de l'affichage ou de la modification d'une participation
