@@ -104,7 +104,7 @@
             // textBoxRecherche
             // 
             textBoxRecherche.Location = new Point(118, 63);
-            textBoxRecherche.Margin = new Padding(2, 2, 2, 2);
+            textBoxRecherche.Margin = new Padding(2);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(702, 23);
             textBoxRecherche.TabIndex = 0;
@@ -118,7 +118,7 @@
             buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAjouter.ForeColor = Color.White;
             buttonAjouter.Location = new Point(142, 12);
-            buttonAjouter.Margin = new Padding(2, 2, 2, 2);
+            buttonAjouter.Margin = new Padding(2);
             buttonAjouter.Name = "buttonAjouter";
             buttonAjouter.Size = new Size(84, 22);
             buttonAjouter.TabIndex = 6;
@@ -134,7 +134,7 @@
             buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonEffacer.ForeColor = Color.White;
             buttonEffacer.Location = new Point(39, 12);
-            buttonEffacer.Margin = new Padding(2, 2, 2, 2);
+            buttonEffacer.Margin = new Padding(2);
             buttonEffacer.Name = "buttonEffacer";
             buttonEffacer.Size = new Size(84, 22);
             buttonEffacer.TabIndex = 3;
@@ -150,7 +150,7 @@
             buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonModifier.ForeColor = Color.White;
             buttonModifier.Location = new Point(248, 12);
-            buttonModifier.Margin = new Padding(2, 2, 2, 2);
+            buttonModifier.Margin = new Padding(2);
             buttonModifier.Name = "buttonModifier";
             buttonModifier.Size = new Size(108, 22);
             buttonModifier.TabIndex = 4;
@@ -166,7 +166,7 @@
             buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimer.ForeColor = Color.White;
             buttonSupprimer.Location = new Point(375, 12);
-            buttonSupprimer.Margin = new Padding(2, 2, 2, 2);
+            buttonSupprimer.Margin = new Padding(2);
             buttonSupprimer.Name = "buttonSupprimer";
             buttonSupprimer.Size = new Size(110, 22);
             buttonSupprimer.TabIndex = 5;
@@ -190,7 +190,7 @@
             // 
             tableLayoutPanel.SetColumnSpan(textBoxNom, 2);
             textBoxNom.Location = new Point(2, 19);
-            textBoxNom.Margin = new Padding(2, 2, 2, 2);
+            textBoxNom.Margin = new Padding(2);
             textBoxNom.Multiline = true;
             textBoxNom.Name = "textBoxNom";
             textBoxNom.PlaceholderText = "Ex: Espace playstation";
@@ -228,7 +228,7 @@
             dataGridEspaces.ColumnHeadersHeight = 34;
             dataGridEspaces.Dock = DockStyle.Fill;
             dataGridEspaces.Location = new Point(2, 244);
-            dataGridEspaces.Margin = new Padding(2, 2, 2, 2);
+            dataGridEspaces.Margin = new Padding(2);
             dataGridEspaces.Name = "dataGridEspaces";
             dataGridEspaces.ReadOnly = true;
             dataGridEspaces.RowHeadersWidth = 62;
@@ -242,7 +242,7 @@
             numericUpDownSuperficie.Dock = DockStyle.Fill;
             numericUpDownSuperficie.Increment = new decimal(new int[] { 5, 0, 0, 0 });
             numericUpDownSuperficie.Location = new Point(248, 19);
-            numericUpDownSuperficie.Margin = new Padding(2, 2, 2, 2);
+            numericUpDownSuperficie.Margin = new Padding(2);
             numericUpDownSuperficie.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownSuperficie.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
             numericUpDownSuperficie.Name = "numericUpDownSuperficie";
@@ -270,7 +270,7 @@
             tableLayoutPanel.Controls.Add(numericUpDownCapaciteMaxi, 3, 1);
             tableLayoutPanel.Controls.Add(labelStatutTournoi, 4, 0);
             tableLayoutPanel.Location = new Point(2, 2);
-            tableLayoutPanel.Margin = new Padding(2, 2, 2, 2);
+            tableLayoutPanel.Margin = new Padding(2);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 4;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 17F));
@@ -303,7 +303,7 @@
             // 
             tableLayoutPanel.SetColumnSpan(textBoxDescription, 4);
             textBoxDescription.Location = new Point(2, 64);
-            textBoxDescription.Margin = new Padding(2, 2, 2, 2);
+            textBoxDescription.Margin = new Padding(2);
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Description de l'espace";
@@ -368,7 +368,7 @@
             tableLayoutPanelCRUD.Dock = DockStyle.Fill;
             tableLayoutPanelCRUD.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
             tableLayoutPanelCRUD.Location = new Point(0, 0);
-            tableLayoutPanelCRUD.Margin = new Padding(2, 2, 2, 2);
+            tableLayoutPanelCRUD.Margin = new Padding(2);
             tableLayoutPanelCRUD.Name = "tableLayoutPanelCRUD";
             tableLayoutPanelCRUD.RowCount = 2;
             tableLayoutPanelCRUD.RowStyles.Add(new RowStyle(SizeType.Percent, 54.4270821F));
@@ -386,7 +386,7 @@
             tableLayoutPanel1.Controls.Add(groupBoxStatsEspaces, 1, 1);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 0);
             tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Margin = new Padding(2, 2, 2, 2);
+            tableLayoutPanel1.Margin = new Padding(2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 47.636364F));
@@ -447,7 +447,7 @@
             tableLayoutPanel2.Controls.Add(dataGridPostesJeu, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(874, 2);
-            tableLayoutPanel2.Margin = new Padding(2, 2, 2, 2);
+            tableLayoutPanel2.Margin = new Padding(2);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.3350124F));
@@ -477,7 +477,7 @@
             dataGridPostesJeu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridPostesJeu.Dock = DockStyle.Fill;
             dataGridPostesJeu.Location = new Point(2, 28);
-            dataGridPostesJeu.Margin = new Padding(2, 2, 2, 2);
+            dataGridPostesJeu.Margin = new Padding(2);
             dataGridPostesJeu.Name = "dataGridPostesJeu";
             dataGridPostesJeu.ReadOnly = true;
             dataGridPostesJeu.RowHeadersWidth = 62;
@@ -503,7 +503,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 255, 255);
             Controls.Add(tableLayoutPanel1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "UcEspaces";
             Size = new Size(1180, 509);
             groupBox1.ResumeLayout(false);

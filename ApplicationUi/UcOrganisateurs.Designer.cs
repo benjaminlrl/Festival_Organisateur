@@ -299,7 +299,7 @@ namespace ApplicationUi
             // 
             AutoScaleDimensions = new SizeF(7F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(227, 242, 253);
+            BackColor = Color.DarkSalmon;
             Controls.Add(textBoxRecherche);
             Controls.Add(label2);
             Controls.Add(panelForm);
