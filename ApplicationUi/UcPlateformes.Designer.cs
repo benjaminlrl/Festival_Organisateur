@@ -218,7 +218,7 @@
             buttonModifier.TabIndex = 4;
             buttonModifier.Text = "✏️    Modifier";
             buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += ButtonAjouter_Click;
+            buttonModifier.Click += ButtonModifier_Click;
             // 
             // buttonSupprimer
             // 
@@ -362,6 +362,7 @@
             dataGridPostesJeu.RowHeadersWidth = 62;
             dataGridPostesJeu.Size = new Size(393, 273);
             dataGridPostesJeu.TabIndex = 7;
+            dataGridPostesJeu.CellDoubleClick += DataGridPostesJeu_CellDoubleClick;
             // 
             // UcPlateformes
             // 

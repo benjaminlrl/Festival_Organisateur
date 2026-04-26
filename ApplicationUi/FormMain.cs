@@ -109,7 +109,14 @@ namespace ApplicationUi
 
         private void btnPlateformes_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcPlateformes(_organisateurConnecte), "Gestion des plateformes");
+            var uc = new UcPlateformes(_organisateurConnecte);
+
+            uc.NaviguerVersPostesJeu += (posteJeu) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcPostesDeJeu(_organisateurConnecte, posteJeu), "Gestion des postes de jeu");
+            };
+            LoadUserControl(uc, "Gestion des plateformes"); 
         }
 
         private void btnOrganisateurs_Click(object sender, EventArgs e)

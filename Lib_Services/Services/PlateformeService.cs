@@ -89,7 +89,11 @@ namespace Lib_Services.Services
         public Plateforme? Obtenir(int idPlateforme)
         {
             // Find retourne null si l'entité n'existe pas.
-            return _context.Plateformes.AsNoTracking().FirstOrDefault(p => p.IdPlateforme == idPlateforme);
+            return _context.Plateformes
+                .Include(p => p.PostesJeu)
+                .Include(p => p.Jeux)
+                .AsNoTracking()
+                .FirstOrDefault(p => p.IdPlateforme == idPlateforme);
         }
 
         /// <summary>
@@ -134,9 +138,10 @@ namespace Lib_Services.Services
         public void Supprimer(int idPlateforme)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var plateforme = _context.Plateformes.Find(idPlateforme);
+            Plateforme? plateforme = _context.Plateformes.Find(idPlateforme);
             if (plateforme != null)
             {
+                ValidationSupprimer(idPlateforme);
                 _context.Plateformes.Remove(plateforme);
                 // Suppression en cascade des postes de jeu associés à la plateforme. 
                 // Puisqu'un poste de jeu a obligatoirmeent une plateforme.
@@ -158,14 +163,44 @@ namespace Lib_Services.Services
                 throw new PlateformeException("Le libellé est requis.",
                     (int)PlateformeException.PlateformeErreur.LibelleRequis);
 
-            if (estModification && plateforme.IdPlateforme < 0)
-                throw new PlateformeException("L'identifiant de la plateforme est invalide.",
-                    (int)PlateformeException.PlateformeErreur.IdInvalide);
-            Plateforme? enBdd = ObtenirParLibelle(plateforme.Libelle);
+            Plateforme? enBddLibelle = ObtenirParLibelle(plateforme.Libelle);
 
-            if (enBdd != null && enBdd.Libelle == plateforme.Libelle)
+            if (!estModification && enBddLibelle != null && enBddLibelle.Libelle == plateforme.Libelle)
                 throw new PlateformeException("Une autre plateforme avec ce libellé existe déjà.",
                     (int)PlateformeException.PlateformeErreur.LibelleExistant);
+
+            if (plateforme.IdPlateforme < 0)
+                throw new PlateformeException("L'identifiant de la plateforme est invalide.",
+                    (int)PlateformeException.PlateformeErreur.IdInvalide);
+
+
+            if (estModification)
+            {
+                Plateforme? enBdd = Obtenir(plateforme.IdPlateforme) ?? throw new PlateformeException("La plateforme à modifier n'existe pas.",
+                        (int)PlateformeException.PlateformeErreur.IdInvalide);
+                 
+                if(enBdd.Libelle == plateforme.Libelle
+                    && enBdd.IdPlateforme == plateforme.IdPlateforme)
+                    throw new PlateformeException("Aucune modification détectée.",
+                        (int)PlateformeException.PlateformeErreur.AucuneModification);
+
+                if (!estModification && enBddLibelle != null && enBdd.IdPlateforme != plateforme.IdPlateforme)
+                    throw new PlateformeException("Une autre plateforme avec ce libellé existe déjà.",
+                        (int)PlateformeException.PlateformeErreur.LibelleExistant);
+            }
+        }
+
+        private void ValidationSupprimer(int idPlateforme)
+        {
+            Plateforme? enBdd = Obtenir(idPlateforme) ?? throw new PlateformeException("La plateforme à supprimer n'existe pas.",
+                        (int)PlateformeException.PlateformeErreur.IdInvalide);
+            if (enBdd.PostesJeu.Count > 0)
+                throw new PlateformeException("La plateforme ne peut pas être supprimée car elle est associée à des postes de jeu.",
+                    (int)PlateformeException.PlateformeErreur.PostesDeJeuExistant);
+
+            if (enBdd.Jeux.Count > 0)
+                throw new PlateformeException("La plateforme ne peut pas être supprimée car elle est associée à des jeux.",
+                    (int)PlateformeException.PlateformeErreur.JeuxExistant);
         }
         #endregion
     }

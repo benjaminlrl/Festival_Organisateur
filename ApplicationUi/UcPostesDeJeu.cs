@@ -33,7 +33,7 @@ namespace ApplicationUi
         // et l'utiliser lors du rechargement des espaces
         private string ordreChamp;
 
-        public UcPostesDeJeu(Organisateur unOrganisateurConnecte)
+        public UcPostesDeJeu(Organisateur unOrganisateurConnecte, PosteJeu? posteJeuPreselectionne = null)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
@@ -44,6 +44,7 @@ namespace ApplicationUi
             _servicePlateforme = new PlateformeService(context);
 
             _organisateurConnecte = unOrganisateurConnecte;
+            
             _posteJeuSelectionne = null;
 
             fonctionnelSelectionne = false;
@@ -55,6 +56,13 @@ namespace ApplicationUi
             filtre = "";
 
             Raz_Zones();
+            // Si un poste de jeu est préselectionné,
+            // le formulaire est rempli avec ses données
+            if (posteJeuPreselectionne != null)
+            {
+                _posteJeuSelectionne = posteJeuPreselectionne;
+                RemplirFormulaire();
+            }
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
@@ -433,8 +441,10 @@ namespace ApplicationUi
                 return;
             }
 
-            labelStatutTournoi.Visible = _posteJeuSelectionne != null;
+            _posteJeuSelectionne.Espace ??= _serviceEspace.Obtenir(_posteJeuSelectionne.IdEspace);
 
+            labelStatutTournoi.Visible = _posteJeuSelectionne != null;
+            
             List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_posteJeuSelectionne.Espace.IdEspace);
             List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_posteJeuSelectionne.Espace.IdEspace);
 

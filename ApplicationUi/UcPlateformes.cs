@@ -22,10 +22,11 @@ namespace ApplicationUi
         private readonly IPlateformeService _servicePlateforme;
         private readonly IOrganisateurService _serviceOrganisateur;
         private Plateforme? _plateformeSelectionee;
+        private PosteJeu? _posteJeuSelectionne;
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
-
+        public event Action<PosteJeu>? NaviguerVersPostesJeu;
         public UcPlateformes(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace ApplicationUi
 
             _organisateurConnecte = unOrganisateurConnecte;
             _plateformeSelectionee = null;
+            _posteJeuSelectionne = null;
 
             dataGridJeux.Visible = false;
             dataGridPostesJeu.Visible = false;
@@ -199,8 +201,27 @@ namespace ApplicationUi
                 return;
             }
 
-            _servicePlateforme.Supprimer(_plateformeSelectionee.IdPlateforme);
-            Raz_Zones();
+            try
+            {
+                _servicePlateforme.Supprimer(_plateformeSelectionee.IdPlateforme);
+                MessageBox.Show("La plateforme a bien été supprimée.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (PlateformeException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de la plateforme.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
 
         }
         #endregion
@@ -212,7 +233,7 @@ namespace ApplicationUi
             {
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new ()
+                Dictionary<int, string> map = new()
                 {
                     {dataGridPlateformes.Columns["Libelle"].Index, "Libelle"},
                 };
@@ -281,6 +302,7 @@ namespace ApplicationUi
             textBoxNom.Clear();
 
             _plateformeSelectionee = null;
+            _posteJeuSelectionne = null;
 
             dataGridJeux.DataSource = null;
             dataGridPostesJeu.DataSource = null;
@@ -315,5 +337,15 @@ namespace ApplicationUi
             textBoxNom.Enabled = false;
         }
         #endregion
+
+        private void DataGridPostesJeu_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
+
+            if (_posteJeuSelectionne != null)
+                NaviguerVersPostesJeu?.Invoke(_posteJeuSelectionne); // déclenche la navigation vers le form main
+        }
     }
 }
