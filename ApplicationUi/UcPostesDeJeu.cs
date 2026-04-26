@@ -27,13 +27,15 @@ namespace ApplicationUi
         private readonly Organisateur _organisateurConnecte;
         private bool fonctionnelSelectionne;
         private PosteJeu? _posteJeuSelectionne;
+        private Tournoi? _tournoiSelectionne;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
         private string filtre;
         // Champ pour stocker l'ordre de tri actuel sur la propriété de l'espace (ASC ou DESC)
         // et l'utiliser lors du rechargement des espaces
         private string ordreChamp;
+        public event Action<Tournoi>? NaviguerVersTournois;
 
-        public UcPostesDeJeu(Organisateur unOrganisateurConnecte)
+        public UcPostesDeJeu(Organisateur unOrganisateurConnecte, PosteJeu? posteJeuPreselectionne = null)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
@@ -44,7 +46,9 @@ namespace ApplicationUi
             _servicePlateforme = new PlateformeService(context);
 
             _organisateurConnecte = unOrganisateurConnecte;
+            
             _posteJeuSelectionne = null;
+            _tournoiSelectionne = null;
 
             fonctionnelSelectionne = false;
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
@@ -55,6 +59,13 @@ namespace ApplicationUi
             filtre = "";
 
             Raz_Zones();
+            // Si un poste de jeu est préselectionné,
+            // le formulaire est rempli avec ses données
+            if (posteJeuPreselectionne != null)
+            {
+                _posteJeuSelectionne = posteJeuPreselectionne;
+                RemplirFormulaire();
+            }
 
             if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
@@ -203,10 +214,6 @@ namespace ApplicationUi
                 IdEspace = espaceSelectionne.IdEspace
             };
 
-            // Formattage de la référence du poste"
-            posteJeu.SetReference(espaceSelectionne, _servicePosteJeu.
-                NombrePostesJeuEspacePlateforme(espaceSelectionne.IdEspace, plateformeSelectionne.IdPlateforme) + 1);
-
             try
             {
                 _servicePosteJeu.Creer(posteJeu);
@@ -280,6 +287,23 @@ namespace ApplicationUi
         }
 
         #endregion
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des tournois en fonction du tournoi sélectionné dans le DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridTournois_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _tournoiSelectionne = dataGridTournois.Rows[e.RowIndex].DataBoundItem as Tournoi;
+
+            if (_tournoiSelectionne != null)
+                NaviguerVersTournois?.Invoke(_tournoiSelectionne); // déclenche la navigation vers le form main
+
+        }
+
         private void DataGridPostesJeu_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
@@ -315,7 +339,7 @@ namespace ApplicationUi
             _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
 
             if (_posteJeuSelectionne != null)
-                RemplirFormulaire(_posteJeuSelectionne);
+                RemplirFormulaire();
 
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
@@ -368,6 +392,7 @@ namespace ApplicationUi
         /// controls are reset to indicate a planned tournament.</remarks>
         private void Raz_Zones()
         {
+            textBoxReference.ReadOnly = true;
             textBoxReference.Clear();
 
             comboBoxPlateforme.SelectedItem = _posteJeuSelectionne != null;
@@ -380,6 +405,8 @@ namespace ApplicationUi
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
             dataGridTournois.Visible = _posteJeuSelectionne != null;
 
+            comboBoxEspace.Enabled = _posteJeuSelectionne != null;
+
             filtre = "";
 
             // Recharger les postes de jeu pour réinitialiser la sélection et les statistiques
@@ -390,7 +417,7 @@ namespace ApplicationUi
             AfficherBoutons();
         }
 
-        private void RemplirFormulaire(PosteJeu posteJeu)
+        private void RemplirFormulaire()
         {
             if (_posteJeuSelectionne == null)
             {
@@ -398,18 +425,18 @@ namespace ApplicationUi
                 return;
             }
 
-            textBoxReference.Text = posteJeu.Reference;
+            textBoxReference.Text = _posteJeuSelectionne.Reference;
 
             // ComboBox Espace
-            comboBoxEspace.SelectedItem = posteJeu.Espace;
-            comboBoxEspace.SelectedValue = posteJeu.IdEspace;
+            comboBoxEspace.SelectedItem = _posteJeuSelectionne.Espace;
+            comboBoxEspace.SelectedValue = _posteJeuSelectionne.IdEspace;
 
             // ComboBox Plateforme
-            comboBoxPlateforme.SelectedItem = posteJeu.Plateforme;
-            comboBoxPlateforme.SelectedValue = posteJeu.IdPlateforme;
+            comboBoxPlateforme.SelectedItem = _posteJeuSelectionne.Plateforme;
+            comboBoxPlateforme.SelectedValue = _posteJeuSelectionne.IdPlateforme;
 
             // Fonctionnel (RadioButtons)
-            if (posteJeu.Fonctionnel)
+            if (_posteJeuSelectionne.Fonctionnel)
             {
                 radioButtonFonctionnelTrue.Checked = true;
             }
@@ -434,8 +461,10 @@ namespace ApplicationUi
                 return;
             }
 
-            labelStatutTournoi.Visible = _posteJeuSelectionne != null;
+            _posteJeuSelectionne.Espace ??= _serviceEspace.Obtenir(_posteJeuSelectionne.IdEspace);
 
+            labelStatutTournoi.Visible = _posteJeuSelectionne != null;
+            
             List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_posteJeuSelectionne.Espace.IdEspace);
             List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_posteJeuSelectionne.Espace.IdEspace);
 
@@ -476,12 +505,15 @@ namespace ApplicationUi
         /// </summary>
         private void AfficherBoutons()
         {
+
             buttonAjouter.Enabled = _posteJeuSelectionne == null;
+            comboBoxEspace.Enabled = _posteJeuSelectionne == null;
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             buttonEffacer.Enabled = _posteJeuSelectionne != null;
+
         }
 
         /// <summary>

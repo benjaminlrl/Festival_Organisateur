@@ -22,11 +22,14 @@ namespace ApplicationUi
         private readonly IPlateformeService _servicePlateforme;
         private readonly IOrganisateurService _serviceOrganisateur;
         private Plateforme? _plateformeSelectionee;
+        private PosteJeu? _posteJeuSelectionne;
+        private Jeu? _jeuSelectionne;
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
-
-        public UcPlateformes(Organisateur unOrganisateurConnecte)
+        public event Action<PosteJeu>? NaviguerVersPostesJeu;
+        public event Action<Jeu>? NaviguerVersJeux;
+        public UcPlateformes(Organisateur unOrganisateurConnecte, Plateforme? plateformePreselectionnee = null)
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
@@ -35,6 +38,8 @@ namespace ApplicationUi
 
             _organisateurConnecte = unOrganisateurConnecte;
             _plateformeSelectionee = null;
+            _posteJeuSelectionne = null;
+            _jeuSelectionne=null;
 
             dataGridJeux.Visible = false;
             dataGridPostesJeu.Visible = false;
@@ -45,7 +50,13 @@ namespace ApplicationUi
 
             Raz_Zones();
 
-            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
+            if (plateformePreselectionnee != null)
+            {
+                _plateformeSelectionee = plateformePreselectionnee;
+                RemplirFormulaire();
+            }
+
+            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
                 DesactiverInputs();
@@ -199,11 +210,59 @@ namespace ApplicationUi
                 return;
             }
 
-            _servicePlateforme.Supprimer(_plateformeSelectionee.IdPlateforme);
-            Raz_Zones();
+            try
+            {
+                _servicePlateforme.Supprimer(_plateformeSelectionee.IdPlateforme);
+                MessageBox.Show("La plateforme a bien été supprimée.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (PlateformeException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de la plateforme.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
 
         }
         #endregion
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des postes de jeu en transmettant la plateforme sélectionnée
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridPostesJeu_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
+
+            if (_posteJeuSelectionne != null)
+                NaviguerVersPostesJeu?.Invoke(_posteJeuSelectionne); // déclenche la navigation vers le form main
+        }
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des jeux en transmettant le jeu sélectionné
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridJeux_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _jeuSelectionne = dataGridJeux.Rows[e.RowIndex].DataBoundItem as Jeu;
+
+            if (_jeuSelectionne != null)
+                NaviguerVersJeux?.Invoke(_jeuSelectionne); // déclenche la navigation vers le form main
+        }
 
         private void DataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -212,7 +271,7 @@ namespace ApplicationUi
             {
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new ()
+                Dictionary<int, string> map = new()
                 {
                     {dataGridPlateformes.Columns["Libelle"].Index, "Libelle"},
                 };
@@ -281,6 +340,8 @@ namespace ApplicationUi
             textBoxNom.Clear();
 
             _plateformeSelectionee = null;
+            _posteJeuSelectionne = null;
+            _jeuSelectionne = null;
 
             dataGridJeux.DataSource = null;
             dataGridPostesJeu.DataSource = null;
@@ -298,7 +359,7 @@ namespace ApplicationUi
         /// </summary>
         private void AfficherBoutons()
         {
-            buttonAjouter.Enabled = _plateformeSelectionee == null;
+            buttonAjouter.Enabled = true;
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _plateformeSelectionee != null;

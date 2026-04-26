@@ -44,14 +44,14 @@ namespace Lib_Services.Services
             if (!string.IsNullOrWhiteSpace(filtre))
                 query = query.Where(o => o.Login.Contains(filtre)
                 || o.Mail.Contains(filtre)
-                || o.NomRole.Contains(filtre));
+                || o.Role.Libelle.Contains(filtre));
 
             query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "Login" => ordre == "ASC" ? query.OrderBy(o => o.Login) : query.OrderByDescending(o => o.Login),
                 "Mail" => ordre == "ASC" ? query.OrderBy(o => o.Mail) : query.OrderByDescending(o => o.Mail),
-                "NomRole" => ordre == "ASC" ? query.OrderBy(o => o.NomRole) : query.OrderByDescending(o => o.NomRole),
+                "NomRole" => ordre == "ASC" ? query.OrderBy(o => o.Role.Libelle) : query.OrderByDescending(o => o.Role.Libelle),
                 _ => query.OrderByDescending(o => o.Login) // valeur par défaut
             };
 

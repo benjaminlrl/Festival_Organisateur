@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Lib_Entities.Entities
@@ -83,6 +85,12 @@ namespace Lib_Entities.Entities
         /// Lot concerné pour le Tournoi
         /// </summary>
         public ICollection<Lot> Lot { get; set; }
+
+        /// <summary>
+        /// Nombre de participants inscrits au tournoi. Cette propriété n'est pas mappée à la base de données
+        /// </summary>
+        [NotMapped]
+        public int NbParticipantsInscrits { get; set; }
     }
 
 }

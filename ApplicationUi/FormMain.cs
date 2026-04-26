@@ -95,54 +95,104 @@ namespace ApplicationUi
             this.Hide();
         }
         private void boutonQuitter_Click(object sender, EventArgs e)
+        private void BtnQuitter_Click(object? sender, EventArgs e)
         {
             Application.Exit();
         }
-        private void btnTournois_Click(object sender, EventArgs e)
+        private void BtnTournois_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcTournois(_organisateurConnecte), "Gestion des tournois");
         }
 
-        private void btnEspaces_Click(object sender, EventArgs e)
+        private void BtnEspaces_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcEspaces(_organisateurConnecte), "Gestion des espaces");
+            UcEspaces uc = new (_organisateurConnecte);
+
+            uc.NaviguerVersPostesJeu += (posteJeu) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcPostesDeJeu(_organisateurConnecte, posteJeu), "Gestion des postes de jeu");
+            };
+
+            uc.NaviguerVersTournois += (tournoi) =>
+            {
+                // Récupère le premier tournoi de l'espace 
+                LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
+            };
+
+            LoadUserControl(uc, "Gestion des espaces");
         }
 
-        private void btnPostes_Click(object sender, EventArgs e)
+        private void BtnPostes_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcPostesDeJeu(_organisateurConnecte), "Gestion des postes de jeu");
+            UcPostesDeJeu uc = new (_organisateurConnecte);
+
+            uc.NaviguerVersTournois += (tournoi) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
+            };
+
+            LoadUserControl(uc, "Gestion des postes de jeu");
         }
 
-        private void btnPlateformes_Click(object sender, EventArgs e)
+        private void BtnPlateformes_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcPlateformes(_organisateurConnecte), "Gestion des plateformes");
+            var uc = new UcPlateformes(_organisateurConnecte);
+
+            uc.NaviguerVersPostesJeu += (posteJeu) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcPostesDeJeu(_organisateurConnecte, posteJeu), "Gestion des postes de jeu");
+            };
+
+            uc.NaviguerVersJeux += (jeu) =>
+            {
+                // Récupère le premier jeu de la plateforme 
+                LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
+            };
+
+            LoadUserControl(uc, "Gestion des plateformes"); 
         }
 
-        private void btnOrganisateurs_Click(object sender, EventArgs e)
+        private void BtnOrganisateurs_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcOrganisateurs(_organisateurConnecte), "Gestion des Organisateurs");
         }
 
-        private void btnLotComposants_Click(object sender, EventArgs e)
+        private void BtnLotComposants_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcLotComposants(_organisateurConnecte), "Gestion des Lots Composants");
         }
-        private void btnLots_Click(object sender, EventArgs e)
+        private void BtnLots_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcLots(_organisateurConnecte), "Gestion des Lots");
         }
 
-        private void buttonJeux_Click(object sender, EventArgs e)
+        private void BtnJeux_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcJeux(_organisateurConnecte), "Gestion des jeux");
+            UcJeux uc = new (_organisateurConnecte);
+            LoadUserControl(uc, "Gestion des jeux");
         }
 
-        private void btnVoter_Click(object sender, EventArgs e)
+        private void BtnVoter_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcVoter(_organisateurConnecte), "Espace de votes");
+            UcVoter uc = new(_organisateurConnecte);
+
+            uc.NaviguerVersJeux += (jeu) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
+            };
+            uc.NaviguerVersPlateformes += (plateforme) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcPlateformes(_organisateurConnecte, plateforme), "Gestion des plateformes");
+            };
+            LoadUserControl(uc, "Espace de votes");
         }
 
-        private void btnParticiper_Click(object sender, EventArgs e)
+        private void BtnParticiper_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcParticiper(_organisateurConnecte), "Gestion des participations");
         }

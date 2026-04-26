@@ -25,7 +25,7 @@ namespace ApplicationUi
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
-        public UcJeux(Organisateur unOrganisateurConnecte)
+        public UcJeux(Organisateur unOrganisateurConnecte, Jeu? JeuPreselectionne = null)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
@@ -324,7 +324,7 @@ namespace ApplicationUi
         /// </summary>
         private void AfficherBoutons()
         {
-            buttonAjouter.Enabled = _jeuSelectionne == null;
+            buttonAjouter.Enabled = true;
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _jeuSelectionne != null;

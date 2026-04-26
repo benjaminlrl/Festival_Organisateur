@@ -41,6 +41,7 @@ namespace ApplicationUi
             radioButtonEnCours = new RadioButton();
             radioButtonTermine = new RadioButton();
             labelStatut = new Label();
+            labelParticipantsInscrits = new Label();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
@@ -161,6 +162,7 @@ namespace ApplicationUi
             tableLayoutPanel.Controls.Add(numericUpDownDuree, 1, 3);
             tableLayoutPanel.Controls.Add(flowLayoutPanel1, 3, 1);
             tableLayoutPanel.Controls.Add(labelStatut, 3, 0);
+            tableLayoutPanel.Controls.Add(labelParticipantsInscrits, 3, 3);
             tableLayoutPanel.Dock = DockStyle.Top;
             tableLayoutPanel.Location = new Point(0, 0);
             tableLayoutPanel.Margin = new Padding(4);
@@ -361,6 +363,20 @@ namespace ApplicationUi
             labelStatut.TabIndex = 11;
             labelStatut.Text = "Statut :";
             // 
+            // labelParticipantsInscrits
+            // 
+            labelParticipantsInscrits.AutoSize = true;
+            labelParticipantsInscrits.BackColor = Color.DarkBlue;
+            labelParticipantsInscrits.Dock = DockStyle.Fill;
+            labelParticipantsInscrits.Font = new Font("Trebuchet MS", 10F, FontStyle.Bold);
+            labelParticipantsInscrits.ForeColor = Color.White;
+            labelParticipantsInscrits.Location = new Point(978, 105);
+            labelParticipantsInscrits.Name = "labelParticipantsInscrits";
+            labelParticipantsInscrits.Size = new Size(412, 41);
+            labelParticipantsInscrits.TabIndex = 19;
+            labelParticipantsInscrits.Text = "Participants inscrits : 0/10";
+            labelParticipantsInscrits.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // panelButtons
             // 
             panelButtons.Controls.Add(groupBox1);
@@ -517,6 +533,7 @@ namespace ApplicationUi
         private Label label3;
         private ComboBox comboBoxJeu;
         private DataGridView dataGridTournois;
+        private Label labelParticipantsInscrits;
     }
 }
 

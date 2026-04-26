@@ -53,8 +53,8 @@ namespace Lib_Services.Services
             query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
-                "Libelle" => ordre == "ASC" ? query.OrderBy(sv => sv.Plateforme.Libelle) : query.OrderByDescending(sv => sv.Plateforme.Libelle),
-                "Titre" => ordre == "ASC" ? query.OrderBy(sv => sv.Jeu.Titre) : query.OrderByDescending(sv => sv.Jeu.Titre),
+                "LibellePlateforme" => ordre == "ASC" ? query.OrderBy(sv => sv.Plateforme.Libelle) : query.OrderByDescending(sv => sv.Plateforme.Libelle),
+                "TitreJeu" => ordre == "ASC" ? query.OrderBy(sv => sv.Jeu.Titre) : query.OrderByDescending(sv => sv.Jeu.Titre),
                 "DateDebutVote" => ordre == "ASC" ? query.OrderBy(sv => sv.DateDebutVote) : query.OrderByDescending(sv => sv.DateDebutVote),
                 "DateFinVote" => ordre == "ASC" ? query.OrderBy(sv => sv.DateFinVote) : query.OrderByDescending(sv => sv.DateFinVote),
                 _ => query.OrderByDescending(sv => sv.DateDebutVote) // valeur par défaut
@@ -247,23 +247,27 @@ namespace Lib_Services.Services
                 throw new SoumisVoteException("Une autre SoumisVote existe déjà.",
                     (int)SoumisVoteException.SoumisVoteErreur.DoublonSoumisVote);
 
-            SoumisVote? enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
-            if (enBdd != null && enBdd.DateDebutVote == soumisVote.DateDebutVote
-                && enBdd.DateFinVote == soumisVote.DateFinVote)
-                throw new SoumisVoteException("Aucune modification détectée.",
-                    (int)SoumisVoteException.SoumisVoteErreur.AucuneModification);
-
-            if (soumisVote.DateDebutVote >= soumisVote.DateFinVote)
-                throw new SoumisVoteException("La date de début doit être antérieure à la date de fin.",
+            if (soumisVote.DateDebutVote.Date >= soumisVote.DateFinVote.Date)
+                throw new SoumisVoteException("La date de début du soumisVote doit être antérieure à la date de fin.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin);
 
-            if (soumisVote.DateDebutVote < DateTime.Now)
-                throw new SoumisVoteException("La date de début doit être dans le futur.",
+            if (soumisVote.DateDebutVote.Date < DateTime.Now.Date)
+                throw new SoumisVoteException("La date de début du soumisVote ne peut pas être dans le passé.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateDebutDansLePasse);
 
-            if (soumisVote.DateFinVote < DateTime.Now)
-                throw new SoumisVoteException("La date de fin doit être dans le futur.",
+            if (soumisVote.DateFinVote.Date < DateTime.Now.Date)
+                throw new SoumisVoteException("La date de fin du soumisVote ne peut pas être dans le passé.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateFinDansLePasse);
+
+            if (estModification)
+            {
+                SoumisVote? enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
+                if (enBdd != null && enBdd.DateDebutVote.Date == soumisVote.DateDebutVote.Date
+                    && enBdd.DateFinVote.Date == soumisVote.DateFinVote.Date)
+                    throw new SoumisVoteException("Aucune modification détectée.",
+                        (int)SoumisVoteException.SoumisVoteErreur.AucuneModification);
+                
+            }
         }
         #endregion
     }

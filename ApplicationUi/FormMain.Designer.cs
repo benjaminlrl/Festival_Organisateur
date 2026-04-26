@@ -78,7 +78,7 @@ namespace ApplicationUi
             btnPlateformes.TabIndex = 0;
             btnPlateformes.Text = "      Plateformes";
             btnPlateformes.UseVisualStyleBackColor = false;
-            btnPlateformes.Click += btnPlateformes_Click;
+            btnPlateformes.Click += BtnPlateformes_Click;
             // 
             // btnPostes
             // 
@@ -96,7 +96,7 @@ namespace ApplicationUi
             btnPostes.TabIndex = 1;
             btnPostes.Text = "        Postes de jeu";
             btnPostes.UseVisualStyleBackColor = false;
-            btnPostes.Click += btnPostes_Click;
+            btnPostes.Click += BtnPostes_Click;
             // 
             // btnEspaces
             // 
@@ -115,7 +115,7 @@ namespace ApplicationUi
             btnEspaces.TabIndex = 2;
             btnEspaces.Text = "Espaces";
             btnEspaces.UseVisualStyleBackColor = false;
-            btnEspaces.Click += btnEspaces_Click;
+            btnEspaces.Click += BtnEspaces_Click;
             // 
             // btnTournois
             // 
@@ -134,7 +134,7 @@ namespace ApplicationUi
             btnTournois.TabIndex = 3;
             btnTournois.Text = "Tournois";
             btnTournois.UseVisualStyleBackColor = false;
-            btnTournois.Click += btnTournois_Click;
+            btnTournois.Click += BtnTournois_Click;
             // 
             // buttonJeux
             // 
@@ -153,7 +153,7 @@ namespace ApplicationUi
             buttonJeux.TabIndex = 4;
             buttonJeux.Text = "Jeux";
             buttonJeux.UseVisualStyleBackColor = false;
-            buttonJeux.Click += buttonJeux_Click;
+            buttonJeux.Click += BtnJeux_Click;
             // 
             // btnOrganisateurs
             // 
@@ -172,7 +172,7 @@ namespace ApplicationUi
             btnOrganisateurs.TabIndex = 5;
             btnOrganisateurs.Text = "      Organisateurs";
             btnOrganisateurs.UseVisualStyleBackColor = false;
-            btnOrganisateurs.Click += btnOrganisateurs_Click;
+            btnOrganisateurs.Click += BtnOrganisateurs_Click;
             // 
             // btnLots
             // 
@@ -191,7 +191,7 @@ namespace ApplicationUi
             btnLots.TabIndex = 6;
             btnLots.Text = "Lots";
             btnLots.UseVisualStyleBackColor = false;
-            btnLots.Click += btnLots_Click;
+            btnLots.Click += BtnLots_Click;
             // 
             // btnLotComposants
             // 
@@ -210,7 +210,7 @@ namespace ApplicationUi
             btnLotComposants.TabIndex = 7;
             btnLotComposants.Text = "      Composant des lots";
             btnLotComposants.UseVisualStyleBackColor = false;
-            btnLotComposants.Click += btnLotComposants_Click;
+            btnLotComposants.Click += BtnLotComposants_Click;
             // 
             // btnVoter
             // 
@@ -229,7 +229,7 @@ namespace ApplicationUi
             btnVoter.TabIndex = 8;
             btnVoter.Text = "Voter";
             btnVoter.UseVisualStyleBackColor = false;
-            btnVoter.Click += btnVoter_Click;
+            btnVoter.Click += BtnVoter_Click;
             // 
             // btnParticiper
             // 
@@ -248,7 +248,7 @@ namespace ApplicationUi
             btnParticiper.TabIndex = 9;
             btnParticiper.Text = "Participations";
             btnParticiper.UseVisualStyleBackColor = false;
-            btnParticiper.Click += btnParticiper_Click;
+            btnParticiper.Click += BtnParticiper_Click;
             // 
             // boutonDeconnexion
             // 

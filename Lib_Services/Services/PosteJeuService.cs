@@ -2,9 +2,11 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Lib_Services.Services
 {
@@ -16,8 +18,7 @@ namespace Lib_Services.Services
     {
         // Contexte Entity Framework 
         private readonly ApplicationDbContext _context;
-        private readonly IPlateformeService _plateformeService;
-        private readonly IEspaceService _espaceService;
+        private readonly IEspaceService _serviceEspace;
 
         /// <summary>
         /// Constructeur .
@@ -26,8 +27,7 @@ namespace Lib_Services.Services
         public PosteJeuService(ApplicationDbContext context)
         {
             _context = context;
-            _espaceService = new EspaceService(context);
-            _plateformeService = new PlateformeService(context);
+            _serviceEspace = new EspaceService(context);
         }
         #region Lecture
 
@@ -115,8 +115,9 @@ namespace Lib_Services.Services
         /// <returns>L'entité <see cref="PosteJeu"/> si trouvée ; sinon null.</returns>
         public PosteJeu? Obtenir(int idPosteJeu)
         {
-            // Find retourne null si l'entité n'existe pas dans le contexte/la base.
-            return _context.PostesJeu.Find(idPosteJeu);
+            // AsNoTracking pour éviter le suivi de l'entité dans le contexte,
+            // permet de vérifier la valeur actuelle en base sans risque de conflits avec des entités déjà suivies.
+            return _context.PostesJeu.AsNoTracking().FirstOrDefault(p => p.NumeroPoste.Equals(idPosteJeu));
         }
         
         /// <summary>
@@ -137,6 +138,25 @@ namespace Lib_Services.Services
         /// <param name="posteJeu">Instance de <see cref="PosteJeu"/> à créer.</param>
         public void Creer(PosteJeu posteJeu)
         {
+            Espace? espace = _serviceEspace.Obtenir(posteJeu.IdEspace) ?? throw new Exception("Espace inconnu");
+
+            // récupère le poste de jeu avec le numéro de poste le plus haut
+            // Récupéré le numéro associé a sa référence,
+            // +1
+            PosteJeu? dernierPoste = ObtenirDernierPosteJeuDunEspace(posteJeu.IdEspace);
+
+            int numeroPoste = dernierPoste != null
+                ? int.Parse(dernierPoste.Reference.Substring(dernierPoste.Reference.Length - 3, 3)) +1
+                : 1;
+
+            posteJeu.SetReference(espace, numeroPoste);
+
+            while (ReferenceExiste(posteJeu.Reference) != null)
+            {
+                numeroPoste++;
+                posteJeu.SetReference(espace, numeroPoste);
+            }
+
             ValiderPosteJeu(posteJeu, false);
             // Ajout à l'ensemble suivi d'un commit via SaveChanges.
             _context.PostesJeu.Add(posteJeu);
@@ -192,11 +212,27 @@ namespace Lib_Services.Services
                 throw new PosteJeuException("La plateforme associée est obligatoire.",
                     (int)PosteJeuException.PosteJeuErreur.PlateformeRequise);
 
-            if (!estModification 
-                && ReferenceExiste(posteJeu.Reference) != null
-                && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
+            if (ReferenceExiste(posteJeu.Reference) != null
+            && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
                 throw new PosteJeuException("Un poste de jeu avec cette référence existe déjà.",
                     (int)PosteJeuException.PosteJeuErreur.ReferenceExistante);
+
+            if (estModification)
+            {
+                PosteJeu? enBdd = Obtenir(posteJeu.NumeroPoste);
+
+                if (enBdd != null
+                    && posteJeu.IdEspace == enBdd.IdEspace
+                    && posteJeu.IdPlateforme == enBdd.IdPlateforme
+                    && posteJeu.Fonctionnel == enBdd.Fonctionnel
+                    && posteJeu.Reference == enBdd.Reference)
+                    throw new PosteJeuException("Aucune modification détectée pour ce poste de jeu.",
+                        (int)PosteJeuException.PosteJeuErreur.AucuneModification);
+
+                if (enBdd != null && posteJeu.IdEspace != enBdd.IdEspace)
+                    throw new PosteJeuException("Un poste de jeu ne peut pas avoir un espace différent.",
+                    (int)PosteJeuException.PosteJeuErreur.EspaceDifferent);
+            }
         }
         #endregion
         #region Statistiques
@@ -242,6 +278,17 @@ namespace Lib_Services.Services
 
             return query.Count();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idEspace"></param>
+        /// <returns></returns>
+        public int NombrePostesJeuEspace(int idEspace)
+        {
+            return _context.PostesJeu
+                .Where(p => p.IdEspace == idEspace)
+                .Count();
+        }
 
         /// <summary>
         /// 
@@ -254,6 +301,19 @@ namespace Lib_Services.Services
             return _context.PostesJeu
                 .Where(p => p.IdEspace == idEspace && p.IdPlateforme == idPlateforme)
                 .Count();
+        }
+
+        /// <summary>
+        /// Récupère le poste de jeu d'un espace avec le plus haut numéro de poste
+        /// </summary>
+        /// <param name="idEspace">Id de l'espace du poste de jeu</param>
+        /// <returns>L'objet poste d ejeu</returns>
+        public PosteJeu? ObtenirDernierPosteJeuDunEspace(int idEspace)
+        {
+            return _context.PostesJeu
+                .Where(p => p.IdEspace == idEspace)
+                .OrderByDescending(p => p.NumeroPoste)
+                .FirstOrDefault();
         }
         #endregion
 

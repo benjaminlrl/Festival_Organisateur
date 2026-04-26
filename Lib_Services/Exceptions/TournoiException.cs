@@ -8,13 +8,22 @@ namespace Lib_Services.Exceptions
 
         public enum TournoiErreur
         {
-            NomRequis = 1,
-            JeuRequis = 2,
-            EspaceRequis = 3,
-            NbParticipantsInvalide = 4,
-            StatutRequis = 5,
-            ConflitHoraire = 6,
-            HoraireInvalide = 7
+            TournoiNomRequis = 1,
+            TournoiNomExiste = 2,
+            TournoiJeuRequis = 3,
+            TournoiEspaceRequis = 4,
+            TournoiNbParticipantsInvalide = 5,
+            TournoiStatutRequis = 6,
+            TournoiConflitHoraire = 7,
+            TournoiHoraireInvalide = 8,
+            TournoiInexistantEnBaseDeDonnee = 9,
+            TournoiAucuneModification = 11,
+            TournoiJeuModifier = 12,
+            TournoiStatutTermineModifier = 13,
+            TournoiAjoutHorairePassee = 14,
+
+
+
         }
 
         public TournoiException(string message, int codeErreur) : base(message)

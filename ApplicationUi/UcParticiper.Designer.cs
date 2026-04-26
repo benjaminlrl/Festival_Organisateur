@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             process1 = new System.Diagnostics.Process();
-            dataGridParticipationsUtilisateur = new DataGridView();
+            dataGridParticipationsJoueur = new DataGridView();
             label1 = new Label();
             labelNom = new Label();
             textBoxRecherche = new TextBox();
@@ -62,7 +62,7 @@
             dataGridParticipations = new DataGridView();
             tableLayoutPanel2 = new TableLayoutPanel();
             label3 = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridParticipationsUtilisateur).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridParticipationsJoueur).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             panelForm.SuspendLayout();
             tableLayoutPanelCRUD.SuspendLayout();
@@ -89,21 +89,22 @@
             process1.StartInfo.UserName = "";
             process1.SynchronizingObject = this;
             // 
-            // dataGridParticipationsUtilisateur
+            // dataGridParticipationsJoueur
             // 
-            dataGridParticipationsUtilisateur.AccessibleDescription = "Participations associés à l'utilisateur séléctionné";
-            dataGridParticipationsUtilisateur.AllowUserToAddRows = false;
-            dataGridParticipationsUtilisateur.AllowUserToDeleteRows = false;
-            dataGridParticipationsUtilisateur.AllowUserToOrderColumns = true;
-            dataGridParticipationsUtilisateur.BackgroundColor = Color.White;
-            dataGridParticipationsUtilisateur.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridParticipationsUtilisateur.Dock = DockStyle.Fill;
-            dataGridParticipationsUtilisateur.Location = new Point(3, 48);
-            dataGridParticipationsUtilisateur.Name = "dataGridParticipationsUtilisateur";
-            dataGridParticipationsUtilisateur.ReadOnly = true;
-            dataGridParticipationsUtilisateur.RowHeadersWidth = 62;
-            dataGridParticipationsUtilisateur.Size = new Size(424, 386);
-            dataGridParticipationsUtilisateur.TabIndex = 5;
+            dataGridParticipationsJoueur.AccessibleDescription = "Participations associés à l'utilisateur séléctionné";
+            dataGridParticipationsJoueur.AllowUserToAddRows = false;
+            dataGridParticipationsJoueur.AllowUserToDeleteRows = false;
+            dataGridParticipationsJoueur.AllowUserToOrderColumns = true;
+            dataGridParticipationsJoueur.BackgroundColor = Color.White;
+            dataGridParticipationsJoueur.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridParticipationsJoueur.Dock = DockStyle.Fill;
+            dataGridParticipationsJoueur.Location = new Point(3, 48);
+            dataGridParticipationsJoueur.Name = "dataGridParticipationsJoueur";
+            dataGridParticipationsJoueur.ReadOnly = true;
+            dataGridParticipationsJoueur.RowHeadersWidth = 62;
+            dataGridParticipationsJoueur.Size = new Size(424, 386);
+            dataGridParticipationsJoueur.TabIndex = 5;
+            dataGridParticipationsJoueur.CellClick += DataGridParticipationsJoueur_CellClick;
             // 
             // label1
             // 
@@ -519,7 +520,7 @@
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Controls.Add(label3, 0, 0);
-            tableLayoutPanel2.Controls.Add(dataGridParticipationsUtilisateur, 0, 1);
+            tableLayoutPanel2.Controls.Add(dataGridParticipationsJoueur, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(1267, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -550,7 +551,7 @@
             Controls.Add(tableLayoutPanel1);
             Name = "UcParticiper";
             Size = new Size(1700, 877);
-            ((System.ComponentModel.ISupportInitialize)dataGridParticipationsUtilisateur).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridParticipationsJoueur).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             panelForm.ResumeLayout(false);
             tableLayoutPanelCRUD.ResumeLayout(false);
@@ -588,7 +589,7 @@
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox textBoxRecherche;
         private Label label1;
-        private DataGridView dataGridParticipationsUtilisateur;
+        private DataGridView dataGridParticipationsJoueur;
         private TextBox textBoxCommentaire;
         private TrackBar trackBarEvaluation;
         private Label labelDateHeureInscription;

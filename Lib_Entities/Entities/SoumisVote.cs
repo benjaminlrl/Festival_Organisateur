@@ -5,6 +5,11 @@ using System.Text;
 
 namespace Lib_Entities.Entities
 {
+    /// <summary>
+    /// Un soumisVote représente une proposition de vote pour un jeu sur une plateforme donnée, avec des dates de début et de fin de vote.
+    /// Il dispose d'une date de début de vote, d'une date de fin de vote, d'un identifiant de jeu, d'un identifiant de plateforme, 
+    /// ainsi que des propriétés de navigation vers les entités Jeu et Plateforme.
+    /// </summary>
     public class SoumisVote
     {
         public DateTime DateDebutVote { get; set; }
