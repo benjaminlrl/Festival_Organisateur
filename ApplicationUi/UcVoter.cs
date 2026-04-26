@@ -58,18 +58,18 @@ namespace ApplicationUi
 
             buttonEffacer.Text = " 🧽  Effacer";
 
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Ajouter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
                 DesactiverInputs();
 
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Modifier") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
                 DesactiverInputs();
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Supprimer") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;
                 DesactiverInputs();

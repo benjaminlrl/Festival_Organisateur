@@ -52,11 +52,10 @@
             panelCard.Controls.Add(labelPassword);
             panelCard.Controls.Add(txtPassword);
             panelCard.Controls.Add(btnLogin);
-            panelCard.Location = new Point(55, 58);
-            panelCard.Margin = new Padding(4, 5, 4, 5);
+            panelCard.Location = new Point(38, 35);
             panelCard.Name = "panelCard";
-            panelCard.Padding = new Padding(36, 50, 36, 32);
-            panelCard.Size = new Size(514, 671);
+            panelCard.Padding = new Padding(25, 30, 25, 19);
+            panelCard.Size = new Size(360, 403);
             panelCard.TabIndex = 0;
             // 
             // label4
@@ -64,10 +63,9 @@
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 7F, FontStyle.Italic);
             label4.ForeColor = Color.FromArgb(52, 73, 94);
-            label4.Location = new Point(40, 499);
-            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Location = new Point(28, 299);
             label4.Name = "label4";
-            label4.Size = new Size(59, 19);
+            label4.Size = new Size(41, 12);
             label4.TabIndex = 11;
             label4.Text = "1 chiffre";
             // 
@@ -76,10 +74,9 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 7F, FontStyle.Italic);
             label3.ForeColor = Color.FromArgb(52, 73, 94);
-            label3.Location = new Point(40, 475);
-            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Location = new Point(28, 285);
             label3.Name = "label3";
-            label3.Size = new Size(132, 19);
+            label3.Size = new Size(89, 12);
             label3.TabIndex = 10;
             label3.Text = "1 caractère spéciale";
             // 
@@ -88,10 +85,9 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 7F, FontStyle.Italic);
             label2.ForeColor = Color.FromArgb(52, 73, 94);
-            label2.Location = new Point(41, 451);
-            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Location = new Point(29, 271);
             label2.Name = "label2";
-            label2.Size = new Size(83, 19);
+            label2.Size = new Size(57, 12);
             label2.TabIndex = 9;
             label2.Text = "1 majuscule";
             // 
@@ -100,10 +96,9 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 7F, FontStyle.Italic);
             label1.ForeColor = Color.FromArgb(52, 73, 94);
-            label1.Location = new Point(40, 302);
-            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Location = new Point(28, 181);
             label1.Name = "label1";
-            label1.Size = new Size(156, 19);
+            label1.Size = new Size(106, 12);
             label1.TabIndex = 8;
             label1.Text = "Entre 3 et 12 caractères";
             // 
@@ -112,10 +107,9 @@
             labelMdpMin.AutoSize = true;
             labelMdpMin.Font = new Font("Segoe UI", 7F, FontStyle.Italic);
             labelMdpMin.ForeColor = Color.FromArgb(52, 73, 94);
-            labelMdpMin.Location = new Point(40, 428);
-            labelMdpMin.Margin = new Padding(4, 0, 4, 0);
+            labelMdpMin.Location = new Point(28, 257);
             labelMdpMin.Name = "labelMdpMin";
-            labelMdpMin.Size = new Size(155, 19);
+            labelMdpMin.Size = new Size(108, 12);
             labelMdpMin.TabIndex = 7;
             labelMdpMin.Text = "Minimum 12 caractères";
             // 
@@ -124,10 +118,9 @@
             labelTitle.AutoSize = true;
             labelTitle.Font = new Font("Segoe UI Light", 24F);
             labelTitle.ForeColor = Color.FromArgb(52, 73, 94);
-            labelTitle.Location = new Point(138, 88);
-            labelTitle.Margin = new Padding(4, 0, 4, 0);
+            labelTitle.Location = new Point(97, 53);
             labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(244, 65);
+            labelTitle.Size = new Size(163, 45);
             labelTitle.TabIndex = 0;
             labelTitle.Text = "Connexion";
             // 
@@ -136,10 +129,9 @@
             labelUsername.AutoSize = true;
             labelUsername.Font = new Font("Segoe UI", 10F);
             labelUsername.ForeColor = Color.FromArgb(52, 73, 94);
-            labelUsername.Location = new Point(46, 219);
-            labelUsername.Margin = new Padding(4, 0, 4, 0);
+            labelUsername.Location = new Point(32, 131);
             labelUsername.Name = "labelUsername";
-            labelUsername.Size = new Size(164, 28);
+            labelUsername.Size = new Size(114, 19);
             labelUsername.TabIndex = 1;
             labelUsername.Text = "Nom d'utilisateur";
             // 
@@ -148,11 +140,10 @@
             txtUsername.AccessibleDescription = "";
             txtUsername.BorderStyle = BorderStyle.FixedSingle;
             txtUsername.Font = new Font("Segoe UI", 10F);
-            txtUsername.Location = new Point(46, 260);
-            txtUsername.Margin = new Padding(4, 5, 4, 5);
+            txtUsername.Location = new Point(32, 156);
             txtUsername.Name = "txtUsername";
             txtUsername.PlaceholderText = " Votre identifiant";
-            txtUsername.Size = new Size(428, 34);
+            txtUsername.Size = new Size(300, 25);
             txtUsername.TabIndex = 2;
             txtUsername.Enter += txt_Enter;
             txtUsername.Leave += txt_Leave;
@@ -162,10 +153,9 @@
             labelPassword.AutoSize = true;
             labelPassword.Font = new Font("Segoe UI", 10F);
             labelPassword.ForeColor = Color.FromArgb(52, 73, 94);
-            labelPassword.Location = new Point(46, 344);
-            labelPassword.Margin = new Padding(4, 0, 4, 0);
+            labelPassword.Location = new Point(32, 206);
             labelPassword.Name = "labelPassword";
-            labelPassword.Size = new Size(129, 28);
+            labelPassword.Size = new Size(92, 19);
             labelPassword.TabIndex = 3;
             labelPassword.Text = "Mot de passe";
             // 
@@ -173,12 +163,11 @@
             // 
             txtPassword.BorderStyle = BorderStyle.FixedSingle;
             txtPassword.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPassword.Location = new Point(46, 385);
-            txtPassword.Margin = new Padding(4, 5, 4, 5);
+            txtPassword.Location = new Point(32, 231);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
             txtPassword.PlaceholderText = " Votre mot de passe";
-            txtPassword.Size = new Size(428, 34);
+            txtPassword.Size = new Size(300, 25);
             txtPassword.TabIndex = 4;
             txtPassword.Enter += txt_Enter;
             txtPassword.KeyPress += txtPassword_KeyPress;
@@ -192,10 +181,9 @@
             btnLogin.FlatStyle = FlatStyle.Flat;
             btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(45, 559);
-            btnLogin.Margin = new Padding(4, 5, 4, 5);
+            btnLogin.Location = new Point(32, 335);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(429, 75);
+            btnLogin.Size = new Size(300, 45);
             btnLogin.TabIndex = 5;
             btnLogin.Text = "Se connecter";
             btnLogin.UseVisualStyleBackColor = false;
@@ -210,26 +198,24 @@
             btnQuitter.ForeColor = Color.White;
             btnQuitter.Image = Properties.Resources.deconnecter;
             btnQuitter.ImageAlign = ContentAlignment.MiddleLeft;
-            btnQuitter.Location = new Point(456, 766);
-            btnQuitter.Margin = new Padding(4, 5, 4, 5);
+            btnQuitter.Location = new Point(308, 444);
             btnQuitter.Name = "btnQuitter";
-            btnQuitter.Size = new Size(174, 68);
+            btnQuitter.Size = new Size(133, 54);
             btnQuitter.TabIndex = 8;
-            btnQuitter.Text = "  Quitter";
+            btnQuitter.Text = "       Quitter";
             btnQuitter.UseVisualStyleBackColor = false;
             btnQuitter.Click += btnQuitter_Click;
             // 
             // FormAuthentification
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(240, 242, 245);
-            ClientSize = new Size(629, 832);
+            ClientSize = new Size(440, 499);
             Controls.Add(btnQuitter);
             Controls.Add(panelCard);
             Font = new Font("Segoe UI", 9F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
             Name = "FormAuthentification";
             StartPosition = FormStartPosition.CenterScreen;

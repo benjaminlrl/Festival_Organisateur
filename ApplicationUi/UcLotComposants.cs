@@ -2,6 +2,7 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Lib_Services.Exceptions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -44,15 +45,15 @@ namespace ApplicationUi
             boutonModifier.Enabled = _lotComposantSelectionne != null;
             boutonSupprimer.Enabled = _lotComposantSelectionne != null;
 
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Ajouter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Ajouter") == false)
             {
                 boutonAjouter.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Modifier") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Modifier") == false)
             {
                 boutonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Supprimer") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLotComposants, "Supprimer") == false)
             {
                 boutonSupprimer.Visible = false;
             }
@@ -439,6 +440,7 @@ namespace ApplicationUi
             return true;
         }
         #endregion
+
         #region Méthodes
         /// <summary>
         /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.

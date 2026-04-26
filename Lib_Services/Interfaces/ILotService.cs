@@ -29,6 +29,7 @@ namespace Lib_Services.Interfaces
         /// <returns>L'entité <see cref="Lot"/> si trouvée, sinon null.</returns>
         Lot? Obtenir(int numero);
         #endregion
+
         #region CUD
         /// <summary>
         /// Crée un nouveau Lot en base
@@ -50,6 +51,7 @@ namespace Lib_Services.Interfaces
         /// <param name="numero">numero du Lot à supprimer.</param>
         void Supprimer(int numero);
         #endregion
+
         #region Validations
         /// <summary>
         /// Permet de voir si un lot est conformes aux règles de sécurité suivantes

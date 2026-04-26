@@ -23,6 +23,7 @@ namespace Lib_Services.Services
         {
             _context = context;
         }
+
         #region Lecture
         /// <summary>
         ///  Retourne la liste complète des organisateurs présents en base, 
@@ -69,6 +70,7 @@ namespace Lib_Services.Services
                            .FirstOrDefault(o => o.Login == login);
         }
         #endregion
+
         #region CUD
 
         /// <summary>
@@ -78,8 +80,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance de <see cref="Organisateur"/> à créer.</param>
         public void Creer(Organisateur organisateur)
         {
-            // Ajout de l'entité au contexte puis persistance immédiate.
-
+            ValiderOrganisateur(organisateur, false);
             // Hashe du mot de passe via BCrypt.
             organisateur.motPasse = BCrypt.Net.BCrypt.HashPassword(organisateur.motPasse);
             _context.Organisateurs.Add(organisateur);
@@ -93,6 +94,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Organisateur"/>.</param>
         public void Modifier(Organisateur organisateur)
         {
+            ValiderOrganisateur(organisateur, true);
             _context.Organisateurs.Update(organisateur);
             _context.SaveChanges();
         }
@@ -112,6 +114,7 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Vérifie si les informations d'identification fournies correspondent à un organisateur existant.
@@ -131,7 +134,7 @@ namespace Lib_Services.Services
         /// Consulter - Modifier - Supprimer - Ajouter
         /// </summary>
         /// <returns>true si il a l'autorisation, sinon false.</returns>
-        public bool estAutoriser(Organisateur unOrganisateur, Organisateur.LesUC unUC, string action)
+        public bool EstAutoriser(Organisateur unOrganisateur, Organisateur.LesUC unUC, string action)
         {
             Role role = unOrganisateur.Role;
             // Les administrateurs ont le droit à tout
@@ -214,61 +217,44 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Permet de voir si un mot de passe est conformes aux règles de sécurité suivantes 
+        /// Valide les propriétés d'une instance de <see cref="Organisateur"/> avant sa création ou sa modification.
         /// </summary>
-        /// <param name="motDePasse"></param>
-        /// <returns>la liste des msgs d'erreurs.</returns>
-        public List<string> MdpValide(string motDePasse)
+        /// <param name="organisateur">Instance de <see cref="Organisateur"/> à valider.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <exception cref="OrganisateurException">Exception levée si une validation échoue.</exception>
+        public void ValiderOrganisateur(Organisateur organisateur, bool estModification = false)
         {
-            // liste des erreurs
-            List<string> erreurs = [];
+            if (organisateur.Login.Length > 12)
+                throw new OrganisateurException("Le login ne peut pas dépasser 12 caractères.",
+                    (int)OrganisateurException.OrganisateurErreur.LibelleTropLong);
 
-            if(string.IsNullOrWhiteSpace(motDePasse))
-            {
-                erreurs.Add("Le mot de passe ne peut pas être vide.");
-            }
-            if (motDePasse.Contains(" "))
-            {
-                erreurs.Add("Le mot de passe ne peut pas contenir d'espace.");
-            }
-            if (motDePasse.Length < 12)
-            {
-                erreurs.Add("Le mot de passe doit contenir plus de 12 caractères.");
-            }
-            if (motDePasse.Any(char.IsUpper) == false)
-            {
-                erreurs.Add("Le mot de passe doit contenir au moins 1 majuscule.");
-            }
-            if (motDePasse.Any(char.IsDigit) == false)
-            {
-                erreurs.Add("Le mot de passe doit contenir au moins 1 chiffre.");
-            }
-            if (motDePasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
-            {
-                erreurs.Add("Le mot de passe doit contenir au moins 1 caractère spéciale.");
-            }
-            return erreurs;
-        }
+            if (organisateur.Login.Length < 3)
+                throw new OrganisateurException("Le login ne peut pas être inférieur à 3 caractères.",
+                    (int)OrganisateurException.OrganisateurErreur.LibelleTropCourt);
 
-        /// <summary>
-        /// Permet de voir si un identifiant est conformes aux règles de sécurité suivantes
-        /// </summary>
-        /// <param name="identifiant"></param>
-        /// <returns>la liste des msgs d'erreurs.</returns>
-        public List<string> IdentifiantValide(string identifiant)
-        {
-            // liste des erreurs
-            List<string> erreurs = [];
+            if (organisateur.motPasse.Contains(" "))
+                throw new OrganisateurException("Le mot de passe ne peut pas contenir d'espaces.",
+                    (int)OrganisateurException.OrganisateurErreur.MdpEspace);
 
-            if (string.IsNullOrWhiteSpace(identifiant))
-            {
-                erreurs.Add("Le login ne peut pas être vide.");
-            }
-            if (identifiant.Length < 3 || identifiant.Length > 12)
-            {
-                erreurs.Add("Le login doit contenir entre 3 et 12 caractères.");
-            }
-            return erreurs;
+            if (organisateur.motPasse.Length < 12)
+                throw new OrganisateurException("Le mot de passe doit contenir au moins 12 caractères.",
+                    (int)OrganisateurException.OrganisateurErreur.MdpTropCourt);
+
+            if (organisateur.motPasse.Any(char.IsUpper) == false)
+                throw new OrganisateurException("Le mot de passe doit contenir au moin 1 lettre majuscule.",
+                    (int)OrganisateurException.OrganisateurErreur.MdpPasDeMajuscule);
+
+            if (organisateur.motPasse.Any(char.IsDigit) == false)
+                throw new OrganisateurException("Le mot de passe doit contenir au moin 1 chiffre.",
+                    (int)OrganisateurException.OrganisateurErreur.MdpPasDeChiffre);
+
+            if (organisateur.motPasse.Any(ch => !char.IsLetterOrDigit(ch)) == false)
+                throw new OrganisateurException("Le mot de passe doit contenir au moin 1 caractère spécial.",
+                    (int)OrganisateurException.OrganisateurErreur.MdpPasDeCaractereSpecial);
+
+            if(!estModification && _context.Organisateurs.Any(o => o.Login == organisateur.Login))
+                throw new OrganisateurException("Un organisateur avec ce login existe déjà.",
+                    (int)OrganisateurException.OrganisateurErreur.LoginExistant);
         }
         #endregion
     }

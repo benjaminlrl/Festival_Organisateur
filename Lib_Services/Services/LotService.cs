@@ -78,6 +78,7 @@ namespace Lib_Services.Services
                            .FirstOrDefault(o => o.Numero == numero);
         }
         #endregion
+
         #region CUD
         /// <summary>
         /// Crée un nouveau Lot en base
@@ -120,6 +121,7 @@ namespace Lib_Services.Services
         }
 
         #endregion
+
         #region Validations
         /// <summary>
         /// Valide les propriétés d'une instance de <see cref="Lot"/> avant sa création ou sa modification.
@@ -129,9 +131,6 @@ namespace Lib_Services.Services
         /// <exception cref="LotException">Exception levée si une validation échoue.</exception>
         public void ValiderLot(Lot lot, bool estModification = false)
         {
-            if (string.IsNullOrWhiteSpace(lot.Libelle))
-                throw new LotException("Le libellé ne peut pas être vide.",
-                    (int)LotException.LotErreur.LibelleRequis);
 
             if (lot.Libelle.Length > 50)
                 throw new LotException("Le libellé ne peut pas dépasser 50 caractères.",

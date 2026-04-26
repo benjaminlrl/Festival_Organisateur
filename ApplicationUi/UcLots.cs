@@ -46,15 +46,15 @@ namespace ApplicationUi
             DemarrageLotComposantsDunlot();
             boutonModifier.Enabled = _lotSelectionnee != null;
             boutonSupprimerLot.Enabled = _lotSelectionnee != null;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Ajouter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Ajouter") == false)
             {
                 boutonAjouterLot.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Modifier") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Modifier") == false)
             {
                 boutonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Supprimer") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcLots, "Supprimer") == false)
             {
                 boutonSupprimerLot.Visible = false;
             }
@@ -414,15 +414,15 @@ namespace ApplicationUi
                 ValeurTotale = 0,
                 NumeroTournoi = comboBoxTournoi.SelectedValue != null ? (int)comboBoxTournoi.SelectedValue : null
             };
-            // On oublie pas de mettre "estAttribue" à true si un tournoi est sélectionné (= le NumeroTournoi pas null)
-            if (unNouveauLot.NumeroTournoi != null)
-            {
-                _lotSelectionnee.EstAttribue = true;
-            }
 
             try
             {
-                // on crée le lot en base
+                // On oublie pas de mettre "estAttribue" à true si un tournoi est sélectionné (= le NumeroTournoi pas null)
+                if (unNouveauLot.NumeroTournoi != null)
+                {
+                    unNouveauLot.EstAttribue = true;
+                }
+                // On crée le lot en base
                 _serviceLot.Creer(unNouveauLot);
                 MessageBox.Show("Le lot a bien été créé.", "Création", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ChargerLots();
@@ -516,23 +516,22 @@ namespace ApplicationUi
                 return;
             }
 
-            // Modifiée seulement les valeurs qui ont été modifiées
-            if (textBoxLibelle.Text != "" || _lotSelectionnee.Libelle != textBoxLibelle.Text)
-                _lotSelectionnee.Libelle = textBoxLibelle.Text;
-            if (textBoxRang.Text.ToString() != "" || _lotSelectionnee.RangAttribution != int.Parse(textBoxRang.Text))
-                _lotSelectionnee.RangAttribution = int.Parse(textBoxRang.Text);
-            // Gestion du tournoi nullable
-            nouveauNumeroTournoi = comboBoxTournoi.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
-            if (nouveauNumeroTournoi != _lotSelectionnee.NumeroTournoi)
-            {
-                _lotSelectionnee.NumeroTournoi = nouveauNumeroTournoi;
-                if (_lotSelectionnee.EstAttribue != true) // On modifie uniquement si le champ est pas déjà à true
-                    _lotSelectionnee.EstAttribue = true;
-            }
-
             try
             {
-                // on modifie le lot en base
+                // Modifiée seulement les valeurs qui ont été modifiées
+                if (textBoxLibelle.Text != "" || _lotSelectionnee.Libelle != textBoxLibelle.Text)
+                    _lotSelectionnee.Libelle = textBoxLibelle.Text;
+                if (textBoxRang.Text.ToString() != "" || _lotSelectionnee.RangAttribution != int.Parse(textBoxRang.Text))
+                    _lotSelectionnee.RangAttribution = int.Parse(textBoxRang.Text);
+                // Gestion du tournoi nullable
+                nouveauNumeroTournoi = comboBoxTournoi.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
+                if (nouveauNumeroTournoi != _lotSelectionnee.NumeroTournoi)
+                {
+                    _lotSelectionnee.NumeroTournoi = nouveauNumeroTournoi;
+                    if (_lotSelectionnee.EstAttribue != true) // On modifie uniquement si le champ est pas déjà à true
+                        _lotSelectionnee.EstAttribue = true;
+                }
+                // On modifie le lot en base
                 _serviceLot.Modifier(unNouveauLot);
                 MessageBox.Show("Le lot a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ChargerLots();
@@ -709,6 +708,9 @@ namespace ApplicationUi
             ChargerLots();
         }
 
+        #endregion
+
+        #region Méthodes
         /// <summary>
         /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
         /// </summary>

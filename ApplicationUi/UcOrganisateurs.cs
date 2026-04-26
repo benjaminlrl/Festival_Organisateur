@@ -2,14 +2,17 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Lib_Services.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Serilog;
 
 namespace ApplicationUi
 {
@@ -34,15 +37,15 @@ namespace ApplicationUi
             Raz_Zones();
             boutonModifier.Enabled = _organisateurSelectionne != null;
             boutonSupprimer.Enabled = _organisateurSelectionne != null;
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Ajouter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Ajouter") == false)
             {
                 boutonAjouter.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Modifier") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Modifier") == false)
             {
                 boutonModifier.Visible = false;
             }
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Supprimer") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Supprimer") == false)
             {
                 boutonSupprimer.Visible = false;
             }
@@ -129,37 +132,6 @@ namespace ApplicationUi
 
         #region Validations
         /// <summary>
-        /// Permet de voir si un mot de passe est conformes aux règles de sécurité suivantes 
-        /// </summary>
-        /// <param name="motDePasse"></param>
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool MdpValide(string motDePasse)
-        {
-            var erreurs = _serviceOrganisateur.MdpValide(motDePasse);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Permet de voir si un identifaint est conformes aux règles de sécurité suivantes
-        /// </summary>
-        /// <param name="identifiant"></param>
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool IdentifiantValide(string identifiant)
-        {
-            var erreurs = _serviceOrganisateur.IdentifiantValide(identifiant);
-            if (erreurs.Count > 0)
-            {
-                MessageBox.Show(string.Join("\n", erreurs), "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-        /// <summary>
         /// Permet de voir si tout les champs d'un organisateur ne sont pas vides
         /// </summary>
         /// <returns>true si tout est respectés, sinon false.</returns>
@@ -214,29 +186,28 @@ namespace ApplicationUi
                 IdRole = (int)comboBoxRole.SelectedValue
             };
 
-            // On check si l'identifiant n'existe pas déjà
-            if (_serviceOrganisateur.Obtenir(_unNouveauOrganisateur.Login) != null)
+            try
             {
-                MessageBox.Show("Ce login est déjà utilisé.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                _serviceOrganisateur.Creer(_unNouveauOrganisateur);
+                MessageBox.Show("L'organisateur a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerOrganisateurs();
+                Raz_Zones();
             }
-
-            // On check si l'identifiant est valide
-            if (IdentifiantValide(textBoxLogin.Text) == false)
+            catch (OrganisateurException ex)
+            { 
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
             {
-                return;
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de l'organisateur.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
             }
-            // On check si le mot de passe est valide
-            if (MdpValide(textBoxMotDePasse.Text) == false)
+            catch (Exception ex)
             {
-                return;
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
-
-            // On créé l'organisateur en bdd
-            MessageBox.Show("L'organisateur a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceOrganisateur.Creer(_unNouveauOrganisateur);
-            ChargerOrganisateurs();
-            Raz_Zones();
         }
 
         /// <summary>
@@ -252,15 +223,6 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            // On check si l'identifiant & le mot de passe sont valides, puis on modifie l'organisateur selectionné
-            if (IdentifiantValide(textBoxLogin.Text) == false)
-            {
-                return;
-            }
-            if (textBoxMotDePasse.Text != "")
-                if (MdpValide(textBoxMotDePasse.Text) == false)
-                    return;
-
             // On check si il essaye de modifier le login (on a pas le droit)
             if (textBoxLogin.Text != _organisateurSelectionne.Login)
             {
@@ -269,18 +231,37 @@ namespace ApplicationUi
                 return;
             }
 
-            // Modifiée seulement les valeurs qui ont été modifiées
-            if (textBoxMail.Text != "" || _organisateurSelectionne.Mail != textBoxMail.Text)
-                _organisateurSelectionne.Mail = textBoxMail.Text;
-            if (textBoxMotDePasse.Text != "" || _organisateurSelectionne.motPasse != textBoxMotDePasse.Text)
-                _organisateurSelectionne.motPasse = BCrypt.Net.BCrypt.HashPassword(textBoxMotDePasse.Text); // on oublie pas de hashé via BCrypt
-            if ((int)comboBoxRole.SelectedValue != _organisateurSelectionne.IdRole)
-                _organisateurSelectionne.IdRole = (int)comboBoxRole.SelectedValue;
+            try
+            {
+                // Modifiée seulement les valeurs qui ont été modifiées
+                if (textBoxMail.Text != "" || _organisateurSelectionne.Mail != textBoxMail.Text)
+                    _organisateurSelectionne.Mail = textBoxMail.Text;
+                if (textBoxMotDePasse.Text != "" || _organisateurSelectionne.motPasse != textBoxMotDePasse.Text)
+                    _organisateurSelectionne.motPasse = textBoxMotDePasse.Text;
+                if ((int)comboBoxRole.SelectedValue != _organisateurSelectionne.IdRole)
+                    _organisateurSelectionne.IdRole = (int)comboBoxRole.SelectedValue;
 
-            MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _serviceOrganisateur.Modifier(_organisateurSelectionne);
-            ChargerOrganisateurs();
-            Raz_Zones();
+                MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _serviceOrganisateur.Modifier(_organisateurSelectionne);
+                ChargerOrganisateurs();
+                Raz_Zones();
+            }
+            catch (OrganisateurException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'organisateur.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
+            //if (textBoxMotDePasse.Text != "")
         }
 
         /// <summary>
@@ -380,7 +361,9 @@ namespace ApplicationUi
             ChargerOrganisateurs();
 
         }
+        #endregion
 
+        #region Méthodes
         /// <summary>
         /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
         /// </summary>
