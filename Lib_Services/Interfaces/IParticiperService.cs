@@ -23,6 +23,21 @@ namespace Lib_Services.Interfaces
         List<Participer> Lister(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
+        ///  Retourne la liste complète des jeux présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="idUser">id du joueur</param>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="Participer"/>.</returns>
+        public List<Participer> ListerParJoueur(int idUser, string filtre = "", string propriete = "", string ordre = "");
+
+        /// <summary>
         /// Permet d'obtenir la liste des id des participants inscrits à au moins un tournoi.
         /// </summary>
         /// <returns>Liste des identifiants des participants.</returns>

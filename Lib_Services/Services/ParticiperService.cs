@@ -55,6 +55,55 @@ namespace Lib_Services.Services
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(p => p.NumeroTournoi) : query.OrderByDescending(p => p.NumeroTournoi),
+                "NomTournoi" => ordre == "ASC" ? query.OrderBy(p => p.Tournoi.Nom) : query.OrderByDescending(p => p.Tournoi.Nom),
+                "IdUser" => ordre == "ASC" ? query.OrderBy(p => p.IdUser) : query.OrderByDescending(p => p.IdUser),
+                "Evaluation" => ordre == "ASC" ? query.OrderBy(p => p.Evaluation) : query.OrderByDescending(p => p.Evaluation),
+                "ScoreFinal" => ordre == "ASC" ? query.OrderBy(p => p.ScoreFinal) : query.OrderByDescending(p => p.ScoreFinal),
+                "LotRemis" => ordre == "ASC" ? query.OrderBy(p => p.LotRemis) : query.OrderByDescending(p => p.LotRemis),
+                "Rang" => ordre == "ASC" ? query.OrderBy(p => p.Rang) : query.OrderByDescending(p => p.Rang),
+                "Commentaire" => ordre == "ASC" ? query.OrderBy(p => p.Commentaire) : query.OrderByDescending(p => p.Commentaire),
+                "DateHeureInscription" => ordre == "ASC" ? query.OrderBy(p => p.DateHeureInscription) : query.OrderByDescending(p => p.DateHeureInscription),
+                _ => query.OrderByDescending(p => p.DateHeureInscription) // valeur par défaut
+            };
+
+            return query.ToList();
+        }
+
+        /// <summary>
+        ///  Retourne la liste complète des jeux présents en base, 
+        ///  avec possibilité de filtrer
+        ///  
+        ///  Permet également de trier les résultats par une colonne spécifiée 
+        ///  (Nom, Description, Superficie, CapaciteMaxi) 
+        ///  et dans un ordre donné (ASC ou DESC).
+        /// </summary>
+        /// <param name="idUser">id du joueur</param>
+        /// <param name="filtre">Optionnel, filtre</param>
+        /// <param name="propriete">Optionnel, propriété de trie</param>
+        /// <param name="ordre">Optionnel, ordre de trie</param>
+        /// <returns>Liste d'objets <see cref="Participer"/>.</returns>
+        public List<Participer> ListerParJoueur(int idUser, string filtre = "", string propriete = "", string ordre = "")
+        {
+            IQueryable<Participer> query = _context.Participer
+                .Include(p => p.Tournoi)
+                .Where(p => p.IdUser == idUser);
+
+            if (!string.IsNullOrWhiteSpace(filtre))
+                query = query.Where(p => p.NumeroTournoi.ToString().Contains(filtre)
+                || p.NumeroTournoi.ToString().Contains(filtre)
+                || p.Rang.ToString().Contains(filtre)
+                || (p.Commentaire ?? "").Contains(filtre)
+                || p.DateHeureInscription.ToString().Contains(filtre));
+
+            query = propriete switch
+            {
+                // tri par la colonne spécifiée, en fonction de l'ordre demandé
+                "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(p => p.NumeroTournoi) : query.OrderByDescending(p => p.NumeroTournoi),
+                "NomTournoi" => ordre == "ASC" ? query.OrderBy(p => p.NomTournoi) : query.OrderByDescending(p => p.NomTournoi),
+                "IdUser" => ordre == "ASC" ? query.OrderBy(p => p.IdUser) : query.OrderByDescending(p => p.IdUser),
+                "Evaluation" => ordre == "ASC" ? query.OrderBy(p => p.Evaluation) : query.OrderByDescending(p => p.Evaluation),
+                "ScoreFinal" => ordre == "ASC" ? query.OrderBy(p => p.ScoreFinal) : query.OrderByDescending(p => p.ScoreFinal),
+                "LotRemis" => ordre == "ASC" ? query.OrderBy(p => p.LotRemis) : query.OrderByDescending(p => p.LotRemis),
                 "Rang" => ordre == "ASC" ? query.OrderBy(p => p.Rang) : query.OrderByDescending(p => p.Rang),
                 "Commentaire" => ordre == "ASC" ? query.OrderBy(p => p.Commentaire) : query.OrderByDescending(p => p.Commentaire),
                 "DateHeureInscription" => ordre == "ASC" ? query.OrderBy(p => p.DateHeureInscription) : query.OrderByDescending(p => p.DateHeureInscription),
