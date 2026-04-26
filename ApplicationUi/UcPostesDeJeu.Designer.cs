@@ -361,6 +361,7 @@
             tableLayoutPanel.SetRowSpan(dataGridTournois, 3);
             dataGridTournois.Size = new Size(376, 119);
             dataGridTournois.TabIndex = 24;
+            dataGridTournois.CellContentDoubleClick += DataGridTournois_CellContentDoubleClick;
             // 
             // dataGridPostesJeu
             // 

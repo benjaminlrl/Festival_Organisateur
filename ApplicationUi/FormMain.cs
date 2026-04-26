@@ -170,7 +170,19 @@ namespace ApplicationUi
 
         private void BtnVoter_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcVoter(_organisateurConnecte), "Espace de votes");
+            UcVoter uc = new(_organisateurConnecte);
+
+            uc.NaviguerVersJeux += (jeu) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
+            };
+            uc.NaviguerVersPlateformes += (plateforme) =>
+            {
+                // Récupère le premier poste de jeu de la plateforme 
+                LoadUserControl(new UcPlateformes(_organisateurConnecte, plateforme), "Gestion des plateformes");
+            };
+            LoadUserControl(uc, "Espace de votes");
         }
 
         private void BtnParticiper_Click(object sender, EventArgs e)

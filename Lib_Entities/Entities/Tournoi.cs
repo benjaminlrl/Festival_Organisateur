@@ -81,7 +81,6 @@ namespace Lib_Entities.Entities
         /// </summary>
         public string TitreJeu => Jeu?.Titre ?? string.Empty;
 
-
         /// <summary>
         /// Lot concerné pour le Tournoi
         /// </summary>

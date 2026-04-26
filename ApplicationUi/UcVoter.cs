@@ -28,8 +28,11 @@ namespace ApplicationUi
         private SoumisVote? _soumisVoteSelectionne;
         private string filtre;
         private string ordreChamp;
+        private string ordreChampClassement;
         private readonly Organisateur _organisateurConnecte;
-        // Constante de debug pour avoir un utilisateur fictif avec lequel tester les fonctionnalités de vote.
+        public event Action<Jeu>? NaviguerVersJeux;
+        public event Action<Plateforme>? NaviguerVersPlateformes;
+
         public UcVoter(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
@@ -46,6 +49,7 @@ namespace ApplicationUi
 
             filtre = "";
             ordreChamp = "DESC";
+            ordreChampClassement = "DESC";
 
             dateTimePickerDateDebutVote.Value = DateTime.Now;
             dateTimePickerDateFinVote.Value = DateTime.Now.AddDays(1);
@@ -58,7 +62,7 @@ namespace ApplicationUi
             {
                 buttonAjouter.Visible = false;
                 DesactiverInputs();
-                
+
             }
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Modifier") == false)
             {
@@ -70,7 +74,7 @@ namespace ApplicationUi
                 buttonSupprimer.Visible = false;
                 DesactiverInputs();
             }
-            
+
         }
 
         #region Données
@@ -117,15 +121,13 @@ namespace ApplicationUi
         private void MEP_DataGridSoumisVote()
         {
             // Après avoir lié la DataSource, définir le SortMode de chaque colonne
-            foreach (DataGridViewColumn col in dataGridSoumisVote.Columns)
-            {
-                col.SortMode = DataGridViewColumnSortMode.Programmatic;
-            } 
+            DesactiverTrieAutomatique(dataGridSoumisVote);
 
-            dataGridSoumisVote.Columns["LibellePlateforme"].DisplayIndex = 0;
-            dataGridSoumisVote.Columns["TitreJeu"].DisplayIndex = 1;
-            dataGridSoumisVote.Columns["DateDebutVote"].DisplayIndex = 2;
-            dataGridSoumisVote.Columns["DateFinVote"].DisplayIndex = 3;
+
+            dataGridSoumisVote.Columns["LibellePlateforme"].DisplayIndex = 1;
+            dataGridSoumisVote.Columns["TitreJeu"].DisplayIndex = 2;
+            dataGridSoumisVote.Columns["DateDebutVote"].DisplayIndex = 3;
+            dataGridSoumisVote.Columns["DateFinVote"].DisplayIndex = 4;
 
             dataGridSoumisVote.Columns["IdJeu"].Visible = false;
             dataGridSoumisVote.Columns["IdPlateforme"].Visible = false;
@@ -141,6 +143,9 @@ namespace ApplicationUi
 
         private void MEP_DataGridClassement()
         {
+            // Après avoir lié la DataSource, définir le SortMode de chaque colonne
+            DesactiverTrieAutomatique(dataGridClassement);
+
             dataGridClassement.Columns["NbVotes"].DisplayIndex = 2; // A placer en premier à cause des conflits de propriétés calculés
             dataGridClassement.Columns["TitreJeu"].DisplayIndex = 0;
             dataGridClassement.Columns["LibellePlateforme"].DisplayIndex = 1;
@@ -174,7 +179,7 @@ namespace ApplicationUi
                 MessageBox.Show("Veuillez sélectionner une plateforme et un jeu.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            SoumisVote soumisVote = new ()
+            SoumisVote soumisVote = new()
             {
                 IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
                 IdPlateforme = (comboBoxPlateforme.SelectedItem as Plateforme).IdPlateforme,
@@ -273,7 +278,7 @@ namespace ApplicationUi
             comboBoxJeu.Enabled = _soumisVoteSelectionne == null;
             comboBoxPlateforme.Enabled = _soumisVoteSelectionne == null;
         }
-       
+
         private void DataGridClassement_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // on ne gère pas les cliques sur la première colonne
@@ -292,11 +297,11 @@ namespace ApplicationUi
             if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
                 return;
 
-            ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+            ordreChampClassement = ordreChampClassement == "ASC" ? "DESC" : "ASC";
 
-            dataGridClassement.DataSource = _serviceSoumisVote.ListerClassmentJeuxVotes(filtre, colonne, ordreChamp);
+            dataGridClassement.DataSource = _serviceSoumisVote.ListerClassmentJeuxVotes(filtre, colonne, ordreChampClassement);
             dataGridClassement.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
-                ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                ordreChampClassement == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
             MEP_DataGridClassement();
 
@@ -314,7 +319,7 @@ namespace ApplicationUi
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new ()
+                Dictionary<int, string> map = new()
                 {
                     {dataGridSoumisVote.Columns["DateDebutVote"].Index, "DateDebutVote"},
                     {dataGridSoumisVote.Columns["DateFinVote"].Index, "DateFinVote"},
@@ -327,7 +332,7 @@ namespace ApplicationUi
 
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
-                dataGridSoumisVote.DataSource = _serviceTournoi.Lister(filtre, colonne, ordreChamp);
+                dataGridSoumisVote.DataSource = _serviceSoumisVote.Lister(filtre, colonne, ordreChamp);
                 dataGridSoumisVote.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
                     ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
@@ -339,6 +344,38 @@ namespace ApplicationUi
 
             if (_soumisVoteSelectionne != null)
                 RemplirFormulaire();
+        }
+
+        /// <summary>
+        /// Redirige vers le jeu ou l'espace de jeu est cliqué dans le DataGrid, en ouvrant une nouvelle fenêtre de détails du jeu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridSoumisVote_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dataGridSoumisVote.Rows[e.RowIndex];
+            SoumisVote? soumisVote = row.DataBoundItem as SoumisVote;
+
+            if (soumisVote == null)
+                return;
+
+            _soumisVoteSelectionne = soumisVote;
+
+            string colonne = dataGridSoumisVote.Columns[e.ColumnIndex].Name;
+
+            if (colonne == "TitreJeu")
+            {
+                if (soumisVote.Jeu != null)
+                    NaviguerVersJeux?.Invoke(soumisVote.Jeu);
+            }
+            else if (colonne == "LibellePlateforme")
+            {
+                if (soumisVote.Plateforme != null)
+                    NaviguerVersPlateformes?.Invoke(soumisVote.Plateforme);
+            }
+
         }
 
         /// <summary>
@@ -434,6 +471,18 @@ namespace ApplicationUi
             comboBoxPlateforme.Enabled = false;
             dateTimePickerDateDebutVote.Enabled = false;
             dateTimePickerDateFinVote.Enabled = false;
+        }
+
+        /// <summary>
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// </summary>
+        /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
+        static void DesactiverTrieAutomatique(DataGridView dataGrid)
+        {
+            foreach (DataGridViewColumn col in dataGrid.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
         }
         #endregion
     }
