@@ -3,5 +3,7 @@
   <Project Path="Lib_Entities/Lib_Entities.csproj" />
   <Project Path="Lib_Metier/Lib_Metier.csproj" />
   <Project Path="Lib_Services/Lib_Services.csproj" />
-  <Project Path="ServiceTests/ServiceTests.csproj" Id="c40e1ac9-9719-4d08-bd2d-97f62af87758" />
+  <Project Path="ServiceTests/ServiceTests.csproj" Id="c40e1ac9-9719-4d08-bd2d-97f62af87758">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
 </Solution>
