@@ -10,21 +10,43 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 
 ## 📋 Sommaire
 
-- [Fonctionnalités](#-fonctionnalités)
-- [Architecture](#-architecture)
+## 📋 Sommaire
+
+- [Contexte et objectifs](#contexte-et-objectifs)
+  - [Objectifs principaux](#objectifs-principaux)
+  - [Contraintes](#contraintes)
+- [Fonctionnalités](#fonctionnalités)
+- [Diagramme de flux](#diagramme-de-flux)
+- [Choix techniques](#choix-techniques)
+- [Architecture](#architecture)
   - [Relations entre les couches](#relations-entre-les-couches)
   - [Détail des couches](#détail-des-couches)
   - [Stack technique](#stack-technique)
   - [Packages NuGet](#packages-nuget)
-- [Modèle de données](#-modèle-de-données)
-- [Gestion des rôles](#-gestion-des-rôles)
-- [Documentation des validations métier](#-documentation-des-validations-métier)
+  - [Conventions de nommage](#conventions-de-nommage-pour-le-code-métier)
+    - [Git](#git)
+- [Sécurité](#sécurité)
+- [Gestion des rôles](#gestion-des-rôles)
+- [Modèle de données](#modèle-de-données)
+  - [Schémas de la base de données](#schémas-de-la-base-de-données)
+- [Documentation des validations métier](#documentation-des-validations-métier)
   - [Architecture des contrôles](#architecture-de-mise-en-place-du-controles-des-données)
-  - [UserControl Tournois](#démarche-à-suivre-dans-le-usercontrol-dédié-aux-tournoisconfiguration-minimale)
+  - [UserControl Tournois](#démarche-à-suivre-dans-le-usercontrol-dédié-aux-tournois-configuration-minimale)
   - [Interface & Service](#faire-le-lien-entre-linterface-et-le-service)
   - [Exceptions métier](#création-des-exceptions-liés-aux-tournois)
   - [Liste des contrôles](#listes-des-controles-présents-actuellement)
-- [Prérequis](#-prérequis)
+    - [Espace](#espace)
+    - [Jeu](#jeu)
+    - [Plateforme](#plateforme)
+    - [Poste de jeu](#poste-de-jeu)
+    - [Tournoi](#tournoi)
+    - [SoumisVote](#soumisvotre)
+    - [Participer](#participer-inscription-à-un-tournoi)
+    - [Vote](#vote-voter)
+- [Limites et axes d'amélioration](#limites-et-axes-damélioration)
+  - [Limites actuelles](#limites-actuelles)
+  - [Améliorations possibles](#améliorations-possibles)
+- [Prérequis](#️-prérequis)
 - [Installation & Migrations](#-installation--migrations)
   - [Cloner le dépôt](#1-cloner-le-dépôt)
   - [Installer EF CLI](#2-installer-loutil-ef-core-cli)
@@ -38,9 +60,29 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 
 ---
 
-## ✨ Fonctionnalités
+## Contexte et objectifs
 
-### 👤 Organisateurs
+Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à un besoin de gestion complète d’un festival.
+
+### Objectifs principaux
+
+- Centraliser la gestion des tournois et des espaces
+- Assurer la cohérence des données via des validations métier
+- Mettre en place une architecture maintenable et évolutive
+- Implémenter une gestion des rôles et des permissions
+- Garantir la robustesse de l’application via la gestion des exceptions
+
+### Contraintes
+
+- Application desktop (WinForms imposé)
+- Utilisation de C# et Entity Framework Core
+- Base de données locale (SQLite)
+
+---
+
+## Fonctionnalités
+
+### 👤Organisateurs
 
 - Authentification avec hashage du mot de passe (BCrypt)
 - Création et gestion des comptes organisateurs
@@ -88,7 +130,43 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 
 ---
 
-## 🏗️ Architecture
+## Diagramme de flux
+
+1. Utilisateur intéragie avec une IHM (UserControl)
+2. L'interface envoie les données au service métier
+3. Le service métier valide les données
+4. Si les données sont valides, on applique la requête de l'uitilisateur en base de données (EF)
+5. Retour à l'IHM avec succès ou erreur
+
+---
+
+## Choix techniques
+
+### Architecture en couches
+
+Le choix d’une architecture en couches permet :
+
+- Une séparation claire des responsabilités
+- Une meilleure testabilité
+- Une maintenabilité accrue
+
+### Utilisation d’Entity Framework Core
+
+- Simplifie l’accès aux données
+- Permet la gestion des migrations
+- Réduit le code SQL manuel
+
+### Gestion des exceptions métier
+
+Les validations sont centralisées dans les services afin de :
+
+- Éviter la duplication de code
+- Garantir l’intégrité des données
+- Faciliter les tests unitaires
+
+---
+
+## Architecture
 
 _CRUD signifie Create, Read, Update, Delete_
 _CUD signifie Create, Update, Delete_
@@ -141,18 +219,89 @@ Contient la `FormMain`, les `UserControls` par module et la gestion des droits d
 - `Microsoft.EntityFrameworkCore.Sqlite`
 - `Microsoft.EntityFrameworkCore.Tools`
 - `Microsoft.EntityFrameworkCore.Design`
+- `Microsoft.EntityFrameworkCore.Design`
+- `Serilog`
+
+### Conventions de nommage pour le code métier
+
+- Les classes sont écrites en PascalCase (ex: `FestivalOrganisateur`).
+- Les properties sont écrites en PascalCase (ex: `NomFestival`).
+- Les méthodes sont écrites en PascalCase (ex: `OrganiserFestival()`).
+- Les variables sont écrites en camelCase (ex: `nomFestival`).
+- Les constantes sont écrites en majuscules avec des underscores (ex: `NOMBRE_MAX_FESTIVALS`).
+- Les fichiers sont nommés en fonction de la classe qu'ils contiennent (ex: `FestivalOrganisateur`).
+- Les packages sont nommés en Pascal.Case (ex: `Festival.Organisateur.Services`).
+- Les interfaces sont nommées en PascalCase et commencent par "I" (ex: `IFestivalOrganisateur`).
+- Les exceptions sont nommées en PascalCase et se terminent par "Exception" (ex: `FestivalOrganisateurException`).
+- Les tests unitaires sont nommés en fonction de la classe qu'ils testent, suivis de "Tests" (ex: `FestivalOrganisateurTests`).
+- Les commentaires sont écrits en français et expliquent clairement le but de chaque classe, méthode et variable.
+- Les noms de variables et de méthodes doivent être descriptifs et refléter leur fonction (ex: `organiserFestival()` au lieu de `organiser()`).
+- Les noms de classes et de méthodes doivent être cohérents avec les conventions de nommage utilisées dans le projet.
+
+### Git
+
+#### Conventions de nommage pour les branches
+
+feature/auth
+feature/user-profile
+fix/login-bug
+hotfix/security-patch
+
+#### Conventions de nommage pour les commit
+
+type(scope): message
+
+##### Types principaux :
+
+    feat → nouvelle feature
+    fix → bug
+    refactor → amélioration sans changement fonctionnel
+    docs → documentation
+    test → tests
+    chore → maintenance
+
+##### Exemples :
+
+feat(auth): ajout d'un role d'organisateur
+fix(auth): controle appronfondie sur le Role "Gestionnaire de stock"
+refactor(auth): simplification de la méthode ActionMethode()
 
 ---
 
-## 🗄️ Modèle de données
+## Sécurité
 
-Le schéma UML complet est disponible dans le dossier [`Documentation/`](./Documentation/).
-
-Les entités principales sont : `Organisateur`, `Role`, `Joueur`, `Jeu`, `Plateforme`, `Tournoi`, `Espace`, `Poste_Jeu`, `Lot`, `LotComposant`, `SoumisVote`, `Voter`, `Participer`.
+- Hashage des mots de passe avec BCrypt
+- Validation stricte des données côté service
+- Gestion des erreurs via exceptions métier
+- Limitation des actions via rôles
 
 ---
 
-## 🔐 Gestion des rôles
+## Modèle de données
+
+### Schémas de la base de données
+
+> **Comprendre :** Les entités principales sont : `Organisateur`, `Role`, `Joueur`, `Jeu`, `Plateforme`, `Tournoi`, `Espace`, `Poste_Jeu`, `Lot`, `LotComposant`, `SoumisVote`, `Voter`, `Participer`.
+
+#### Schéma UML :
+
+![Schéma UML de la base de données](Documentation/Schema/SchemaBddFestivalOrganisation.png)
+
+#### Schéma relationnelle de la base de donnée actuelle
+
+> **Note sur la table `JeuPlateforme`**  
+> Durant le développement, j'ai découvert que EF Core génère automatiquement une table de jointure (_shadow table_) lorsqu'une relation many-to-many est déclarée via des propriétés de navigation (`ICollection<Plateforme>` dans `Jeu`). Cette table existe bien en base de données mais n'est pas manipulée directement dans le code — EF Core s'en charge via `.Include()`. Elle ne figure donc pas dans les modèles du projet.
+> 📖 [Many-to-many relationships — EF Core Documentation](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many)
+
+![Schéma relationnelle de la base de donnée actuelle](Documentation/Schema/SchemaBddFestivalOrganisationActuelle.png)
+
+#### Schéma relationnelle de la base de donnée prévu
+
+![Schéma relationnelle de la base de donnée prévu](Documentation/Schema/SchemaBddFestivalOrganisation.png)
+
+---
+
+## Gestion des rôles
 
 Quatre rôles ont été définis dans l'application :
 
@@ -165,7 +314,7 @@ Quatre rôles ont été définis dans l'application :
 
 ---
 
-## 🔐 Documentation des validations métier
+## Documentation des validations métier
 
 ---
 
@@ -579,8 +728,26 @@ namespace Lib_Services.Exceptions
 ##### Création et modification
 
 - L'identifiant de l'utilisateur doit être supérieur à 0
-- Un utilisateur ne peut pas dépasser le nombre maximum de votes autorisés (`NbMaxVotesParJoueur`)
+- Un utilisateur ne peut pas dépasser le nombre maximum de votes autorisés (`NB_MAX_VOTES_PAR_JOUEUR`)
 - Un utilisateur ne peut pas voter deux fois pour le même binôme jeu/plateforme
+
+---
+
+## Limites et axes d'amélioration
+
+### Limites actuelles
+
+- Interface WinForms peu moderne
+- Absence d’API (application uniquement locale)
+- Gestion des utilisateurs simplifiée
+
+### Améliorations possibles
+
+- Migration vers une architecture web (ASP.NET)
+- Mise en place d’une API REST
+- Ajout d’un système d’authentification sécurisé (JWT)
+- Amélioration de l’UX/UI
+- Déploiement sur serveur distant
 
 ---
 
@@ -590,7 +757,7 @@ namespace Lib_Services.Exceptions
 - [Visual Studio 2022+](https://visualstudio.microsoft.com/fr/)
 - `dotnet-ef` (Entity Framework CLI)
 
----
+- ***
 
 ## 🚀 Installation & Migrations
 
@@ -658,7 +825,7 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Portail de connexion
 
-![Portail de connexion](Documentation/App/portailConnexion.png)
+![Portail de connexion](Documentation/App/connexion.png)
 
 ### Accueil
 
@@ -666,36 +833,40 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Gestion des espaces
 
-![Gestion des espaces](Documentation/App/gestionEspaces.png)
+![Gestion des espaces](Documentation/App/espaces.png)
 
 ### Gestion des plateformes
 
-![Gestion des plateformes](Documentation/App/gestionPlateformes.png)
+![Gestion des plateformes](Documentation/App/plateformes.png)
 
 ### Gestion des tournois
 
-![Gestion des tournois](Documentation/App/gestionTournois.png)
+![Gestion des tournois](Documentation/App/tournois.png)
 
 ### Gestion des postes de jeu
 
-![Gestion des postes de jeu](Documentation/App/gestionPostesJeu.png)
-
-### Gestion des organisateurs
-
-![Gestion des organisateurs](Documentation/App/gestionOrganisateurs.png)
+![Gestion des postes de jeu](Documentation/App/postesJeu.png)
 
 ### Gestion des jeux
 
-![Gestion des organisateurs](Documentation/App/gestionJeux.png)
+![Gestion des organisateurs](Documentation/App/jeux.png)
 
-### Espace de votes pour les utilisateurs
+### Gestion des binomes jeu/plateforme ouverts aux votes
 
-![Espace de votes dédié aux utilisateurs](Documentation/App/espaceVoter.png)
+![Espace de votes dédié aux utilisateurs](Documentation/App/soumisVote.png)
+
+### Gestion des participants
+
+![Gestion des participants](Documentation/App/participer.png)
 
 ### Gestion des lots
 
-![Gestion des lots](Documentation/App/gestionLots.png)
+![Gestion des lots](Documentation/App/lots.png)
 
 ### Gestion des composants des lots
 
-![Espace de votes dédié aux utilisateurs](Documentation/App/gestionComposantsLots.png)
+![Espace de votes dédié aux utilisateurs](Documentation/App/lotsComposant.png)
+
+### Gestion des organisateurs
+
+![Gestion des organisateurs](Documentation/App/organisateurs.png)
