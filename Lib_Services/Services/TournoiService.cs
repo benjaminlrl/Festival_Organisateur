@@ -205,52 +205,81 @@ namespace Lib_Services.Services
         {
             if (string.IsNullOrWhiteSpace(tournoi.Nom))
                 throw new TournoiException("Le nom est requis.",
-                    (int)TournoiException.TournoiErreur.NomRequis);
+                    (int)TournoiException.TournoiErreur.TournoiNomRequis);
+
             List<Tournoi> tournoiBdd = ObtenirAvecNom(tournoi.Nom);
 
             if (tournoiBdd.Count > 0 && 
                 (!estModification || tournoiBdd.Any(t => t.NumeroTournoi != tournoi.NumeroTournoi)))
                 throw new TournoiException("Un tournoi avec ce nom existe déjà.",
-                    (int)TournoiException.TournoiErreur.NomExiste);
+                    (int)TournoiException.TournoiErreur.TournoiNomExiste);
 
             if (tournoi.IdJeu <= 0)
                 throw new TournoiException("Un jeu est requis.",
-                    (int)TournoiException.TournoiErreur.JeuRequis);
+                    (int)TournoiException.TournoiErreur.TournoiJeuRequis);
 
             if (tournoi.IdEspace <= 0)
                 throw new TournoiException("Un espace est requis.",
-                    (int)TournoiException.TournoiErreur.EspaceRequis);
+                    (int)TournoiException.TournoiErreur.TournoiEspaceRequis);
 
             if (tournoi.NbParticipants <= 0)
                 throw new TournoiException("Le nombre de participants doit être supérieur à zéro.",
-                    (int)TournoiException.TournoiErreur.NbParticipantsInvalide);
+                    (int)TournoiException.TournoiErreur.TournoiNbParticipantsInvalide);
 
             if (tournoi.DureePrevue <= 0)
                 throw new TournoiException("La durée prévue doit être supérieure à zéro.",
-                    (int)TournoiException.TournoiErreur.HoraireInvalide);
+                    (int)TournoiException.TournoiErreur.TournoiHoraireInvalide);
 
             if (string.IsNullOrWhiteSpace(tournoi.Statut))
                 throw new TournoiException("Le tournoi doit avoir un statut défini.",
-                    (int)TournoiException.TournoiErreur.StatutRequis);
+                    (int)TournoiException.TournoiErreur.TournoiStatutRequis);
 
             if (Lister("").Any(t => t.NumeroTournoi != tournoi.NumeroTournoi
                                 && t.IdEspace == tournoi.IdEspace
                                 && ((t.Statut == "En cours" && tournoi.Statut == "En cours")
                                     || (tournoi.DateHeure >= t.DateHeure
                                         && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue)))))
-
                 throw new TournoiException("Un autre tournoi est déjà en cours à cette période.",
-                    (int)TournoiException.TournoiErreur.ConflitHoraire);
+                    (int)TournoiException.TournoiErreur.TournoiConflitHoraire);
 
             if (!ValiderHoraire(tournoi.DateHeure))
                 throw new TournoiException("Les horaires ne sont pas valides.\nSamedi : 10h - 20h\nDimanche : 10h - 18h",
-                    (int)TournoiException.TournoiErreur.HoraireInvalide);
+                    (int)TournoiException.TournoiErreur.TournoiHoraireInvalide);
+
+            if (tournoi.DateHeure < DateTime.Now && !estModification)
+                throw new TournoiException("La date et l'heure du tournoi doivent être dans le futur.",
+                    (int)TournoiException.TournoiErreur.TournoiAjoutHorairePassee);
 
             if (estModification)
             {
+                Tournoi? enBdd = Obtenir(tournoi.NumeroTournoi);
 
+                if(enBdd == null)
+                    throw new TournoiException("Tournoi inexistant en base de donnée.",
+                        (int)TournoiException.TournoiErreur.TournoiInexistantEnBaseDeDonnee);
+
+                if(enBdd.IdEspace == tournoi.IdEspace
+                    && enBdd.DateHeure == tournoi.DateHeure
+                    && enBdd.DureePrevue == tournoi.DureePrevue
+                    && enBdd.Statut == tournoi.Statut
+                    && enBdd.IdJeu == tournoi.IdJeu
+                    && enBdd.IdEspace == tournoi.IdEspace
+                    && enBdd.NbParticipants ==  tournoi.NbParticipants)
+                    throw new TournoiException("Aucune modification sur le tournoi détéctée",
+                        (int)TournoiException.TournoiErreur.TournoiAucuneModification);
+
+                
+                if(enBdd.IdJeu != tournoi.IdJeu)
+                    throw new TournoiException("Le jeu d'un tournoi ne peut pas être modifié.",
+                        (int)TournoiException.TournoiErreur.TournoiJeuModifier);
+
+                if(enBdd.Statut == "Terminé" && tournoi.Statut != "Terminé")
+                    throw new TournoiException("Le statut d'un tournoi terminé ne peut pas être modifié.",
+                        (int)TournoiException.TournoiErreur.TournoiStatutTermineModifier);
+
+                
             }
-           
+
         }
         #endregion
     }

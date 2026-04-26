@@ -547,7 +547,7 @@ namespace ApplicationUi
         /// </summary>
         private void AfficherBoutons()
         {
-            buttonAjouter.Enabled = _espaceSelectionnee == null;
+            buttonAjouter.Enabled = true;
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _espaceSelectionnee != null;

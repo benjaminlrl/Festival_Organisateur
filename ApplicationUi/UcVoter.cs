@@ -265,7 +265,7 @@ namespace ApplicationUi
         #endregion
         private void AfficherBoutons()
         {
-            buttonAjouter.Enabled = _soumisVoteSelectionne == null;
+            buttonAjouter.Enabled = true;
             buttonModifier.Enabled = _soumisVoteSelectionne != null;
             buttonSupprimer.Enabled = _soumisVoteSelectionne != null;
             buttonEffacer.Enabled = _soumisVoteSelectionne != null;

@@ -9,7 +9,7 @@ namespace Lib_Services.Exceptions
         public enum VoteErreur
         {
             UtilisateurInvalide = 1,
-            NbVotesMax = 2,
+            NbVotesMaxParJoueur = 5,
             DejaVote = 3
         }
 

@@ -8,7 +8,7 @@ namespace Lib_Services.Services
     {
         public static class Voter
         {
-            public const int NbMaxVotes = 15;
+            public const int NbMaxVotesParJoueur = 5;
         }
 
         public enum PEGI
