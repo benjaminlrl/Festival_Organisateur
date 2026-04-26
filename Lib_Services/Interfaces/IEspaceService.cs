@@ -69,10 +69,15 @@ namespace Lib_Services.Interfaces
 
         /// <summary>
         /// Met à jour un espace existant.
-        /// L'appel à <c>Update</c> marque toutes les propriétés comme modifiées.
+        /// 
+        /// Si le nom de l'espace est modifié et que <paramref name="modifPosteJeu"/> est à true,
+        /// les postes de jeu associés à cet espace seront également mis à jour pour refléter le nouveau nom de l'espace.
         /// </summary>
         /// <param name="espace">Instance modifiée de <see cref="Espace"/>.</param>
-        void Modifier(Espace espace);
+        /// <param name="modifPosteJeu">Indique si la modification concerne les postes de jeu associés à l'espace.</param>
+        /// <exception cref="EspaceException">Exception levée si la validation échoue ou si une erreur survient lors de la
+        /// modification des postes de jeu associés.</exception>
+        void Modifier(Espace espace, bool modifPosteJeu = false);
 
         /// <summary>
         /// Supprime un espace identifié par son identifiant s'il existe.
@@ -85,9 +90,10 @@ namespace Lib_Services.Interfaces
         /// Permet de vérifier les propriétés associés a un espace.
         /// </summary>
         /// <param name="espace">L'esapce à valider</param>
-        /// <param name="estModification"
+        /// <param name="estModification">Indique si la validation concerne une modification existante.</param>
+        /// <param name="modifPosteJeu">Indique si la validation concerne une modification des postes de jeu associés.</param>
         /// <returns>Liste de <see cref="string"/> correspondants aux erreurs, ou vide</returns>
-        void ValiderEspace(Espace espace, bool estModification = false);
+        void ValiderEspace(Espace espace, bool estModification = false, bool modifPosteJeu = false);
         #endregion
         #region Statistiques
 

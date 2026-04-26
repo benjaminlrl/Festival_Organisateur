@@ -16,7 +16,7 @@ namespace Lib_Services.Services
     public class EspaceService : IEspaceService
     {
         private readonly ApplicationDbContext _context;
-       
+        private IPosteJeuService? _posteJeuService;
         /// <summary>
         /// Initialise une nouvelle instance de <see cref="EspaceService"/>.
         /// </summary>
@@ -24,6 +24,7 @@ namespace Lib_Services.Services
         public EspaceService(ApplicationDbContext context)
         {
             _context = context;
+            _posteJeuService = null;
         }
         #region Lecture
         /// <summary>
@@ -146,11 +147,32 @@ namespace Lib_Services.Services
         /// L'appel à <c>Update</c> marque toutes les propriétés comme modifiées.
         /// </summary>
         /// <param name="espace">Instance modifiée de <see cref="Espace"/>.</param>
-        public void Modifier(Espace espace)
+        /// <param name="modifPosteJeu">Indique si la modification concerne les postes de jeu associés à l'espace.</param>
+        /// <exception cref="EspaceException">Exception levée si la validation échoue ou si une erreur survient lors de la
+        /// modification des postes de jeu associés.</exception>
+        public void Modifier(Espace espace, bool modifPosteJeu = false)
         {
-            ValiderEspace(espace, true);    
+            _posteJeuService ??= new PosteJeuService(_context);
+
+            ValiderEspace(espace, true, modifPosteJeu);
             _context.Espaces.Update(espace);
             _context.SaveChanges();
+
+            if (modifPosteJeu)
+            {
+                List<PosteJeu> postesJeuAssocies = _posteJeuService.ListerPostesJeuDunEspace(espace);
+                try
+                {
+                    _posteJeuService.FormatRefPosteJeuEspaceNouvNom(postesJeuAssocies, espace.Nom);
+                    _context.SaveChanges();
+                }
+                catch (PosteJeuException ex)
+                {                    
+                    throw new EspaceException("Erreur lors de la modification des postes de jeu associés à l'espace : \n" 
+                        + ex.Message,
+                        (int)EspaceException.EspaceErreur.ModificationPosteJeuEspaceNom);
+                }
+            }
         }
 
         /// <summary>
@@ -202,8 +224,9 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="espace">Instance de <see cref="Espace"/> à valider.</param>
         /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <param name="modifPosteJeu">Indique si la validation concerne une modification des postes de jeu associés.</param>
         /// <exception cref="EspaceException">Exception levée si une validation échoue.</exception>
-        public void ValiderEspace(Espace espace, bool estModification = false)
+        public void ValiderEspace(Espace espace, bool estModification = false, bool modifPosteJeu = false)
         {
             if (string.IsNullOrWhiteSpace(espace.Nom))
                 throw new EspaceException("Le nom est requis.",
@@ -216,7 +239,9 @@ namespace Lib_Services.Services
                 throw new EspaceException("Le nom est déjà attribué à un autre espace.",
                     (int)EspaceException.EspaceErreur.NomExiste);
 
-            if (espaceNomLet != null && espaceNomLet.IdEspace != espace.IdEspace 
+            // Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.
+            if (espaceNomLet != null
+                && espaceNomLet.IdEspace != espace.IdEspace 
                 && espaceNomLet.Nom.Substring(0,3) == espace.Nom.Substring(0, 3))
                 throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
                     "Un autre espace a déjà ces trois lettre.",
@@ -261,10 +286,12 @@ namespace Lib_Services.Services
                     throw new EspaceException("Aucune modification détectée.",
                         (int)EspaceException.EspaceErreur.ModificationEspaceAucune);
 
-                if(espace.Nom != enBdd.Nom)
-                {
-                    
-                }
+                // Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.
+                if (enBdd.Nom != espace.Nom
+                    && !modifPosteJeu)
+                    throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
+                        "Les postes de jeux ne correspondront pas à l'espace",
+                        (int)EspaceException.EspaceErreur.ModificationNomExistePostesJeu);
             }
         }
         #endregion

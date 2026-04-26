@@ -15,6 +15,8 @@
         ModificationEspaceId = 9,
         ModificationEspaceAucune = 10,
         NomExistePostesJeu = 11,
+        ModificationNomExistePostesJeu = 13,
+        ModificationPosteJeuEspaceNom = 12,
     }
 
     public EspaceException(string message, int codeErreur) : base(message)

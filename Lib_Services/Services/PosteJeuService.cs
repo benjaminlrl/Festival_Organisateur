@@ -120,12 +120,17 @@ namespace Lib_Services.Services
             return _context.PostesJeu.AsNoTracking().FirstOrDefault(p => p.NumeroPoste.Equals(idPosteJeu));
         }
 
-        public List<PosteJeu> ObtenirPostesJeuDunEspace(int idEspace)
+        /// <summary>
+        /// permet de récupérer les postes de jeu associés à un espace donné,
+        /// </summary>
+        /// <param name="espace">L'espace dont on souhaite récupérer les postes de jeu</param>
+        /// <returns>Liste des postes de jeu associés à l'espace</returns>
+        public List<PosteJeu> ListerPostesJeuDunEspace(Espace espace)
         {
             return _context.PostesJeu
                 .Include(p => p.Espace)
                 .Include(p => p.Plateforme)
-                .Where(p => p.IdEspace == idEspace)
+                .Where(p => p.IdEspace == espace.IdEspace)
                 .ToList();
         }
         
@@ -338,7 +343,14 @@ namespace Lib_Services.Services
         #endregion
 
         #region Méthodes
-
+        /// <summary>
+        /// Dans le cas ou le nom d'un espace est modifié, 
+        /// cette méthode permet de mettre à jour 
+        /// la référence de tous les postes de jeu associés à cet espace
+        /// </summary>
+        /// <param name="postesJeu"></param>
+        /// <param name="nouveauNomEspace"></param>
+        /// <exception cref="Exception"></exception>
         public void FormatRefPosteJeuEspaceNouvNom(List<PosteJeu> postesJeu, string nouveauNomEspace)
         {
             Espace? nouvEspace = _serviceEspace.ObtenirParNom(nouveauNomEspace);
@@ -352,6 +364,7 @@ namespace Lib_Services.Services
                 int numeroPoste = int.Parse(posteJeu.Reference.Substring(posteJeu.Reference.Length - 3, 3));
 
                 posteJeu.SetReference(nouvEspace, numeroPoste);
+                Modifier(posteJeu);
             }
         }
 

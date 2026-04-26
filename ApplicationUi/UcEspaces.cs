@@ -2,6 +2,7 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Lib_Services.Exceptions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
+        private readonly IPosteJeuService _servicePosteJeu;
         private readonly Organisateur _organisateurConnecte;
         private Espace? _espaceSelectionnee;
         private Tournoi? _tournoiSelectionne;
@@ -36,10 +38,11 @@ namespace ApplicationUi
         public UcEspaces(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            var context = new ApplicationDbContext();
-            _serviceOrganisateur = new OrganisateurService(context);
-            _serviceEspace = new EspaceService(context);
-            _serviceTournoi = new TournoiService(context);
+            var _context = new ApplicationDbContext();
+            _serviceOrganisateur = new OrganisateurService(_context);
+            _serviceEspace = new EspaceService(_context);
+            _serviceTournoi = new TournoiService(_context);
+            _servicePosteJeu = new PosteJeuService(_context);
 
             _organisateurConnecte = unOrganisateurConnecte;
             _espaceSelectionnee = null;
@@ -292,8 +295,45 @@ namespace ApplicationUi
             }
             catch (EspaceException ex)
             {
-                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                if (ex.CodeErreur == (int)EspaceException.EspaceErreur.ModificationNomExistePostesJeu)
+                {
+                    if (MessageBox.Show("Voulez vous renommer l'espace et reformatter le nom des postes de jeu associés ?",
+                        "Modification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            _serviceEspace.Modifier(_espaceSelectionnee, true);
+                            MessageBox.Show("L'espace et ses postes de jeu ont bien été modifiés.", "Modification",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Raz_Zones();
+                        }
+                        catch (EspaceException ex2)
+                        {
+                            Log.Error(ex2, "Une erreur technique est survenue lors de la modification de l'espace.");
+                            MessageBox.Show("Erreur technique, réessayez plus tard.");
+                        }
+                        catch (PosteJeuException ex2)
+                        {
+                            Log.Error(ex2, "Une erreur technique est survenue lors de la modification des postes de jeu pour le reformatage des references.");
+                            MessageBox.Show("Erreur technique, réessayez plus tard.");
+                        }
+                        catch (DbException ex2)
+                        {
+                            Log.Error(ex2, "Une erreur technique est survenue lors de la modification des postes de jeu pour le reformatage des references.");
+                            MessageBox.Show("Erreur technique, réessayez plus tard.");
+                        }
+                        catch (Exception ex2)
+                        {
+                            Log.Error(ex2, "Une erreur inattendue est survenue lors de la modification des postes de jeu pour le reformatage des references.");
+                            MessageBox.Show("Une erreur inattendue est survenue.");
+                        }
+                    }
+                }
+                else 
+                {
+                    Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                    MessageBox.Show(ex.Message);
+                }
             }
             catch (DbException ex)
             {
