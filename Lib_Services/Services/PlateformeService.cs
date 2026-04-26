@@ -27,27 +27,6 @@ namespace Lib_Services.Services
         }
         #region Lecture
         /// <summary>
-        /// Retourne toutes les plateformes présentes dans la base de données.
-        /// Si un filtre est fourni, retourne uniquement 
-        /// les plateformes dont le libellé correspond au filtre.
-        /// </summary>
-        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
-        /// <returns>Liste de <see cref="Plateforme"/>.</returns>
-        public List<Plateforme> Lister(string filtre = "")
-        {
-            // Utilise le DbSet Plateformes pour matérialiser la collection en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Plateformes
-                     .Include(e => e.PostesJeu)
-                     .ToList();
-            return
-                _context.Plateformes
-                .Include(e => e.PostesJeu)
-                .Where(p => p.Libelle.Contains(filtre))
-                .ToList();
-        }
-
-        /// <summary>
         ///  Retourne la liste complète des jeux présents en base, 
         ///  avec possibilité de filtrer
         ///  

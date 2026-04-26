@@ -3,7 +3,6 @@ using Lib_Metier.Data.Configurations;
 using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using static Lib_Entities.Entities.Jeu;
 
 namespace Lib_Services.Services
 {

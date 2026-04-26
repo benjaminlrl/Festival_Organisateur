@@ -21,9 +21,6 @@ namespace Lib_Services.Exceptions
             TournoiJeuModifier = 12,
             TournoiStatutTermineModifier = 13,
             TournoiAjoutHorairePassee = 14,
-
-
-
         }
 
         public TournoiException(string message, int codeErreur) : base(message)
