@@ -76,6 +76,7 @@ namespace Lib_Services.Services
             return _context.Jeux.Find(idJeu);
         }
         #endregion
+
         #region CUD
         /// <summary>
         /// Crée un nouveau jeu et persiste la modification.
@@ -120,6 +121,7 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Valide les propriétés d'une instance de <see cref="Jeu"/> avant sa création ou sa modification.

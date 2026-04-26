@@ -69,6 +69,7 @@ namespace Lib_Services.Services
                            .FirstOrDefault(o => o.Login == login);
         }
         #endregion
+
         #region CUD
 
         /// <summary>
@@ -112,6 +113,7 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+
         #region Validations
         /// <summary>
         /// Vérifie si les informations d'identification fournies correspondent à un organisateur existant.
