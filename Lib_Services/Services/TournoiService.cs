@@ -268,6 +268,7 @@ namespace Lib_Services.Services
                                 && ((t.Statut == "En cours" && tournoi.Statut == "En cours")
                                     || (tournoi.DateHeure >= t.DateHeure
                                         && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue)))))
+
                 throw new TournoiException("Un autre tournoi est déjà en cours à cette période.",
                     (int)TournoiException.TournoiErreur.TournoiConflitHoraire);
 
