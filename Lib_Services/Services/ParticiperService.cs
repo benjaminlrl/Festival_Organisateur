@@ -65,6 +65,20 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
+        /// Permet d'obtenir la liste des id des participants inscrits à au moins un tournoi.
+        /// </summary>
+        /// <returns>Liste des identifiants des participants.</returns>
+        public List<object> ListerIdsParticipants()
+        {
+            return _context.Participer
+                .Select(p => new {
+                    IdUser = p.IdUser,
+                })
+                .Distinct()
+                .ToList<object>();
+        }
+
+        /// <summary>
         /// Récupère un Participant par son id et son numéro de tournoi.
         /// </summary>
         /// <param name="Login">Login de l'Participer cherché.</param>
@@ -73,6 +87,7 @@ namespace Lib_Services.Services
         {
             return _context.Participer
                            .Include(p => p.Tournoi)
+                           .AsNoTracking()
                            .FirstOrDefault(p => p.IdUser == idUser && p.NumeroTournoi == numeroTournoi);
         }
 
@@ -98,7 +113,7 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance modifiée de <see cref="Participer"/>.</param>
         public void Modifier(Participer participer)
         {
-            ValiderParticipation(participer, false);
+            ValiderParticipation(participer, true);
             _context.Participer.Update(participer);
             _context.SaveChanges();
         }
@@ -169,18 +184,44 @@ namespace Lib_Services.Services
         /// <exception cref="ParticiperException">Exception levée en cas de validation échouée.</exception>
         public void ValiderParticipation(Participer participer, bool estModification = false)
         {
-            if (Obtenir(participer.IdUser, participer.NumeroTournoi) != null && !estModification)
-                throw new ParticiperException("L'utilisateur participe déjà à ce tournoi.",
-                    (int)ParticiperException.ParticiperErreur.DejaParticipant);
+            // 1. Existence du tournoi en premier car les checks suivants en dépendent
+            Tournoi? tournoiInscrit = _serviceTournoi.Obtenir(participer.NumeroTournoi)
+                ?? throw new ParticiperException("Le tournoi associé à la participation doit exister.",
+                    (int)ParticiperException.ParticiperErreur.TournoiInexistant);
 
-            if (participer.ScoreFinal < 0)
-                throw new ParticiperException("Le score final ne peut pas être négatif.",
-                    (int)ParticiperException.ParticiperErreur.ScoreNegatif);
+            // 2. Checks création
+            if (!estModification)
+            {
+                if (Obtenir(participer.IdUser, participer.NumeroTournoi) != null)
+                    throw new ParticiperException("L'utilisateur participe déjà à ce tournoi.",
+                        (int)ParticiperException.ParticiperErreur.DejaParticipant);
 
-            if (participer.Rang < 0)
-                throw new ParticiperException("Le rang ne peut pas être inférieur à 0.",
-                    (int)ParticiperException.ParticiperErreur.RangNegatif);
+                if (tournoiInscrit.Statut == "Terminé")
+                    throw new ParticiperException("Le tournoi est terminé, il n'est plus possible de s'y inscrire.",
+                        (int)ParticiperException.ParticiperErreur.TournoiTermine);
 
+                if (tournoiInscrit.Statut == "En cours")
+                    throw new ParticiperException("Le tournoi est en cours, il n'est plus possible de s'y inscrire.",
+                        (int)ParticiperException.ParticiperErreur.TournoiEnCours);
+
+                if (ObtenirNombreParticipantsParTournoi(participer.NumeroTournoi) >= tournoiInscrit.NbParticipants)
+                    throw new ParticiperException("Le nombre de participants a atteint la limite du tournoi.",
+                        (int)ParticiperException.ParticiperErreur.TournoiComplet);
+
+                if (participer.Rang != 0)
+                    throw new ParticiperException("Le rang doit être 0 par défaut à l'inscription.",
+                        (int)ParticiperException.ParticiperErreur.RangInvalide);
+
+                if (participer.ScoreFinal != 0)
+                    throw new ParticiperException("Le score final doit être 0 par défaut à l'inscription.",
+                        (int)ParticiperException.ParticiperErreur.ScoreNegatif);
+
+                if (participer.LotRemis == true)
+                    throw new ParticiperException("Le lot ne peut pas être remis à l'inscription.",
+                        (int)ParticiperException.ParticiperErreur.LotRemisParDefaut);
+            }
+
+            // 3. Checks communs création et modification
             if (participer.Evaluation < 0 || participer.Evaluation > 10)
                 throw new ParticiperException("L'évaluation doit être comprise entre 0 et 10.",
                     (int)ParticiperException.ParticiperErreur.EvaluationInvalide);
@@ -189,23 +230,54 @@ namespace Lib_Services.Services
                 throw new ParticiperException("Le commentaire ne peut pas dépasser 500 caractères.",
                     (int)ParticiperException.ParticiperErreur.CommentaireTropLong);
 
-            Tournoi? tournoi = _serviceTournoi.Obtenir(participer.NumeroTournoi);
+            // 4. Checks modification
+            if (estModification)
+            {
+                Participer? enBdd = Obtenir(participer.IdUser, participer.NumeroTournoi)
+                    ?? throw new ParticiperException("La participation à modifier n'existe pas.",
+                        (int)ParticiperException.ParticiperErreur.TournoiInexistant);
 
-            if (tournoi == null)
-                throw new ParticiperException("Le tournoi associé à la participation doit exister.",
-                    (int)ParticiperException.ParticiperErreur.TournoiInexistant);
+                if (enBdd.IdUser != participer.IdUser)
+                    throw new ParticiperException("L'id de l'utilisateur ne peut pas être modifié.",
+                        (int)ParticiperException.ParticiperErreur.ModificationUtilisateur);
 
-            if (ObtenirNombreParticipantsParTournoi(participer.NumeroTournoi) >= tournoi.NbParticipants)
-                throw new ParticiperException("Le nombre de participants a atteint la limite du tournoi.",
-                    (int)ParticiperException.ParticiperErreur.TournoiComplet);
+                if (enBdd.DateHeureInscription != participer.DateHeureInscription)
+                    throw new ParticiperException("La date et l'heure d'inscription ne peuvent pas être modifiées.",
+                        (int)ParticiperException.ParticiperErreur.ModificationDateInscription);
 
-            if (tournoi.Statut == "Terminé")
-                throw new ParticiperException("Le tournoi est terminé, il n'est plus possible de s'y inscrire.",
-                    (int)ParticiperException.ParticiperErreur.TournoiTermine);
+                if (participer.Rang < 0)
+                    throw new ParticiperException("Le rang ne peut pas être inférieur à 0.",
+                        (int)ParticiperException.ParticiperErreur.RangNegatif);
 
-            if (tournoi.Statut == "En cours")
-                throw new ParticiperException("Le tournoi est en cours, il n'est plus possible de s'y inscrire.",
-                    (int)ParticiperException.ParticiperErreur.TournoiEnCours);
+                if (participer.Rang > tournoiInscrit.NbParticipants)
+                    throw new ParticiperException("Le rang ne peut pas dépasser le nombre de participants.",
+                        (int)ParticiperException.ParticiperErreur.RangInvalide);
+
+                if (participer.Rang > 0 && tournoiInscrit.Statut != "Terminé")
+                    throw new ParticiperException("Vous ne pouvez pas définir un rang tant que le tournoi n'est pas terminé.",
+                        (int)ParticiperException.ParticiperErreur.RangInvalideTournoiNonTermine);
+
+                if (participer.ScoreFinal < 0)
+                    throw new ParticiperException("Le score final ne peut pas être négatif.",
+                        (int)ParticiperException.ParticiperErreur.ScoreNegatif);
+
+                if (participer.ScoreFinal != 0 && tournoiInscrit.Statut != "Terminé")
+                    throw new ParticiperException("Vous ne pouvez pas définir un score final tant que le tournoi n'est pas terminé.",
+                        (int)ParticiperException.ParticiperErreur.ScoreFinal);
+
+                if (participer.LotRemis == true && tournoiInscrit.Statut != "Terminé")
+                    throw new ParticiperException("Vous ne pouvez pas remettre un lot tant que le tournoi n'est pas terminé.",
+                        (int)ParticiperException.ParticiperErreur.LotRemisParDefaut);
+
+                if (enBdd.NumeroTournoi == participer.NumeroTournoi
+                    && enBdd.Rang == participer.Rang
+                    && enBdd.Evaluation == participer.Evaluation
+                    && enBdd.ScoreFinal == participer.ScoreFinal
+                    && enBdd.LotRemis == participer.LotRemis
+                    && enBdd.Commentaire == participer.Commentaire)
+                    throw new ParticiperException("Aucune modification détectée.",
+                        (int)ParticiperException.ParticiperErreur.AucuneModification);
+            }
         }
         #endregion
     }

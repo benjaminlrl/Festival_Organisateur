@@ -247,12 +247,6 @@ namespace Lib_Services.Services
                 throw new SoumisVoteException("Une autre SoumisVote existe déjà.",
                     (int)SoumisVoteException.SoumisVoteErreur.DoublonSoumisVote);
 
-            SoumisVote? enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
-            if (enBdd != null && enBdd.DateDebutVote == soumisVote.DateDebutVote
-                && enBdd.DateFinVote == soumisVote.DateFinVote)
-                throw new SoumisVoteException("Aucune modification détectée.",
-                    (int)SoumisVoteException.SoumisVoteErreur.AucuneModification);
-
             if (soumisVote.DateDebutVote >= soumisVote.DateFinVote)
                 throw new SoumisVoteException("La date de début doit être antérieure à la date de fin.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin);
@@ -264,6 +258,15 @@ namespace Lib_Services.Services
             if (soumisVote.DateFinVote < DateTime.Now)
                 throw new SoumisVoteException("La date de fin doit être dans le futur.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateFinDansLePasse);
+
+            if (estModification)
+            {
+                SoumisVote? enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
+                if (enBdd != null && enBdd.DateDebutVote == soumisVote.DateDebutVote
+                    && enBdd.DateFinVote == soumisVote.DateFinVote)
+                    throw new SoumisVoteException("Aucune modification détectée.",
+                        (int)SoumisVoteException.SoumisVoteErreur.AucuneModification);
+            }
         }
         #endregion
     }

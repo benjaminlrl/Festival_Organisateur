@@ -130,6 +130,7 @@ namespace Lib_Services.Services
             // Utilisation de FirstOrDefault avec Include pour obtenir l'entité complète.
             return _context.Tournois
                            .Include(t => t.Espace)
+                           .AsNoTracking()
                            .FirstOrDefault(t => t.NumeroTournoi == numeroTournoi);
         }
         #endregion  
@@ -223,6 +224,10 @@ namespace Lib_Services.Services
                 throw new TournoiException("Le nombre de participants doit être supérieur à zéro.",
                     (int)TournoiException.TournoiErreur.NbParticipantsInvalide);
 
+            if (tournoi.DureePrevue <= 0)
+                throw new TournoiException("La durée prévue doit être supérieure à zéro.",
+                    (int)TournoiException.TournoiErreur.HoraireInvalide);
+
             if (string.IsNullOrWhiteSpace(tournoi.Statut))
                 throw new TournoiException("Le tournoi doit avoir un statut défini.",
                     (int)TournoiException.TournoiErreur.StatutRequis);
@@ -238,6 +243,12 @@ namespace Lib_Services.Services
             if (!ValiderHoraire(tournoi.DateHeure))
                 throw new TournoiException("Les horaires ne sont pas valides.\nSamedi : 10h - 20h\nDimanche : 10h - 18h",
                     (int)TournoiException.TournoiErreur.HoraireInvalide);
+
+            if (estModification)
+            {
+
+            }
+           
         }
         #endregion
     }

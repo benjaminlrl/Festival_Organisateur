@@ -10,6 +10,20 @@ namespace Lib_Metier.Data.Configurations
     /// </summary>
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options) { }
+
+        // Constructeur sans paramètre pour l'app normale
+        public ApplicationDbContext() { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            // configure SQLite uniquement si aucune option n'est déjà injectée
+            // évite d'écraser la BDD en mémoire lors des tests
+            if (!options.IsConfigured)
+                options.UseSqlite("Data Source=gestionTournois.db");
+        }
+
         /// <summary>
         /// Ensemble des organisateurs (table `Organisateur`).
         /// Utilise `Set<T>()` pour rester compatible avec le pattern DbContext minimal.
@@ -70,17 +84,6 @@ namespace Lib_Metier.Data.Configurations
         /// Ensemble des Participants (table `Participer`).
         /// </summary>
         public DbSet<Participer> Participer => Set<Participer>();
-
-
-        /// <summary>
-        /// Configure la source de données : ici une base SQLite locale : `gestionTournois.db`
-        /// </summary>
-        /// <param name="options">Builder des options de DbContext.</param>
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            // Configuration par défaut utilisée en l'absence d'injection.
-            options.UseSqlite("Data Source=gestionTournois.db");
-        }
 
         /// <summary>
         /// Applique les configurations EF Core définies dans l'assembly.

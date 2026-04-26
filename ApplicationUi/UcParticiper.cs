@@ -40,6 +40,8 @@ namespace ApplicationUi
             _participerSelectionne = null;
             lotRemisSelectionne = false;
 
+            dateTimePickerDateHeureInscription.Enabled = false;
+
             filtre = "";
             ordreChamp = "DESC";
             buttonEffacer.Text = " 🧽  Effacer";
@@ -104,7 +106,7 @@ namespace ApplicationUi
         private void ChargerUtilisateurs()
         {
             comboBoxUtilisateur.DataSource = null;
-            comboBoxUtilisateur.DataSource = _serviceParticiper.Lister(""); // TODO: remplacer par un service utilisateur lorsque les utilisateurs seront intégrés
+            comboBoxUtilisateur.DataSource = _serviceParticiper.ListerIdsParticipants(); // TODO: remplacer par un service utilisateur lorsque les utilisateurs seront intégrés
             // charge les participations dans le comboBox et affiche l'id tout en conservant l'id en valeur
             comboBoxUtilisateur.DisplayMember = "IdUser";
             comboBoxUtilisateur.ValueMember = "IdUser";
@@ -158,11 +160,9 @@ namespace ApplicationUi
                 ScoreFinal = (int)numericUpDownScoreFinal.Value,
                 Commentaire = textBoxCommentaire.Text,
                 Evaluation = trackBarEvaluation.Value,
-                DateHeureInscription = dateTimePickerDateHeureInscription.Value,
+                DateHeureInscription = DateTime.Now,
                 IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
                 NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi,
-                // TODO: voir conflit lucien
-                //NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi,
                 LotRemis = lotRemisSelectionne
             };
 
@@ -201,7 +201,6 @@ namespace ApplicationUi
             _participerSelectionne.ScoreFinal = (int)numericUpDownScoreFinal.Value;
             _participerSelectionne.Commentaire = textBoxCommentaire.Text;
             _participerSelectionne.Evaluation = trackBarEvaluation.Value;
-            _participerSelectionne.DateHeureInscription = dateTimePickerDateHeureInscription.Value;
             _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
             _participerSelectionne.NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi;
             // TODO: voir conflit lucien
@@ -372,6 +371,7 @@ namespace ApplicationUi
                 return;
             }
 
+            numericUpDownRang.Maximum = _participerSelectionne.Tournoi.NbParticipants;
             numericUpDownRang.Value = _participerSelectionne.Rang;
             numericUpDownScoreFinal.Value = _participerSelectionne.ScoreFinal ?? numericUpDownScoreFinal.Minimum;
             textBoxCommentaire.Text = _participerSelectionne.Commentaire;

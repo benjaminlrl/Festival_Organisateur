@@ -212,6 +212,11 @@ namespace Lib_Services.Services
                 throw new PosteJeuException("La plateforme associée est obligatoire.",
                     (int)PosteJeuException.PosteJeuErreur.PlateformeRequise);
 
+            if (ReferenceExiste(posteJeu.Reference) != null
+            && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
+                throw new PosteJeuException("Un poste de jeu avec cette référence existe déjà.",
+                    (int)PosteJeuException.PosteJeuErreur.ReferenceExistante);
+
             if (estModification)
             {
                 PosteJeu? enBdd = Obtenir(posteJeu.NumeroPoste);
@@ -223,11 +228,6 @@ namespace Lib_Services.Services
                     && posteJeu.Reference == enBdd.Reference)
                     throw new PosteJeuException("Aucune modification détectée pour ce poste de jeu.",
                         (int)PosteJeuException.PosteJeuErreur.AucuneModification);
-
-                if(ReferenceExiste(posteJeu.Reference) != null
-                && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
-                throw new PosteJeuException("Un poste de jeu avec cette référence existe déjà.",
-                    (int)PosteJeuException.PosteJeuErreur.ReferenceExistante);
 
                 if (enBdd != null && posteJeu.IdEspace != enBdd.IdEspace)
                     throw new PosteJeuException("Un poste de jeu ne peut pas avoir un espace différent.",
