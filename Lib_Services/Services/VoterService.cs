@@ -21,7 +21,7 @@ namespace Lib_Services.Services
         public VoterService(ApplicationDbContext context)
         {
             _context = context;
-            nbVotesMax = ConstanteService.Voter.NbMaxVotesParJoueur;
+            nbVotesMax = ConstanteService.Voter.NB_MAX_VOTES_PAR_JOUEUR;
         }
 
         /// <summary>
