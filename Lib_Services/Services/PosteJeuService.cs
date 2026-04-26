@@ -119,6 +119,15 @@ namespace Lib_Services.Services
             // permet de vérifier la valeur actuelle en base sans risque de conflits avec des entités déjà suivies.
             return _context.PostesJeu.AsNoTracking().FirstOrDefault(p => p.NumeroPoste.Equals(idPosteJeu));
         }
+
+        public List<PosteJeu> ObtenirPostesJeuDunEspace(int idEspace)
+        {
+            return _context.PostesJeu
+                .Include(p => p.Espace)
+                .Include(p => p.Plateforme)
+                .Where(p => p.IdEspace == idEspace)
+                .ToList();
+        }
         
         /// <summary>
         /// Récupère un poste de jeu par sa référence.
@@ -131,6 +140,7 @@ namespace Lib_Services.Services
             return _context.PostesJeu.FirstOrDefault(p => p.Reference == reference);
         }
         #endregion
+
         #region CUD
         /// <summary>
         /// Ajoute un nouveau poste de jeu .
@@ -190,6 +200,7 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+
         #region Validations
 
         /// <summary>
@@ -216,25 +227,34 @@ namespace Lib_Services.Services
             && ReferenceExiste(posteJeu.Reference)?.NumeroPoste != posteJeu.NumeroPoste)
                 throw new PosteJeuException("Un poste de jeu avec cette référence existe déjà.",
                     (int)PosteJeuException.PosteJeuErreur.ReferenceExistante);
-
+            
+            // Modifications
             if (estModification)
             {
                 PosteJeu? enBdd = Obtenir(posteJeu.NumeroPoste);
+                if(enBdd == null)
+                    throw new PosteJeuException("Le poste de jeu à modifier n'existe pas en base.",
+                        (int)PosteJeuException.PosteJeuErreur.ModificationPosteInexistante);
 
-                if (enBdd != null
-                    && posteJeu.IdEspace == enBdd.IdEspace
+                if (posteJeu.IdEspace == enBdd.IdEspace
                     && posteJeu.IdPlateforme == enBdd.IdPlateforme
                     && posteJeu.Fonctionnel == enBdd.Fonctionnel
                     && posteJeu.Reference == enBdd.Reference)
                     throw new PosteJeuException("Aucune modification détectée pour ce poste de jeu.",
                         (int)PosteJeuException.PosteJeuErreur.AucuneModification);
 
-                if (enBdd != null && posteJeu.IdEspace != enBdd.IdEspace)
+                if (posteJeu.IdEspace != enBdd.IdEspace)
                     throw new PosteJeuException("Un poste de jeu ne peut pas avoir un espace différent.",
-                    (int)PosteJeuException.PosteJeuErreur.EspaceDifferent);
+                    (int)PosteJeuException.PosteJeuErreur.ModificationPosteEspaceDifferent);
+
+                if (posteJeu.IdPlateforme != enBdd.IdPlateforme)
+                    throw new PosteJeuException("Un poste de jeu ne peut pas avoir une plateforme différent.",
+                    (int)PosteJeuException.PosteJeuErreur.ModificationPostePlateformeDifferente);
+
             }
         }
         #endregion
+
         #region Statistiques
 
         /// <summary>
@@ -317,6 +337,25 @@ namespace Lib_Services.Services
         }
         #endregion
 
+        #region Méthodes
+
+        public void FormatRefPosteJeuEspaceNouvNom(List<PosteJeu> postesJeu, string nouveauNomEspace)
+        {
+            Espace? nouvEspace = _serviceEspace.ObtenirParNom(nouveauNomEspace);
+
+            if (nouvEspace == null)
+                throw new Exception("Espace inconnu");
+
+            foreach (PosteJeu posteJeu in postesJeu)
+            {
+                // Récupère le numéro de poste à partir de la référence actuelle du poste de jeu
+                int numeroPoste = int.Parse(posteJeu.Reference.Substring(posteJeu.Reference.Length - 3, 3));
+
+                posteJeu.SetReference(nouvEspace, numeroPoste);
+            }
+        }
+
+        #endregion
     }
 
 }

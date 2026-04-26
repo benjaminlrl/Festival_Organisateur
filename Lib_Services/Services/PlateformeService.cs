@@ -163,7 +163,10 @@ namespace Lib_Services.Services
 
             Plateforme? enBddLibelle = ObtenirParLibelle(plateforme.Libelle);
 
-            if (!estModification && enBddLibelle != null && enBddLibelle.Libelle == plateforme.Libelle)
+            // si une plateforme avec le même libellé existe déjà
+            if (enBddLibelle != null 
+                && enBddLibelle.Libelle == plateforme.Libelle
+                && enBddLibelle.IdPlateforme != plateforme.IdPlateforme)
                 throw new PlateformeException("Une autre plateforme avec ce libellé existe déjà.",
                     (int)PlateformeException.PlateformeErreur.LibelleExistant);
 

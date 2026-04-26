@@ -184,6 +184,7 @@ namespace ApplicationUi
             dataGridTournois.Columns["Statut"].Visible = false;
             dataGridTournois.Columns["DureePrevue"].Visible = false;
             dataGridTournois.Columns["Lot"].Visible = false;
+            dataGridTournois.Columns["Inscriptions"].Visible = false;
 
             dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -397,8 +398,9 @@ namespace ApplicationUi
 
             comboBoxPlateforme.SelectedItem = _posteJeuSelectionne != null;
             comboBoxEspace.SelectedItem = _posteJeuSelectionne != null;
-            radioButtonFonctionnelTrue.Checked = _posteJeuSelectionne != null;
-            radioButtonFonctionnelFalse.Checked = _posteJeuSelectionne != null;
+
+            radioButtonFonctionnelTrue.Checked = false;
+            radioButtonFonctionnelFalse.Checked = false;
 
             _posteJeuSelectionne = null;
 
@@ -406,6 +408,7 @@ namespace ApplicationUi
             dataGridTournois.Visible = _posteJeuSelectionne != null;
 
             comboBoxEspace.Enabled = _posteJeuSelectionne != null;
+            comboBoxPlateforme.Enabled = _posteJeuSelectionne != null;
 
             filtre = "";
 
@@ -508,6 +511,8 @@ namespace ApplicationUi
 
             buttonAjouter.Enabled = _posteJeuSelectionne == null;
             comboBoxEspace.Enabled = _posteJeuSelectionne == null;
+            comboBoxPlateforme.Enabled = _posteJeuSelectionne == null;
+
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _posteJeuSelectionne != null;

@@ -51,6 +51,13 @@ namespace Lib_Services.Interfaces
         /// <param name="idEspace">Identifiant de l'espace cherché.</param>
         /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
         Espace? Obtenir(int idEspace);
+
+        /// <summary>
+        /// Récupère un espace par son nom.
+        /// </summary>
+        /// <param name="nomEspace">Nom de l'espace cherché.</param>
+        /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
+        Espace? ObtenirParNom(string nomEspace);
         #endregion
         #region CUD
         /// <summary>

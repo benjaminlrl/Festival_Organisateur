@@ -46,6 +46,10 @@ namespace Lib_Metier.Data.Configurations
                         v => v ? "O" : "N",    // CLR -> DB
                         v => v == "O"          // DB  -> CLR
                     );
+
+            builder.HasOne(p => p.Tournoi)
+               .WithMany(t => t.Inscriptions)
+               .HasForeignKey(p => p.NumeroTournoi);
         }
     }
 }

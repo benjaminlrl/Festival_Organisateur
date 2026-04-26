@@ -11,6 +11,10 @@
         CapaciteNegative = 5,
         CapaciteTropGrande = 6,
         NomExiste = 7,
+        ModificationEspaceInexistant = 8,
+        ModificationEspaceId = 9,
+        ModificationEspaceAucune = 10,
+        NomExistePostesJeu = 11,
     }
 
     public EspaceException(string message, int codeErreur) : base(message)

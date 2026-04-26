@@ -113,12 +113,18 @@ namespace Lib_Services.Services
         public Espace? Obtenir(int idEspace)
         {
             // Find utilise le cache du contexte s'il existe, sinon interroge la base.
-            return _context.Espaces.Find(idEspace);
+            return _context.Espaces.AsNoTracking().FirstOrDefault(e => e.IdEspace == idEspace);
         }
 
-        public List<Espace> ObtenirParNom(string nom)
+        public Espace? ObtenirParNom(string nom)
         {
-            return _context.Espaces.Where(e => e.Nom.Equals(nom)).ToList();
+            return _context.Espaces.AsNoTracking().FirstOrDefault(e => e.Nom.Equals(nom));
+        }
+
+        public Espace? ObtenirParNomPremieresLettres(string nom)
+        {
+            return _context.Espaces.AsNoTracking().FirstOrDefault(e => 
+                e.Nom.Substring(0,3).Contains(nom.Substring(0,3)));
         }
         #endregion
         #region CUD
@@ -203,9 +209,18 @@ namespace Lib_Services.Services
                 throw new EspaceException("Le nom est requis.",
                     (int)EspaceException.EspaceErreur.NomRequis);
 
-            if(!estModification && ObtenirParNom(espace.Nom).Count > 0)
-                throw new EspaceException("Le nom existe déjà.",
+            Espace? espaceNom = ObtenirParNom(espace.Nom);
+            Espace? espaceNomLet = ObtenirParNomPremieresLettres(espace.Nom);
+
+            if (espaceNom != null && espaceNom.IdEspace != espace.IdEspace)
+                throw new EspaceException("Le nom est déjà attribué à un autre espace.",
                     (int)EspaceException.EspaceErreur.NomExiste);
+
+            if (espaceNomLet != null && espaceNomLet.IdEspace != espace.IdEspace 
+                && espaceNomLet.Nom.Substring(0,3) == espace.Nom.Substring(0, 3))
+                throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
+                    "Un autre espace a déjà ces trois lettre.",
+                    (int)EspaceException.EspaceErreur.NomExistePostesJeu);
 
             if (string.IsNullOrWhiteSpace(espace.Description))
                 throw new EspaceException("La description est requise.",
@@ -226,6 +241,31 @@ namespace Lib_Services.Services
             if (espace.CapaciteMaxi > 50)
                 throw new EspaceException("La capacité maximale ne peut pas être supérieure à 50.",
                     (int)EspaceException.EspaceErreur.CapaciteTropGrande);
+
+            if (estModification)
+            {
+                Espace? enBdd = Obtenir(espace.IdEspace);
+
+                if (enBdd == null)
+                    throw new EspaceException("L'espace n'existe pas en base.",
+                        (int)EspaceException.EspaceErreur.ModificationEspaceInexistant);
+
+                if (enBdd.IdEspace != espace.IdEspace)
+                    throw new EspaceException("Il n'est pas possible de modifier l'id de l'espace.",
+                        (int)EspaceException.EspaceErreur.ModificationEspaceId);
+
+                if (enBdd.Nom ==  espace.Nom
+                    && enBdd.Description == espace.Description
+                    && enBdd.Superficie == espace.Superficie
+                    && enBdd.CapaciteMaxi == espace.CapaciteMaxi)
+                    throw new EspaceException("Aucune modification détectée.",
+                        (int)EspaceException.EspaceErreur.ModificationEspaceAucune);
+
+                if(espace.Nom != enBdd.Nom)
+                {
+                    
+                }
+            }
         }
         #endregion
     }

@@ -209,6 +209,7 @@ namespace ApplicationUi
             dataGridTournois.Columns["Statut"].Visible = false;
             dataGridTournois.Columns["DureePrevue"].Visible = false;
             dataGridTournois.Columns["Lot"].Visible = false;
+            dataGridTournois.Columns["Inscriptions"].Visible = false;
 
             dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
