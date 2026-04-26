@@ -188,12 +188,17 @@ namespace ApplicationUi
                 // Récupère le premier poste de jeu de la plateforme 
                 LoadUserControl(new UcPlateformes(_organisateurConnecte, plateforme), "Gestion des plateformes");
             };
-            LoadUserControl(uc, "Espace de votes");
+            LoadUserControl(uc, "Gestion des jeux ouverts aux votes");
         }
 
         private void BtnParticiper_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcParticiper(_organisateurConnecte), "Gestion des participations");
+        }
+
+        private void panelContent_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

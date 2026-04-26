@@ -121,8 +121,8 @@
   <data name="postes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\postes.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="espace" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\espace.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="plateforme" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\plateforme.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="deconnecter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\deconnecter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -130,7 +130,7 @@
   <data name="tournoi" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tournoi.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="plateforme" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\plateforme.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="espaces" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\espaces.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -73,9 +73,9 @@ namespace ApplicationUi.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap espace {
+        internal static System.Drawing.Bitmap espaces {
             get {
-                object obj = ResourceManager.GetObject("espace", resourceCulture);
+                object obj = ResourceManager.GetObject("espaces", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
