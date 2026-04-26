@@ -641,14 +641,18 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ## 📦 Releases
 
-| Version                                                                                        | Date      | Description                                                       |
-| ---------------------------------------------------------------------------------------------- | --------- | ----------------------------------------------------------------- |
-| [v1.3.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.3.0-alpha) | Avr. 2026 | Gestion des lots, amélioration postes de jeu, corrections bugs    |
-| [v1.2.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.2.0-alpha) | Avr. 2026 | Système de vote, gestion des lots, association jeux/plateformes   |
-| [v1.1.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.1.0-alpha) | Mar. 2026 | Gestion des jeux, lots, tournois, enrichissement validations      |
-| [v1.0.1-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.0.1-alpha) | Mar. 2026 | Correction bug lancement application                              |
-| [v1.0.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.0.0-alpha) | Mar. 2026 | Connexion BCrypt, organisateurs, espaces, postes de jeu, tournois |
-| [v0.0.0](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v0.0.0)             | Mar. 2026 | État initial de référence                                         |
+| Version                                                                                        | Date      | Type    | Description                                                                |
+| ---------------------------------------------------------------------------------------------- | --------- | ------- | -------------------------------------------------------------------------- |
+| [v1.4.1](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.4.1)             | Avr. 2026 | Stable  | Correction bugs critiques, amélioration navigation UC, gestion des erreurs |
+| [v1.4.0](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.4.0)             | Avr. 2026 | Dev     | Mise en place des exceptions métier, navigation dynamique, tests unitaires |
+| [v1.3.2-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.3.2-alpha) | Avr. 2026 | Alpha   | Nettoyage de code                                                          |
+| [v1.3.1-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.3.1-alpha) | Avr. 2026 | Alpha   | Gestion participations, rôles, tests espaces                               |
+| [v1.3.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.3.0-alpha) | Avr. 2026 | Alpha   | Amélioration lots, postes de jeu, corrections                              |
+| [v1.2.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.2.0-alpha) | Avr. 2026 | Alpha   | Système de vote, gestion des lots, association jeux/plateformes            |
+| [v1.1.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.1.0-alpha) | Mar. 2026 | Alpha   | Gestion jeux, lots, tournois                                               |
+| [v1.0.1-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.0.1-alpha) | Mar. 2026 | Alpha   | Correction bug lancement                                                   |
+| [v1.0.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.0.0-alpha) | Mar. 2026 | Alpha   | Authentification, organisateurs, espaces, postes, tournois                 |
+| [v0.0.0](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v0.0.0)             | Mar. 2026 | Initial | Version de référence                                                       |
 
 ## 📸 Captures d'écran
 
