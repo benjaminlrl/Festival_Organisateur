@@ -57,7 +57,7 @@ namespace ApplicationUi
                 RemplirFormulaire();
             }
 
-            if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
             {
                 buttonAjouter.Visible = false;
                 DesactiverInputs();

@@ -88,13 +88,12 @@ namespace ApplicationUi
         // ===============================
         // Actions Associées au Menu
         // ===============================
-        private void boutonDeconnexion_Click(object? sender, EventArgs e)
+        private void BtnDeconnexion_Click(object? sender, EventArgs e)
         {
             var formAuth = new FormAuthentification();
             formAuth.Show();
             this.Hide();
         }
-        private void boutonQuitter_Click(object sender, EventArgs e)
         private void BtnQuitter_Click(object? sender, EventArgs e)
         {
             Application.Exit();
@@ -106,7 +105,7 @@ namespace ApplicationUi
 
         private void BtnEspaces_Click(object sender, EventArgs e)
         {
-            UcEspaces uc = new (_organisateurConnecte);
+            UcEspaces uc = new(_organisateurConnecte);
 
             uc.NaviguerVersPostesJeu += (posteJeu) =>
             {
@@ -125,7 +124,7 @@ namespace ApplicationUi
 
         private void BtnPostes_Click(object sender, EventArgs e)
         {
-            UcPostesDeJeu uc = new (_organisateurConnecte);
+            UcPostesDeJeu uc = new(_organisateurConnecte);
 
             uc.NaviguerVersTournois += (tournoi) =>
             {
@@ -152,7 +151,7 @@ namespace ApplicationUi
                 LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
             };
 
-            LoadUserControl(uc, "Gestion des plateformes"); 
+            LoadUserControl(uc, "Gestion des plateformes");
         }
 
         private void BtnOrganisateurs_Click(object sender, EventArgs e)
@@ -171,7 +170,7 @@ namespace ApplicationUi
 
         private void BtnJeux_Click(object sender, EventArgs e)
         {
-            UcJeux uc = new (_organisateurConnecte);
+            UcJeux uc = new(_organisateurConnecte);
             LoadUserControl(uc, "Gestion des jeux");
         }
 

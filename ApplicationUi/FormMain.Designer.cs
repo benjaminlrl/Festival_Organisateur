@@ -30,8 +30,8 @@ namespace ApplicationUi
             btnLotComposants = new Button();
             btnVoter = new Button();
             btnParticiper = new Button();
-            boutonDeconnexion = new Button();
-            boutonQuitter = new Button();
+            BtnDeconnexion = new Button();
+            BtnQuitter = new Button();
             panelHeader = new Panel();
             lblTitre = new Label();
             panelContent = new Panel();
@@ -52,8 +52,8 @@ namespace ApplicationUi
             panelMenu.Controls.Add(btnLotComposants);
             panelMenu.Controls.Add(btnVoter);
             panelMenu.Controls.Add(btnParticiper);
-            panelMenu.Controls.Add(boutonDeconnexion);
-            panelMenu.Controls.Add(boutonQuitter);
+            panelMenu.Controls.Add(BtnDeconnexion);
+            panelMenu.Controls.Add(BtnQuitter);
             panelMenu.Dock = DockStyle.Left;
             panelMenu.FlowDirection = FlowDirection.TopDown;
             panelMenu.Location = new Point(0, 0);
@@ -250,39 +250,39 @@ namespace ApplicationUi
             btnParticiper.UseVisualStyleBackColor = false;
             btnParticiper.Click += BtnParticiper_Click;
             // 
-            // boutonDeconnexion
+            // BtnDeconnexion
             // 
-            boutonDeconnexion.BackColor = Color.Gray;
-            boutonDeconnexion.FlatAppearance.BorderSize = 0;
-            boutonDeconnexion.FlatStyle = FlatStyle.Flat;
-            boutonDeconnexion.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            boutonDeconnexion.ForeColor = Color.White;
-            boutonDeconnexion.Image = Properties.Resources.deconnecter;
-            boutonDeconnexion.ImageAlign = ContentAlignment.MiddleLeft;
-            boutonDeconnexion.Location = new Point(3, 673);
-            boutonDeconnexion.Name = "boutonDeconnexion";
-            boutonDeconnexion.Size = new Size(197, 49);
-            boutonDeconnexion.TabIndex = 10;
-            boutonDeconnexion.Text = "     Déconnexion";
-            boutonDeconnexion.UseVisualStyleBackColor = false;
-            boutonDeconnexion.Click += boutonDeconnexion_Click;
+            BtnDeconnexion.BackColor = Color.Gray;
+            BtnDeconnexion.FlatAppearance.BorderSize = 0;
+            BtnDeconnexion.FlatStyle = FlatStyle.Flat;
+            BtnDeconnexion.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            BtnDeconnexion.ForeColor = Color.White;
+            BtnDeconnexion.Image = Properties.Resources.deconnecter;
+            BtnDeconnexion.ImageAlign = ContentAlignment.MiddleLeft;
+            BtnDeconnexion.Location = new Point(3, 673);
+            BtnDeconnexion.Name = "BtnDeconnexion";
+            BtnDeconnexion.Size = new Size(197, 49);
+            BtnDeconnexion.TabIndex = 10;
+            BtnDeconnexion.Text = "     Déconnexion";
+            BtnDeconnexion.UseVisualStyleBackColor = false;
+            BtnDeconnexion.Click += BtnDeconnexion_Click;
             // 
-            // boutonQuitter
+            // BtnQuitter
             // 
-            boutonQuitter.BackColor = Color.FromArgb(60, 60, 60);
-            boutonQuitter.FlatAppearance.BorderSize = 0;
-            boutonQuitter.FlatStyle = FlatStyle.Flat;
-            boutonQuitter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            boutonQuitter.ForeColor = Color.White;
-            boutonQuitter.Image = Properties.Resources.deconnecter;
-            boutonQuitter.ImageAlign = ContentAlignment.MiddleLeft;
-            boutonQuitter.Location = new Point(3, 728);
-            boutonQuitter.Name = "boutonQuitter";
-            boutonQuitter.Size = new Size(197, 49);
-            boutonQuitter.TabIndex = 11;
-            boutonQuitter.Text = " Quitter";
-            boutonQuitter.UseVisualStyleBackColor = false;
-            boutonQuitter.Click += boutonQuitter_Click;
+            BtnQuitter.BackColor = Color.FromArgb(60, 60, 60);
+            BtnQuitter.FlatAppearance.BorderSize = 0;
+            BtnQuitter.FlatStyle = FlatStyle.Flat;
+            BtnQuitter.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            BtnQuitter.ForeColor = Color.White;
+            BtnQuitter.Image = Properties.Resources.deconnecter;
+            BtnQuitter.ImageAlign = ContentAlignment.MiddleLeft;
+            BtnQuitter.Location = new Point(3, 728);
+            BtnQuitter.Name = "BtnQuitter";
+            BtnQuitter.Size = new Size(197, 49);
+            BtnQuitter.TabIndex = 11;
+            BtnQuitter.Text = " Quitter";
+            BtnQuitter.UseVisualStyleBackColor = false;
+            BtnQuitter.Click += BtnQuitter_Click;
             // 
             // panelHeader
             // 
@@ -342,7 +342,7 @@ namespace ApplicationUi
         private Button btnEspaces;
         private Button btnPostes;
         private Button btnPlateformes;
-        private Button boutonDeconnexion ;
+        private Button BtnDeconnexion ;
         private Panel panelHeader;
         private Label lblTitre;
 
@@ -353,6 +353,6 @@ namespace ApplicationUi
         private Button btnLots;
         private Button btnVoter;
         private Button btnParticiper;
-        private Button boutonQuitter;
+        private Button BtnQuitter;
     }
 }
