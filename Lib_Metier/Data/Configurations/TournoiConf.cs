@@ -52,23 +52,12 @@ namespace Lib_Metier.Data.Configurations
             builder.Property(t => t.IdEspace)
                    .HasColumnName("id_espace");
 
-            builder.Property(t => t.IdJeu)
-                   .HasColumnName("id_jeu");
-
-
             // Configuration de la relation entre Tournoi et Espace :
             // - Un Tournoi possède une référence vers un Espace (IdEspace)
             // - Un Espace peut contenir plusieurs Tournois (collection Tournois)
             builder.HasOne(t => t.Espace)
                    .WithMany(e => e.Tournois)
                    .HasForeignKey(t => t.IdEspace);
-
-            // Configuration de la relation entre Tournoi et Jeu :
-            // - Un Tournoi possède une référence vers un Jeu (IdJeu)
-            // - Un Jeu peut contenir plusieurs Tournois (collection Tournois)
-            builder.HasOne(t => t.Jeu)
-                   .WithMany(j => j.Tournois)
-                   .HasForeignKey(t => t.IdJeu);
         }
     }
 }
