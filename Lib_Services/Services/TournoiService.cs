@@ -208,9 +208,10 @@ namespace Lib_Services.Services
                     (int)TournoiException.TournoiErreur.NomRequis);
             List<Tournoi> tournoiBdd = ObtenirAvecNom(tournoi.Nom);
 
-            if (!estModification && tournoiBdd.Count > 0)
-                throw new TournoiException("Le nom est requis.",
-                    (int)TournoiException.TournoiErreur.NomRequis);
+            if (tournoiBdd.Count > 0 && 
+                (!estModification || tournoiBdd.Any(t => t.NumeroTournoi != tournoi.NumeroTournoi)))
+                throw new TournoiException("Un tournoi avec ce nom existe déjà.",
+                    (int)TournoiException.TournoiErreur.NomExiste);
 
             if (tournoi.IdJeu <= 0)
                 throw new TournoiException("Un jeu est requis.",

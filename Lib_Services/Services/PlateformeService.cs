@@ -89,7 +89,18 @@ namespace Lib_Services.Services
         public Plateforme? Obtenir(int idPlateforme)
         {
             // Find retourne null si l'entité n'existe pas.
-            return _context.Plateformes.Find(idPlateforme);
+            return _context.Plateformes.AsNoTracking().FirstOrDefault(p => p.IdPlateforme == idPlateforme);
+        }
+
+        /// <summary>
+        /// Récupère une plateforme par son identifiant.
+        /// </summary>
+        /// <param name="idPlateforme">Identifiant de la plateforme recherchée.</param>
+        /// <returns>Instance de <see cref="Plateforme"/> si trouvée, sinon null.</returns>
+        public Plateforme? ObtenirParLibelle(string libelle)
+        {
+            // Find retourne null si l'entité n'existe pas.
+            return _context.Plateformes.AsNoTracking().FirstOrDefault(p => p.Libelle == libelle);
         }
         #endregion
         #region CUD
@@ -150,9 +161,9 @@ namespace Lib_Services.Services
             if (estModification && plateforme.IdPlateforme < 0)
                 throw new PlateformeException("L'identifiant de la plateforme est invalide.",
                     (int)PlateformeException.PlateformeErreur.IdInvalide);
+            Plateforme? enBdd = ObtenirParLibelle(plateforme.Libelle);
 
-            if (Lister(plateforme.Libelle).Any(p => p.Libelle == plateforme.Libelle
-                && p.IdPlateforme != plateforme.IdPlateforme))
+            if (enBdd != null && enBdd.Libelle == plateforme.Libelle)
                 throw new PlateformeException("Une autre plateforme avec ce libellé existe déjà.",
                     (int)PlateformeException.PlateformeErreur.LibelleExistant);
         }
