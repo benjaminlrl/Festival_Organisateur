@@ -16,7 +16,7 @@ namespace Lib_Services.Services
     public class EspaceService : IEspaceService
     {
         private readonly ApplicationDbContext _context;
-       
+        private IPosteJeuService? _posteJeuService;
         /// <summary>
         /// Initialise une nouvelle instance de <see cref="EspaceService"/>.
         /// </summary>
@@ -24,6 +24,7 @@ namespace Lib_Services.Services
         public EspaceService(ApplicationDbContext context)
         {
             _context = context;
+            _posteJeuService = null;
         }
         #region Lecture
         /// <summary>
@@ -113,12 +114,18 @@ namespace Lib_Services.Services
         public Espace? Obtenir(int idEspace)
         {
             // Find utilise le cache du contexte s'il existe, sinon interroge la base.
-            return _context.Espaces.Find(idEspace);
+            return _context.Espaces.AsNoTracking().FirstOrDefault(e => e.IdEspace == idEspace);
         }
 
-        public List<Espace> ObtenirParNom(string nom)
+        public Espace? ObtenirParNom(string nom)
         {
-            return _context.Espaces.Where(e => e.Nom.Equals(nom)).ToList();
+            return _context.Espaces.AsNoTracking().FirstOrDefault(e => e.Nom.Equals(nom));
+        }
+
+        public Espace? ObtenirParNomPremieresLettres(string nom)
+        {
+            return _context.Espaces.AsNoTracking().FirstOrDefault(e => 
+                e.Nom.Substring(0,3).Contains(nom.Substring(0,3)));
         }
         #endregion
         #region CUD
@@ -140,11 +147,32 @@ namespace Lib_Services.Services
         /// L'appel à <c>Update</c> marque toutes les propriétés comme modifiées.
         /// </summary>
         /// <param name="espace">Instance modifiée de <see cref="Espace"/>.</param>
-        public void Modifier(Espace espace)
+        /// <param name="modifPosteJeu">Indique si la modification concerne les postes de jeu associés à l'espace.</param>
+        /// <exception cref="EspaceException">Exception levée si la validation échoue ou si une erreur survient lors de la
+        /// modification des postes de jeu associés.</exception>
+        public void Modifier(Espace espace, bool modifPosteJeu = false)
         {
-            ValiderEspace(espace, true);    
+            _posteJeuService ??= new PosteJeuService(_context);
+
+            ValiderEspace(espace, true, modifPosteJeu);
             _context.Espaces.Update(espace);
             _context.SaveChanges();
+
+            if (modifPosteJeu)
+            {
+                List<PosteJeu> postesJeuAssocies = _posteJeuService.ListerPostesJeuDunEspace(espace);
+                try
+                {
+                    _posteJeuService.FormatRefPosteJeuEspaceNouvNom(postesJeuAssocies, espace.Nom);
+                    _context.SaveChanges();
+                }
+                catch (PosteJeuException ex)
+                {                    
+                    throw new EspaceException("Erreur lors de la modification des postes de jeu associés à l'espace : \n" 
+                        + ex.Message,
+                        (int)EspaceException.EspaceErreur.ModificationPosteJeuEspaceNom);
+                }
+            }
         }
 
         /// <summary>
@@ -196,16 +224,28 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="espace">Instance de <see cref="Espace"/> à valider.</param>
         /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <param name="modifPosteJeu">Indique si la validation concerne une modification des postes de jeu associés.</param>
         /// <exception cref="EspaceException">Exception levée si une validation échoue.</exception>
-        public void ValiderEspace(Espace espace, bool estModification = false)
+        public void ValiderEspace(Espace espace, bool estModification = false, bool modifPosteJeu = false)
         {
             if (string.IsNullOrWhiteSpace(espace.Nom))
                 throw new EspaceException("Le nom est requis.",
                     (int)EspaceException.EspaceErreur.NomRequis);
 
-            if(!estModification && ObtenirParNom(espace.Nom).Count > 0)
-                throw new EspaceException("Le nom existe déjà.",
+            Espace? espaceNom = ObtenirParNom(espace.Nom);
+            Espace? espaceNomLet = ObtenirParNomPremieresLettres(espace.Nom);
+
+            if (espaceNom != null && espaceNom.IdEspace != espace.IdEspace)
+                throw new EspaceException("Le nom est déjà attribué à un autre espace.",
                     (int)EspaceException.EspaceErreur.NomExiste);
+
+            // Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.
+            if (espaceNomLet != null
+                && espaceNomLet.IdEspace != espace.IdEspace 
+                && espaceNomLet.Nom.Substring(0,3) == espace.Nom.Substring(0, 3))
+                throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
+                    "Un autre espace a déjà ces trois lettre.",
+                    (int)EspaceException.EspaceErreur.NomExistePostesJeu);
 
             if (string.IsNullOrWhiteSpace(espace.Description))
                 throw new EspaceException("La description est requise.",
@@ -226,6 +266,33 @@ namespace Lib_Services.Services
             if (espace.CapaciteMaxi > 50)
                 throw new EspaceException("La capacité maximale ne peut pas être supérieure à 50.",
                     (int)EspaceException.EspaceErreur.CapaciteTropGrande);
+
+            if (estModification)
+            {
+                Espace? enBdd = Obtenir(espace.IdEspace);
+
+                if (enBdd == null)
+                    throw new EspaceException("L'espace n'existe pas en base.",
+                        (int)EspaceException.EspaceErreur.ModificationEspaceInexistant);
+
+                if (enBdd.IdEspace != espace.IdEspace)
+                    throw new EspaceException("Il n'est pas possible de modifier l'id de l'espace.",
+                        (int)EspaceException.EspaceErreur.ModificationEspaceId);
+
+                if (enBdd.Nom ==  espace.Nom
+                    && enBdd.Description == espace.Description
+                    && enBdd.Superficie == espace.Superficie
+                    && enBdd.CapaciteMaxi == espace.CapaciteMaxi)
+                    throw new EspaceException("Aucune modification détectée.",
+                        (int)EspaceException.EspaceErreur.ModificationEspaceAucune);
+
+                // Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.
+                if (enBdd.Nom != espace.Nom
+                    && !modifPosteJeu)
+                    throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
+                        "Les postes de jeux ne correspondront pas à l'espace",
+                        (int)EspaceException.EspaceErreur.ModificationNomExistePostesJeu);
+            }
         }
         #endregion
     }

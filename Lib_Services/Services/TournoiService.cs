@@ -3,7 +3,6 @@ using Lib_Metier.Data.Configurations;
 using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using static Lib_Entities.Entities.Jeu;
 
 namespace Lib_Services.Services
 {
@@ -39,6 +38,7 @@ namespace Lib_Services.Services
         {
             IQueryable<Tournoi> query = _context.Tournois
                 .Include(t => t.Espace)
+                .Include(t => t.Inscriptions)
                 .Include(t => t.Jeu);
 
             if (!string.IsNullOrWhiteSpace(filtre))

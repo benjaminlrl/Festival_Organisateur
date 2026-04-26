@@ -27,27 +27,6 @@ namespace Lib_Services.Services
         }
         #region Lecture
         /// <summary>
-        /// Retourne toutes les plateformes présentes dans la base de données.
-        /// Si un filtre est fourni, retourne uniquement 
-        /// les plateformes dont le libellé correspond au filtre.
-        /// </summary>
-        /// <param name="filtre">Optionnel : libellé à filtrer.</param>
-        /// <returns>Liste de <see cref="Plateforme"/>.</returns>
-        public List<Plateforme> Lister(string filtre = "")
-        {
-            // Utilise le DbSet Plateformes pour matérialiser la collection en mémoire.
-            if (string.IsNullOrWhiteSpace(filtre))
-                return _context.Plateformes
-                     .Include(e => e.PostesJeu)
-                     .ToList();
-            return
-                _context.Plateformes
-                .Include(e => e.PostesJeu)
-                .Where(p => p.Libelle.Contains(filtre))
-                .ToList();
-        }
-
-        /// <summary>
         ///  Retourne la liste complète des jeux présents en base, 
         ///  avec possibilité de filtrer
         ///  
@@ -163,7 +142,10 @@ namespace Lib_Services.Services
 
             Plateforme? enBddLibelle = ObtenirParLibelle(plateforme.Libelle);
 
-            if (!estModification && enBddLibelle != null && enBddLibelle.Libelle == plateforme.Libelle)
+            // si une plateforme avec le même libellé existe déjà
+            if (enBddLibelle != null 
+                && enBddLibelle.Libelle == plateforme.Libelle
+                && enBddLibelle.IdPlateforme != plateforme.IdPlateforme)
                 throw new PlateformeException("Une autre plateforme avec ce libellé existe déjà.",
                     (int)PlateformeException.PlateformeErreur.LibelleExistant);
 

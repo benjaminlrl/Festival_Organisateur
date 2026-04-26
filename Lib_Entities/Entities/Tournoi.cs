@@ -86,11 +86,12 @@ namespace Lib_Entities.Entities
         /// </summary>
         public ICollection<Lot> Lot { get; set; }
 
+        public ICollection<Participer> Inscriptions { get; set; }
+
         /// <summary>
         /// Nombre de participants inscrits au tournoi. Cette propriété n'est pas mappée à la base de données
         /// </summary>
-        [NotMapped]
-        public int NbParticipantsInscrits { get; set; }
+        public int NbParticipantsInscrits => Inscriptions?.Count ?? 0;
     }
 
 }

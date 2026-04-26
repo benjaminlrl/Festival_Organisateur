@@ -197,6 +197,7 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+
         #region Statistiques
         /// <summary>
         /// Permet de récupérer le podium Par tournoi
@@ -237,6 +238,7 @@ namespace Lib_Services.Services
             return _context.Participer.Count(p => p.NumeroTournoi == numeroTournoi);
         }
         #endregion
+
         #region Validations
 
         /// <summary>

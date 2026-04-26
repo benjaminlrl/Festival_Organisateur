@@ -173,10 +173,10 @@
             labelSuperficie.AutoSize = true;
             labelSuperficie.Dock = DockStyle.Fill;
             labelSuperficie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelSuperficie.Location = new Point(364, 0);
+            labelSuperficie.Location = new Point(295, 0);
             labelSuperficie.Margin = new Padding(4, 0, 4, 0);
             labelSuperficie.Name = "labelSuperficie";
-            labelSuperficie.Size = new Size(291, 47);
+            labelSuperficie.Size = new Size(150, 47);
             labelSuperficie.TabIndex = 14;
             labelSuperficie.Text = "Superficie en m² :*";
             // 
@@ -188,7 +188,7 @@
             textBoxNom.Multiline = true;
             textBoxNom.Name = "textBoxNom";
             textBoxNom.PlaceholderText = "Ex: Espace playstation";
-            textBoxNom.Size = new Size(354, 50);
+            textBoxNom.Size = new Size(285, 50);
             textBoxNom.TabIndex = 0;
             // 
             // labelNom
@@ -199,7 +199,7 @@
             labelNom.Location = new Point(4, 0);
             labelNom.Margin = new Padding(4, 0, 4, 0);
             labelNom.Name = "labelNom";
-            labelNom.Size = new Size(271, 47);
+            labelNom.Size = new Size(182, 47);
             labelNom.TabIndex = 6;
             labelNom.Text = "Nom de l'espace :*";
             // 
@@ -208,10 +208,10 @@
             labelCapaciteMaxi.AutoSize = true;
             labelCapaciteMaxi.Dock = DockStyle.Fill;
             labelCapaciteMaxi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelCapaciteMaxi.Location = new Point(663, 0);
+            labelCapaciteMaxi.Location = new Point(453, 0);
             labelCapaciteMaxi.Margin = new Padding(4, 0, 4, 0);
             labelCapaciteMaxi.Name = "labelCapaciteMaxi";
-            labelCapaciteMaxi.Size = new Size(206, 47);
+            labelCapaciteMaxi.Size = new Size(214, 47);
             labelCapaciteMaxi.TabIndex = 8;
             labelCapaciteMaxi.Text = "Capacité maximale :*";
             // 
@@ -236,12 +236,12 @@
             // 
             numericUpDownSuperficie.Dock = DockStyle.Fill;
             numericUpDownSuperficie.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownSuperficie.Location = new Point(364, 52);
+            numericUpDownSuperficie.Location = new Point(295, 52);
             numericUpDownSuperficie.Margin = new Padding(4, 5, 4, 5);
             numericUpDownSuperficie.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownSuperficie.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
             numericUpDownSuperficie.Name = "numericUpDownSuperficie";
-            numericUpDownSuperficie.Size = new Size(291, 31);
+            numericUpDownSuperficie.Size = new Size(150, 31);
             numericUpDownSuperficie.TabIndex = 15;
             numericUpDownSuperficie.Value = new decimal(new int[] { 12, 0, 0, 0 });
             // 
@@ -250,10 +250,10 @@
             tableLayoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel.ColumnCount = 5;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.33871F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.2983875F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45.29058F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 214F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 374F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22.4944324F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35.18931F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 222F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 576F));
             tableLayoutPanel.Controls.Add(dataGridTournois, 4, 1);
             tableLayoutPanel.Controls.Add(textBoxNom, 0, 1);
             tableLayoutPanel.Controls.Add(labelNom, 0, 0);
@@ -284,13 +284,13 @@
             dataGridTournois.BackgroundColor = Color.White;
             dataGridTournois.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridTournois.Dock = DockStyle.Fill;
-            dataGridTournois.Location = new Point(876, 52);
+            dataGridTournois.Location = new Point(674, 52);
             dataGridTournois.Margin = new Padding(3, 5, 3, 5);
             dataGridTournois.Name = "dataGridTournois";
             dataGridTournois.ReadOnly = true;
             dataGridTournois.RowHeadersWidth = 62;
             tableLayoutPanel.SetRowSpan(dataGridTournois, 3);
-            dataGridTournois.Size = new Size(369, 203);
+            dataGridTournois.Size = new Size(571, 203);
             dataGridTournois.TabIndex = 19;
             dataGridTournois.CellContentDoubleClick += dataGridTournois_CellContentDoubleClick;
             // 
@@ -302,7 +302,7 @@
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Description de l'espace";
-            textBoxDescription.Size = new Size(867, 118);
+            textBoxDescription.Size = new Size(665, 118);
             textBoxDescription.TabIndex = 17;
             // 
             // labelDescription
@@ -313,7 +313,7 @@
             labelDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelDescription.Location = new Point(3, 103);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(653, 33);
+            labelDescription.Size = new Size(443, 33);
             labelDescription.TabIndex = 16;
             labelDescription.Text = "Description de l'espace  :*";
             labelDescription.TextAlign = ContentAlignment.BottomLeft;
@@ -322,11 +322,11 @@
             // 
             numericUpDownCapaciteMaxi.Dock = DockStyle.Fill;
             numericUpDownCapaciteMaxi.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownCapaciteMaxi.Location = new Point(665, 52);
+            numericUpDownCapaciteMaxi.Location = new Point(455, 52);
             numericUpDownCapaciteMaxi.Margin = new Padding(6, 5, 6, 5);
             numericUpDownCapaciteMaxi.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             numericUpDownCapaciteMaxi.Name = "numericUpDownCapaciteMaxi";
-            numericUpDownCapaciteMaxi.Size = new Size(202, 31);
+            numericUpDownCapaciteMaxi.Size = new Size(210, 31);
             numericUpDownCapaciteMaxi.TabIndex = 3;
             // 
             // labelStatutTournoi
@@ -335,10 +335,10 @@
             labelStatutTournoi.Dock = DockStyle.Fill;
             labelStatutTournoi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelStatutTournoi.ForeColor = Color.Chocolate;
-            labelStatutTournoi.Location = new Point(879, 0);
+            labelStatutTournoi.Location = new Point(677, 0);
             labelStatutTournoi.Margin = new Padding(6, 0, 6, 0);
             labelStatutTournoi.Name = "labelStatutTournoi";
-            labelStatutTournoi.Size = new Size(363, 47);
+            labelStatutTournoi.Size = new Size(565, 47);
             labelStatutTournoi.TabIndex = 18;
             labelStatutTournoi.Text = "Tournoi en cours";
             labelStatutTournoi.TextAlign = ContentAlignment.MiddleCenter;

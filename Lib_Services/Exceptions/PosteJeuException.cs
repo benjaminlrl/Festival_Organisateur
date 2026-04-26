@@ -10,6 +10,9 @@
         ReferenceExistante = 4,
         AucuneModification = 5,
         EspaceDifferent = 6,
+        ModificationPosteInexistante = 7,
+        ModificationPostePlateformeDifferente = 8,
+        ModificationPosteEspaceDifferent = 9,
     }
 
     public PosteJeuException(string message, int codeErreur) : base(message)
