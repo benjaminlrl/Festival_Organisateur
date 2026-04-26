@@ -23,11 +23,16 @@ namespace ApplicationUi
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly Organisateur _organisateurConnecte;
         private Espace? _espaceSelectionnee;
+        private Tournoi? _tournoiSelectionne;
+        private PosteJeu? _posteJeuSelectionne;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
         private string filtre;
         // Champ pour stocker l'ordre de tri actuel sur la propriété de l'espace (ASC ou DESC)
         // et l'utiliser lors du rechargement des espaces
         private string ordreChamp;
+        public event Action<Tournoi>? NaviguerVersTournois;
+        public event Action<PosteJeu>? NaviguerVersPostesJeu;
+
         public UcEspaces(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
@@ -38,6 +43,8 @@ namespace ApplicationUi
 
             _organisateurConnecte = unOrganisateurConnecte;
             _espaceSelectionnee = null;
+            _tournoiSelectionne = null;
+            _posteJeuSelectionne = null;
 
             labelStatutTournoi.Visible = _espaceSelectionnee != null;
             dataGridTournois.Visible = _espaceSelectionnee != null;
@@ -331,14 +338,43 @@ namespace ApplicationUi
             Raz_Zones();
         }
         #endregion 
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des postes de jeu en fonction du poste de jeu sélectionné dans le DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridPostesJeu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
 
+            _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
+            if (_posteJeuSelectionne != null)
+                NaviguerVersPostesJeu?.Invoke(_posteJeuSelectionne); // déclenche la navigation vers le form main
+
+        }
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des tournois en fonction du tournoi sélectionné dans le DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridTournois_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _tournoiSelectionne = dataGridTournois.Rows[e.RowIndex].DataBoundItem as Tournoi;
+
+            if (_tournoiSelectionne != null)
+                NaviguerVersTournois?.Invoke(_tournoiSelectionne); // déclenche la navigation vers le form main
+
+        }
         private void DataGridEspaces_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gestion des clics sur l'en-tête (gérés pour le tri)
             if (e.RowIndex < 0)
             {
                 // Association des index avec les propriétés de l'objet
-                Dictionary<int, string> map = new ()
+                Dictionary<int, string> map = new()
                 {
                     { dataGridEspaces.Columns["Nom"].Index,          "Nom" },
                     { dataGridEspaces.Columns["Description"].Index,  "Description" },
@@ -356,7 +392,7 @@ namespace ApplicationUi
                 dataGridEspaces.DataSource = _serviceEspace.Lister(filtre, colonne, ordreChamp);
                 dataGridEspaces.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
                     ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
-                
+
                 MEP_DataGridEspaces();
                 return;
             }
@@ -466,6 +502,8 @@ namespace ApplicationUi
 
             // Réinitialiser la sélection de l'espace
             _espaceSelectionnee = null;
+            _tournoiSelectionne = null;
+            _posteJeuSelectionne = null;
 
             labelStatutTournoi.Visible = _espaceSelectionnee != null;
             dataGridPostesJeu.Visible = _espaceSelectionnee != null;

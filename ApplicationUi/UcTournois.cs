@@ -31,7 +31,7 @@ namespace ApplicationUi
         private string filtre;
         private string ordreChamp;
 
-        public UcTournois(Organisateur unOrganisateurConnecte)
+        public UcTournois(Organisateur unOrganisateurConnecte, Tournoi? tournoiPreselectionne = null)
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
@@ -50,6 +50,12 @@ namespace ApplicationUi
             buttonEffacer.Text = " 🧽  Effacer";
 
             Raz_Zones();
+
+            if (tournoiPreselectionne != null)
+            {
+                _tournoiSelectionne = tournoiPreselectionne;
+                RemplirFormulaire();
+            }
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcTournois, "Ajouter") == false)
             {

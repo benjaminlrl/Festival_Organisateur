@@ -25,7 +25,7 @@ namespace ApplicationUi
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
-        public UcJeux(Organisateur unOrganisateurConnecte)
+        public UcJeux(Organisateur unOrganisateurConnecte, Jeu? JeuPreselectionne = null)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
@@ -41,6 +41,13 @@ namespace ApplicationUi
             buttonEffacer.Text = " 🧽  Effacer";
 
             Raz_Zones();
+
+            // Si un jeu est préselectionné (par exemple, après la création d'un nouveau jeu),
+            // le formulaire est rempli avec ses données
+            if (JeuPreselectionne != null) {
+                _jeuSelectionne = JeuPreselectionne;
+                RemplirFormulaire();                
+            }
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {

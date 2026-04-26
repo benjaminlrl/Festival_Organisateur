@@ -23,10 +23,12 @@ namespace ApplicationUi
         private readonly IOrganisateurService _serviceOrganisateur;
         private Plateforme? _plateformeSelectionee;
         private PosteJeu? _posteJeuSelectionne;
+        private Jeu? _jeuSelectionne;
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
         public event Action<PosteJeu>? NaviguerVersPostesJeu;
+        public event Action<Jeu>? NaviguerVersJeux;
         public UcPlateformes(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
@@ -37,6 +39,7 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             _plateformeSelectionee = null;
             _posteJeuSelectionne = null;
+            _jeuSelectionne=null;
 
             dataGridJeux.Visible = false;
             dataGridPostesJeu.Visible = false;
@@ -225,6 +228,35 @@ namespace ApplicationUi
 
         }
         #endregion
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des postes de jeu en transmettant la plateforme sélectionnée
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridPostesJeu_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
+
+            if (_posteJeuSelectionne != null)
+                NaviguerVersPostesJeu?.Invoke(_posteJeuSelectionne); // déclenche la navigation vers le form main
+        }
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des jeux en transmettant le jeu sélectionné
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridJeux_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _jeuSelectionne = dataGridJeux.Rows[e.RowIndex].DataBoundItem as Jeu;
+
+            if (_jeuSelectionne != null)
+                NaviguerVersJeux?.Invoke(_jeuSelectionne); // déclenche la navigation vers le form main
+        }
 
         private void DataGridPlateformes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -303,6 +335,7 @@ namespace ApplicationUi
 
             _plateformeSelectionee = null;
             _posteJeuSelectionne = null;
+            _jeuSelectionne = null;
 
             dataGridJeux.DataSource = null;
             dataGridPostesJeu.DataSource = null;
@@ -337,15 +370,5 @@ namespace ApplicationUi
             textBoxNom.Enabled = false;
         }
         #endregion
-
-        private void DataGridPostesJeu_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-
-            _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
-
-            if (_posteJeuSelectionne != null)
-                NaviguerVersPostesJeu?.Invoke(_posteJeuSelectionne); // déclenche la navigation vers le form main
-        }
     }
 }

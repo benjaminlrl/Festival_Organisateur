@@ -27,11 +27,13 @@ namespace ApplicationUi
         private readonly Organisateur _organisateurConnecte;
         private bool fonctionnelSelectionne;
         private PosteJeu? _posteJeuSelectionne;
+        private Tournoi? _tournoiSelectionne;
         // Champ pour stocker le texte de recherche et l'utiliser lors du rechargement des espaces
         private string filtre;
         // Champ pour stocker l'ordre de tri actuel sur la propriété de l'espace (ASC ou DESC)
         // et l'utiliser lors du rechargement des espaces
         private string ordreChamp;
+        public event Action<Tournoi>? NaviguerVersTournois;
 
         public UcPostesDeJeu(Organisateur unOrganisateurConnecte, PosteJeu? posteJeuPreselectionne = null)
         {
@@ -46,6 +48,7 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             
             _posteJeuSelectionne = null;
+            _tournoiSelectionne = null;
 
             fonctionnelSelectionne = false;
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
@@ -284,6 +287,23 @@ namespace ApplicationUi
         }
 
         #endregion
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des tournois en fonction du tournoi sélectionné dans le DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridTournois_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _tournoiSelectionne = dataGridTournois.Rows[e.RowIndex].DataBoundItem as Tournoi;
+
+            if (_tournoiSelectionne != null)
+                NaviguerVersTournois?.Invoke(_tournoiSelectionne); // déclenche la navigation vers le form main
+
+        }
+
         private void DataGridPostesJeu_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
