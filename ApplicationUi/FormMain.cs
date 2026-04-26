@@ -92,7 +92,7 @@ namespace ApplicationUi
         {
             Application.Exit();
         }
-        private void btnTournois_Click(object sender, EventArgs e)
+        private void BtnTournois_Click(object sender, EventArgs e)
         {
             LoadUserControl(new UcTournois(_organisateurConnecte), "Gestion des tournois");
         }

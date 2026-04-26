@@ -15,7 +15,7 @@ namespace Lib_Services.Exceptions
             NbParticipantsInvalide = 5,
             StatutRequis = 6,
             ConflitHoraire = 7,
-            HoraireInvalide = 8
+            HoraireInvalide = 8,
         }
 
         public TournoiException(string message, int codeErreur) : base(message)

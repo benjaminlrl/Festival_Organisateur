@@ -248,15 +248,15 @@ namespace Lib_Services.Services
                     (int)SoumisVoteException.SoumisVoteErreur.DoublonSoumisVote);
 
             if (soumisVote.DateDebutVote.Date >= soumisVote.DateFinVote.Date)
-                throw new SoumisVoteException("La date de début doit être antérieure à la date de fin.",
+                throw new SoumisVoteException("La date de début du soumisVote doit être antérieure à la date de fin.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin);
 
             if (soumisVote.DateDebutVote.Date < DateTime.Now.Date)
-                throw new SoumisVoteException("La date de début ne peut pas être dans le passé.",
+                throw new SoumisVoteException("La date de début du soumisVote ne peut pas être dans le passé.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateDebutDansLePasse);
 
             if (soumisVote.DateFinVote.Date < DateTime.Now.Date)
-                throw new SoumisVoteException("La date de fin ne peut pas être dans le passé.",
+                throw new SoumisVoteException("La date de fin du soumisVote ne peut pas être dans le passé.",
                     (int)SoumisVoteException.SoumisVoteErreur.DateFinDansLePasse);
 
             if (estModification)

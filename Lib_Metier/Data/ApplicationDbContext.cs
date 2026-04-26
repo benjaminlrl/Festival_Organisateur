@@ -86,6 +86,12 @@ namespace Lib_Metier.Data.Configurations
         public DbSet<Participer> Participer => Set<Participer>();
 
         /// <summary>
+        /// Ensemble des Joueurs (table `Joueur`).
+        /// </summary>
+        public DbSet<Joueur> Joueurs => Set<Joueur>();
+
+
+        /// <summary>
         /// Applique les configurations EF Core définies dans l'assembly.
         /// Utilise `ApplyConfigurationsFromAssembly` pour centraliser les mappings
         /// (IEntityTypeConfiguration&lt;T&gt;).

@@ -29,13 +29,18 @@ namespace ApplicationUi
                 context.Database.Migrate();
 
                 // Création des services
-                var tournoiService = new TournoiService(context);
+                var tournoisService = new TournoiService(context);
                 var espaceService = new EspaceService(context);
                 var organisateurService = new OrganisateurService(context);
                 var roleService = new RoleService(context);
                 var lotComposantService = new LotComposantService(context);
                 var lotService = new LotService(context);
                 var jeuService = new JeuService(context);
+                var participerService = new ParticiperService(context);
+                var plateformeService = new PlateformeService(context);
+                var posteJeuService = new PosteJeuService(context);
+                var soumisVoteService = new SoumisVoteService(context);
+                var voterService = new VoterService(context);
 
                 if (!context.Lots.Any())
                 {
@@ -128,7 +133,7 @@ namespace ApplicationUi
 
                 if (!context.PostesJeu.Any())
                 {
-                    var espaces = context.Espaces.ToList();
+                    List<Espace> espaces = context.Espaces.ToList();
                     var plateformes = context.Plateformes.ToList();
 
                     Espace E(string nom) => espaces.First(e => e.Nom == nom);
@@ -280,7 +285,7 @@ namespace ApplicationUi
                     var plateformes = context.Plateformes.ToList();
                     Plateforme P(string lib) => plateformes.First(p => p.Libelle == lib);
 
-                    var jeux = new List<Jeu>
+                    List<Jeu> jeux = new List<Jeu>
                 {
                     // Nintendo
                     new Jeu { Titre = "Mario Kart 8 Deluxe",       Description = "Terminer les courses en première position en utilisant des objets pour ralentir les adversaires ou se protéger",                          Editeur = "Nintendo",          AnneeSortie = "2017", Pegi = 3,  DateSortie = new DateTime(2017, 04, 28),
@@ -386,45 +391,165 @@ namespace ApplicationUi
                 if (!context.Tournois.Any())
                 {
                     // Récupération des IDs espaces et jeux créés
-                    var espaceNintendo = context.Espaces.First(e => e.Nom == "Nintendo");
-                    var espaceXbox = context.Espaces.First(e => e.Nom == "X Box");
-                    var espacePS = context.Espaces.First(e => e.Nom == "PlayStation");
-                    var espaceFPS = context.Espaces.First(e => e.Nom == "FPS Arena");
-                    var espaceMOBA = context.Espaces.First(e => e.Nom == "MOBA Zone");
-                    var espaceFighting = context.Espaces.First(e => e.Nom == "Fighting Games");
-                    var espaceSports = context.Espaces.First(e => e.Nom == "Sports Games");
-                    var espaceEsport = context.Espaces.First(e => e.Nom == "Esport Arena");
+                    Espace espaceNintendo = context.Espaces.First(e => e.Nom == "Nintendo");
+                    Espace espaceXbox = context.Espaces.First(e => e.Nom == "X Box");
+                    Espace espacePS = context.Espaces.First(e => e.Nom == "PlayStation");
+                    Espace espaceFPS = context.Espaces.First(e => e.Nom == "FPS Arena");
+                    Espace espaceMOBA = context.Espaces.First(e => e.Nom == "MOBA Zone");
+                    Espace espaceFighting = context.Espaces.First(e => e.Nom == "Fighting Games");
+                    Espace espaceSports = context.Espaces.First(e => e.Nom == "Sports Games");
+                    Espace espaceEsport = context.Espaces.First(e => e.Nom == "Esport Arena");
 
-                    var jeuMK = context.Jeux.First(j => j.Titre == "Mario Kart 8 Deluxe");
-                    var jeuFortnite = context.Jeux.First(j => j.Titre == "Fortnite");
-                    var jeuHalo = context.Jeux.First(j => j.Titre == "Halo Infinite");
-                    var jeuValorant = context.Jeux.First(j => j.Titre == "Valorant");
-                    var jeuLoL = context.Jeux.First(j => j.Titre == "League of Legends");
-                    var jeuCS2 = context.Jeux.First(j => j.Titre == "Counter-Strike 2");
-                    var jeuFC25 = context.Jeux.First(j => j.Titre == "EA Sports FC 25");
-                    var jeuElden = context.Jeux.First(j => j.Titre == "Elden Ring");
-                    var jeuSmash = context.Jeux.First(j => j.Titre == "Super Smash Bros. Ultimate");
-                    var jeuMinecraft = context.Jeux.First(j => j.Titre == "Minecraft");
+                    Jeu jeuMK = context.Jeux.First(j => j.Titre == "Mario Kart 8 Deluxe");
+                    Jeu jeuFortnite = context.Jeux.First(j => j.Titre == "Fortnite");
+                    Jeu jeuHalo = context.Jeux.First(j => j.Titre == "Halo Infinite");
+                    Jeu jeuValorant = context.Jeux.First(j => j.Titre == "Valorant");
+                    Jeu jeuLoL = context.Jeux.First(j => j.Titre == "League of Legends");
+                    Jeu jeuCS2 = context.Jeux.First(j => j.Titre == "Counter-Strike 2");
+                    Jeu jeuFC25 = context.Jeux.First(j => j.Titre == "EA Sports FC 25");
+                    Jeu jeuElden = context.Jeux.First(j => j.Titre == "Elden Ring");
+                    Jeu jeuSmash = context.Jeux.First(j => j.Titre == "Super Smash Bros. Ultimate");
+                    Jeu jeuMinecraft = context.Jeux.First(j => j.Titre == "Minecraft");
 
-                    context.Tournois.AddRange(new List<Tournoi>
-                {
                     // Samedi 10h-20h — espaces différents, pas de chevauchement
-                    new Tournoi { Nom = "Tournoi Mario Kart",         DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 16, DureePrevue = 20, Statut = "Terminé",  IdEspace = espaceNintendo.IdEspace, IdJeu = jeuMK.IdJeu },
-                    new Tournoi { Nom = "Tournoi Fortnite Saison 1", DateHeure = new DateTime(2026,05,24,12,0,0),NbParticipants = 16, DureePrevue = 50, Statut = "Terminé",  IdEspace = espaceXbox.IdEspace,    IdJeu = jeuFortnite.IdJeu },
-                    new Tournoi { Nom = "Tournoi Halo Open",          DateHeure = new DateTime(2026,05,24,13,0,0),NbParticipants = 16,DureePrevue = 60,  Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuHalo.IdJeu },
-                    new Tournoi { Nom = "Tournoi FC 25 Ligue 1",      DateHeure = new DateTime(2026,05,24,14,0,0),NbParticipants = 8,  DureePrevue = 20, Statut = "Terminé",  IdEspace = espaceSports.IdEspace,  IdJeu = jeuFC25.IdJeu },
-                    new Tournoi { Nom = "Tournoi Smash Bros Elite",  DateHeure = new DateTime(2026,05,24,15,0,0), NbParticipants = 16, DureePrevue = 30,  Statut = "Terminé",  IdEspace = espaceFighting.IdEspace,IdJeu = jeuSmash.IdJeu },
+                    tournoisService.Creer(new Tournoi { Nom = "Tournoi Mario Kart", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 16, DureePrevue = 20, Statut = "Terminé", IdEspace = espaceNintendo.IdEspace, IdJeu = jeuMK.IdJeu });
+                    tournoisService.Creer(new Tournoi { Nom = "Tournoi Fortnite Saison 1", DateHeure = new DateTime(2026, 05, 24, 12, 0, 0), NbParticipants = 16, DureePrevue = 50, Statut = "Terminé", IdEspace = espaceXbox.IdEspace, IdJeu = jeuFortnite.IdJeu });
+                    tournoisService.Creer(new Tournoi { Nom = "Tournoi Halo Open", DateHeure = new DateTime(2026, 05, 24, 13, 0, 0), NbParticipants = 16, DureePrevue = 60, Statut = "Terminé", IdEspace = espaceFPS.IdEspace, IdJeu = jeuHalo.IdJeu });
+                    tournoisService.Creer(new Tournoi { Nom = "Tournoi FC 25 Ligue 1", DateHeure = new DateTime(2026, 05, 24, 14, 0, 0), NbParticipants = 8, DureePrevue = 20, Statut = "Terminé", IdEspace = espaceSports.IdEspace, IdJeu = jeuFC25.IdJeu });
+                    tournoisService.Creer(new Tournoi { Nom = "Tournoi Smash Bros Elite", DateHeure = new DateTime(2026, 05, 24, 15, 0, 0), NbParticipants = 16, DureePrevue = 30, Statut = "Terminé", IdEspace = espaceFighting.IdEspace, IdJeu = jeuSmash.IdJeu });
 
                     // Dimanche 10h-18h
-                    new Tournoi { Nom = "Tournoi LoL Printemps",     DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 10, DureePrevue = 20, Statut = "Terminé",  IdEspace = espaceMOBA.IdEspace,    IdJeu = jeuLoL.IdJeu },
-                    new Tournoi { Nom = "Tournoi CS2 Qualif",         DateHeure = new DateTime(2026,05,24,11,0,0),NbParticipants = 10, DureePrevue = 15, Statut = "Terminé",  IdEspace = espaceFPS.IdEspace,     IdJeu = jeuCS2.IdJeu },
-                    new Tournoi { Nom = "Tournoi Valorant Invitatio", DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 10, DureePrevue = 25, Statut = "En cours", IdEspace = espaceEsport.IdEspace,  IdJeu = jeuValorant.IdJeu },
-                    new Tournoi { Nom = "Tournoi Elden Ring No Hit", DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 8,  DureePrevue = 30,  Statut = "En cours", IdEspace = espacePS.IdEspace,      IdJeu = jeuElden.IdJeu },
-                    new Tournoi { Nom = "Tournoi Minecraft Build",   DateHeure = new DateTime(2026,05,24,11,0,0), NbParticipants = 12, DureePrevue = 50,  Statut = "Planifié", IdEspace = espaceXbox.IdEspace,    IdJeu = jeuMinecraft.IdJeu },
-                });
+                    tournoisService.Creer(new Tournoi { Nom = "Tournoi LoL Printemps", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 10, DureePrevue = 20, Statut = "Terminé", IdEspace = espaceMOBA.IdEspace, IdJeu = jeuLoL.IdJeu });
+                        tournoisService.Creer(new Tournoi { Nom = "Tournoi CS2 Qualif", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 10, DureePrevue = 15, Statut = "Terminé", IdEspace = espaceFPS.IdEspace, IdJeu = jeuCS2.IdJeu });
+                        tournoisService.Creer(new Tournoi { Nom = "Tournoi Valorant Invitatio", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 10, DureePrevue = 25, Statut = "En cours", IdEspace = espaceEsport.IdEspace, IdJeu = jeuValorant.IdJeu });
+                        tournoisService.Creer(new Tournoi { Nom = "Tournoi Elden Ring No Hit", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 8, DureePrevue = 30, Statut = "En cours", IdEspace = espacePS.IdEspace, IdJeu = jeuElden.IdJeu });
+                        tournoisService.Creer(new Tournoi { Nom = "Tournoi Minecraft Build", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 12, DureePrevue = 50, Statut = "Planifié", IdEspace = espaceXbox.IdEspace, IdJeu = jeuMinecraft.IdJeu });
+                    
+                }
+
+                if (!context.SoumisVotes.Any())
+                {
+                    Jeu jeuMK = context.Jeux.First(j => j.Titre == "Mario Kart 8 Deluxe");
+                    Jeu jeuFortnite = context.Jeux.First(j => j.Titre == "Fortnite");
+                    Jeu jeuHalo = context.Jeux.First(j => j.Titre == "Halo Infinite");
+                    Jeu jeuValorant = context.Jeux.First(j => j.Titre == "Valorant");
+                    Jeu jeuLoL = context.Jeux.First(j => j.Titre == "League of Legends");
+                    Jeu jeuCS2 = context.Jeux.First(j => j.Titre == "Counter-Strike 2");
+                    Jeu jeuFC25 = context.Jeux.First(j => j.Titre == "EA Sports FC 25");
+                    Jeu jeuElden = context.Jeux.First(j => j.Titre == "Elden Ring");
+                    Jeu jeuSmash = context.Jeux.First(j => j.Titre == "Super Smash Bros. Ultimate");
+                    Jeu jeuMinecraft = context.Jeux.First(j => j.Titre == "Minecraft");
+
+                    Plateforme plateformePlaystation = context.Plateformes.First(p => p.Libelle == "PlayStation 5");
+                    Plateforme plateformeXbox = context.Plateformes.First(p => p.Libelle == "Xbox Series X/S");
+                    Plateforme plateformeNintendoSwitch = context.Plateformes.First(p => p.Libelle == "Nintendo Switch");
+                    Plateforme plateformePc = context.Plateformes.First(p => p.Libelle == "PC (Windows)");
+                    Plateforme plateformeNintendoSwitch2 = context.Plateformes.First(p => p.Libelle == "Nintendo Switch 2");
+                    Plateforme plateformeNintendoWiiU = context.Plateformes.First(p => p.Libelle == "Nintendo Wii U");
+
+                    context.SoumisVotes.AddRange(new List<SoumisVote>
+                    {
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuMK.IdJeu, IdPlateforme = plateformeNintendoSwitch.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuFortnite.IdJeu, IdPlateforme = plateformePc.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuHalo.IdJeu, IdPlateforme = plateformeXbox.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuValorant.IdJeu, IdPlateforme = plateformePc.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuLoL.IdJeu, IdPlateforme = plateformePc.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuCS2.IdJeu, IdPlateforme = plateformePc.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuElden.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuMinecraft.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme },
+                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = jeuSmash.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme },
+                    });
+
+                    context.SaveChanges();
+
+                    context.Voter.AddRange(new List<Voter>
+                    {
+                        new Voter { IdJeu = jeuMK.IdJeu, IdPlateforme = plateformeNintendoSwitch.IdPlateforme, IdUser = 946, DateVote = DateTime.Now.AddDays(-3) },
+                        new Voter { IdJeu = jeuMK.IdJeu, IdPlateforme = plateformeNintendoSwitch.IdPlateforme, IdUser = 785, DateVote = DateTime.Now.AddDays(-1) },
+                        new Voter { IdJeu = jeuMK.IdJeu, IdPlateforme = plateformeNintendoSwitch.IdPlateforme, IdUser = 453, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuMK.IdJeu, IdPlateforme = plateformeNintendoSwitch.IdPlateforme, IdUser = 864, DateVote = DateTime.Now.AddDays(-4) },
+                        new Voter { IdJeu = jeuMK.IdJeu, IdPlateforme = plateformeNintendoSwitch.IdPlateforme, IdUser = 125, DateVote = DateTime.Now.AddDays(-3) },
+                        new Voter { IdJeu = jeuMK.IdJeu, IdPlateforme = plateformeNintendoSwitch.IdPlateforme, IdUser = 666, DateVote = DateTime.Now.AddDays(-2) },
+                        new Voter { IdJeu = jeuFortnite.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 666, DateVote = DateTime.Now.AddDays(-2) },
+                        new Voter { IdJeu = jeuFortnite.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 453, DateVote = DateTime.Now.AddDays(-1) },
+                        new Voter { IdJeu = jeuFortnite.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 125, DateVote = DateTime.Now.AddDays(-1) },
+                        new Voter { IdJeu = jeuFortnite.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 785, DateVote = DateTime.Now.AddDays(-4) },
+                        new Voter { IdJeu = jeuFortnite.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 946, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuHalo.IdJeu, IdPlateforme = plateformeXbox.IdPlateforme, IdUser = 163, DateVote = DateTime.Now.AddDays(-3) },
+                        new Voter { IdJeu = jeuHalo.IdJeu, IdPlateforme = plateformeXbox.IdPlateforme, IdUser = 453, DateVote = DateTime.Now.AddDays(-3) },
+                        new Voter { IdJeu = jeuHalo.IdJeu, IdPlateforme = plateformeXbox.IdPlateforme, IdUser = 785, DateVote = DateTime.Now.AddDays(-3) },
+                        new Voter { IdJeu = jeuValorant.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 125, DateVote = DateTime.Now.AddDays(-5) },
+                        new Voter { IdJeu = jeuLoL.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 942, DateVote = DateTime.Now.AddDays(-5) },
+                        new Voter { IdJeu = jeuLoL.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 457, DateVote = DateTime.Now.AddDays(-3) },
+                        new Voter { IdJeu = jeuLoL.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 453, DateVote = DateTime.Now.AddDays(-4) },
+                        new Voter { IdJeu = jeuLoL.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 125, DateVote = DateTime.Now.AddDays(-5) },
+                        new Voter { IdJeu = jeuCS2.IdJeu, IdPlateforme = plateformePc.IdPlateforme, IdUser = 163, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 180, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 457, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 917, DateVote = DateTime.Now.AddDays(-1) },
+                        new Voter { IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 125, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 74, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 163, DateVote = DateTime.Now.AddDays(-2) },
+                        new Voter { IdJeu = jeuFC25.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 453, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuMinecraft.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 453, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuElden.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 453, DateVote = DateTime.Now.AddDays(-1) },
+                        new Voter { IdJeu = jeuElden.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 845, DateVote = DateTime.Now.AddDays(-3) },
+                        new Voter { IdJeu = jeuElden.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 920, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuElden.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 841, DateVote = DateTime.Now.AddDays(-2) },
+                        new Voter { IdJeu = jeuElden.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 120, DateVote = DateTime.Now },
+                        new Voter { IdJeu = jeuSmash.IdJeu, IdPlateforme = plateformePlaystation.IdPlateforme, IdUser = 510, DateVote = DateTime.Now },
+                    });
 
                     context.SaveChanges();
                 }
+
+                if (!context.Participer.Any())
+                {
+                    Tournoi tournoiMK = context.Tournois.First(t => t.Nom == "Tournoi Mario Kart");
+                    Tournoi tournoiLol = context.Tournois.First(t => t.Nom == "Tournoi LoL Printemps");
+                    Tournoi tournoiFtn = context.Tournois.First(t => t.Nom == "Tournoi Fortnite Saison 1");
+                    Tournoi tournoiElden = context.Tournois.First(t => t.Nom == "Tournoi Elden Ring No Hit");
+                    context.Participer.AddRange(new List<Participer>
+                    {
+                   new Participer { IdUser = 845, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-10), Rang = 0 },
+                   new Participer { IdUser = 453, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-7), Rang = 0 },
+                   new Participer { IdUser = 120, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-7), Rang = 0 },
+                   new Participer { IdUser = 457, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-5), Rang = 0 },
+                   new Participer { IdUser = 812, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-4), Rang = 0 },
+
+                   new Participer { IdUser = 920, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                       new Participer { IdUser = 150, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                       new Participer { IdUser = 760, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now , Rang = 0},
+                       new Participer { IdUser = 125, NumeroTournoi = tournoiMK.NumeroTournoi, DateHeureInscription = DateTime.Now , Rang = 0},
+
+                       new Participer { IdUser = 845, NumeroTournoi = tournoiElden.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-10) , Rang = 0},
+                       new Participer { IdUser = 453, NumeroTournoi = tournoiElden.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-7) , Rang = 0},
+                       new Participer { IdUser = 920, NumeroTournoi = tournoiElden.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                       new Participer { IdUser = 150, NumeroTournoi = tournoiElden.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                       new Participer { IdUser = 760, NumeroTournoi = tournoiElden.NumeroTournoi, DateHeureInscription = DateTime.Now , Rang = 0},
+                       new Participer { IdUser = 125, NumeroTournoi = tournoiElden.NumeroTournoi, DateHeureInscription = DateTime.Now , Rang = 0},
+
+                       new Participer { IdUser = 845, NumeroTournoi = tournoiFtn.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-10) , Rang = 0},
+                       new Participer { IdUser = 453, NumeroTournoi = tournoiFtn.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-7) , Rang = 0},
+                       new Participer { IdUser = 120, NumeroTournoi = tournoiFtn.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-7), Rang = 0 },
+
+                       new Participer { IdUser = 845, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-10), Rang = 0 },
+                       new Participer { IdUser = 453, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-7) , Rang = 0},
+                       new Participer { IdUser = 920, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                       new Participer { IdUser = 150, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                       new Participer { IdUser = 858, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(0) , Rang = 0},
+                       new Participer { IdUser = 495, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-1) , Rang = 0},
+                       new Participer { IdUser = 921, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-1) , Rang = 0},
+                       new Participer { IdUser = 152, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-1) , Rang = 0},
+                       new Participer { IdUser = 857, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-2) , Rang = 0},
+                       new Participer { IdUser = 470, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-2) , Rang = 0},
+                       new Participer { IdUser = 910, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                       new Participer { IdUser = 149, NumeroTournoi = tournoiLol.NumeroTournoi, DateHeureInscription = DateTime.Now.AddDays(-3) , Rang = 0},
+                });
+                    context.SaveChanges();
+                }
+
                 // lancement du formulaire principal
                 ApplicationConfiguration.Initialize();
                 Application.Run(new FormAuthentification());

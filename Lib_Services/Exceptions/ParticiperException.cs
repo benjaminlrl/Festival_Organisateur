@@ -20,6 +20,8 @@
         RangInvalide = 14,
         LotRemisParDefaut = 15,
         ScoreFinal = 16,
+        ParticipationTournoiChevauchee = 17,
+
     }
 
     public ParticiperException(string message, int codeErreur) : base(message)
