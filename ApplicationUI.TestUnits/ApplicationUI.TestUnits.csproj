@@ -5,9 +5,14 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UseVSTest>true</UseVSTest>
+	  <!-- <UseVSTest>true</UseVSTest> -->
   </PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Lib_Services\Lib_Services.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.7" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
+	  <PackageReference Include="MSTest" Version="4.2.1" />
 	</ItemGroup>
 </Project>

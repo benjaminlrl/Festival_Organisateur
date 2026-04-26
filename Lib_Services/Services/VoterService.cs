@@ -21,7 +21,7 @@ namespace Lib_Services.Services
         public VoterService(ApplicationDbContext context)
         {
             _context = context;
-            nbVotesMax = ConstanteService.Voter.NbMaxVotes;
+            nbVotesMax = ConstanteService.Voter.NbMaxVotesParJoueur;
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Lib_Services.Services
 
             // L'utilisateur ne peut pas voter plus de NB_VOTES_MAX fois pour un même jeu sur une même plateforme.
             if (_context.Voter.Count(v => v.IdUser == vote.IdUser) >= nbVotesMax)
-                throw new VoteException("Vous avez atteint le nombre maximum de votes.", (int)VoteException.VoteErreur.NbVotesMax);
+                throw new VoteException("Vous avez atteint le nombre maximum de votes.", (int)VoteException.VoteErreur.NbVotesMaxParJoueur);
 
             // Si l'utilisateur a déjà voté pour ce jeu sur cette plateforme, il ne peut pas voter à nouveau.
             if (Obtenir(vote.IdJeu, vote.IdPlateforme, vote.IdUser) != null)

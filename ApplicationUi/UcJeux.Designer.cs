@@ -33,8 +33,6 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
-            comboBoxPegi = new ComboBox();
-            labelPegi = new Label();
             textBoxTitre = new TextBox();
             labelPlateforme = new Label();
             textBoxEditeur = new TextBox();
@@ -45,6 +43,8 @@
             labelDateSortie = new Label();
             dateTimePickerDateSortie = new DateTimePicker();
             checkedListBoxPlateforme = new CheckedListBox();
+            labelPegi = new Label();
+            comboBoxPegi = new ComboBox();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
@@ -114,8 +114,6 @@
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 239F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 279F));
-            tableLayoutPanel.Controls.Add(comboBoxPegi, 1, 3);
-            tableLayoutPanel.Controls.Add(labelPegi, 1, 2);
             tableLayoutPanel.Controls.Add(textBoxTitre, 0, 1);
             tableLayoutPanel.Controls.Add(labelPlateforme, 2, 0);
             tableLayoutPanel.Controls.Add(textBoxEditeur, 0, 3);
@@ -126,6 +124,8 @@
             tableLayoutPanel.Controls.Add(labelDateSortie, 3, 0);
             tableLayoutPanel.Controls.Add(dateTimePickerDateSortie, 3, 1);
             tableLayoutPanel.Controls.Add(checkedListBoxPlateforme, 2, 1);
+            tableLayoutPanel.Controls.Add(labelPegi, 3, 2);
+            tableLayoutPanel.Controls.Add(comboBoxPegi, 3, 3);
             tableLayoutPanel.Location = new Point(10, 12);
             tableLayoutPanel.Margin = new Padding(4, 3, 4, 3);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -138,124 +138,138 @@
             tableLayoutPanel.Size = new Size(1129, 143);
             tableLayoutPanel.TabIndex = 0;
             // 
-            // comboBoxPegi
-            // 
-            comboBoxPegi.DisplayMember = "3,7,";
-            comboBoxPegi.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPegi.Location = new Point(309, 108);
-            comboBoxPegi.Margin = new Padding(4, 3, 4, 3);
-            comboBoxPegi.Name = "comboBoxPegi";
-            comboBoxPegi.Size = new Size(217, 33);
-            comboBoxPegi.TabIndex = 28;
-            // 
-            // labelPegi
-            // 
-            labelPegi.AutoSize = true;
-            labelPegi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelPegi.Location = new Point(309, 78);
-            labelPegi.Margin = new Padding(4, 0, 4, 0);
-            labelPegi.Name = "labelPegi";
-            labelPegi.Size = new Size(52, 27);
-            labelPegi.TabIndex = 27;
-            labelPegi.Text = "Pegi";
-            // 
             // textBoxTitre
             // 
+            textBoxTitre.Dock = DockStyle.Fill;
             textBoxTitre.Location = new Point(4, 38);
             textBoxTitre.Margin = new Padding(4, 3, 4, 3);
             textBoxTitre.Name = "textBoxTitre";
             textBoxTitre.PlaceholderText = "Ex: Mariokart 8";
-            textBoxTitre.Size = new Size(281, 31);
+            textBoxTitre.Size = new Size(297, 31);
             textBoxTitre.TabIndex = 0;
             // 
             // labelPlateforme
             // 
             labelPlateforme.AutoSize = true;
+            labelPlateforme.Dock = DockStyle.Fill;
             labelPlateforme.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelPlateforme.Location = new Point(614, 0);
             labelPlateforme.Margin = new Padding(4, 0, 4, 0);
             labelPlateforme.Name = "labelPlateforme";
-            labelPlateforme.Size = new Size(128, 28);
+            labelPlateforme.Size = new Size(231, 35);
             labelPlateforme.TabIndex = 21;
             labelPlateforme.Text = "Plateforme :";
             // 
             // textBoxEditeur
             // 
+            textBoxEditeur.Dock = DockStyle.Fill;
             textBoxEditeur.Location = new Point(3, 108);
             textBoxEditeur.Name = "textBoxEditeur";
             textBoxEditeur.PlaceholderText = "Editeur";
-            textBoxEditeur.Size = new Size(150, 31);
+            textBoxEditeur.Size = new Size(299, 31);
             textBoxEditeur.TabIndex = 23;
             // 
             // labelEditeur
             // 
             labelEditeur.AutoSize = true;
+            labelEditeur.Dock = DockStyle.Fill;
             labelEditeur.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelEditeur.Location = new Point(4, 78);
             labelEditeur.Margin = new Padding(4, 0, 4, 0);
             labelEditeur.Name = "labelEditeur";
-            labelEditeur.Size = new Size(80, 27);
+            labelEditeur.Size = new Size(297, 27);
             labelEditeur.TabIndex = 8;
             labelEditeur.Text = "Editeur";
             // 
             // labelTitre
             // 
             labelTitre.AutoSize = true;
+            labelTitre.Dock = DockStyle.Fill;
             labelTitre.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelTitre.Location = new Point(4, 0);
             labelTitre.Margin = new Padding(4, 0, 4, 0);
             labelTitre.Name = "labelTitre";
-            labelTitre.Size = new Size(68, 28);
+            labelTitre.Size = new Size(297, 35);
             labelTitre.TabIndex = 6;
             labelTitre.Text = "Titre :";
             // 
             // labelDescription
             // 
             labelDescription.AutoSize = true;
+            labelDescription.Dock = DockStyle.Fill;
             labelDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelDescription.Location = new Point(309, 0);
             labelDescription.Margin = new Padding(4, 0, 4, 0);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(132, 28);
+            labelDescription.Size = new Size(297, 35);
             labelDescription.TabIndex = 26;
             labelDescription.Text = "Description :";
             // 
             // textBoxDescription
             // 
+            textBoxDescription.Dock = DockStyle.Fill;
             textBoxDescription.Location = new Point(309, 38);
             textBoxDescription.Margin = new Padding(4, 3, 4, 3);
+            textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Mariokart 8 est un jeu de courses";
-            textBoxDescription.Size = new Size(281, 31);
+            tableLayoutPanel.SetRowSpan(textBoxDescription, 3);
+            textBoxDescription.Size = new Size(297, 106);
             textBoxDescription.TabIndex = 25;
             // 
             // labelDateSortie
             // 
             labelDateSortie.AutoSize = true;
+            labelDateSortie.Dock = DockStyle.Fill;
             labelDateSortie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
             labelDateSortie.Location = new Point(853, 0);
             labelDateSortie.Margin = new Padding(4, 0, 4, 0);
             labelDateSortie.Name = "labelDateSortie";
-            labelDateSortie.Size = new Size(158, 28);
+            labelDateSortie.Size = new Size(272, 35);
             labelDateSortie.TabIndex = 19;
             labelDateSortie.Text = "Date de sortie :";
             // 
             // dateTimePickerDateSortie
             // 
+            dateTimePickerDateSortie.Dock = DockStyle.Fill;
             dateTimePickerDateSortie.Format = DateTimePickerFormat.Short;
             dateTimePickerDateSortie.Location = new Point(852, 38);
             dateTimePickerDateSortie.Name = "dateTimePickerDateSortie";
-            dateTimePickerDateSortie.Size = new Size(223, 31);
+            dateTimePickerDateSortie.Size = new Size(274, 31);
             dateTimePickerDateSortie.TabIndex = 24;
             // 
             // checkedListBoxPlateforme
             // 
+            checkedListBoxPlateforme.Dock = DockStyle.Fill;
             checkedListBoxPlateforme.FormattingEnabled = true;
             checkedListBoxPlateforme.Location = new Point(613, 38);
             checkedListBoxPlateforme.Name = "checkedListBoxPlateforme";
             tableLayoutPanel.SetRowSpan(checkedListBoxPlateforme, 3);
-            checkedListBoxPlateforme.Size = new Size(231, 60);
+            checkedListBoxPlateforme.Size = new Size(233, 106);
             checkedListBoxPlateforme.TabIndex = 29;
+            // 
+            // labelPegi
+            // 
+            labelPegi.AutoSize = true;
+            labelPegi.Dock = DockStyle.Fill;
+            labelPegi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelPegi.Location = new Point(853, 78);
+            labelPegi.Margin = new Padding(4, 0, 4, 0);
+            labelPegi.Name = "labelPegi";
+            labelPegi.Size = new Size(272, 27);
+            labelPegi.TabIndex = 27;
+            labelPegi.Text = "Pegi";
+            // 
+            // comboBoxPegi
+            // 
+            comboBoxPegi.DisplayMember = "3,7,";
+            comboBoxPegi.Dock = DockStyle.Fill;
+            comboBoxPegi.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxPegi.Location = new Point(853, 108);
+            comboBoxPegi.Margin = new Padding(4, 3, 4, 3);
+            comboBoxPegi.Name = "comboBoxPegi";
+            comboBoxPegi.Size = new Size(272, 33);
+            comboBoxPegi.TabIndex = 28;
             // 
             // panelButtons
             // 

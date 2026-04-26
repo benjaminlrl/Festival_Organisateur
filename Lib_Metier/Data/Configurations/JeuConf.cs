@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lib_Metier.Data.Configurations
 {
-    public class JeuConConf : IEntityTypeConfiguration<Jeu>
+    public class JeuConf : IEntityTypeConfiguration<Jeu>
     {
         /// <summary>
         /// Configure le mapping EF Core pour l'entité Jeu>.

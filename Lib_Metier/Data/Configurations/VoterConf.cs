@@ -32,6 +32,14 @@ namespace Lib_Metier.Data.Configurations
 
             builder.Property(v => v.IdUser)
                    .HasColumnName("id_user");
+
+            builder.HasOne(v => v.Jeu)
+                   .WithMany()
+                   .HasForeignKey(v => v.IdJeu);
+
+            builder.HasOne(v => v.Plateforme)
+                   .WithMany()
+                   .HasForeignKey(v => v.IdPlateforme);
         }
     }
 }

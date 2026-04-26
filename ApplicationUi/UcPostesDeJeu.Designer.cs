@@ -225,7 +225,7 @@
             textBoxReference.Location = new Point(4, 39);
             textBoxReference.Margin = new Padding(4);
             textBoxReference.Name = "textBoxReference";
-            textBoxReference.PlaceholderText = "Ex: Tournoi Mario Kart Débutant";
+            textBoxReference.PlaceholderText = "Généré automatiquement";
             textBoxReference.ReadOnly = true;
             textBoxReference.Size = new Size(282, 31);
             textBoxReference.TabIndex = 0;
