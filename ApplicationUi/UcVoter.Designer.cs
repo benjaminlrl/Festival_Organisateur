@@ -441,6 +441,7 @@
             dataGridSoumisVote.Size = new Size(1312, 352);
             dataGridSoumisVote.TabIndex = 6;
             dataGridSoumisVote.CellClick += DataGridSoumisVote_CellClick;
+            dataGridSoumisVote.CellContentDoubleClick += dataGridSoumisVote_CellContentDoubleClick;
             // 
             // UcVoter
             // 

@@ -53,8 +53,8 @@ namespace Lib_Services.Services
             query = propriete switch
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
-                "Libelle" => ordre == "ASC" ? query.OrderBy(sv => sv.Plateforme.Libelle) : query.OrderByDescending(sv => sv.Plateforme.Libelle),
-                "Titre" => ordre == "ASC" ? query.OrderBy(sv => sv.Jeu.Titre) : query.OrderByDescending(sv => sv.Jeu.Titre),
+                "LibellePlateforme" => ordre == "ASC" ? query.OrderBy(sv => sv.Plateforme.Libelle) : query.OrderByDescending(sv => sv.Plateforme.Libelle),
+                "TitreJeu" => ordre == "ASC" ? query.OrderBy(sv => sv.Jeu.Titre) : query.OrderByDescending(sv => sv.Jeu.Titre),
                 "DateDebutVote" => ordre == "ASC" ? query.OrderBy(sv => sv.DateDebutVote) : query.OrderByDescending(sv => sv.DateDebutVote),
                 "DateFinVote" => ordre == "ASC" ? query.OrderBy(sv => sv.DateFinVote) : query.OrderByDescending(sv => sv.DateFinVote),
                 _ => query.OrderByDescending(sv => sv.DateDebutVote) // valeur par défaut

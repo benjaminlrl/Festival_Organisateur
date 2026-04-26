@@ -29,7 +29,7 @@ namespace ApplicationUi
         private readonly Organisateur _organisateurConnecte;
         public event Action<PosteJeu>? NaviguerVersPostesJeu;
         public event Action<Jeu>? NaviguerVersJeux;
-        public UcPlateformes(Organisateur unOrganisateurConnecte)
+        public UcPlateformes(Organisateur unOrganisateurConnecte, Plateforme? plateformePreselectionnee = null)
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
@@ -49,6 +49,12 @@ namespace ApplicationUi
             ordreChamp = "DESC";
 
             Raz_Zones();
+
+            if (plateformePreselectionnee != null)
+            {
+                _plateformeSelectionee = plateformePreselectionnee;
+                RemplirFormulaire();
+            }
 
             if (_serviceOrganisateur.estAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPlateformes, "Ajouter") == false)
             {
