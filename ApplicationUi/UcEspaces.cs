@@ -287,75 +287,7 @@ namespace ApplicationUi
             _espaceSelectionnee.CapaciteMaxi = (int)numericUpDownCapaciteMaxi.Value;
             _espaceSelectionnee.Superficie = (int)numericUpDownSuperficie.Value;
 
-            try
-            {
-                _serviceEspace.Modifier(_espaceSelectionnee);
-                MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (EspaceException ex)
-            {
-                if (ex.CodeErreur == (int)EspaceException.EspaceErreur.ModificationNomExistePostesJeu)
-                {
-                    if (MessageBox.Show("Voulez vous renommer l'espace et reformatter le nom des postes de jeu associés ?",
-                        "Modification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        try
-                        {
-                            _serviceEspace.Modifier(_espaceSelectionnee, true);
-                            MessageBox.Show("L'espace et ses postes de jeu ont bien été modifiés.", "Modification",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (EspaceException ex2)
-                        {
-                            if (ex2.CodeErreur == (int)EspaceException.EspaceErreur.ModificationAucunPosteJeu)
-                            {
-                                Log.Warning("[{Code}] {Message}", ex2.CodeErreur, ex2.Message);
-                                MessageBox.Show("L'espace a bien été modifié\n"+
-                                    ex2.Message);
-                            }
-                            else
-                            {
-                                Log.Error(ex2, "Une erreur technique est survenue lors de la modification de l'espace et de ses postes de jeu associés.");
-                                MessageBox.Show(ex2.Message);
-                            }
-                        }
-                        catch (PosteJeuException ex2)
-                        {
-                            Log.Error(ex2, "Une erreur technique est survenue lors de la modification des postes de jeu pour le reformatage des references.");
-                            MessageBox.Show(ex2.Message);
-                        }
-                        catch (DbException ex2)
-                        {
-                            Log.Error(ex2, "Une erreur technique est survenue lors de la modification des postes de jeu pour le reformatage des references.");
-                            MessageBox.Show("Erreur technique, réessayez plus tard.");
-                        }
-                        catch (Exception ex2)
-                        {
-                            Log.Error(ex2, "Une erreur inattendue est survenue lors de la modification des postes de jeu pour le reformatage des references.");
-                            MessageBox.Show("Une erreur inattendue est survenue.");
-                        }
-                    }
-                }
-                else
-                {
-                    Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                    MessageBox.Show(ex.Message);
-                }
-            }
-            catch (DbException ex)
-            {
-                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
-            }
-            finally
-            {
-                Raz_Zones();
-            }
+            ModifierEspace(false);
 
         }
         /// <summary>
@@ -378,16 +310,14 @@ namespace ApplicationUi
         /// <param name="e">Les données d'événement associées au clic sur le bouton.</param>
         private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
-            // Si aucune ligne n'est sélectionnée, ne rien faire
             if (dataGridEspaces.CurrentRow == null || _espaceSelectionnee == null)
                 return;
 
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
 
-            _serviceEspace.Supprimer(_espaceSelectionnee.IdEspace);
-            MessageBox.Show("L'espace a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Raz_Zones();
+            SupprimerEspace(false);
         }
         #endregion 
         /// <summary>
@@ -616,6 +546,85 @@ namespace ApplicationUi
             foreach (DataGridViewColumn col in dataGrid.Columns)
             {
                 col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
+        
+        private void ModifierEspace(bool modifPosteJeu)
+        {
+            try
+            {
+                _serviceEspace.Modifier(_espaceSelectionnee!, modifPosteJeu);
+                MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (EspaceException ex)
+            {
+
+                if (ex.CodeErreur == (int)EspaceException.EspaceErreur.ModificationNomExistePostesJeu)
+                {
+                    if (MessageBox.Show("Voulez vous renommer l'espace et reformatter le nom des postes de jeu associés ?",
+                        "Modification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                        return;
+
+                    ModifierEspace(true);
+
+                }
+                else
+                {
+                    Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
+        }
+
+
+        /// <summary>
+        /// Permets de supprimer un espace en gérant les différentes exceptions qui peuvent survenir, notamment lorsqu'il existe des postes de jeu associés à l'espace.
+        /// </summary>
+        /// <param name="avecPostesJeu"></param>
+        private void SupprimerEspace(bool avecPostesJeu)
+        {
+            try
+            {
+                _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, avecPostesJeu);
+                MessageBox.Show("L'espace a bien été supprimé.", "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !avecPostesJeu)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                if (MessageBox.Show("Impossible de supprimer l'espace car il est associé à un ou plusieurs postes de jeu.\n" +
+                    "Voulez-vous supprimer les postes de jeux également ?", "Suppression",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    SupprimerEspace(true); // rappel avec les postes
+                }
+            }
+            catch (EspaceException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Erreur technique lors de la suppression de l'espace.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors de la suppression de l'espace.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         #endregion
