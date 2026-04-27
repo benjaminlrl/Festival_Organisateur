@@ -353,7 +353,7 @@ Aucun fichier de configuration externe n'est requis — la base SQLite est cré�
 
 #### Schéma UML
 
-![Schéma UML de la base de données](Documentation/Schema/SchemaBddFestivalOrganisation.png)
+![Schéma UML de la base de données](Documentation/Schema/SchemaUMLBddFestivalOrganisation.png)
 
 #### Schéma relationnel de la base de données actuelle
 
