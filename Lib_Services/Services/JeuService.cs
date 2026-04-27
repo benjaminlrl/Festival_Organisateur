@@ -85,7 +85,7 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="titreJeu">Titre du jeu recherché.</param>
         /// <returns>Instance de <see cref="Jeu"/> si trouvée, sinon null.</returns>
-        public Jeu? ObtenirAvecTitre(string titreJeu)
+        public Jeu? ObtenirParTitre(string titreJeu)
         {
             // Find retourne null si l'entité n'existe pas.
             return _context.Jeux
@@ -133,7 +133,7 @@ namespace Lib_Services.Services
                 jeu?.AnneeSortie = jeu.DateSortie.Year.ToString(); // année de sortie calculée
 
                 ValiderJeu(jeu, true);
-                _context.Jeux.Update(jeu);
+                _context.Jeux.Update(jeu!);
                 _context.SaveChanges();
             }
             catch (JeuException ex)
@@ -193,7 +193,7 @@ namespace Lib_Services.Services
                 throw new JeuException("Le titre est requis.",
                     (int)JeuException.JeuErreur.JeuTitreRequis);
 
-            Jeu? jeuTitre = ObtenirAvecTitre(jeu.Titre);
+            Jeu? jeuTitre = ObtenirParTitre(jeu.Titre);
 
             if(jeuTitre != null
                 && jeuTitre.IdJeu != jeu.IdJeu)

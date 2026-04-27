@@ -111,7 +111,7 @@ namespace Lib_Services.Services
                 .ToList();
         }
 
-        public List<Tournoi> ObtenirAvecNom(string nomEspace)
+        public List<Tournoi> ObtenirParNom(string nomEspace)
         {
             return _context.Tournois
                 .Include(t => t.Espace)
@@ -236,7 +236,7 @@ namespace Lib_Services.Services
                 throw new TournoiException("Le nom est requis.",
                     (int)TournoiException.TournoiErreur.TournoiNomRequis);
 
-            List<Tournoi> tournoiBdd = ObtenirAvecNom(tournoi.Nom);
+            List<Tournoi> tournoiBdd = ObtenirParNom(tournoi.Nom);
 
             if (tournoiBdd.Count > 0 && 
                 (!estModification || tournoiBdd.Any(t => t.NumeroTournoi != tournoi.NumeroTournoi)))

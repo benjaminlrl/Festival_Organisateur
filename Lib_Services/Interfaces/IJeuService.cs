@@ -34,7 +34,7 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="titreJeu">Titre du jeu recherché.</param>
         /// <returns>Instance de <see cref="Jeu"/> si trouvée, sinon null.</returns>
-        public Jeu? ObtenirAvecTitre(string titreJeu);
+        public Jeu? ObtenirParTitre(string titreJeu);
         #endregion
         #region CUD
 
