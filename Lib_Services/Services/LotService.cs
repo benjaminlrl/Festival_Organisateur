@@ -140,8 +140,16 @@ namespace Lib_Services.Services
                     (int)LotException.LotErreur.LibelleTropLong);
 
             if (lot.RangAttribution < 0)
-                throw new LotException("Le rang ne peut pas être nul ou négatif.",
+                throw new LotException("Le rang ne peut pas être négatif.",
                     (int)LotException.LotErreur.RangNegatif);
+
+            if (lot.RangAttribution == 0)
+                throw new LotException("Le rang ne peut pas être égale à 0.",
+                    (int)LotException.LotErreur.RangZero);
+
+            if (lot.RangAttribution > 10)
+                throw new LotException("Le rang ne peut pas être supérieur à 10.",
+                    (int)LotException.LotErreur.RangTropGrand);
         }
 
         /// <summary>

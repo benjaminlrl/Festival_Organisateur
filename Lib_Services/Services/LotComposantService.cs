@@ -164,15 +164,23 @@ namespace Lib_Services.Services
                 throw new LotComposantException("Le lot ne peut pas être vide.",
                     (int)LotComposantException.LotComposantErreur.LotVide);
 
+            if (lotComposant.Valeur < 0)
+                throw new LotComposantException("La valeur ne peut pas être négatif.",
+                    (int)LotComposantException.LotComposantErreur.ValeurNegative);
+
+            if (lotComposant.Valeur == 0)
+                throw new LotComposantException("La valeur ne peut pas être égale à 0.",
+                    (int)LotComposantException.LotComposantErreur.ValeurZero);
+
+            if (lotComposant.Valeur > 1000000)
+                throw new LotComposantException("La valeur ne peut pas dépasser 1 000 000.",
+                    (int)LotComposantException.LotComposantErreur.ValeurTropGrande);
+
             if (lotComposant.Libelle.Length > 50)
                 throw new LotComposantException("Le libellé ne peut pas dépasser 50 caractères.",
                     (int)LotComposantException.LotComposantErreur.LibelleTropLong);
 
-            if (lotComposant.Valeur < 0)
-                throw new LotComposantException("La valeur doit être positive.",
-                    (int)LotComposantException.LotComposantErreur.ValeurNegative);
-
-            if (!string.IsNullOrEmpty(lotComposant.Description) && lotComposant.Description.Length > 150)
+            if (lotComposant.Description.Length > 150)
                 throw new LotComposantException("La description ne peut pas dépasser 150 caractères.",
                     (int)LotComposantException.LotComposantErreur.DescriptionTropLongue);
         }
@@ -186,7 +194,7 @@ namespace Lib_Services.Services
         {
             if (Obtenir(lotComposant.Numero) == null)
                 throw new LotComposantException("Le lot composant n'existe pas en base de données'.",
-                    (int)LotComposantException.LotComposantErreur.LotComposantInexistant);
+                    (int)LotComposantException.LotComposantErreur.SuppressionLotComposantInexistant);
         }
         #endregion
     }

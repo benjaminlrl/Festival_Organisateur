@@ -4,20 +4,24 @@
 
     public enum OrganisateurErreur
     {
+        // Exception concernant la création ou la modification
         LoginVide = 1,
         MailVide = 2,
         MdpVide = 3,
         RoleVide = 4,
-        LoginTropLong = 5,
-        LoginTropCourt = 6,
-        MdpEspace = 7,
-        MdpTropCourt = 8,
-        MdpPasDeMajuscule = 9,
-        MdpPasDeChiffre = 10,
-        MdpPasDeCaractereSpecial = 11,
-        LoginExistant = 12,
-        OrganisateurInexistant = 13,
-        OrganisateurEstAdmin = 14,
+        MdpEspace = 5,
+        MdpTropCourt = 6,
+        MdpPasDeMajuscule = 7,
+        MdpPasDeChiffre = 8,
+        MdpPasDeCaractereSpecial = 9,
+        LoginExistant = 10,
+        LoginTropLong = 11,
+        LoginTropCourt = 12,
+        MailExistant = 13,
+
+        // Exception concernant la suppression
+        OrganisateurInexistant = 14,
+        OrganisateurEstAdmin = 15,
     }
 
     public OrganisateurException(string message, int codeErreur) : base(message)

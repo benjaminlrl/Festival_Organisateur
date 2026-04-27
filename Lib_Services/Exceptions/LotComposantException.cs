@@ -4,13 +4,18 @@
 
     public enum LotComposantErreur
     {
+        // Exception concernant la création ou la modification
         LibelleVide = 1,
         DescriptionVide = 2,
         LotVide = 3,
         ValeurNegative = 4,
-        LibelleTropLong = 5,
-        DescriptionTropLongue = 6,
-        LotComposantInexistant = 7,
+        ValeurZero = 5,
+        ValeurTropGrande = 6,
+        LibelleTropLong = 7,
+        DescriptionTropLongue = 8,
+
+        // Exception concernant la suppression
+        SuppressionLotComposantInexistant = 9,
     }
 
     public LotComposantException(string message, int codeErreur) : base(message)

@@ -236,13 +236,6 @@ namespace Lib_Services.Services
                 throw new OrganisateurException("Le rôle ne peut pas être vide.",
                     (int)OrganisateurException.OrganisateurErreur.RoleVide);
 
-            if (organisateur.Login.Length > 12)
-                throw new OrganisateurException("Le login ne peut pas dépasser 12 caractères.",
-                    (int)OrganisateurException.OrganisateurErreur.LoginTropLong);
-
-            if (organisateur.Login.Length < 3)
-                throw new OrganisateurException("Le login ne peut pas être inférieur à 3 caractères.",
-                    (int)OrganisateurException.OrganisateurErreur.LoginTropCourt);
             if (organisateur.motPasse.Contains(" "))
                 throw new OrganisateurException("Le mot de passe ne peut pas contenir d'espaces.",
                     (int)OrganisateurException.OrganisateurErreur.MdpEspace);
@@ -263,9 +256,22 @@ namespace Lib_Services.Services
                 throw new OrganisateurException("Le mot de passe doit contenir au moin 1 caractère spécial.",
                     (int)OrganisateurException.OrganisateurErreur.MdpPasDeCaractereSpecial);
 
-            if(!estModification && _context.Organisateurs.Any(o => o.Login == organisateur.Login))
+            if (!estModification && _context.Organisateurs.Any(o => o.Login == organisateur.Login))
                 throw new OrganisateurException("Un organisateur avec ce login existe déjà.",
                     (int)OrganisateurException.OrganisateurErreur.LoginExistant);
+
+            if (organisateur.Login.Length > 12)
+                throw new OrganisateurException("Le login ne peut pas dépasser 12 caractères.",
+                    (int)OrganisateurException.OrganisateurErreur.LoginTropLong);
+
+            if (organisateur.Login.Length < 3)
+                throw new OrganisateurException("Le login ne peut pas être inférieur à 3 caractères.",
+                    (int)OrganisateurException.OrganisateurErreur.LoginTropCourt);
+
+            if (_context.Organisateurs.Any(o => o.Mail == organisateur.Mail))
+                throw new OrganisateurException("Ce mail est déjà associée à un autre organisateur.",
+                    (int)OrganisateurException.OrganisateurErreur.MailExistant);
+
         }
 
         /// <summary>
