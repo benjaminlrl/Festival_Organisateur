@@ -85,9 +85,22 @@ namespace Lib_Services.Services
         public void Creer(Jeu jeu)
         {
             jeu.AnneeSortie = jeu.DateSortie.Year.ToString();// année de sortie calculée
-            ValiderJeu(jeu, false);
-            _context.Jeux.Add(jeu);
-            _context.SaveChanges();
+            try
+            {
+                ValiderJeu(jeu);
+                _context.Jeux.Add(jeu);
+                _context.SaveChanges();
+            }
+            catch (JeuException ex)
+            {
+                throw new JeuException("Erreur lors de l'ajout du jeu : \n" + ex.Message,
+                    (int)JeuException.JeuErreur.SuppressionJeuException);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new JeuException("Erreur BDD lors de l'ajout du jeu : \n" + ex.Message,
+                    (int)JeuException.JeuErreur.SuppressionJeuDbUpdateException);
+            }
         }
 
         /// <summary>
@@ -98,9 +111,22 @@ namespace Lib_Services.Services
         {
             // Marque l'entité comme modifiée puis sauvegarde.
             jeu.AnneeSortie = jeu.DateSortie.Year.ToString(); // année de sortie calculée
-            ValiderJeu(jeu, true);
-            _context.Jeux.Update(jeu);
-            _context.SaveChanges();
+            try
+            {
+                ValiderJeu(jeu, true);
+                _context.Jeux.Update(jeu);
+                _context.SaveChanges();
+            }
+            catch (JeuException ex)
+            {
+                throw new JeuException("Erreur lors de la modification du jeu : \n" + ex.Message,
+                    (int)JeuException.JeuErreur.SuppressionJeuException);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new JeuException("Erreur BDD lors de la modification du jeu : \n" + ex.Message,
+                    (int)JeuException.JeuErreur.SuppressionJeuDbUpdateException);
+            }
         }
 
         /// <summary>
@@ -110,14 +136,23 @@ namespace Lib_Services.Services
         public void Supprimer(int idJeu)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var jeu = _context.Jeux.Find(idJeu);
-            if (jeu != null)
+            Jeu? jeu = _context.Jeux.Find(idJeu);
+            try
             {
-                _context.Jeux.Remove(jeu);
-                // Suppression en cascade des Tournois associés au jeu. 
-                // Puisqu'un Tournoi a obligatoirmeent un jeu.
-                _context.Tournois.RemoveRange(_context.Tournois.Where(t => t.IdJeu == idJeu));
+                ValiderSuppressionJeu(jeu);
+                // cas simple sans postes de jeu
+                _context.Jeux.Remove(jeu!);
                 _context.SaveChanges();
+            }
+            catch (JeuException ex)
+            {
+                throw new JeuException("Erreur lors de la suppression de l'espace : \n" + ex.Message,
+                    (int)JeuException.JeuErreur.SuppressionJeuException);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new JeuException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
+                    (int)JeuException.JeuErreur.SuppressionJeuDbUpdateException);
             }
         }
         #endregion
@@ -133,31 +168,73 @@ namespace Lib_Services.Services
         {
             if (string.IsNullOrWhiteSpace(jeu.Titre))
                 throw new JeuException("Le titre est requis.",
-                    (int)JeuException.JeuErreur.TitreRequis);
+                    (int)JeuException.JeuErreur.JeuTitreRequis);
 
             if (string.IsNullOrWhiteSpace(jeu.Description))
                 throw new JeuException("La description est requise.",
-                    (int)JeuException.JeuErreur.DescriptionRequise);
+                    (int)JeuException.JeuErreur.JeuDescriptionRequise);
 
             if (jeu.Description.Length > 500)
                 throw new JeuException("La description ne peut pas dépasser 500 caractères.",
-                    (int)JeuException.JeuErreur.DescriptionTropLongue);
+                    (int)JeuException.JeuErreur.JeuDescriptionTropLongue);
 
             if (string.IsNullOrWhiteSpace(jeu.Editeur))
                 throw new JeuException("L'éditeur est requis.",
-                    (int)JeuException.JeuErreur.EditeurRequis);
+                    (int)JeuException.JeuErreur.JeuEditeurRequis);
 
             if (jeu.DateSortie == default)
                 throw new JeuException("La date de sortie est requise.",
-                    (int)JeuException.JeuErreur.DateSortieRequise);
+                    (int)JeuException.JeuErreur.JeuDateSortieRequise);
 
             if (!Enum.IsDefined(typeof(ConstanteService.PEGI), jeu.Pegi))
                 throw new JeuException("Le PEGI sélectionné est invalide.",
-                    (int)JeuException.JeuErreur.PegiInvalide);
+                    (int)JeuException.JeuErreur.JeuPegiInvalide);
 
             if (Lister(jeu.Titre).Any(j => j.Titre == jeu.Titre && j.IdJeu != jeu.IdJeu))
                 throw new JeuException("Un autre jeu avec ce titre existe déjà.",
-                    (int)JeuException.JeuErreur.TitreExistant);
+                    (int)JeuException.JeuErreur.JeuTitreExistant);
+
+            if (estModification)
+            {
+                Jeu? enBdd = Obtenir(jeu.IdJeu);
+
+                if (enBdd == null)
+                    throw new JeuException("Le jeu à modifier n'existe pas.",
+                        (int)JeuException.JeuErreur.ModificationJeuInexistant);
+
+                if (enBdd .IdJeu != jeu.IdJeu)
+                    throw new JeuException("L'identifiant du jeu ne peut pas être modifié.",
+                        (int)JeuException.JeuErreur.ModificationJeuId);
+
+                if (enBdd.Pegi == jeu.Pegi
+                    && enBdd.Titre == jeu.Titre
+                    && enBdd.DateSortie == jeu.DateSortie
+                    && enBdd.Plateformes == jeu.Plateformes
+                    && enBdd.Description == jeu.Description
+                    && enBdd.AnneeSortie == jeu.AnneeSortie)
+                    throw new JeuException("Aucune modification détectée",
+                        (int)JeuException.JeuErreur.ModificationJeuAucune);
+            }
+        }
+
+        /// <summary>
+        /// Valide les propriétés d'une instance de <see cref="Jeu"/> peut être supprimer ou non.
+        /// </summary>
+        /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
+        /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
+        public void ValiderSuppressionJeu(Jeu? jeu)
+        {
+            if (jeu == null)
+                throw new JeuException("L'espace ne peut pas être null.",
+                    (int)JeuException.JeuErreur.JeuNull);
+
+            if (Obtenir(jeu.IdJeu) == null)
+                throw new JeuException("Le jeu n'existe pas en base de données'.",
+                    (int)JeuException.JeuErreur.JeuInexistant);
+
+            if (jeu.Tournois != null && jeu.Tournois.Any(t => t.Statut == "Planifié" || t.Statut == "En cours"))
+                throw new JeuException("Il n'est pas possible de supprimer un jeu associé à un tournoi planifié ou en cours.",
+                    (int)JeuException.JeuErreur.SuppressionJeuTournoiExistant);
         }
         #endregion
     }

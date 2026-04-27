@@ -59,6 +59,7 @@ namespace ApplicationUi
             }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
         }
+
         #region Données
         private void ChargerJeux()
         {
@@ -110,6 +111,7 @@ namespace ApplicationUi
                                   .ToList(),
                 DateSortie = dateTimePickerDateSortie.Value
             };
+
             try
             {
                 _serviceJeu.Creer(jeu);
@@ -144,7 +146,7 @@ namespace ApplicationUi
             _jeuSelectionne.Titre = textBoxTitre.Text;
             _jeuSelectionne.Description = textBoxDescription.Text; ;
             _jeuSelectionne.Editeur = textBoxEditeur.Text;
-            _jeuSelectionne.Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0;
+            _jeuSelectionne.Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue;
             _jeuSelectionne.Plateformes = checkedListBoxPlateforme.CheckedItems
                           .Cast<Plateforme>()
                           .ToList();
@@ -302,7 +304,7 @@ namespace ApplicationUi
             textBoxDescription.Text = _jeuSelectionne.Description;
             textBoxEditeur.Text = _jeuSelectionne.Editeur;
 
-            comboBoxPegi.SelectedItem = _jeuSelectionne.Pegi;
+            comboBoxPegi.SelectedItem = (ConstanteService.PEGI)_jeuSelectionne.Pegi;
 
             // CheckBox plateforme, pour l aséléction multiple des plateformes
             // on dit explicitement "ces object sont des Plateforme"
