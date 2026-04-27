@@ -26,7 +26,6 @@ namespace ApplicationUi
         private LotComposant? unNouveauLotComposant;
         private readonly Organisateur _organisateurConnecte;
         private List<Lot>? listeLots;
-        int? nouveauNumeroLot;
         string filtre;
         string ordreChamp = "DESC";
         Lot? lotActuelle;
@@ -35,9 +34,10 @@ namespace ApplicationUi
         public UcLotComposants(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
-            _serviceLot = new LotService(new ApplicationDbContext());
-            _serviceLotComposant = new LotComposantService(new ApplicationDbContext());
+            var context = new ApplicationDbContext();
+            _serviceOrganisateur = new OrganisateurService(context);
+            _serviceLot = new LotService(context);
+            _serviceLotComposant = new LotComposantService(context);
             listeLots = new List<Lot>();
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
@@ -164,10 +164,11 @@ namespace ApplicationUi
         private void ChargerStatistiques()
         {
             // Un lot composant est considéré comme non attribués quand il dispose d'aucun lot associé
-            int nbComposantNonAttribue = _serviceLotComposant.Lister(filtre)
-                                    .Count(e => e.Lot == null);
+            var liste = _serviceLotComposant.Lister(filtre);
+            int nbTotal = liste.Count();
+            int nbComposantNonAttribue = liste.Count(e => e.Lot == null);
 
-            labelStatComposantsTotal.Text = $"{_serviceLotComposant.Lister(filtre).Count()}";
+            labelStatComposantsTotal.Text = $"{nbTotal}";
 
             if (nbComposantNonAttribue == 0)
             {
@@ -250,72 +251,70 @@ namespace ApplicationUi
                 MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            // Modifiée seulement les valeurs qui ont été modifiées
-            if (textBoxLibelle.Text != "" || _lotComposantSelectionne.Libelle != textBoxLibelle.Text)
-                _lotComposantSelectionne.Libelle = textBoxLibelle.Text;
-            if (textBoxDescription.Text != "" || _lotComposantSelectionne.Description != textBoxDescription.Text)
-                _lotComposantSelectionne.Description = textBoxDescription.Text;
-            if (textBoxValeur.Text != "" || _lotComposantSelectionne.Valeur != int.Parse(textBoxValeur.Text))
-                _lotComposantSelectionne.Valeur = int.Parse(textBoxValeur.Text);
-            // Gestion du lot nullable
-            nouveauNumeroLot = comboBoxLot.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
-            if (nouveauNumeroLot != _lotComposantSelectionne.NumeroLot)
+            try
             {
-                lotActuelle = nouveauNumeroLot.HasValue
-                    ? _serviceLot.Obtenir(nouveauNumeroLot.Value)
-                    : null;
-
-                lotAncien = _lotComposantSelectionne.NumeroLot.HasValue
-                    ? _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value)
-                    : null;
-
-                _lotComposantSelectionne.NumeroLot = nouveauNumeroLot;
-
-                try
+                // Gestion du lot nullable
+                int? nouveauNumeroLot = comboBoxLot.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
+                if (nouveauNumeroLot != _lotComposantSelectionne.NumeroLot)
                 {
-                    // aucun lot -> un lot 
-                    if (lotAncien == null && lotActuelle != null)
-                    {
-                        lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
-                        _serviceLot.Modifier(lotActuelle);
-                    }
-                    // un lot -> aucun lot
-                    else if (lotActuelle == null && lotAncien != null)
-                    {
-                        lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
-                        _serviceLot.Modifier(lotAncien);
-                    }
-                    // un lot -> un autre lot
-                    else if (lotActuelle != null && lotAncien != null)
-                    {
-                        lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
-                        _serviceLot.Modifier(lotActuelle);
-                        lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
-                        _serviceLot.Modifier(lotAncien);
-                    }
-                    _serviceLotComposant.Modifier(_lotComposantSelectionne);
-                    MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ChargerLotComposants();
-                    Raz_Zones();
-                }
-                catch (LotComposantException ex)
-                {
-                    Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                    MessageBox.Show(ex.Message);
-                }
-                catch (DbException ex)
-                {
-                    Log.Error(ex, "Une erreur technique est survenue lors de la modification du lot composant.");
-                    MessageBox.Show("Erreur technique, réessayez plus tard.");
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Une erreur inattendue est survenue.");
-                    MessageBox.Show("Une erreur inattendue est survenue.");
-                }
+                    lotActuelle = nouveauNumeroLot.HasValue
+                        ? _serviceLot.Obtenir(nouveauNumeroLot.Value)
+                        : null;
 
+                    lotAncien = _lotComposantSelectionne.NumeroLot.HasValue
+                        ? _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value)
+                        : null;
+
+                    _lotComposantSelectionne.NumeroLot = nouveauNumeroLot;
+                }
+                // aucun lot -> un lot 
+                if (lotAncien == null && lotActuelle != null)
+                {
+                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                }
+                // un lot -> aucun lot
+                else if (lotActuelle == null && lotAncien != null)
+                {
+                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotAncien);
+                }
+                // un lot -> un autre lot
+                else if (lotActuelle != null && lotAncien != null)
+                {
+                    lotActuelle.ValeurTotale += _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                    lotAncien.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotAncien);
+                }
+                // Modifiée seulement les valeurs qui ont été modifiées
+                if (textBoxLibelle.Text != "" || _lotComposantSelectionne.Libelle != textBoxLibelle.Text)
+                     _lotComposantSelectionne.Libelle = textBoxLibelle.Text;
+                if (textBoxDescription.Text != "" || _lotComposantSelectionne.Description != textBoxDescription.Text)
+                     _lotComposantSelectionne.Description = textBoxDescription.Text;
+                if (textBoxValeur.Text != "" || _lotComposantSelectionne.Valeur != int.Parse(textBoxValeur.Text))
+                     _lotComposantSelectionne.Valeur = int.Parse(textBoxValeur.Text);
+                _serviceLotComposant.Modifier(_lotComposantSelectionne);
+                MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerLotComposants();
+                Raz_Zones();
             }
+            catch (LotComposantException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du lot composant.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
+
         }
 
         /// <summary>
@@ -339,8 +338,8 @@ namespace ApplicationUi
                 lotActuelle.ValeurTotale -= _lotComposantSelectionne.Valeur;
                 _serviceLot.Modifier(lotActuelle);
             }
-            MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero);
+            MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ChargerLotComposants();
             Raz_Zones();
         }

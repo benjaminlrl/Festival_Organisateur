@@ -28,16 +28,18 @@ namespace ApplicationUi
         private List<LotComposant> listeLotComposants;
         private List<LotComposant> listeLotComposantsDunLot;
         string filtre;
-        int? nouveauNumeroTournoi;
-        string ordreChamp = "DESC";
+        string ordreChampLots = "DESC";
+        string ordreChampComposants = "DESC";
+        string ordreChampComposantsDunLot = "DESC";
 
         public UcLots(Organisateur unOrganisateurConnecte)
         {
             InitializeComponent();
-            _serviceOrganisateur = new OrganisateurService(new ApplicationDbContext());
-            _serviceTournoi = new TournoiService(new ApplicationDbContext());
-            _serviceLot = new LotService(new ApplicationDbContext());
-            _serviceLotComposant = new LotComposantService(new ApplicationDbContext());
+            var context = new ApplicationDbContext();
+            _serviceOrganisateur = new OrganisateurService(context);
+            _serviceTournoi = new TournoiService(context);
+            _serviceLot = new LotService(context);
+            _serviceLotComposant = new LotComposantService(context);
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
             ChargerLots();
@@ -315,11 +317,11 @@ namespace ApplicationUi
         /// </summary>
         private void ChargerStatistiquesLots()
         {
-            // Un lot composant est considéré comme non attribués quand il dispose d'aucun lot associé
-            int nbLotNonAttribue = _serviceLot.Lister(filtre)
-                                    .Count(e => e.Tournoi == null);
+            var liste = _serviceLot.Lister(filtre);
+            int nbTotal = liste.Count();
+            int nbLotNonAttribue = liste.Count(e => e.Tournoi == null);
 
-            labelStatLotsTotal.Text = $"{_serviceLot.Lister(filtre).Count()}";
+            labelStatLotsTotal.Text = $"{nbTotal}";
 
             if (nbLotNonAttribue == 0)
             {
@@ -496,8 +498,8 @@ namespace ApplicationUi
             }
             if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
-            MessageBox.Show("Le lot a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceLot.Supprimer(_lotSelectionnee.Numero);
+            MessageBox.Show("Le lot a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ChargerLots();
             Raz_Zones();
         }
@@ -524,7 +526,7 @@ namespace ApplicationUi
                 if (textBoxRang.Text.ToString() != "" || _lotSelectionnee.RangAttribution != int.Parse(textBoxRang.Text))
                     _lotSelectionnee.RangAttribution = int.Parse(textBoxRang.Text);
                 // Gestion du tournoi nullable
-                nouveauNumeroTournoi = comboBoxTournoi.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
+                int? nouveauNumeroTournoi = comboBoxTournoi.SelectedValue is int valLot ? valLot : (int?)null; //ternaire qui met à null si "Aucun" est sélectionné
                 if (nouveauNumeroTournoi != _lotSelectionnee.NumeroTournoi)
                 {
                     _lotSelectionnee.NumeroTournoi = nouveauNumeroTournoi;
@@ -532,7 +534,7 @@ namespace ApplicationUi
                         _lotSelectionnee.EstAttribue = true;
                 }
                 // On modifie le lot en base
-                _serviceLot.Modifier(unNouveauLot);
+                _serviceLot.Modifier(_lotSelectionnee);
                 MessageBox.Show("Le lot a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ChargerLots();
                 Raz_Zones();
@@ -589,12 +591,12 @@ namespace ApplicationUi
                     return;
 
                 // Inverser l’ordre
-                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+                ordreChampLots = ordreChampLots == "ASC" ? "DESC" : "ASC";
 
                 // Appliquer le tri
-                dataGridLots.DataSource = _serviceLot.Lister(filtre, colonne, ordreChamp);
+                dataGridLots.DataSource = _serviceLot.Lister(filtre, colonne, ordreChampLots);
                 dataGridLots.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
-                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                    ordreChampLots == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGrid("Lots");
                 return;
@@ -637,12 +639,12 @@ namespace ApplicationUi
                     return;
 
                 // Inverser l’ordre
-                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+                ordreChampComposants = ordreChampComposants == "ASC" ? "DESC" : "ASC";
 
                 // Appliquer le tri
-                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChamp);
+                dataGridLotComposants.DataSource = _serviceLotComposant.Lister(filtre, colonne, ordreChampComposants);
                 dataGridLotComposants.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
-                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                    ordreChampComposants == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGrid("LotComposants");
                 return;
@@ -677,12 +679,12 @@ namespace ApplicationUi
                     return;
 
                 // Inverser l’ordre
-                ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
+                ordreChampComposantsDunLot = ordreChampComposantsDunLot == "ASC" ? "DESC" : "ASC";
 
                 // Appliquer le tri
-                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotComposantDunLotSelectionnee.Numero, colonne, ordreChamp);
+                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotComposantDunLotSelectionnee.Numero, colonne, ordreChampComposantsDunLot);
                 dataGridLotComposantsDunLot.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
-                    ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                    ordreChampComposantsDunLot == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGrid("LotComposantsDunLot");
                 return;

@@ -35,8 +35,6 @@ namespace ApplicationUi
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
             Raz_Zones();
-            boutonModifier.Enabled = _organisateurSelectionne != null;
-            boutonSupprimer.Enabled = _organisateurSelectionne != null;
             if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcOrganisateurs, "Ajouter") == false)
             {
                 boutonAjouter.Visible = false;
@@ -241,7 +239,7 @@ namespace ApplicationUi
                 if ((int)comboBoxRole.SelectedValue != _organisateurSelectionne.IdRole)
                     _organisateurSelectionne.IdRole = (int)comboBoxRole.SelectedValue;
 
-                MessageBox.Show("Le lot composant a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("L'organisateur a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 _serviceOrganisateur.Modifier(_organisateurSelectionne);
                 ChargerOrganisateurs();
                 Raz_Zones();
@@ -261,7 +259,6 @@ namespace ApplicationUi
                 Log.Error(ex, "Une erreur inattendue est survenue.");
                 MessageBox.Show("Une erreur inattendue est survenue.");
             }
-            //if (textBoxMotDePasse.Text != "")
         }
 
         /// <summary>
@@ -289,8 +286,8 @@ namespace ApplicationUi
             }
             if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
-            MessageBox.Show("L'organisateur a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login);
+            MessageBox.Show("L'organisateur a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ChargerOrganisateurs();
             Raz_Zones();
         }
