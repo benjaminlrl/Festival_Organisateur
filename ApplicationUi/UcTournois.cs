@@ -211,8 +211,30 @@ namespace ApplicationUi
                 return;
             }
 
-            _serviceTournoi.Supprimer(_tournoiSelectionne.NumeroTournoi);
-            Raz_Zones();
+            try
+            {
+                if (MessageBox.Show("Êtes-vous sûr de vouloir supprimer ce tournoi ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    return;
+
+                _serviceTournoi.Supprimer(_tournoiSelectionne.NumeroTournoi);
+                Raz_Zones();
+            }
+            catch (TournoiException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message, "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modifiation du tournoi.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
         #endregion
         private void DataGridTournois_CellClick(object sender, DataGridViewCellEventArgs e)

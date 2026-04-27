@@ -61,6 +61,7 @@ namespace Lib_Services.Interfaces
         /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
         Espace? ObtenirParNom(string nomEspace);
         #endregion
+
         #region CUD
         /// <summary>
         /// Crée un nouvel espace en base.
@@ -85,7 +86,8 @@ namespace Lib_Services.Interfaces
         /// Supprime un espace identifié par son identifiant s'il existe.
         /// </summary>
         /// <param name="idEspace">Identifiant de l'espace à supprimer.</param>
-        void Supprimer(int idEspace);
+        /// <param name="suppPosteJeu">Indique si la suppression concerne également les postes de jeu associés à l'espace.</param>
+        void Supprimer(int idEspace, bool suppPosteJeu = false);
         #endregion
 
         #region Validations 

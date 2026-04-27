@@ -35,6 +35,9 @@
         SuppressionEspacePosteJeuExistant = 17,
         SuppressionEspaceDbUpdateException = 18,
         SuppressionEspaceException = 19,
+        SuppressionEspacePosteJeuErreur = 20,
+        SuppressionEspacePosteJeuDbErreur = 21,
+        SuppressionEspacePosteJeuErreurInconnue = 22
     }
 
     public EspaceException(string message, int codeErreur) : base(message)

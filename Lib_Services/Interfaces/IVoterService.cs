@@ -37,6 +37,7 @@ namespace Lib_Services.Interfaces
         /// <returns>L'objet <see cref="Voter"/> ou null si aucun vote n'est trouvé.</returns>
         Voter? Obtenir(int idJeu, int idPlateforme, int idUser);
         #endregion
+
         #region CUD
         /// <summary>
         /// Crée un nouveau Vote et persiste la modification.
@@ -60,6 +61,7 @@ namespace Lib_Services.Interfaces
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
         void Supprimer(int idJeu, int idPlateforme, int idUser);
         #endregion       
+
         #region Validations
 
         /// <summary>

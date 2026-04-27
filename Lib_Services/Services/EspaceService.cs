@@ -2,9 +2,11 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Text;
 using static System.Net.WebRequestMethods;
 
@@ -189,47 +191,70 @@ namespace Lib_Services.Services
         /// Supprime un espace identifié par son identifiant s'il existe.
         /// </summary>
         /// <param name="idEspace">Identifiant de l'espace à supprimer.</param>
-        public void Supprimer(int idEspace)
+        /// <param name="suppPOsteJeu">Indique si la suppression concerne les postes de jeu associés à l'espace.</param>
+        public void Supprimer(int idEspace, bool suppPosteJeu = false)
         {
-            // Recherche de l'entité (utilise le cache si possible).
-            Espace? espace = _context.Espaces.Find(idEspace);
+            Espace? espace = _context.Espaces
+                .Include(e => e.PostesJeu)
+                .Include(e => e.Tournois)
+                .FirstOrDefault(e => e.IdEspace == idEspace);
 
-            try
+            ValiderSuppressionEspace(espace, suppPosteJeu);
+
+            if (suppPosteJeu)
             {
-                
-                ValiderSuppressionEspace(espace);
-                _context.Espaces.Remove(espace);
+                _posteJeuService ??= new PosteJeuService(_context);
 
+                using IDbContextTransaction transaction = _context.Database.BeginTransaction();
+                try
+                {
+                    foreach (PosteJeu posteJeu in espace!.PostesJeu)
+                    {
+                        try
+                        {
+                            _posteJeuService.Supprimer(posteJeu.NumeroPoste);
+                        }
+                        catch (PosteJeuException ex)
+                        {
+                            throw new EspaceException(
+                                "Erreur lors de la suppression des postes de jeu : \n" + ex.Message,
+                                (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuErreur);
+                        }
+                    }
+
+                    _context.Espaces.Remove(espace);
+                    _context.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (EspaceException)
+                {
+                    transaction.Rollback();
+                    throw; // ✅ on re-throw sans wrapper
+                }
+                catch (DbUpdateException ex)
+                {
+                    transaction.Rollback();
+                    throw new EspaceException(
+                        "Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
+                        (int)EspaceException.EspaceErreur.SuppressionEspaceDbUpdateException);
+                }
+            }
+            else
+            {
+                // cas simple sans postes de jeu
+                _context.Espaces.Remove(espace!);
                 _context.SaveChanges();
-            }
-            catch (EspaceException ex)
-            {
-                throw new EspaceException("Erreur lors de la suppression de l'espace : \n"
-                    + ex.Message,
-                    ex.CodeErreur);
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new EspaceException("Erreur de mise à jour de la base de données lors de la suppression de l'espace : \n"
-                    + ex.Message,
-                    (int)EspaceException.EspaceErreur.SuppressionEspaceDbUpdateException);
-            }
-            catch (Exception ex)
-            {
-                throw new EspaceException("Erreur inattendue lors de la suppression de l'espace : \n"
-                    + ex.Message,
-                    (int)EspaceException.EspaceErreur.SuppressionEspaceException);
             }
         }
         #endregion
 
-            #region statistiques
-            /// <summary>
-            /// Retourne le nombre d'espaces disponibales en fonction du filtre.
-            /// Un espace est considéré comme disponible si aucun tournoi planifié ou en cours n'est associé à cet espace.
-            /// </summary>
-            /// <param name="filtre">Filtre optionnel pour rechercher des espaces spécifiques.</param>
-            /// <returns><see cref="int"/>Nombre d'espaces disponibles.</returns>
+        #region statistiques
+        /// <summary>
+        /// Retourne le nombre d'espaces disponibales en fonction du filtre.
+        /// Un espace est considéré comme disponible si aucun tournoi planifié ou en cours n'est associé à cet espace.
+        /// </summary>
+        /// <param name="filtre">Filtre optionnel pour rechercher des espaces spécifiques.</param>
+        /// <returns><see cref="int"/>Nombre d'espaces disponibles.</returns>
         public int CompterEspacesDisponibles(string filtre = "")
         {
             return Lister(filtre)
@@ -354,7 +379,9 @@ namespace Lib_Services.Services
                 throw new EspaceException("L'espace n'existe pas en base de données'.",
                     (int)EspaceException.EspaceErreur.EspaceInexistant);
 
-            if (espace.Tournois != null && espace.Tournois.Any(t => t.Statut == "Planifié" || t.Statut == "EnCours"))
+            //List<Tournoi> tornois = _serviceTournoi.
+
+            if (espace.Tournois != null && espace.Tournois.Any(t => t.Statut == "Planifié" || t.Statut == "En cours"))
                 throw new EspaceException("Il n'est pas possible de supprimer un espace associé à un tournoi planifié ou en cours.",
                     (int)EspaceException.EspaceErreur.SuppressionEspaceTournoiExistant);
 
