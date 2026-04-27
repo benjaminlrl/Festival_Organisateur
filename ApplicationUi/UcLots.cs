@@ -42,6 +42,7 @@ namespace ApplicationUi
             _serviceLotComposant = new LotComposantService(context);
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
+            Raz_Zones();
             ChargerLots();
             ChargerTournoi();
             DemarrageLotComposants();
@@ -337,63 +338,7 @@ namespace ApplicationUi
 
         #endregion
 
-        #region Validations
-
-        /// <summary>
-        /// Permet de voir si les champs du formulaire ne sont pas vides
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool ChampVide()
-        {
-            if (string.IsNullOrWhiteSpace(textBoxLibelle.Text))
-            {
-                MessageBox.Show("Le Libelle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxRang.Text))
-            {
-                MessageBox.Show("Le Rang ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        #endregion
-
         #region Evènements
-
-        /// <summary>
-        /// Associe le lot composant sélectionné au lot en cours, met à jour la valeur totale du lot
-        /// et rafraîchit les DataGrids.
-        /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant n'est pas déjà associé.
-        /// </summary>
-        private void BoutonAjouterLotComposant_Click(object sender, EventArgs e)
-        {
-            if (_lotSelectionnee == null)
-            {
-                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (_lotComposantSelectionnee == null)
-            {
-                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero)
-            {
-                MessageBox.Show("Le Lot selectionné contient déjà ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            MessageBox.Show($"Le lot composant a bien été ajouté au lot {_lotSelectionnee.Libelle}.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero;
-            _serviceLotComposant.Modifier(_lotComposantSelectionnee);
-            _lotSelectionnee.ValeurTotale += _lotComposantSelectionnee.Valeur;
-            _serviceLot.Modifier(_lotSelectionnee);
-            ChargerLots();
-            ChargerLotComposants();
-            ChargerLotComposantsDunLot();
-            ChargerCellOrigine();
-        }
 
         /// <summary>
         /// Crée un nouveau lot avec les données saisies dans le formulaire.
@@ -402,23 +347,23 @@ namespace ApplicationUi
         /// </summary>
         private void BoutonAjouterLot_Click(object sender, EventArgs e)
         {
-            // On check si les champs sont vides
-            if (ChampVide() == false)
-            {
-                return;
-            }
-
-            // On crée un nouveau lot composant avec les données des champs
-            unNouveauLot = new Lot
-            {
-                Libelle = textBoxLibelle.Text,
-                RangAttribution = int.Parse(textBoxRang.Text),
-                ValeurTotale = 0,
-                NumeroTournoi = comboBoxTournoi.SelectedValue != null ? (int)comboBoxTournoi.SelectedValue : null
-            };
-
             try
             {
+                // On vérifie d'abord que le rang n'est pas vide
+                if (string.IsNullOrWhiteSpace(textBoxRang.Text))
+                {
+                    MessageBox.Show("Le rang ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                // On crée un nouveau lot composant avec les données des champs
+                unNouveauLot = new Lot
+                {
+                    Libelle = textBoxLibelle.Text,
+                    RangAttribution = int.Parse(textBoxRang.Text),
+                    ValeurTotale = 0,
+                    NumeroTournoi = (int)comboBoxTournoi.SelectedValue
+                };
+
                 // On oublie pas de mettre "estAttribue" à true si un tournoi est sélectionné (= le NumeroTournoi pas null)
                 if (unNouveauLot.NumeroTournoi != null)
                 {
@@ -433,55 +378,18 @@ namespace ApplicationUi
             catch (LotException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la création du lot.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        /// <summary>
-        /// Dissocie le lot composant sélectionné du lot en cours, met à jour la valeur totale du lot
-        /// et rafraîchit les DataGrids.
-        /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant appartient bien au lot.
-        /// </summary>
-        private void BoutonSupprimerLotComposant_Click(object sender, EventArgs e)
-        {
-            if (_lotSelectionnee == null)
-            {
-                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (_lotComposantDunLotSelectionnee == null)
-            {
-                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero)
-            {
-                MessageBox.Show("Le Lot selectionné ne contient pas ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (MessageBox.Show($"Êtes vous sûr de vouloir supprimer {_lotComposantDunLotSelectionnee.Libelle} du lot {_lotSelectionnee.Libelle} ?"
-            , "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-            MessageBox.Show($"Le lot composant {_lotComposantDunLotSelectionnee.Libelle} du lot {_lotSelectionnee.Libelle} a bien été supprimé."
-                , "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            _lotComposantDunLotSelectionnee.NumeroLot = null;
-            _serviceLotComposant.Modifier(_lotComposantDunLotSelectionnee);
-            _lotSelectionnee.ValeurTotale -= _lotComposantDunLotSelectionnee.Valeur;
-            _serviceLot.Modifier(_lotSelectionnee);
-            ChargerLots();
-            ChargerLotComposants();
-            ChargerLotComposantsDunLot();
-            ChargerCellOrigine();
         }
 
         /// <summary>
@@ -489,19 +397,37 @@ namespace ApplicationUi
         /// </summary>
         private void BoutonSupprimerLot_Click(object sender, EventArgs e)
         {
-            // On check si un orgnisateur est sélectionné, puis on le supprime
-            // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
-            if (_lotSelectionnee == null)
+            try
             {
-                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // On check si un orgnisateur est sélectionné, puis on le supprime
+                // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
+                if (_lotSelectionnee == null)
+                {
+                    MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    return;
+                _serviceLot.Supprimer(_lotSelectionnee);
+                MessageBox.Show("Le lot a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerLots();
+                Raz_Zones();
             }
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-            _serviceLot.Supprimer(_lotSelectionnee.Numero);
-            MessageBox.Show("Le lot a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            ChargerLots();
-            Raz_Zones();
+            catch (OrganisateurException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'organisateur.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -509,7 +435,7 @@ namespace ApplicationUi
         /// Met à jour uniquement les champs modifiés et gère le tournoi nullable.
         /// Met à jour EstAttribue si un tournoi est associé.
         /// </summary>
-        private void BoutonModifier_Click(object sender, EventArgs e)
+        private void BoutonModifierLot_Click(object sender, EventArgs e)
         {
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotSelectionnee == null)
@@ -547,13 +473,84 @@ namespace ApplicationUi
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification du lot.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Associe le lot composant sélectionné au lot en cours, met à jour la valeur totale du lot
+        /// et rafraîchit les DataGrids.
+        /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant n'est pas déjà associé.
+        /// </summary>
+        private void BoutonAjouterLotComposant_Click(object sender, EventArgs e)
+        {
+            if (_lotSelectionnee == null)
+            {
+                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_lotComposantSelectionnee == null)
+            {
+                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero)
+            {
+                MessageBox.Show("Le Lot selectionné contient déjà ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            MessageBox.Show($"Le lot composant a bien été ajouté au lot {_lotSelectionnee.Libelle}.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            _lotComposantSelectionnee.NumeroLot = _lotSelectionnee.Numero;
+            _serviceLotComposant.Modifier(_lotComposantSelectionnee);
+            _lotSelectionnee.ValeurTotale += _lotComposantSelectionnee.Valeur;
+            _serviceLot.Modifier(_lotSelectionnee);
+            ChargerLots();
+            ChargerLotComposants();
+            ChargerLotComposantsDunLot();
+            ChargerCellOrigine();
+        }
+
+        /// <summary>
+        /// Dissocie le lot composant sélectionné du lot en cours, met à jour la valeur totale du lot
+        /// et rafraîchit les DataGrids.
+        /// Vérifie qu'un lot et un composant sont bien sélectionnés, et que le composant appartient bien au lot.
+        /// </summary>
+        private void BoutonSupprimerLotComposant_Click(object sender, EventArgs e)
+        {
+            if (_lotSelectionnee == null)
+            {
+                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_lotComposantDunLotSelectionnee == null)
+            {
+                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero)
+            {
+                MessageBox.Show("Le Lot selectionné ne contient pas ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (MessageBox.Show($"Êtes vous sûr de vouloir supprimer {_lotComposantDunLotSelectionnee.Libelle} du lot {_lotSelectionnee.Libelle} ?"
+            , "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+            MessageBox.Show($"Le lot composant {_lotComposantDunLotSelectionnee.Libelle} du lot {_lotSelectionnee.Libelle} a bien été supprimé."
+                , "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            _lotComposantDunLotSelectionnee.NumeroLot = null;
+            _serviceLotComposant.Modifier(_lotComposantDunLotSelectionnee);
+            _lotSelectionnee.ValeurTotale -= _lotComposantDunLotSelectionnee.Valeur;
+            _serviceLot.Modifier(_lotSelectionnee);
+            ChargerLots();
+            ChargerLotComposants();
+            ChargerLotComposantsDunLot();
+            ChargerCellOrigine();
         }
 
         /// <summary>
@@ -725,6 +722,5 @@ namespace ApplicationUi
             }
         }
         #endregion
-
     }
 }

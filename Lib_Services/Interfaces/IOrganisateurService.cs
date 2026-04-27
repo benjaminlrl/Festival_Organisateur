@@ -45,10 +45,10 @@ namespace Lib_Services.Interfaces
         void Modifier(Organisateur organisateur);
 
         /// <summary>
-        /// Supprime un organisateur identifié par son login s'il existe.
+        /// Supprime un organisateur identifié en base.
         /// </summary>
-        /// <param name="login">login de l'organisateur à supprimer.</param>
-        void Supprimer(string login);
+        /// <param name="organisateur">Instance de <see cref="Organisateur"/> à supprimer.</param>
+        void Supprimer(Organisateur organisateur);
         #endregion
         #region Validations
         /// <summary>
@@ -67,12 +67,19 @@ namespace Lib_Services.Interfaces
         bool EstAutoriser(Organisateur organisateur, Organisateur.LesUC unUC, string action);
 
         /// <summary>
-        /// Permet de voir si un organisateur est conformes aux règles de sécurité suivantes
+        /// Permet de voir si un organisateur est conformes aux règles de sécurité suivantes lors de l'ajout et la modificaiton
         /// </summary>
         /// <param name="organisateur">Instance de <see cref="Organisateur"/> à créer.</param>
         /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification (true) ou d'une création (false).</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
         void ValiderOrganisateur(Organisateur organisateur, bool estModification = false);
+
+        /// <summary>
+        /// Permet de voir si un organisateur est conformes aux règles de sécurité suivantes lors de la suppression
+        /// </summary>
+        /// <param name="organisateur">Instance de <see cref="Organisateur"/> à créer.</param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        void ValiderSuppressionOrganisateur(Organisateur organisateur);
         #endregion
     }
 }

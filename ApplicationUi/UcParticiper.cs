@@ -258,9 +258,6 @@ namespace ApplicationUi
             _participerSelectionne.Evaluation = trackBarEvaluation.Value;
             _participerSelectionne.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
             _participerSelectionne.NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi;
-            // TODO: voir conflit lucien
-            // puisque NumeroTournoi est une clé primaire, elle ne peut pas être null
-            //_participerSelectionne.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
             _participerSelectionne.LotRemis = lotRemisSelectionne;
 
             try

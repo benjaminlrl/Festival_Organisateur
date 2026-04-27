@@ -123,7 +123,7 @@ namespace Lib_Services.Services
         /// Met à jour un lotcomposant existant.
         /// L'appel à <c>Update</c> marque toutes les propriétés comme modifiées.
         /// </summary>
-        /// <param name="espace">Instance modifiée de <see cref="LotComposant"/>.</param>
+        /// <param name="lotComposant">Instance modifiée de <see cref="LotComposant"/>.</param>
         public void Modifier(LotComposant lotComposant)
         {
             ValiderLotComposant(lotComposant, true);
@@ -132,18 +132,14 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Supprime un lotcomposant identifié par son login s'il existe.
+        /// Supprime un lotcomposant identifié en base
         /// </summary>
-        /// <param name="numero">numero du lotcomposant à supprimer.</param>
-        public void Supprimer(int numero)
+        /// <param name="lotComposant">Instance modifiée de <see cref="LotComposant"/>.</param>
+        public void Supprimer(LotComposant lotComposant)
         {
-            // Recherche de l'entité (utilise le cache si possible).
-            var lotComposant = _context.LotComposants.Find(numero);
-            if (lotComposant != null)
-            {
-                _context.LotComposants.Remove(lotComposant);
-                _context.SaveChanges();
-            }
+            ValiderSuppressionLotComposant(lotComposant);
+             _context.LotComposants.Remove(lotComposant);
+             _context.SaveChanges();
         }
         #endregion
 
@@ -156,6 +152,18 @@ namespace Lib_Services.Services
         /// <exception cref="LotComposantException">Exception levée si une validation échoue.</exception>
         public void ValiderLotComposant(LotComposant lotComposant, bool estModification = false)
         {
+            if (string.IsNullOrWhiteSpace(lotComposant.Libelle))
+                throw new LotComposantException("Le libellé ne peut pas être vide.",
+                    (int)LotComposantException.LotComposantErreur.LibelleVide);
+
+            if (string.IsNullOrWhiteSpace(lotComposant.Description))
+                throw new LotComposantException("La description ne peut pas être vide.",
+                    (int)LotComposantException.LotComposantErreur.DescriptionVide);
+
+            if (string.IsNullOrWhiteSpace(lotComposant.NumeroLot.ToString()))
+                throw new LotComposantException("Le lot ne peut pas être vide.",
+                    (int)LotComposantException.LotComposantErreur.LotVide);
+
             if (lotComposant.Libelle.Length > 50)
                 throw new LotComposantException("Le libellé ne peut pas dépasser 50 caractères.",
                     (int)LotComposantException.LotComposantErreur.LibelleTropLong);
@@ -167,6 +175,18 @@ namespace Lib_Services.Services
             if (!string.IsNullOrEmpty(lotComposant.Description) && lotComposant.Description.Length > 150)
                 throw new LotComposantException("La description ne peut pas dépasser 150 caractères.",
                     (int)LotComposantException.LotComposantErreur.DescriptionTropLongue);
+        }
+
+        /// <summary>
+        /// Valide les propriétés d'une instance de <see cref="LotComposant"/> peut être supprimer ou non.
+        /// </summary>
+        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à valider.</param>
+        /// <exception cref="LotComposantException">Exception levée si une validation échoue.</exception>
+        public void ValiderSuppressionLotComposant(LotComposant lotComposant)
+        {
+            if (Obtenir(lotComposant.Numero) == null)
+                throw new LotComposantException("Le lot composant n'existe pas en base de données'.",
+                    (int)LotComposantException.LotComposantErreur.LotComposantInexistant);
         }
         #endregion
     }

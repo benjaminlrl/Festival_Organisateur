@@ -192,23 +192,23 @@ namespace ApplicationUi
         /// </summary>
         private void BoutonAjouter_Click(object sender, EventArgs e)
         {
-            // On check si les champs sont vides
-            if (ChampVide() == false)
+            // On vérifie d'abord que la veleur n'est pas vide
+            if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
             {
+                MessageBox.Show("La valeur ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            // On crée un nouveau lot composant avec les données des champs
-            unNouveauLotComposant = new LotComposant
-            {
-                Libelle = textBoxLibelle.Text,
-                Description = textBoxDescription.Text,
-                Valeur = int.Parse(textBoxValeur.Text),
-                NumeroLot = comboBoxLot.SelectedValue != null ? (int)comboBoxLot.SelectedValue : null
-            };
-
             try
             {
+                // On crée un nouveau lot composant avec les données des champs
+                unNouveauLotComposant = new LotComposant
+                {
+                    Libelle = textBoxLibelle.Text,
+                    Description = textBoxDescription.Text,
+                    Valeur = int.Parse(textBoxValeur.Text),
+                    NumeroLot = (int)comboBoxLot.SelectedValue
+                };
+
                 _serviceLotComposant.Creer(unNouveauLotComposant);
                 // On ajoute sa valeur à la valeur totale du lot associé si il en a un
                 if (unNouveauLotComposant.NumeroLot != null)
@@ -230,12 +230,12 @@ namespace ApplicationUi
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du lot composant.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -307,12 +307,12 @@ namespace ApplicationUi
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification du lot composant.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -322,26 +322,44 @@ namespace ApplicationUi
         /// </summary>
         private void BoutonSupprimer_Click(object sender, EventArgs e)
         {
-            // On check si un orgnisateur est sélectionné, puis on le supprime
-            // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
-            if (_lotComposantSelectionne == null)
+            try
             {
-                MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // On check si un lot composant est sélectionné, puis on le supprime
+                // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
+                if (_lotComposantSelectionne == null)
+                {
+                    MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    return;
+                // On retire la valeur du lot composant si il a un lot associé
+                if (_lotComposantSelectionne.NumeroLot != null)
+                {
+                    lotActuelle = _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value);
+                    lotActuelle.ValeurTotale -= _lotComposantSelectionne.Valeur;
+                    _serviceLot.Modifier(lotActuelle);
+                }
+                _serviceLotComposant.Supprimer(_lotComposantSelectionne);
+                MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerLotComposants();
+                Raz_Zones();
             }
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-            // On retire la valeur du lot composant si il a un lot associé
-            if (_lotComposantSelectionne.NumeroLot != null)
+            catch (OrganisateurException ex)
             {
-                lotActuelle = _serviceLot.Obtenir(_lotComposantSelectionne.NumeroLot.Value);
-                lotActuelle.ValeurTotale -= _lotComposantSelectionne.Valeur;
-                _serviceLot.Modifier(lotActuelle);
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
             }
-            _serviceLotComposant.Supprimer(_lotComposantSelectionne.Numero);
-            MessageBox.Show("Le lot composant a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            ChargerLotComposants();
-            Raz_Zones();
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'organisateur.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -412,32 +430,6 @@ namespace ApplicationUi
             ChargerStatistiques();
         }
 
-        #endregion
-
-        #region Validations
-        /// <summary>
-        /// Permet de voir si tout les champs d'un lot composant ne sont pas vides
-        /// </summary>
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool ChampVide()
-        {
-            if (string.IsNullOrWhiteSpace(textBoxLibelle.Text))
-            {
-                MessageBox.Show("Le Libelle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
-            {
-                MessageBox.Show("La Description ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
-            {
-                MessageBox.Show("La Valeur ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
         #endregion
 
         #region Méthodes

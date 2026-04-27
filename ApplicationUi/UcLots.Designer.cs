@@ -248,7 +248,7 @@ namespace ApplicationUi
             boutonModifier.TabIndex = 4;
             boutonModifier.Text = "✏️    Modifier";
             boutonModifier.UseVisualStyleBackColor = false;
-            boutonModifier.Click += BoutonModifier_Click;
+            boutonModifier.Click += BoutonModifierLot_Click;
             // 
             // boutonSupprimerLot
             // 
