@@ -23,6 +23,8 @@
         ModificationJeuInexistant = 9,
         ModificationJeuId = 10,
         ModificationJeuAucune = 11,
+        ModificationJeuDbUpdateException = 15,
+        ModificationJeuException = 16,
 
         //-------------------
         // Exceptions uniques à la suppression d'un jeu
@@ -30,6 +32,12 @@
         SuppressionJeuTournoiExistant = 12,
         SuppressionJeuDbUpdateException = 13,
         SuppressionJeuException = 14,
+
+        //-------------------
+        // Exceptions uniques à l'ajout d'un jeu
+        //-------------------
+        AjoutJeuException = 17,
+        AjoutJeuDbUpdateException = 18,
     }
 
     public JeuException(string message, int codeErreur) : base(message)

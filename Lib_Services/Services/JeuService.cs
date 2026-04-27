@@ -73,7 +73,26 @@ namespace Lib_Services.Services
         public Jeu? Obtenir(int idJeu)
         {
             // Find retourne null si l'entité n'existe pas.
-            return _context.Jeux.Find(idJeu);
+            return _context.Jeux
+                .Include(j => j.Plateformes)
+                .Include(j => j.Tournois)
+                .AsNoTracking()
+                .FirstOrDefault(j => j.IdJeu.Equals(idJeu));
+        }
+
+        /// <summary>
+        /// Récupère un jeu par son titre.
+        /// </summary>
+        /// <param name="titreJeu">Titre du jeu recherché.</param>
+        /// <returns>Instance de <see cref="Jeu"/> si trouvée, sinon null.</returns>
+        public Jeu? ObtenirAvecTitre(string titreJeu)
+        {
+            // Find retourne null si l'entité n'existe pas.
+            return _context.Jeux
+                .Include(j => j.Plateformes)
+                .Include(j => j.Tournois)
+                .AsNoTracking()
+                .FirstOrDefault(j => j.Titre.Equals(titreJeu));
         }
         #endregion
 
@@ -94,12 +113,12 @@ namespace Lib_Services.Services
             catch (JeuException ex)
             {
                 throw new JeuException("Erreur lors de l'ajout du jeu : \n" + ex.Message,
-                    (int)JeuException.JeuErreur.SuppressionJeuException);
+                    (int)JeuException.JeuErreur.AjoutJeuException);
             }
             catch (DbUpdateException ex)
             {
                 throw new JeuException("Erreur BDD lors de l'ajout du jeu : \n" + ex.Message,
-                    (int)JeuException.JeuErreur.SuppressionJeuDbUpdateException);
+                    (int)JeuException.JeuErreur.AjoutJeuDbUpdateException);
             }
         }
 
@@ -107,12 +126,12 @@ namespace Lib_Services.Services
         /// Met à jour un jeu existant et persiste la modification.
         /// </summary>
         /// <param name="jeu">Objet <see cref="Jeu"/> contenant les valeurs mises à jour.</param>
-        public void Modifier(Jeu jeu)
+        public void Modifier(Jeu? jeu)
         {
-            // Marque l'entité comme modifiée puis sauvegarde.
-            jeu.AnneeSortie = jeu.DateSortie.Year.ToString(); // année de sortie calculée
             try
             {
+                jeu?.AnneeSortie = jeu.DateSortie.Year.ToString(); // année de sortie calculée
+
                 ValiderJeu(jeu, true);
                 _context.Jeux.Update(jeu);
                 _context.SaveChanges();
@@ -120,12 +139,12 @@ namespace Lib_Services.Services
             catch (JeuException ex)
             {
                 throw new JeuException("Erreur lors de la modification du jeu : \n" + ex.Message,
-                    (int)JeuException.JeuErreur.SuppressionJeuException);
+                    (int)JeuException.JeuErreur.ModificationJeuException);
             }
             catch (DbUpdateException ex)
             {
                 throw new JeuException("Erreur BDD lors de la modification du jeu : \n" + ex.Message,
-                    (int)JeuException.JeuErreur.SuppressionJeuDbUpdateException);
+                    (int)JeuException.JeuErreur.ModificationJeuDbUpdateException);
             }
         }
 
@@ -164,11 +183,22 @@ namespace Lib_Services.Services
         /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
         /// <param name="estModification">Indique si la validation est pour une modification.</param>
         /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
-        public void ValiderJeu(Jeu jeu, bool estModification = false)
+        private void ValiderJeu(Jeu? jeu, bool estModification = false)
         {
+            if (jeu == null)
+                throw new JeuException("Le jeu ne peut pas être null.",
+                    (int)JeuException.JeuErreur.JeuNull);
+
             if (string.IsNullOrWhiteSpace(jeu.Titre))
                 throw new JeuException("Le titre est requis.",
                     (int)JeuException.JeuErreur.JeuTitreRequis);
+
+            Jeu? jeuTitre = ObtenirAvecTitre(jeu.Titre);
+
+            if(jeuTitre != null
+                && jeuTitre.IdJeu != jeu.IdJeu)
+                throw new JeuException("Un autre jeu utilise déjà ce titre.",
+                   (int)JeuException.JeuErreur.JeuTitreExistant);
 
             if (string.IsNullOrWhiteSpace(jeu.Description))
                 throw new JeuException("La description est requise.",
@@ -190,10 +220,6 @@ namespace Lib_Services.Services
                 throw new JeuException("Le PEGI sélectionné est invalide.",
                     (int)JeuException.JeuErreur.JeuPegiInvalide);
 
-            if (Lister(jeu.Titre).Any(j => j.Titre == jeu.Titre && j.IdJeu != jeu.IdJeu))
-                throw new JeuException("Un autre jeu avec ce titre existe déjà.",
-                    (int)JeuException.JeuErreur.JeuTitreExistant);
-
             if (estModification)
             {
                 Jeu? enBdd = Obtenir(jeu.IdJeu);
@@ -205,13 +231,18 @@ namespace Lib_Services.Services
                 if (enBdd .IdJeu != jeu.IdJeu)
                     throw new JeuException("L'identifiant du jeu ne peut pas être modifié.",
                         (int)JeuException.JeuErreur.ModificationJeuId);
-
+                // HashSet permet de vérifier que les plateformes sont mêmes puisque deux listes ne sont jamais égales
+                // par référence même si elles ont le même contenu
+                // SetEquals ignore l'ordre et les doublons,
+                // ce qui est souvent suffisant pour des collections de navigation EF.
                 if (enBdd.Pegi == jeu.Pegi
                     && enBdd.Titre == jeu.Titre
                     && enBdd.DateSortie == jeu.DateSortie
-                    && enBdd.Plateformes == jeu.Plateformes
                     && enBdd.Description == jeu.Description
-                    && enBdd.AnneeSortie == jeu.AnneeSortie)
+                    && enBdd.AnneeSortie == jeu.AnneeSortie
+                    && enBdd.Editeur == jeu.Editeur                    
+                    && new HashSet<int>(enBdd.Plateformes?.Select(p => p.IdPlateforme) ?? [])
+                        .SetEquals(jeu.Plateformes?.Select(p => p.IdPlateforme) ?? []))
                     throw new JeuException("Aucune modification détectée",
                         (int)JeuException.JeuErreur.ModificationJeuAucune);
             }
@@ -222,7 +253,7 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
         /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
-        public void ValiderSuppressionJeu(Jeu? jeu)
+        private void ValiderSuppressionJeu(Jeu? jeu)
         {
             if (jeu == null)
                 throw new JeuException("L'espace ne peut pas être null.",

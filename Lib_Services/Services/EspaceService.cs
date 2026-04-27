@@ -152,10 +152,22 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance de <see cref="Espace"/> à créer.</param>
         public void Creer(Espace espace)
         {
-            ValiderEspace(espace, false);    
-            // Ajout de l'entité au contexte puis persistance immédiate.
-            _context.Espaces.Add(espace);
-            _context.SaveChanges();
+            try
+            {
+                ValiderEspace(espace);
+                _context.Espaces.Add(espace!);
+                _context.SaveChanges();
+            }
+                catch (EspaceException ex)
+                {
+                throw new EspaceException("Erreur lors de la suppression de l'espace : \n" + ex.Message,
+                    (int)EspaceException.EspaceErreur.AjoutEspaceException);
+            }
+                catch (DbUpdateException ex)
+                {
+                throw new EspaceException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
+                    (int)EspaceException.EspaceErreur.AjoutEspaceDbUpdateException);
+            }
         }
 
         /// <summary>
@@ -285,11 +297,6 @@ namespace Lib_Services.Services
                     throw new EspaceException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
                         (int)EspaceException.EspaceErreur.SuppressionEspaceDbUpdateException);
                 }
-                catch (Exception ex)
-                {
-                    throw new EspaceException("Erreur inconnue lors de la suppression de l'espace : \n" + ex.Message,
-                        (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuErreurInconnue);
-                }
             }
         }
         #endregion
@@ -400,11 +407,12 @@ namespace Lib_Services.Services
                         (int)EspaceException.EspaceErreur.ModificationEspaceAucune);
 
                 // Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.
+                // On vérifie donc si la séquence de Lettre existe ou pas
                 if (enBdd.Nom != espace.Nom
                     && !modifPosteJeu)
                     throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
                         "Les postes de jeux ne correspondront pas à l'espace",
-                        (int)EspaceException.EspaceErreur.ModificationEspaceNomExistePostesJeu);
+                        (int)EspaceException.EspaceErreur.ModificationEspaceNomLettresExistePostesJeu);
             }                      
         }
 

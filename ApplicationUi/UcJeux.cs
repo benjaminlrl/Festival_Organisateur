@@ -105,7 +105,7 @@ namespace ApplicationUi
                 Titre = textBoxTitre.Text,
                 Description = textBoxDescription.Text,
                 Editeur = textBoxEditeur.Text,
-                Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0,
+                Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue,
                 Plateformes = checkedListBoxPlateforme.CheckedItems
                                   .Cast<Plateforme>()
                                   .ToList(),
@@ -152,28 +152,7 @@ namespace ApplicationUi
                           .ToList();
             _jeuSelectionne.DateSortie = dateTimePickerDateSortie.Value;
 
-            try
-            {
-                _serviceJeu.Modifier(_jeuSelectionne);
-                MessageBox.Show("Le jeu a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Raz_Zones();
-            }
-            catch (JeuException ex)
-            {
-                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
-            }
-            catch (DbException ex)
-            {
-                Log.Error(ex, "Une erreur technique est survenue lors de la modification du jeu.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
-            }
-
+            ModifierJeu(_jeuSelectionne);
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
         {
@@ -181,20 +160,18 @@ namespace ApplicationUi
         }
         private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
-            if (dataGridJeux.CurrentRow == null)
+            if (dataGridJeux.CurrentRow == null || _jeuSelectionne == null)
                 return;
 
-            if (_jeuSelectionne == null)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
 
-            _serviceJeu.Supprimer(_jeuSelectionne.IdJeu);
-            _jeuSelectionne = null;
-            ChargerJeux();
-            Raz_Zones();
-
+            SupprimerJeu();
         }
 
         #endregion
+
         private void DataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
@@ -326,7 +303,7 @@ namespace ApplicationUi
         /// </summary>
         private void AfficherBoutons()
         {
-            buttonAjouter.Enabled = true;
+            buttonAjouter.Enabled = _jeuSelectionne == null;
 
             // Si aucun espace n'est sélectionné, les boutons de modification, suppression et effacement sont désactivés
             buttonModifier.Enabled = _jeuSelectionne != null;
@@ -343,6 +320,62 @@ namespace ApplicationUi
             foreach (DataGridViewColumn col in dataGrid.Columns)
             {
                 col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
+        /// <summary>
+        /// Permets de modifier un jeu en gérant les différentes exceptions qui peuvent survenir,
+        /// </summary>
+        private void ModifierJeu(Jeu? jeu)
+        {
+            try
+            {
+                _serviceJeu.Modifier(jeu);
+                MessageBox.Show("Le jeu a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
+        }
+
+        /// <summary>
+        /// Permets de supprimer un jeu en gérant les différentes exceptions qui peuvent survenir,
+        /// </summary>
+        private void SupprimerJeu()
+        {
+            try
+            {
+                _serviceJeu.Supprimer(_jeuSelectionne!.IdJeu);                
+                MessageBox.Show("Le jeu a bien été supprimé.", "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Erreur technique lors de la suppression de l'espace.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors de la suppression de l'espace.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         #endregion

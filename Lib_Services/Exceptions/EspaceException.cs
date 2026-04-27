@@ -24,7 +24,7 @@
         ModificationEspaceInexistant = 9,
         ModificationEspaceId = 10,
         ModificationEspaceAucune = 11,
-        ModificationEspaceNomExistePostesJeu = 13,
+        ModificationEspaceNomLettresExistePostesJeu = 13,
         ModificationEspacePosteJeuEspaceNom = 14,
         ModificationEspaceAucunPosteJeu = 15,
 
@@ -37,7 +37,12 @@
         SuppressionEspaceException = 19,
         SuppressionEspacePosteJeuErreur = 20,
         SuppressionEspacePosteJeuDbErreur = 21,
-        SuppressionEspacePosteJeuErreurInconnue = 22
+
+        //-------------------
+        // Exceptions uniques à l'ajout d'un jeu
+        //-------------------
+        AjoutEspaceException = 17,
+        AjoutEspaceDbUpdateException = 18,
     }
 
     public EspaceException(string message, int codeErreur) : base(message)
