@@ -9,14 +9,14 @@
         //-------------------
         EspaceNull = 0,
         EspaceInexistant = 1,
-        NomRequis = 2,
-        DescriptionRequise = 3,
-        SuperficieInsuffisante = 4,
-        SuperficieTropGrande = 5,
-        CapaciteNegative = 6,
-        CapaciteTropGrande = 7,
-        NomExiste = 8,
-        NomExistePostesJeu = 12,
+        EspaceNomRequis = 2,
+        EspaceDescriptionRequise = 3,
+        EspaceSuperficieInsuffisante = 4,
+        EspaceSuperficieTropGrande = 5,
+        EspaceCapaciteNegative = 6,
+        EspaceCapaciteTropGrande = 7,
+        EspaceNomExiste = 8,
+        EspaceNomExistePostesJeu = 12,
 
         //-------------------
         // Exceptions uniques à la modification d'un espace
@@ -24,9 +24,9 @@
         ModificationEspaceInexistant = 9,
         ModificationEspaceId = 10,
         ModificationEspaceAucune = 11,
-        ModificationNomExistePostesJeu = 13,
-        ModificationPosteJeuEspaceNom = 14,
-        ModificationAucunPosteJeu = 15,
+        ModificationEspaceNomExistePostesJeu = 13,
+        ModificationEspacePosteJeuEspaceNom = 14,
+        ModificationEspaceAucunPosteJeu = 15,
 
         //-------------------
         // Exceptions uniques à la suppression d'un espace

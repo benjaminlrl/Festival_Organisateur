@@ -1,4 +1,5 @@
 ﻿using Lib_Entities.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -60,6 +61,13 @@ namespace Lib_Services.Interfaces
         /// <param name="nomEspace">Nom de l'espace cherché.</param>
         /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
         Espace? ObtenirParNom(string nomEspace);
+
+        /// <summary>
+        /// Récupère un espace si les 3 premières lettres de son nom correspondent à celles fournies en paramètre.
+        /// </summary>
+        /// <param name="nom">Les 3 premières lettres du nom de l'espace.</param>
+        /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
+        public Espace? ObtenirParNomPremieresLettres(string nom);
         #endregion
 
         #region CUD

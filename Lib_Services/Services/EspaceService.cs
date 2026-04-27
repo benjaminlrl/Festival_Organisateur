@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Text;
+using System.Transactions;
 using static System.Net.WebRequestMethods;
 
 namespace Lib_Services.Services
@@ -19,6 +20,7 @@ namespace Lib_Services.Services
     {
         private readonly ApplicationDbContext _context;
         private IPosteJeuService? _posteJeuService;
+
         /// <summary>
         /// Initialise une nouvelle instance de <see cref="EspaceService"/>.
         /// </summary>
@@ -28,6 +30,7 @@ namespace Lib_Services.Services
             _context = context;
             _posteJeuService = null;
         }
+
         #region Lecture
         /// <summary>
         ///  Retourne la liste complète des espaces présents en base, 
@@ -119,11 +122,21 @@ namespace Lib_Services.Services
             return _context.Espaces.AsNoTracking().FirstOrDefault(e => e.IdEspace == idEspace);
         }
 
+        /// <summary>
+        /// Récupère un espace si son nom correspond à celui fourni en paramètre.
+        /// </summary>
+        /// <param name="nom">Nom de l'espace.</param>
+        /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
         public Espace? ObtenirParNom(string nom)
         {
             return _context.Espaces.AsNoTracking().FirstOrDefault(e => e.Nom.Equals(nom));
         }
 
+        /// <summary>
+        /// Récupère un espace si les 3 premières lettres de son nom correspondent à celles fournies en paramètre.
+        /// </summary>
+        /// <param name="nom">Le nom de l'espace.</param>
+        /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
         public Espace? ObtenirParNomPremieresLettres(string nom)
         {
             return _context.Espaces.AsNoTracking().FirstOrDefault(e => 
@@ -155,43 +168,60 @@ namespace Lib_Services.Services
         /// modification des postes de jeu associés.</exception>
         public void Modifier(Espace espace, bool modifPosteJeu = false)
         {
-            _posteJeuService ??= new PosteJeuService(_context);
-            ValiderEspace(espace, true, modifPosteJeu);
-            _context.Espaces.Update(espace);
-            // Dans le cas ou les postes de jeux rencontre une exception, on ne veut pas que le nom de l'espace soit modifié
-            // sans que les postes de jeu soient modifiés pour garder la correspondance à l'espace.
+            IDbContextTransaction transaction = _context.Database.BeginTransaction();
 
-            // Idée de passer par une transaction cependant chaque modification faite sur une poste de jeu est sauvegarder en bdd
-            // Et cela implique de passser les fonctions en asynchrone pour pouvoir faire un rollback en cas d'erreur, ce qui est plus complexe à mettre en place.
-            if (modifPosteJeu)
+            try
             {
-                List<PosteJeu> postesJeuAssocies = _posteJeuService.ListerPostesJeuDunEspace(espace);
-                if (postesJeuAssocies.Count > 0)
-                {
-                    try
-                    {
-                        _posteJeuService.FormatRefPosteJeuEspaceNouvNom(postesJeuAssocies, espace.Nom);
-                    }
-                    catch (PosteJeuException ex)
-                    {
-                        throw new EspaceException("Erreur lors de la modification des postes de jeu associés à l'espace : \n"
-                            + ex.Message,
-                            (int)EspaceException.EspaceErreur.ModificationPosteJeuEspaceNom);
-                    }
-                }
-                else
-                    throw new EspaceException("Aucun poste de jeux n'est associé à l'espace",
-                            (int)EspaceException.EspaceErreur.ModificationAucunPosteJeu);
-            }
-            _context.SaveChanges();
+                _posteJeuService ??= new PosteJeuService(_context);
 
+                ValiderEspace(espace, true, modifPosteJeu);
+                _context.Espaces.Update(espace);
+
+                // Dans le cas ou les postes de jeux rencontre une exception, on ne veut pas que le nom de l'espace soit modifié
+                // sans que les postes de jeu soient modifiés pour garder la correspondance à l'espace.
+
+                // Idée de passer par une transaction cependant chaque modification faite sur une poste de jeu est sauvegarder en bdd
+                // Et cela implique de passser les fonctions en asynchrone pour pouvoir faire un rollback en cas d'erreur, ce qui est plus complexe à mettre en place.
+                if (modifPosteJeu)
+                {
+                    List<PosteJeu> postesJeuAssocies = _posteJeuService.ListerPostesJeuDunEspace(espace);
+                    if (postesJeuAssocies.Count > 0)
+                    {
+                        try
+                        {
+                            _posteJeuService.FormatRefPosteJeuEspaceNouvNom(postesJeuAssocies, espace.Nom);
+                        }
+                        catch (PosteJeuException ex)
+                        {
+                            transaction.Rollback();
+                            throw new EspaceException("Erreur lors de la modification des postes de jeu associés à l'espace : \n"
+                                + ex.Message,
+                                (int)EspaceException.EspaceErreur.ModificationEspacePosteJeuEspaceNom);
+                        }
+                    }
+                    else
+                        throw new EspaceException("Aucun poste de jeux n'est associé à l'espace",
+                                (int)EspaceException.EspaceErreur.ModificationEspaceAucunPosteJeu);
+                }
+                _context.SaveChanges();
+                transaction.Commit();
+            }
+            catch (EspaceException)
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
 
         /// <summary>
-        /// Supprime un espace identifié par son identifiant s'il existe.
+        /// Supprime un espace de la base de données.
+        /// Vérifie d'abord que l'espace existe 
+        /// et qu'il n'est pas associé à des tournois planifiés ou en cours, 
+        /// ni à des postes de jeu (sauf si spécifié).
         /// </summary>
         /// <param name="idEspace">Identifiant de l'espace à supprimer.</param>
-        /// <param name="suppPOsteJeu">Indique si la suppression concerne les postes de jeu associés à l'espace.</param>
+        /// <param name="suppPosteJeu">Indique si la suppression concerne également les postes de jeu associés à l'espace.</param>
+        /// <exception cref="EspaceException">Exception levée si la validation échoue ou si une erreur survient lors de la suppression.</exception>
         public void Supprimer(int idEspace, bool suppPosteJeu = false)
         {
             Espace? espace = _context.Espaces
@@ -205,7 +235,7 @@ namespace Lib_Services.Services
             {
                 _posteJeuService ??= new PosteJeuService(_context);
 
-                using IDbContextTransaction transaction = _context.Database.BeginTransaction();
+                IDbContextTransaction transaction = _context.Database.BeginTransaction();
                 try
                 {
                     foreach (PosteJeu posteJeu in espace!.PostesJeu)
@@ -216,8 +246,7 @@ namespace Lib_Services.Services
                         }
                         catch (PosteJeuException ex)
                         {
-                            throw new EspaceException(
-                                "Erreur lors de la suppression des postes de jeu : \n" + ex.Message,
+                            throw new EspaceException("Erreur lors de la suppression des postes de jeu : \n" + ex.Message,
                                 (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuErreur);
                         }
                     }
@@ -229,21 +258,38 @@ namespace Lib_Services.Services
                 catch (EspaceException)
                 {
                     transaction.Rollback();
-                    throw; // ✅ on re-throw sans wrapper
+                    throw;
                 }
                 catch (DbUpdateException ex)
                 {
                     transaction.Rollback();
-                    throw new EspaceException(
-                        "Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
+                    throw new EspaceException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
                         (int)EspaceException.EspaceErreur.SuppressionEspaceDbUpdateException);
                 }
             }
             else
             {
-                // cas simple sans postes de jeu
-                _context.Espaces.Remove(espace!);
-                _context.SaveChanges();
+                try
+                {
+                    // cas simple sans postes de jeu
+                    _context.Espaces.Remove(espace!);
+                    _context.SaveChanges();
+                }
+                catch (EspaceException ex)
+                {
+                    throw new EspaceException("Erreur lors de la suppression de l'espace : \n" + ex.Message,
+                        (int)EspaceException.EspaceErreur.SuppressionEspaceException);
+                }
+                catch (DbUpdateException ex)
+                {
+                    throw new EspaceException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
+                        (int)EspaceException.EspaceErreur.SuppressionEspaceDbUpdateException);
+                }
+                catch (Exception ex)
+                {
+                    throw new EspaceException("Erreur inconnue lors de la suppression de l'espace : \n" + ex.Message,
+                        (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuErreurInconnue);
+                }
             }
         }
         #endregion
@@ -297,14 +343,14 @@ namespace Lib_Services.Services
 
             if (string.IsNullOrWhiteSpace(espace.Nom))
                 throw new EspaceException("Le nom est requis.",
-                    (int)EspaceException.EspaceErreur.NomRequis);
+                    (int)EspaceException.EspaceErreur.EspaceNomRequis);
 
             Espace? espaceNom = ObtenirParNom(espace.Nom);
             Espace? espaceNomLet = ObtenirParNomPremieresLettres(espace.Nom);
 
             if (espaceNom != null && espaceNom.IdEspace != espace.IdEspace)
                 throw new EspaceException("Le nom est déjà attribué à un autre espace.",
-                    (int)EspaceException.EspaceErreur.NomExiste);
+                    (int)EspaceException.EspaceErreur.EspaceNomExiste);
 
             // Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.
             if (espaceNomLet != null
@@ -312,27 +358,27 @@ namespace Lib_Services.Services
                 && espaceNomLet.Nom.Substring(0,3) == espace.Nom.Substring(0, 3))
                 throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
                     "Un autre espace a déjà ces trois lettre.",
-                    (int)EspaceException.EspaceErreur.NomExistePostesJeu);
+                    (int)EspaceException.EspaceErreur.EspaceNomExistePostesJeu);
 
             if (string.IsNullOrWhiteSpace(espace.Description))
                 throw new EspaceException("La description est requise.",
-                    (int)EspaceException.EspaceErreur.DescriptionRequise);
+                    (int)EspaceException.EspaceErreur.EspaceDescriptionRequise);
 
             if (espace.Superficie < 9)
                 throw new EspaceException("La superficie ne peut pas être inférieure à 9.",
-                    (int)EspaceException.EspaceErreur.SuperficieInsuffisante);
+                    (int)EspaceException.EspaceErreur.EspaceSuperficieInsuffisante);
 
             if (espace.Superficie > 60)
                 throw new EspaceException("La superficie ne peut pas être supérieure à 60.",
-                    (int)EspaceException.EspaceErreur.SuperficieTropGrande);
+                    (int)EspaceException.EspaceErreur.EspaceSuperficieTropGrande);
 
             if (espace.CapaciteMaxi < 0)
                 throw new EspaceException("La capacité maximale doit être positive.",
-                    (int)EspaceException.EspaceErreur.CapaciteNegative);
+                    (int)EspaceException.EspaceErreur.EspaceCapaciteNegative);
 
             if (espace.CapaciteMaxi > 50)
                 throw new EspaceException("La capacité maximale ne peut pas être supérieure à 50.",
-                    (int)EspaceException.EspaceErreur.CapaciteTropGrande);
+                    (int)EspaceException.EspaceErreur.EspaceCapaciteTropGrande);
 
             if (estModification)
             {
@@ -358,7 +404,7 @@ namespace Lib_Services.Services
                     && !modifPosteJeu)
                     throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
                         "Les postes de jeux ne correspondront pas à l'espace",
-                        (int)EspaceException.EspaceErreur.ModificationNomExistePostesJeu);
+                        (int)EspaceException.EspaceErreur.ModificationEspaceNomExistePostesJeu);
             }                      
         }
 

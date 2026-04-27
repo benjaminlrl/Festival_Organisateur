@@ -3,6 +3,7 @@ using Lib_Metier.Data.Configurations;
 using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 namespace Lib_Services.Services
 {
@@ -154,10 +155,22 @@ namespace Lib_Services.Services
         /// <param name="tournoi">Instance modifiée du tournoi</param>
         public void Modifier(Tournoi tournoi)
         {
-            ValiderTournoi(tournoi, true);
-            // Update attache l'entité et marque toutes les propriétés comme modifiées.
-            _context.Tournois.Update(tournoi);
-            _context.SaveChanges();
+            try
+            {
+                ValiderTournoi(tournoi, true);
+                _context.Tournois.Update(tournoi);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new TournoiException("Erreur lors de la modification du tournoi.\n" + ex.Message,
+                    (int)TournoiException.TournoiErreur.ModificationTournoiDbUpdateException);
+            }
+            catch (Exception ex)
+            {
+                throw new TournoiException(ex.Message,
+                    (int)TournoiException.TournoiErreur.ModificationTournoiException);
+            }
         }
 
         /// <summary>
@@ -167,11 +180,23 @@ namespace Lib_Services.Services
         public void Supprimer(int numeroTournoi)
         {
             // Find utilise le cache du contexte si l'entité est déjà suivie.
-            var tournoi = _context.Tournois.Find(numeroTournoi);
-            if (tournoi != null)
+            Tournoi? tournoi = _context.Tournois.Find(numeroTournoi);
+
+            try
             {
+                ValiderSuppressionTournoi(tournoi);
                 _context.Tournois.Remove(tournoi);
                 _context.SaveChanges();
+            }
+            catch (DbException ex)
+            {
+                throw new TournoiException("Erreur lors de la suppression du tournoi : \n" + ex.Message,
+                    (int)TournoiException.TournoiErreur.SuppressionTournoiDbException);
+            }
+            catch (Exception ex)
+            {
+                throw new TournoiException("Une erreur est survenue lors de la suppression du tournoi : \n" + ex.Message,
+                    (int)TournoiException.TournoiErreur.SuppressionTournoiException);
             }
         }
         #endregion
@@ -201,8 +226,12 @@ namespace Lib_Services.Services
         /// <param name="tournoi">Tournoi à valider</param>
         /// <param name="estModification">Indique si c'est une modification ou une création</param>
         /// <exception cref="TournoiException">Exception si les données du tournoi sont invalides</exception>
-        public void ValiderTournoi(Tournoi tournoi, bool estModification = false)
+        public void ValiderTournoi(Tournoi? tournoi, bool estModification = false)
         {
+            if (tournoi == null)
+                throw new TournoiException("Le tournoi est requis.",
+                    (int)TournoiException.TournoiErreur.TournoiNull);
+
             if (string.IsNullOrWhiteSpace(tournoi.Nom))
                 throw new TournoiException("Le nom est requis.",
                     (int)TournoiException.TournoiErreur.TournoiNomRequis);
@@ -228,7 +257,7 @@ namespace Lib_Services.Services
 
             if (tournoi.DureePrevue <= 0)
                 throw new TournoiException("La durée prévue doit être supérieure à zéro.",
-                    (int)TournoiException.TournoiErreur.TournoiHoraireInvalide);
+                    (int)TournoiException.TournoiErreur.TournoiDureeInvalide);
 
             if (string.IsNullOrWhiteSpace(tournoi.Statut))
                 throw new TournoiException("Le tournoi doit avoir un statut défini.",
@@ -250,13 +279,17 @@ namespace Lib_Services.Services
                 throw new TournoiException("La date et l'heure du tournoi doivent être dans le futur.",
                     (int)TournoiException.TournoiErreur.TournoiAjoutHorairePassee);
 
+            if (tournoi.NbParticipants < tournoi.NbParticipantsInscrits)
+                throw new TournoiException("Le nombre de participants maximum ne peut pas être inférieur au nombre de participants déjà inscrits.",
+                    (int)TournoiException.TournoiErreur.TournoiNbParticipantsInscrits);
+
             if (estModification)
             {
                 Tournoi? enBdd = Obtenir(tournoi.NumeroTournoi);
 
                 if(enBdd == null)
                     throw new TournoiException("Tournoi inexistant en base de donnée.",
-                        (int)TournoiException.TournoiErreur.TournoiInexistantEnBaseDeDonnee);
+                        (int)TournoiException.TournoiErreur.ModificationTournoiInexistantDb);
 
                 if(enBdd.IdEspace == tournoi.IdEspace
                     && enBdd.DateHeure == tournoi.DateHeure
@@ -266,21 +299,40 @@ namespace Lib_Services.Services
                     && enBdd.IdEspace == tournoi.IdEspace
                     && enBdd.NbParticipants ==  tournoi.NbParticipants)
                     throw new TournoiException("Aucune modification sur le tournoi détéctée",
-                        (int)TournoiException.TournoiErreur.TournoiAucuneModification);
+                        (int)TournoiException.TournoiErreur.ModificationTournoiAucuneModification);
 
-                
-                if(enBdd.IdJeu != tournoi.IdJeu)
+                if (enBdd.NumeroTournoi != tournoi.NumeroTournoi)
+                    throw new TournoiException("Le numéro d'un tournoi ne peut pas être modifié.",
+                        (int)TournoiException.TournoiErreur.ModificationTournoiNumero);
+
+                if (enBdd.IdJeu != tournoi.IdJeu)
                     throw new TournoiException("Le jeu d'un tournoi ne peut pas être modifié.",
-                        (int)TournoiException.TournoiErreur.TournoiJeuModifier);
+                        (int)TournoiException.TournoiErreur.ModificationTournoiJeu);
 
                 if(enBdd.Statut == "Terminé" && tournoi.Statut != "Terminé")
                     throw new TournoiException("Le statut d'un tournoi terminé ne peut pas être modifié.",
-                        (int)TournoiException.TournoiErreur.TournoiStatutTermineModifier);
+                        (int)TournoiException.TournoiErreur.ModificationTournoiStatutTermineModifier);
 
+                if (enBdd.Statut == "En cours" && tournoi.Statut != "En cours")
+                    throw new TournoiException("Le statut d'un tournoi en cours ne peut pas être modifié.",
+                        (int)TournoiException.TournoiErreur.ModificationTournoiStatutEncoursModifier);
                 
             }
 
         }
+
+        public void ValiderSuppressionTournoi(Tournoi? tournoi)
+        {
+            if (tournoi == null)
+                throw new TournoiException("Le tournoi ne peut pas être null.",
+                    (int)TournoiException.TournoiErreur.TournoiNull);
+
+            if (tournoi.NbParticipantsInscrits > 0)            
+                throw new TournoiException("Il n'est pas possible de supprimer un tournoi avec des participants inscrits.",
+                    (int)TournoiException.TournoiErreur.SuppressionTournoiParticipantsExistant);        
+        }
+
+
         #endregion
     }
 }

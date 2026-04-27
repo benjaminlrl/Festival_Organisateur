@@ -8,19 +8,46 @@ namespace Lib_Services.Exceptions
 
         public enum TournoiErreur
         {
-            TournoiNomRequis = 1,
-            TournoiNomExiste = 2,
-            TournoiJeuRequis = 3,
-            TournoiEspaceRequis = 4,
-            TournoiNbParticipantsInvalide = 5,
-            TournoiStatutRequis = 6,
-            TournoiConflitHoraire = 7,
-            TournoiHoraireInvalide = 8,
-            TournoiInexistantEnBaseDeDonnee = 9,
+            //-------------------
+            // Exceptions communes à la création et à la modification d'un espace
+            //-------------------
+            TournoiNull = 0,
+            TournoiInexistant = 1,
+            TournoiNomRequis = 2,
+            TournoiNomExiste = 3,
+            TournoiJeuRequis = 4,
+            TournoiEspaceRequis = 5,
+            TournoiNbParticipantsInvalide = 6,
+            TournoiStatutRequis = 7,
+            TournoiConflitHoraire = 8,
+            TournoiHoraireInvalide = 9,
+            TournoiDureeInvalide = 21,
+            TournoiInexistantEnBaseDeDonnee = 10,
             TournoiAucuneModification = 11,
             TournoiJeuModifier = 12,
             TournoiStatutTermineModifier = 13,
             TournoiAjoutHorairePassee = 14,
+            TournoiNbParticipantsInscrits = 20,
+
+            //-------------------
+            // Exceptions uniques à la modification d'un tournoi
+            //-------------------
+            ModificationTournoiInexistantDb = 9,
+            ModificationTournoiAucuneModification = 10,
+            ModificationTournoiNumero = 11,
+            ModificationTournoiJeu = 12,
+            ModificationTournoiStatutTermineModifier = 13,
+            ModificationTournoiStatutEncoursModifier = 14,
+            ModificationTournoiDbUpdateException = 22,
+            ModificationTournoiException = 23,
+
+            //-------------------
+            // Exceptions uniques à la suppression d'un tournoi
+            //-------------------
+            SuppressionTournoiParticipantsExistant = 15,
+            SuppressionTournoiDbException = 18,
+            SuppressionTournoiException = 19,
+            SuppressionTournoiLotExistant = 20,
         }
 
         public TournoiException(string message, int codeErreur) : base(message)

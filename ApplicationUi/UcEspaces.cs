@@ -554,26 +554,27 @@ namespace ApplicationUi
             try
             {
                 _serviceEspace.Modifier(_espaceSelectionnee!, modifPosteJeu);
-                MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (!modifPosteJeu)
+                    MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show("L'espace a bien été renommé et les postes de jeu associés ont été mis à jour.", 
+                        "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
+            }
+            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !modifPosteJeu)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                if (MessageBox.Show("Voulez vous renommer l'espace et reformatter le nom des postes de jeu associés ?",
+                        "Modification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    return;
+
+                ModifierEspace(true); // rappel avec les postes
             }
             catch (EspaceException ex)
             {
-
-                if (ex.CodeErreur == (int)EspaceException.EspaceErreur.ModificationNomExistePostesJeu)
-                {
-                    if (MessageBox.Show("Voulez vous renommer l'espace et reformatter le nom des postes de jeu associés ?",
-                        "Modification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                        return;
-
-                    ModifierEspace(true);
-
-                }
-                else
-                {
-                    Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                    MessageBox.Show(ex.Message);
-                }
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+                
             }
             catch (DbException ex)
             {
@@ -597,7 +598,11 @@ namespace ApplicationUi
             try
             {
                 _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, avecPostesJeu);
-                MessageBox.Show("L'espace a bien été supprimé.", "Suppression",
+                if(!avecPostesJeu)
+                    MessageBox.Show("L'espace a bien été supprimé.", "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else                
+                    MessageBox.Show("L'espace et les postes de jeu associés ont bien été supprimés.", "Suppression",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
@@ -606,10 +611,11 @@ namespace ApplicationUi
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                 if (MessageBox.Show("Impossible de supprimer l'espace car il est associé à un ou plusieurs postes de jeu.\n" +
                     "Voulez-vous supprimer les postes de jeux également ?", "Suppression",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    SupprimerEspace(true); // rappel avec les postes
-                }
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                    return;
+                
+                SupprimerEspace(true); // rappel avec les postes
+                
             }
             catch (EspaceException ex)
             {
