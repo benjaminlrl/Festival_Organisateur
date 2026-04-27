@@ -1,6 +1,6 @@
 # 🎪 Festival Organisateur
 
-Application de bureau **Windows Forms** développée en **C#** dans le cadre d'un BTS SIO Option SLAM (2025-2026).
+Application de bureau **Windows Forms** développée en **C#** dans le cadre d'un BTS SIO Option SLAM (2024-2026).
 
 Elle permet la gestion complète d'un festival : organisateurs, espaces, tournois, jeux, plateformes, lots et système de vote.
 
@@ -10,11 +10,10 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 
 ## 📋 Sommaire
 
-## 📋 Sommaire
-
 - [Contexte et objectifs](#contexte-et-objectifs)
   - [Objectifs principaux](#objectifs-principaux)
   - [Contraintes](#contraintes)
+  - [Répartition-du-travail](#repartition-du-travail)
 - [Fonctionnalités](#fonctionnalités)
 - [Diagramme de flux](#diagramme-de-flux)
 - [Choix techniques](#choix-techniques)
@@ -29,11 +28,13 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 - [Gestion des rôles](#gestion-des-rôles)
 - [Modèle de données](#modèle-de-données)
   - [Schémas de la base de données](#schémas-de-la-base-de-données)
+- [Logs](#logs)
+- [Tests unitaires](#tests-unitaires)
 - [Documentation des validations métier](#documentation-des-validations-métier)
   - [Architecture des contrôles](#architecture-de-mise-en-place-du-controles-des-données)
   - [UserControl Tournois](#démarche-à-suivre-dans-le-usercontrol-dédié-aux-tournois-configuration-minimale)
   - [Interface & Service](#faire-le-lien-entre-linterface-et-le-service)
-  - [Exceptions métier](#création-des-exceptions-liés-aux-tournois)
+  - [Exceptions métier](#création-des-exceptions)
   - [Liste des contrôles](#listes-des-controles-présents-actuellement)
     - [Espace](#espace)
     - [Jeu](#jeu)
@@ -62,7 +63,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 
 ## Contexte et objectifs
 
-Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à un besoin de gestion complète d’un festival.
+Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à un besoin de gestion complète d'un festival.
 
 ### Objectifs principaux
 
@@ -70,7 +71,7 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 - Assurer la cohérence des données via des validations métier
 - Mettre en place une architecture maintenable et évolutive
 - Implémenter une gestion des rôles et des permissions
-- Garantir la robustesse de l’application via la gestion des exceptions
+- Garantir la robustesse de l'application via la gestion des exceptions
 
 ### Contraintes
 
@@ -78,15 +79,38 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 - Utilisation de C# et Entity Framework Core
 - Base de données locale (SQLite)
 
+### Répartition du travail
+
+[@lucienlaf](https://github.com/lucienlaf) : _Collaborateur_
+
+> - Gestion des Lots
+> - Gestion des Lots composants
+> - Gestion de l'authentification
+> - Gestion des Organisateurs
+> - Gestion des Roles
+
+---
+
+[@benjaminlrl](https://github.com/benjaminlrl) : _Responsable du repository_
+
+> - Évolution des Espaces
+> - Évolution des Postes de jeu
+> - Évolution des Tournois
+> - Évolution des Plateformes
+> - Gestion des Jeux
+> - Gestion des Votes
+> - Gestion des SoumisVote
+> - Gestion des Participants
+
 ---
 
 ## Fonctionnalités
 
-### 👤Organisateurs
+### 👤 Organisateurs
 
 - Authentification avec hashage du mot de passe (BCrypt)
 - Création et gestion des comptes organisateurs
-- Gestion des rôles et permissions par module
+- Gestion des rôles et permissions par module (Administrateur, Gestionnaire du stock, Gestionnaire de l'espace, Gestionnaire des tournois)
 
 ### 🏟️ Espaces
 
@@ -132,11 +156,24 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 
 ## Diagramme de flux
 
-1. Utilisateur intéragie avec une IHM (UserControl)
-2. L'interface envoie les données au service métier
-3. Le service métier valide les données
-4. Si les données sont valides, on applique la requête de l'uitilisateur en base de données (EF)
-5. Retour à l'IHM avec succès ou erreur
+```
+[Utilisateur]
+     │
+     ▼
+[IHM — UserControl]          ← Contrôles de surface (champs requis, formats)
+     │
+     ▼
+[Service métier]             ← Validation métier approfondie + exceptions typées
+     │
+     ▼
+[Entity Framework Core]      ← Accès base de données via ApplicationDbContext
+     │
+     ▼
+[SQLite]
+     │
+     ▼
+[Retour IHM]                 ← Succès (MessageBox) ou erreur (TournoiException, DbException…)
+```
 
 ---
 
@@ -144,15 +181,15 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 
 ### Architecture en couches
 
-Le choix d’une architecture en couches permet :
+Le choix d'une architecture en couches permet :
 
 - Une séparation claire des responsabilités
 - Une meilleure testabilité
 - Une maintenabilité accrue
 
-### Utilisation d’Entity Framework Core
+### Utilisation d'Entity Framework Core
 
-- Simplifie l’accès aux données
+- Simplifie l'accès aux données
 - Permet la gestion des migrations
 - Réduit le code SQL manuel
 
@@ -161,16 +198,17 @@ Le choix d’une architecture en couches permet :
 Les validations sont centralisées dans les services afin de :
 
 - Éviter la duplication de code
-- Garantir l’intégrité des données
+- Garantir l'intégrité des données
 - Faciliter les tests unitaires
 
 ---
 
 ## Architecture
 
-_CRUD signifie Create, Read, Update, Delete_
-_CUD signifie Create, Update, Delete_
+_CRUD signifie Create, Read, Update, Delete_  
+_CUD signifie Create, Update, Delete_  
 _R signifie Read_
+
 Le projet suit une **architecture en couches** afin de séparer clairement les responsabilités et faciliter la maintenance.
 
 ```
@@ -201,7 +239,7 @@ Contient le `DbContext`, les classes de configuration EF Core (`XxxConf.cs`) dé
 Contient les interfaces (`IxxxService`) et leurs implémentations. Centralise les règles métier, les exceptions et les accès EF Core.
 
 **`ApplicationUI`** — Interface utilisateur  
-Contient la `FormMain`, les `UserControls` par module et la gestion des droits d'accès.
+Contient la `FormMain`, les `UserControls` (`UcXxx`) par module et la gestion des droits d'accès.
 
 ### Stack technique
 
@@ -211,7 +249,7 @@ Contient la `FormMain`, les `UserControls` par module et la gestion des droits d
 | Entity Framework Core | ORM                       |
 | SQLite                | Base de données           |
 | BCrypt                | Hashage des mots de passe |
-| SeriLog               | Loggeur d'informations    |
+| Serilog               | Journalisation            |
 
 ### Packages NuGet
 
@@ -219,52 +257,61 @@ Contient la `FormMain`, les `UserControls` par module et la gestion des droits d
 - `Microsoft.EntityFrameworkCore.Sqlite`
 - `Microsoft.EntityFrameworkCore.Tools`
 - `Microsoft.EntityFrameworkCore.Design`
-- `Microsoft.EntityFrameworkCore.Design`
+- `BCrypt.Net-Next`
 - `Serilog`
+- `Serilog.Sinks.File`
 
 ### Conventions de nommage pour le code métier
 
 - Les classes sont écrites en PascalCase (ex: `FestivalOrganisateur`).
-- Les properties sont écrites en PascalCase (ex: `NomFestival`).
 - Les méthodes sont écrites en PascalCase (ex: `OrganiserFestival()`).
-- Les variables sont écrites en camelCase (ex: `nomFestival`).
+- Les variables locales sont écrites en camelCase (ex: `nomFestival`).
 - Les constantes sont écrites en majuscules avec des underscores (ex: `NOMBRE_MAX_FESTIVALS`).
-- Les fichiers sont nommés en fonction de la classe qu'ils contiennent (ex: `FestivalOrganisateur`).
-- Les packages sont nommés en Pascal.Case (ex: `Festival.Organisateur.Services`).
-- Les interfaces sont nommées en PascalCase et commencent par "I" (ex: `IFestivalOrganisateur`).
-- Les exceptions sont nommées en PascalCase et se terminent par "Exception" (ex: `FestivalOrganisateurException`).
-- Les tests unitaires sont nommés en fonction de la classe qu'ils testent, suivis de "Tests" (ex: `FestivalOrganisateurTests`).
+- Les fichiers sont nommés en fonction de la classe qu'ils contiennent (ex: `FestivalOrganisateur.cs`).
+- Les namespaces suivent la convention PascalCase (ex: `Festival.Organisateur.Services`).
+- Les interfaces sont nommées en PascalCase et commencent par `I` (ex: `ITournoiService`).
+- Les exceptions sont nommées en PascalCase et se terminent par `Exception` (ex: `TournoiException`).
+- Les UserControls sont nommés en PascalCase et préfixés par `Uc` (ex: `UcTournois`).
+- Les fichiers de configuration EF Core sont nommés en PascalCase et suffixés par `Conf` (ex: `TournoiConf.cs`).
+- Les tests unitaires sont nommés en fonction de la classe testée, suffixés par `Tests` (ex: `TournoiServiceValidationTests`).
 - Les commentaires sont écrits en français et expliquent clairement le but de chaque classe, méthode et variable.
-- Les noms de variables et de méthodes doivent être descriptifs et refléter leur fonction (ex: `organiserFestival()` au lieu de `organiser()`).
-- Les noms de classes et de méthodes doivent être cohérents avec les conventions de nommage utilisées dans le projet.
+- Les noms de variables et de méthodes doivent être descriptifs et refléter leur fonction.
 
 ### Git
 
 #### Conventions de nommage pour les branches
 
+```
 feature/auth
 feature/user-profile
 fix/login-bug
 hotfix/security-patch
+```
 
-#### Conventions de nommage pour les commit
+#### Conventions de nommage pour les commits
 
+```
 type(scope): message
+```
 
-##### Types principaux :
+##### Types principaux
 
-    feat → nouvelle feature
-    fix → bug
-    refactor → amélioration sans changement fonctionnel
-    docs → documentation
-    test → tests
-    chore → maintenance
+| Type       | Usage                                    |
+| ---------- | ---------------------------------------- |
+| `feat`     | Nouvelle fonctionnalité                  |
+| `fix`      | Correction de bug                        |
+| `refactor` | Amélioration sans changement fonctionnel |
+| `docs`     | Documentation                            |
+| `test`     | Tests                                    |
+| `chore`    | Maintenance                              |
 
-##### Exemples :
+##### Exemples
 
+```
 feat(auth): ajout d'un role d'organisateur
-fix(auth): controle appronfondie sur le Role "Gestionnaire de stock"
+fix(auth): controle approfondi sur le Role "Gestionnaire de stock"
 refactor(auth): simplification de la méthode ActionMethode()
+```
 
 ---
 
@@ -274,30 +321,6 @@ refactor(auth): simplification de la méthode ActionMethode()
 - Validation stricte des données côté service
 - Gestion des erreurs via exceptions métier
 - Limitation des actions via rôles
-
----
-
-## Modèle de données
-
-### Schémas de la base de données
-
-> **Comprendre :** Les entités principales sont : `Organisateur`, `Role`, `Joueur`, `Jeu`, `Plateforme`, `Tournoi`, `Espace`, `Poste_Jeu`, `Lot`, `LotComposant`, `SoumisVote`, `Voter`, `Participer`.
-
-#### Schéma UML :
-
-![Schéma UML de la base de données](Documentation/Schema/SchemaBddFestivalOrganisation.png)
-
-#### Schéma relationnelle de la base de donnée actuelle
-
-> **Note sur la table `JeuPlateforme`**  
-> Durant le développement, j'ai découvert que EF Core génère automatiquement une table de jointure (_shadow table_) lorsqu'une relation many-to-many est déclarée via des propriétés de navigation (`ICollection<Plateforme>` dans `Jeu`). Cette table existe bien en base de données mais n'est pas manipulée directement dans le code — EF Core s'en charge via `.Include()`. Elle ne figure donc pas dans les modèles du projet.
-> 📖 [Many-to-many relationships — EF Core Documentation](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many)
-
-![Schéma relationnelle de la base de donnée actuelle](Documentation/Schema/SchemaBddFestivalOrganisationActuelle.png)
-
-#### Schéma relationnelle de la base de donnée prévu
-
-![Schéma relationnelle de la base de donnée prévu](Documentation/Schema/SchemaBddFestivalOrganisation.png)
 
 ---
 
@@ -314,21 +337,99 @@ Quatre rôles ont été définis dans l'application :
 
 ---
 
-## Documentation des validations métier
+## Modèle de données
+
+### Schémas de la base de données
+
+> **Comprendre :** Les entités principales sont : `Organisateur`, `Role`, `Joueur`, `Jeu`, `Plateforme`, `Tournoi`, `Espace`, `Poste_Jeu`, `Lot`, `LotComposant`, `SoumisVote`, `Voter`, `Participer`.
+
+La connexion à la base de données est gérée via `ApplicationDbContext`, instancié directement dans chaque service :
+
+```csharp
+_context = new ApplicationDbContext();
+```
+
+Aucun fichier de configuration externe n'est requis — la base SQLite est créée localement au premier lancement après application des migrations.
+
+#### Schéma UML
+
+![Schéma UML de la base de données](Documentation/Schema/SchemaBddFestivalOrganisation.png)
+
+#### Schéma relationnel de la base de données actuelle
+
+> **Note sur la table `JeuPlateforme`**  
+> Cette table n'est pas modélisée explicitement dans le code. Il s'agit d'une table de jointure générée automatiquement par EF Core pour gérer la relation many-to-many entre `Jeu` et `Plateforme` via les propriétés de navigation (`ICollection<Plateforme>`). EF Core la gère en coulisse via `.Include()` — elle existe en base de données mais ne figure pas dans les modèles du projet.  
+> 📖 [Many-to-many relationships — EF Core Documentation](https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many)
+
+![Schéma relationnel de la base de données actuelle](Documentation/Schema/SchemaBddFestivalOrganisationActuelle.png)
+
+#### Schéma relationnel de la base de données prévu
+
+> **Pourquoi "prévu" ?** Durant l'évolution de l'application, la fonction EF Core `.ThenInclude()` a permis de supprimer certaines tables intermédiaires initialement prévues, en gérant les relations de navigation directement via l'ORM.
+
+![Schéma relationnel de la base de données prévu](Documentation/Schema/SchemaBddFestivalOrganisation.png)
 
 ---
 
-Architecture de mise en place du controles des données :
+## Logs
 
+L'application utilise **Serilog** pour journaliser les événements applicatifs. Les logs sont écrits dans un fichier situé à :
+
+```
+ApplicationUi\bin\Debug\net10.0-windows\logs\
+```
+
+Trois niveaux sont utilisés dans le code :
+
+| Niveau        | Usage                                             |
+| ------------- | ------------------------------------------------- |
+| `Log.Warning` | Erreurs métier attendues (ex: validation échouée) |
+| `Log.Error`   | Erreurs techniques ou inattendues                 |
+
+Exemple dans un UserControl :
+
+```csharp
+catch (TournoiException ex)
+{
+    Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+}
+catch (Exception ex)
+{
+    Log.Error(ex, "Une erreur inattendue est survenue.");
+}
+```
+
+---
+
+## Tests unitaires
+
+Les tests unitaires couvrent les validations métier des services. Ils sont indépendants de l'interface utilisateur et s'appuient directement sur les services.
+
+```
 Festival_Organisateur/
-├── Application_Ui/TournoiUc.cs # Controles sur les interractions et données entre l'IHM et TournoiService.cs
-|
-├── Lib_Services/ITournoiService.cs # Interface qui permet de ne pas avoir à réécrire les Uc en cas de migrations techniques
-├── Lib_Services/TournoiService.cs # Controles sur les données liés aux tournois avant interraction dans la bdd
-|
-└── ServiceTests/TournoiServiceValidationTests # Tests unitaires dédiés aux tournois
+└── ServiceTests/
+    └── TournoiServiceValidationTests.cs
+```
 
-### Démarche à suivre dans le UserControl dédié aux Tournois(configuration minimale)
+Pour lancer les tests depuis Visual Studio : `Ctrl + R, A` ou via le menu **Test → Exécuter tous les tests**.
+
+> Les tests utilisent un contexte en mémoire ou une base SQLite de test — aucune base de production n'est affectée.
+
+---
+
+## Documentation des validations métier
+
+### Architecture de mise en place du controles des données
+
+```
+Festival_Organisateur/
+├── Application_Ui/TournoiUc.cs                          # Contrôles sur les interactions et données entre l'IHM et TournoiService.cs
+├── Lib_Services/ITournoiService.cs                       # Interface qui permet de ne pas avoir à réécrire les Uc en cas de migrations techniques
+├── Lib_Services/TournoiService.cs                        # Contrôles sur les données liés aux tournois avant interaction en base
+└── ServiceTests/TournoiServiceValidationTests.cs         # Tests unitaires dédiés aux tournois
+```
+
+### Démarche à suivre dans le UserControl dédié aux Tournois (configuration minimale)
 
 _Faire le lien entre le UserControl et l'Interface_
 
@@ -337,7 +438,7 @@ Festival_Organisateur/
 └── Application_Ui/TournoiUc.cs
 ```
 
-```C#
+```csharp
 using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Exceptions;
@@ -361,55 +462,54 @@ namespace ApplicationUi
 
 _Ajouter un Tournoi dans la base de données_
 
-```C#
- private void ButtonAjouter_Click(object sender, EventArgs e)
- {
-     Tournoi tournoi = new ()
-     {
-         Nom = textBoxNom.Text,
-         DateHeure = dateTimePickerDateTournoi.Value,
-         NbParticipants = (int)numericUpDownNbParticip.Value,
-         DureePrevue = (int)numericUpDownDuree.Value,
-         Statut = statutSelectionne,
-         IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace,
-         IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
-     };
+```csharp
+private void ButtonAjouter_Click(object sender, EventArgs e)
+{
+    Tournoi tournoi = new ()
+    {
+        Nom = textBoxNom.Text,
+        DateHeure = dateTimePickerDateTournoi.Value,
+        NbParticipants = (int)numericUpDownNbParticip.Value,
+        DureePrevue = (int)numericUpDownDuree.Value,
+        Statut = statutSelectionne,
+        IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace,
+        IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
+    };
 
-     try
-     {
-         _serviceTournoi.Creer(tournoi);
-         MessageBox.Show("Le tournoi a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
-         Raz_Zones();
-     }
-     catch (TournoiException ex)
-     {
-         Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-         MessageBox.Show("Veuillez vérifier les informations saisies.\n" + ex.Message, "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-     }
-     catch (DbException ex)
-     {
-         Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du tournoi.");
-         MessageBox.Show("Erreur technique, réessayez plus tard.");
-     }
-     catch (Exception ex)
-     {
-         Log.Error(ex, "Une erreur inattendue est survenue.");
-         MessageBox.Show("Une erreur inattendue est survenue.");
-     }
- }
-
+    try
+    {
+        _serviceTournoi.Creer(tournoi);
+        MessageBox.Show("Le tournoi a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        Raz_Zones();
+    }
+    catch (TournoiException ex)
+    {
+        Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+        MessageBox.Show("Veuillez vérifier les informations saisies.\n" + ex.Message, "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+    }
+    catch (DbException ex)
+    {
+        Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du tournoi.");
+        MessageBox.Show("Erreur technique, réessayez plus tard.");
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Une erreur inattendue est survenue.");
+        MessageBox.Show("Une erreur inattendue est survenue.");
+    }
+}
 ```
 
-_Faire le lien entre l'Interface et le Service'_
+### Faire le lien entre l'Interface et le Service
 
-> Info: La méthode n'est pas accessible dans le Uc si sa signature n'est pas définie dans l'Interface et si sa signature existe dans le service
+> Info : La méthode n'est pas accessible dans le Uc si sa signature n'est pas définie dans l'Interface et si sa signature existe dans le service.
 
 ```
 Festival_Organisateur/
 └── Lib_Services/Interfaces/ITournoiService.cs
 ```
 
-```C#
+```csharp
 using Lib_Entities.Entities;
 
 namespace Lib_Services.Interfaces
@@ -431,7 +531,7 @@ Festival_Organisateur/
 └── Lib_Services/Services/TournoiService.cs
 ```
 
-```C#
+```csharp
 using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Exceptions;
@@ -449,47 +549,45 @@ namespace Lib_Services.Services
         private readonly ApplicationDbContext _context;
 
         /// <summary>
-        /// Initialise une nouvelle instance
-        /// de <see cref="TournoiService"/>.
-        /// <param name="context">DbContext
-        /// injecté pour l'accès aux données.</param>
+        /// Initialise une nouvelle instance de <see cref="TournoiService"/>.
         /// </summary>
+        /// <param name="context">DbContext injecté pour l'accès aux données.</param>
         public TournoiService(ApplicationDbContext context)
         {
             _context = context;
         }
+
 [...]
+
 #region CUD
-/// <summary>
-/// Crée un nouveau tournoi en base après validation métier minimale.
-/// Lance une <see cref="ArgumentException"/> si le nombre de participants est invalide.
-/// </summary>
-/// <param name="tournoi">Instance du tournoi à créer.</param>
-public void Creer(Tournoi tournoi)
-{
-    ValiderTournoi(tournoi, false);
-    // Ajout et sauvegarde immédiate.
-    _context.Tournois.Add(tournoi);
-    _context.SaveChanges();
-}
+        /// <summary>
+        /// Crée un nouveau tournoi en base après validation métier minimale.
+        /// Lance une <see cref="ArgumentException"/> si le nombre de participants est invalide.
+        /// </summary>
+        /// <param name="tournoi">Instance du tournoi à créer.</param>
+        public void Creer(Tournoi tournoi)
+        {
+            ValiderTournoi(tournoi, false);
+            _context.Tournois.Add(tournoi);
+            _context.SaveChanges();
+        }
 ```
 
 ---
 
-### Création des Exceptions liés aux tournois
+### Création des Exceptions
 
-> Info: on contrôle chaque action de l'utilisateur (politique du moindre privilège).
-> Pour controler ses actions, nous utilisons les exceptions.
+> Info : on contrôle chaque action de l'utilisateur (politique du moindre privilège). Pour contrôler ses actions, nous utilisons les exceptions.
 
-#### Avantages :
+#### Avantages
 
 - Indépendant des Uc
-- Controles profond des données
+- Contrôles profonds des données
 - Meilleure maintenabilité
 - Exceptions personnalisées
 - Facile à utiliser pour les tests unitaires
 
-#### Inconvéniants :
+#### Inconvénients
 
 - Lourd à mettre en place
 
@@ -500,16 +598,13 @@ Festival_Organisateur/
 └── Lib_Services/Services/TournoiService.cs
 ```
 
-```C#
+```csharp
 /// <summary>
-/// Permet de valider les données d'un tournoi avant
-/// création ou modification.
+/// Permet de valider les données d'un tournoi avant création ou modification.
 /// </summary>
 /// <param name="tournoi">Tournoi à valider</param>
-/// <param name="estModification">Indique si c'est une modification
-/// ou une création</param>
-/// <exception cref="TournoiException">Exception si les données du
-/// tournoi sont invalides</exception>
+/// <param name="estModification">Indique si c'est une modification ou une création</param>
+/// <exception cref="TournoiException">Exception si les données du tournoi sont invalides</exception>
 public void ValiderTournoi(Tournoi tournoi, bool estModification = false)
 {
     if (string.IsNullOrWhiteSpace(tournoi.Nom))
@@ -523,15 +618,12 @@ public void ValiderTournoi(Tournoi tournoi, bool estModification = false)
         if(enBdd == null)
             throw new TournoiException("Tournoi inexistant en base de donnée.",
                 (int)TournoiException.TournoiErreur.ModificationTournoiInexistant);
-
     [...]
 ```
 
-_`TournoiNomRequis`_ corresppond au nom associé au code de l'Exception
-
-_`TournoiException`_ corresppond la classe dédié aux exceptions liés aux tournois
-
-_`TournoiErreur`_ correspond à la propriété de la classe _`TournoiException`_ qui contient les codes
+`TournoiNomRequis` correspond au nom associé au code de l'Exception.  
+`TournoiException` correspond à la classe dédiée aux exceptions liées aux tournois.  
+`TournoiErreur` correspond à la propriété de la classe `TournoiException` qui contient les codes.
 
 #### Définir les codes des exceptions
 
@@ -540,7 +632,7 @@ Festival_Organisateur/
 └── Lib_Services/Exceptions/TournoiException.cs
 ```
 
-```C#
+```csharp
 namespace Lib_Services.Exceptions
 {
     public class TournoiException : Exception
@@ -564,7 +656,7 @@ namespace Lib_Services.Exceptions
 
 ---
 
-### Listes des controles présents actuellement
+### Listes des controles avec les Exceptions présentes actuellement
 
 #### Espace
 
@@ -738,15 +830,15 @@ namespace Lib_Services.Exceptions
 ### Limites actuelles
 
 - Interface WinForms peu moderne
-- Absence d’API (application uniquement locale)
+- Absence d'API (application uniquement locale)
 - Gestion des utilisateurs simplifiée
 
 ### Améliorations possibles
 
 - Migration vers une architecture web (ASP.NET)
-- Mise en place d’une API REST
-- Ajout d’un système d’authentification sécurisé (JWT)
-- Amélioration de l’UX/UI
+- Mise en place d'une API REST
+- Ajout d'un système d'authentification sécurisé (JWT)
+- Amélioration de l'UX/UI
 - Déploiement sur serveur distant
 
 ---
@@ -757,7 +849,7 @@ namespace Lib_Services.Exceptions
 - [Visual Studio 2022+](https://visualstudio.microsoft.com/fr/)
 - `dotnet-ef` (Entity Framework CLI)
 
-- ***
+---
 
 ## 🚀 Installation & Migrations
 
@@ -821,6 +913,8 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 | [v1.0.0-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.0.0-alpha) | Mar. 2026 | Alpha   | Authentification, organisateurs, espaces, postes, tournois                 |
 | [v0.0.0](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v0.0.0)             | Mar. 2026 | Initial | Version de référence                                                       |
 
+---
+
 ## 📸 Captures d'écran
 
 ### Portail de connexion
@@ -829,7 +923,7 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Accueil
 
-![Acceuil](Documentation/App/Accueil.png)
+![Accueil](Documentation/App/Accueil.png)
 
 ### Gestion des espaces
 
@@ -849,9 +943,9 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Gestion des jeux
 
-![Gestion des organisateurs](Documentation/App/jeux.png)
+![Gestion des jeux](Documentation/App/jeux.png)
 
-### Gestion des binomes jeu/plateforme ouverts aux votes
+### Gestion des binômes jeu/plateforme ouverts aux votes
 
 ![Espace de votes dédié aux utilisateurs](Documentation/App/soumisVote.png)
 
@@ -865,7 +959,7 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Gestion des composants des lots
 
-![Espace de votes dédié aux utilisateurs](Documentation/App/lotsComposant.png)
+![Gestion des composants des lots](Documentation/App/lotsComposant.png)
 
 ### Gestion des organisateurs
 
