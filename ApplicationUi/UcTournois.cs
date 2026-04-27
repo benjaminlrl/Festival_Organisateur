@@ -235,7 +235,7 @@ namespace ApplicationUi
 
             AfficherBoutons();
         }
-        private void RadioButtonPlanifié_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonPlanifie_CheckedChanged(object sender, EventArgs e)
         {
             statutSelectionne = "Planifié";
         }
@@ -276,7 +276,7 @@ namespace ApplicationUi
             numericUpDownNbParticip.Enabled = false;
             numericUpDownDuree.Enabled = false;
             radioButtonEnCours.Enabled = false;
-            radioButtonPlanifié.Enabled = false;
+            radioButtonPlanifie.Enabled = false;
             radioButtonTermine.Enabled = false;
         }
 
@@ -313,9 +313,13 @@ namespace ApplicationUi
             numericUpDownNbParticip.Value = numericUpDownNbParticip.Minimum;
             numericUpDownDuree.Value = numericUpDownDuree.Minimum;
             radioButtonEnCours.Checked = false;
-            radioButtonPlanifié.Checked = false;
+            radioButtonPlanifie.Checked = false;
             radioButtonTermine.Checked = false;
             labelParticipantsInscrits.Visible = false;
+
+            comboBoxJeu.Enabled = true;
+            comboBoxEspace.Enabled = true;
+
 
             ChargerTournois();
             ChargerEspaces();
@@ -346,13 +350,15 @@ namespace ApplicationUi
             // ComboBox Espace
             comboBoxEspace.SelectedItem = _tournoiSelectionne.Espace;
             comboBoxEspace.SelectedValue = _tournoiSelectionne.IdEspace;
+            comboBoxEspace.Enabled = false;
 
             // ComboBox Jeu
             comboBoxJeu.SelectedItem = _tournoiSelectionne.Jeu;
             comboBoxJeu.SelectedValue = _tournoiSelectionne.IdJeu;
+            comboBoxJeu.Enabled = false;
 
             // Statut (RadioButtons)
-            radioButtonPlanifié.Checked = _tournoiSelectionne.Statut == "Planifié";
+            radioButtonPlanifie.Checked = _tournoiSelectionne.Statut == "Planifié";
             radioButtonEnCours.Checked = _tournoiSelectionne.Statut == "En cours";
             radioButtonTermine.Checked = _tournoiSelectionne.Statut == "Terminé";
 

@@ -509,7 +509,6 @@ namespace ApplicationUi
         private void AfficherBoutons()
         {
 
-            buttonAjouter.Enabled = _posteJeuSelectionne == null;
             comboBoxEspace.Enabled = _posteJeuSelectionne == null;
             comboBoxPlateforme.Enabled = _posteJeuSelectionne == null;
 
@@ -518,6 +517,7 @@ namespace ApplicationUi
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
             buttonEffacer.Enabled = _posteJeuSelectionne != null;
+            buttonAjouter.Enabled = true;
 
         }
 

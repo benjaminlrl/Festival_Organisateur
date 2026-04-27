@@ -37,7 +37,7 @@ namespace ApplicationUi
             dateTimePickerDateTournoi = new DateTimePicker();
             numericUpDownDuree = new NumericUpDown();
             flowLayoutPanel1 = new FlowLayoutPanel();
-            radioButtonPlanifié = new RadioButton();
+            radioButtonPlanifie = new RadioButton();
             radioButtonEnCours = new RadioButton();
             radioButtonTermine = new RadioButton();
             labelStatut = new Label();
@@ -307,26 +307,28 @@ namespace ApplicationUi
             // 
             // flowLayoutPanel1
             // 
-            flowLayoutPanel1.Controls.Add(radioButtonPlanifié);
+            flowLayoutPanel1.Controls.Add(radioButtonPlanifie);
             flowLayoutPanel1.Controls.Add(radioButtonEnCours);
             flowLayoutPanel1.Controls.Add(radioButtonTermine);
             flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.Enabled = false;
             flowLayoutPanel1.Location = new Point(978, 38);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new Size(412, 38);
             flowLayoutPanel1.TabIndex = 16;
             // 
-            // radioButtonPlanifié
+            // radioButtonPlanifie
             // 
-            radioButtonPlanifié.AutoSize = true;
-            radioButtonPlanifié.Location = new Point(10, 3);
-            radioButtonPlanifié.Margin = new Padding(10, 3, 5, 3);
-            radioButtonPlanifié.Name = "radioButtonPlanifié";
-            radioButtonPlanifié.Size = new Size(106, 30);
-            radioButtonPlanifié.TabIndex = 0;
-            radioButtonPlanifié.TabStop = true;
-            radioButtonPlanifié.Text = "Planifié";
-            radioButtonPlanifié.UseVisualStyleBackColor = true;
+            radioButtonPlanifie.AutoSize = true;
+            radioButtonPlanifie.Location = new Point(10, 3);
+            radioButtonPlanifie.Margin = new Padding(10, 3, 5, 3);
+            radioButtonPlanifie.Name = "radioButtonPlanifie";
+            radioButtonPlanifie.Size = new Size(106, 30);
+            radioButtonPlanifie.TabIndex = 0;
+            radioButtonPlanifie.TabStop = true;
+            radioButtonPlanifie.Text = "Planifié";
+            radioButtonPlanifie.UseVisualStyleBackColor = true;
+            radioButtonPlanifie.CheckedChanged += RadioButtonPlanifie_CheckedChanged;
             // 
             // radioButtonEnCours
             // 
@@ -339,6 +341,7 @@ namespace ApplicationUi
             radioButtonEnCours.TabStop = true;
             radioButtonEnCours.Text = "En Cours";
             radioButtonEnCours.UseVisualStyleBackColor = true;
+            radioButtonEnCours.CheckedChanged += RadioButtonEnCours_CheckedChanged;
             // 
             // radioButtonTermine
             // 
@@ -351,6 +354,7 @@ namespace ApplicationUi
             radioButtonTermine.TabStop = true;
             radioButtonTermine.Text = "Terminé";
             radioButtonTermine.UseVisualStyleBackColor = true;
+            radioButtonTermine.CheckedChanged += RadioButtonTermine_CheckedChanged;
             // 
             // labelStatut
             // 
@@ -517,7 +521,7 @@ namespace ApplicationUi
         private DateTimePicker dateTimePickerDateTournoi;
         private NumericUpDown numericUpDownDuree;
         private FlowLayoutPanel flowLayoutPanel1;
-        private RadioButton radioButtonPlanifié;
+        private RadioButton radioButtonPlanifie;
         private RadioButton radioButtonEnCours;
         private RadioButton radioButtonTermine;
         private Panel panelButtons;
