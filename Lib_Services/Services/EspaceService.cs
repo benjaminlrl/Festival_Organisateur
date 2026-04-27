@@ -128,6 +128,7 @@ namespace Lib_Services.Services
                 e.Nom.Substring(0,3).Contains(nom.Substring(0,3)));
         }
         #endregion
+
         #region CUD
         /// <summary>
         /// Crée un nouvel espace en base.
@@ -161,17 +162,23 @@ namespace Lib_Services.Services
             if (modifPosteJeu)
             {
                 List<PosteJeu> postesJeuAssocies = _posteJeuService.ListerPostesJeuDunEspace(espace);
-                try
+                if (postesJeuAssocies.Count > 0)
                 {
-                    _posteJeuService.FormatRefPosteJeuEspaceNouvNom(postesJeuAssocies, espace.Nom);
-                    _context.SaveChanges();
+                    try
+                    {
+                        _posteJeuService.FormatRefPosteJeuEspaceNouvNom(postesJeuAssocies, espace.Nom);
+                        _context.SaveChanges();
+                    }
+                    catch (PosteJeuException ex)
+                    {
+                        throw new EspaceException("Erreur lors de la modification des postes de jeu associés à l'espace : \n"
+                            + ex.Message,
+                            (int)EspaceException.EspaceErreur.ModificationPosteJeuEspaceNom);
+                    }
                 }
-                catch (PosteJeuException ex)
-                {                    
-                    throw new EspaceException("Erreur lors de la modification des postes de jeu associés à l'espace : \n" 
-                        + ex.Message,
-                        (int)EspaceException.EspaceErreur.ModificationPosteJeuEspaceNom);
-                }
+                else
+                    throw new EspaceException("Aucun poste de jeux n'est associé à l'espace",
+                            (int)EspaceException.EspaceErreur.ModificationAucunPosteJeu;
             }
         }
 
@@ -190,6 +197,7 @@ namespace Lib_Services.Services
             }
         }
         #endregion
+
         #region statistiques
         /// <summary>
         /// Retourne le nombre d'espaces disponibales en fonction du filtre.
@@ -217,6 +225,7 @@ namespace Lib_Services.Services
             return Lister(filtre).Count;
         }
         #endregion
+
         #region Validations
 
         /// <summary>
