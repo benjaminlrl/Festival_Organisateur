@@ -548,7 +548,12 @@ namespace ApplicationUi
                 col.SortMode = DataGridViewColumnSortMode.Programmatic;
             }
         }
-        
+
+        /// <summary>
+        /// Permet de modifier un espace en gérant les différentes exceptions qui peuvent survenir,
+        /// notamment lorsqu'il existe des postes de jeu associés à l'espace.
+        /// </summary>
+        /// <param name="modifPosteJeu"></param>
         private void ModifierEspace(bool modifPosteJeu)
         {
             try
@@ -573,24 +578,25 @@ namespace ApplicationUi
             catch (EspaceException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message);
                 
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                    MessageBox.Show("Erreur technique, réessayez plus tard.");
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                    MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
 
 
         /// <summary>
-        /// Permets de supprimer un espace en gérant les différentes exceptions qui peuvent survenir, notamment lorsqu'il existe des postes de jeu associés à l'espace.
+        /// Permets de supprimer un espace en gérant les différentes exceptions qui peuvent survenir,
+        /// notamment lorsqu'il existe des postes de jeu associés à l'espace.
         /// </summary>
         /// <param name="avecPostesJeu"></param>
         private void SupprimerEspace(bool avecPostesJeu)
@@ -600,10 +606,10 @@ namespace ApplicationUi
                 _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, avecPostesJeu);
                 if(!avecPostesJeu)
                     MessageBox.Show("L'espace a bien été supprimé.", "Suppression",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else                
                     MessageBox.Show("L'espace et les postes de jeu associés ont bien été supprimés.", "Suppression",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
             catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !avecPostesJeu)
@@ -611,7 +617,7 @@ namespace ApplicationUi
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                 if (MessageBox.Show("Impossible de supprimer l'espace car il est associé à un ou plusieurs postes de jeu.\n" +
                     "Voulez-vous supprimer les postes de jeux également ?", "Suppression",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                     return;
                 
                 SupprimerEspace(true); // rappel avec les postes
@@ -620,17 +626,17 @@ namespace ApplicationUi
             catch (EspaceException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Erreur technique lors de la suppression de l'espace.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                    MessageBox.Show("Erreur technique, réessayez plus tard.");
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Erreur inattendue lors de la suppression de l'espace.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                    MessageBox.Show("Une erreur inattendue est survenue.");
             }
         }
         #endregion
