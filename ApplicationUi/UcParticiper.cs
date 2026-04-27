@@ -230,17 +230,17 @@ namespace ApplicationUi
             catch (ParticiperException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de la participation.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -248,7 +248,7 @@ namespace ApplicationUi
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
-                MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -269,17 +269,17 @@ namespace ApplicationUi
             catch (ParticiperException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification de la participation.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -290,7 +290,7 @@ namespace ApplicationUi
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
-                MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -459,7 +459,7 @@ namespace ApplicationUi
         {
             if (_participerSelectionne == null)
             {
-                MessageBox.Show("Aucun espace sélectionné.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun espace sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

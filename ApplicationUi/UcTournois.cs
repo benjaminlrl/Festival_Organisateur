@@ -148,17 +148,17 @@ namespace ApplicationUi
             catch (TournoiException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show("Veuillez vérifier les informations saisies.\n" + ex.Message, "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Veuillez vérifier les informations saisies.\n" + ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du tournoi.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -166,7 +166,7 @@ namespace ApplicationUi
         {
             if (dataGridTournois.CurrentRow == null || _tournoiSelectionne == null)
             {
-                MessageBox.Show("Aucun tournoi sélectionné", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun tournoi sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -188,7 +188,7 @@ namespace ApplicationUi
         {
             if (dataGridTournois.CurrentRow == null || _tournoiSelectionne == null)
             {
-                MessageBox.Show("Aucun tournoi sélectionné", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun tournoi sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
