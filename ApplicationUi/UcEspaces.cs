@@ -310,12 +310,12 @@ namespace ApplicationUi
                         catch (EspaceException ex2)
                         {
                             Log.Error(ex2, "Une erreur technique est survenue lors de la modification de l'espace.");
-                            MessageBox.Show("Erreur technique, réessayez plus tard.");
+                            MessageBox.Show(ex2.Message);
                         }
                         catch (PosteJeuException ex2)
                         {
                             Log.Error(ex2, "Une erreur technique est survenue lors de la modification des postes de jeu pour le reformatage des references.");
-                            MessageBox.Show("Erreur technique, réessayez plus tard.");
+                            MessageBox.Show(ex2.Message);
                         }
                         catch (DbException ex2)
                         {

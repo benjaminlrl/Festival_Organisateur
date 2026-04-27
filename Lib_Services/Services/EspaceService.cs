@@ -178,7 +178,7 @@ namespace Lib_Services.Services
                 }
                 else
                     throw new EspaceException("Aucun poste de jeux n'est associé à l'espace",
-                            (int)EspaceException.EspaceErreur.ModificationAucunPosteJeu;
+                            (int)EspaceException.EspaceErreur.ModificationAucunPosteJeu);
             }
         }
 
