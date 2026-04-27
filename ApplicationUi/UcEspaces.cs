@@ -291,7 +291,6 @@ namespace ApplicationUi
             {
                 _serviceEspace.Modifier(_espaceSelectionnee);
                 MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Raz_Zones();
             }
             catch (EspaceException ex)
             {
@@ -305,12 +304,20 @@ namespace ApplicationUi
                             _serviceEspace.Modifier(_espaceSelectionnee, true);
                             MessageBox.Show("L'espace et ses postes de jeu ont bien été modifiés.", "Modification",
                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            Raz_Zones();
                         }
                         catch (EspaceException ex2)
                         {
-                            Log.Error(ex2, "Une erreur technique est survenue lors de la modification de l'espace.");
-                            MessageBox.Show(ex2.Message);
+                            if (ex2.CodeErreur == (int)EspaceException.EspaceErreur.ModificationAucunPosteJeu)
+                            {
+                                Log.Warning("[{Code}] {Message}", ex2.CodeErreur, ex2.Message);
+                                MessageBox.Show("L'espace a bien été modifié\n"+
+                                    ex2.Message);
+                            }
+                            else
+                            {
+                                Log.Error(ex2, "Une erreur technique est survenue lors de la modification de l'espace et de ses postes de jeu associés.");
+                                MessageBox.Show(ex2.Message);
+                            }
                         }
                         catch (PosteJeuException ex2)
                         {
@@ -329,7 +336,7 @@ namespace ApplicationUi
                         }
                     }
                 }
-                else 
+                else
                 {
                     Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                     MessageBox.Show(ex.Message);
@@ -344,6 +351,10 @@ namespace ApplicationUi
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
                 MessageBox.Show("Une erreur inattendue est survenue.");
+            }
+            finally
+            {
+                Raz_Zones();
             }
 
         }

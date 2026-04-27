@@ -19,7 +19,7 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="filtre">Optionnel, filtre</param>
         /// <returns>Liste d'objets <see cref="Espace"/>.</returns>
-        List<Espace> Lister(string filtre = "", string colonne = "Nom", string ordre = "ASC");
+        List<Espace> Lister(string filtre = "", string colonne = "", string ordre = "");
 
         /// <summary>
         /// Retourne la liste complète des espaces disponibles présents en base.
@@ -31,7 +31,7 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="filtre"></param>
         /// <returns>Liste d'objets <see cref="Espace"/> disponibles</returns>
-        List<Espace> ListerEspacesDisponibles(string filtre = "", string colonne = "Nom", string ordre = "ASC");
+        List<Espace> ListerEspacesDisponibles(string filtre = "", string colonne = "", string ordre = "");
 
         /// <summary>
         /// Retourne la liste complète des espaces disponibles présents en base.
@@ -41,9 +41,11 @@ namespace Lib_Services.Interfaces
         ///  (Nom, Description, Superficie, CapaciteMaxi) 
         ///  et dans un ordre donné (ASC ou DESC).
         /// </summary>
-        /// <param name="filtre"></param>
+        /// <param name="filtre">Contenu dans toutes le sproprietes de l'entite</param>
+        /// <param name="propriete">Propriete sur la quelle on veut trier l'ordre</param>
+        /// <param name="ordre">Ordre ASC ou DESC</param>
         /// <returns>Liste d'objets <see cref="Espace"/>indisponibles</returns>
-        List<Espace> ListerEspacesIndisponibles(string filtre = "", string colonne = "Nom", string ordre = "ASC");
+        List<Espace> ListerEspacesIndisponibles(string filtre = "", string propriete = "", string ordre = "");
        
         /// <summary>
         /// Récupère un espace par son identifiant.
@@ -85,6 +87,7 @@ namespace Lib_Services.Interfaces
         /// <param name="idEspace">Identifiant de l'espace à supprimer.</param>
         void Supprimer(int idEspace);
         #endregion
+
         #region Validations 
         /// <summary>
         /// Permet de vérifier les propriétés associés a un espace.
@@ -94,7 +97,16 @@ namespace Lib_Services.Interfaces
         /// <param name="modifPosteJeu">Indique si la validation concerne une modification des postes de jeu associés.</param>
         /// <returns>Liste de <see cref="string"/> correspondants aux erreurs, ou vide</returns>
         void ValiderEspace(Espace espace, bool estModification = false, bool modifPosteJeu = false);
+
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a un espace.
+        /// </summary>
+        /// <param name="espace">L'esapce à valider</param>
+        /// <param name="suppPosteJeu">Indique si la validation mdofie égalementy les postes de jeu associés.</param>
+        /// <returns>Liste de <see cref="string"/> correspondants aux erreurs, ou vide</returns>
+        void ValiderSuppressionEspace(Espace espace, bool suppPosteJeu = false);
         #endregion
+
         #region Statistiques
 
         /// <summary>
