@@ -198,7 +198,6 @@ namespace ApplicationUi
                 dataGridParticipationsJoueur.Columns["DateHeureInscription"].Visible = false;
                 dataGridParticipationsJoueur.Columns["NomTournoi"].HeaderText = "Tournoi";
                 dataGridParticipationsJoueur.Columns["IdUser"].HeaderText = "Utilisateur";
-                dataGridParticipationsJoueur.Columns["NbParticipants"].HeaderText = "Utilisateur";
 
                 dataGridParticipationsJoueur.Columns["NomTournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dataGridParticipationsJoueur.Columns["IdUser"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
