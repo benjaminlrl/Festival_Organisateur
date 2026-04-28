@@ -2,6 +2,7 @@
 using Lib_Metier.Data.Configurations;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -59,12 +60,14 @@ namespace ApplicationUi
             // On check si le username n'est pas vide
             if (string.IsNullOrWhiteSpace(textBoxUsername.Text))
             {
+                Log.Error("L'identifiant est vide.");
                 MessageBox.Show("L'Identifiant ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             // On check si le mot de passe n'est pas vide
             if (string.IsNullOrWhiteSpace(textBoxPassword.Text))
             {
+                Log.Error("Le mot de passe est vide.");
                 MessageBox.Show("Le Mot de Passe ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -72,6 +75,7 @@ namespace ApplicationUi
             // On check si l'identifiant & le mot de passe correspondent à un compte dans la base de données
             if (!_organisateurService.EstIdentique(textBoxPassword.Text, textBoxUsername.Text.Trim()))
             {
+                Log.Error("Login ou mot de passe incorrect.");
                 MessageBox.Show("Login ou mot de passe incorrect.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -80,6 +84,7 @@ namespace ApplicationUi
             organisateurConnecte = _organisateurService.Obtenir(textBoxUsername.Text);
             if (organisateurConnecte == null)
             {
+                Log.Error("Une erreur technique est survenue lors de la récupération du compte.");
                 MessageBox.Show("Erreur de récupération de votre compte.\nVeuillez contacter un administrateur.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
