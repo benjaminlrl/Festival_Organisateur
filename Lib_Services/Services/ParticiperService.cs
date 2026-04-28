@@ -42,6 +42,7 @@ namespace Lib_Services.Services
         public List<Participer> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Participer> query = _context.Participer
+                .AsNoTracking()
                 .Include(p => p.Tournoi);
 
             if (!string.IsNullOrWhiteSpace(filtre))
@@ -149,9 +150,7 @@ namespace Lib_Services.Services
         public Participer? Obtenir(int idUser, int numeroTournoi)
         {
             return _context.Participer
-                           .Include(p => p.Tournoi)
-                           .AsNoTracking()
-                           .FirstOrDefault(p => p.IdUser == idUser && p.NumeroTournoi == numeroTournoi);
+                .FirstOrDefault(p => p.IdUser == idUser && p.NumeroTournoi == numeroTournoi);
         }
 
         #endregion
@@ -178,17 +177,27 @@ namespace Lib_Services.Services
         public void Modifier(Participer? participer)
         {
 
+            if (participer == null)
+                throw new ParticiperException("Participation ne peut pas être null",
+                    (int)ParticiperException.ParticiperErreur.ParticiperNull);
+
+            Participer? participerDb = _context.Participer
+                .FirstOrDefault(p => p.IdUser == participer.IdUser
+                                  && p.NumeroTournoi == participer.NumeroTournoi);
+
+            if (participerDb == null)
+                throw new ParticiperException("Participation inexistante",
+                    (int)ParticiperException.ParticiperErreur.ParticiperInexistant);
+
             ValiderParticipation(participer, true);
 
-            // Détache l'instance déjà trackée
-            Participer? local = _context.Participer.Local
-                .FirstOrDefault(p => p.IdUser == participer!.IdUser && p.NumeroTournoi == participer.NumeroTournoi);
+            // Update simple permet d'éviter un conflit de tracking
+            participerDb.Rang = participer.Rang;
+            participerDb.ScoreFinal = participer.ScoreFinal;
+            participerDb.Evaluation = participer.Evaluation;
+            participerDb.LotRemis = participer.LotRemis;
+            participerDb.Commentaire = participer.Commentaire;
 
-            if (local != null)
-                _context.Entry(local).State = EntityState.Detached;
-
-            participer!.Tournoi = null; // évite le conflit de tracking sur Tournoi
-            _context.Entry(participer).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
@@ -199,20 +208,12 @@ namespace Lib_Services.Services
         /// <param name="numeroTournoi">Numero du tournoi associé à la participation à supprimer.</param>
         public void Supprimer(int idUser, int numeroTournoi, bool forcerSupp = false)
         {
-            Participer? participer = Obtenir(idUser, numeroTournoi); // AsNoTracking
+            Participer? participer = Obtenir(idUser, numeroTournoi);
 
             ValiderSuppressionParticipation(participer, forcerSupp);
 
-            // Détache l'instance déjà trackée par le Lister()
-            Participer? local = _context.Participer.Local
-                .FirstOrDefault(p => p.IdUser == idUser && p.NumeroTournoi == numeroTournoi);
-
-            if (local != null)
-                _context.Entry(local).State = EntityState.Detached;
-
             _context.Participer.Remove(participer!);
             _context.SaveChanges();
-
         }
         #endregion
 
@@ -298,6 +299,7 @@ namespace Lib_Services.Services
 
             // 1. Existence du tournoi en premier car les checks suivants en dépendent
             Tournoi? tournoi = _serviceTournoi.Obtenir(participer.NumeroTournoi);
+
             if (tournoi == null)
                 throw new ParticiperException("Le tournoi n'existe pas.",
                     (int)ParticiperException.ParticiperErreur.ParticiperTournoiInexistant);
@@ -400,25 +402,24 @@ namespace Lib_Services.Services
         public void ValiderSuppressionParticipation(Participer? participer, bool forcerSupp = false)
         {
             if (participer == null)
-                throw new ParticiperException("L'espace ne peut pas être null.",
+                throw new ParticiperException("La participation ne peut pas être null.",
                     (int)ParticiperException.ParticiperErreur.ParticiperNull);
 
-            if (Obtenir(participer.IdUser, participer.NumeroTournoi) == null)
-                throw new ParticiperException("La participation n'existe pas en base de données'.",
-                    (int)ParticiperException.ParticiperErreur.ParticiperInexistant);
+            Tournoi? tournoi = _serviceTournoi.Obtenir(participer.NumeroTournoi);
 
-            if (!forcerSupp 
-                && participer.Tournoi != null 
-                && (participer.Tournoi.Statut == "En cours" || participer.Tournoi.Statut == "Terminé"))
-                throw new ParticiperException("Il n'est pas possible de supprimer une participation dont le tournoi est planifié ou en cours.",
+            if (tournoi == null)
+                throw new ParticiperException("Le tournoi n'existe pas.",
+                    (int)ParticiperException.ParticiperErreur.ParticiperTournoiInexistant);
+
+            if (!forcerSupp && (tournoi.Statut == "En cours" || tournoi.Statut == "Terminé"))
+                throw new ParticiperException(
+                    "Il n'est pas possible de supprimer une participation dont le tournoi est en cours ou terminé.",
                     (int)ParticiperException.ParticiperErreur.SuppressionParticiperTournoiExistant);
 
-            if (forcerSupp
-                && participer.Tournoi != null
-                && (participer.Tournoi.Statut == "Terminé"))
-                throw new ParticiperException("Il n'est pas possible de supprimer une participation dont le tournoi est terminé.",
+            if (forcerSupp && tournoi.Statut == "Terminé")
+                throw new ParticiperException(
+                    "Il n'est pas possible de supprimer une participation dont le tournoi est terminé.",
                     (int)ParticiperException.ParticiperErreur.SuppressionParticiperForcerTournoiTermine);
-
         }
         #endregion
     }

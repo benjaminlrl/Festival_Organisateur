@@ -244,7 +244,6 @@ namespace ApplicationUi
                 Log.Error(ex, "Une erreur inattendue est survenue.");
                 MessageBox.Show("Une erreur inattendue est survenue.");
             }
-
         }
 
         private void ButtonModifier_Click(object sender, EventArgs e)

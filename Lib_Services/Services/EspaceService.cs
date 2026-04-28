@@ -402,6 +402,10 @@ namespace Lib_Services.Services
 
             if (estModification)
             {
+                if (enBdd == null)
+                    throw new EspaceException("L'espace n'existe pas en base de donnée",
+                        (int)EspaceException.EspaceErreur.EspaceNull);
+
                 if (enBdd.IdEspace != espace.IdEspace)
                     throw new EspaceException("Il n'est pas possible de modifier l'id de l'espace.",
                         (int)EspaceException.EspaceErreur.ModificationEspaceId);
