@@ -213,6 +213,8 @@ Les validations sont centralisées dans les services afin de :
 
 ## Architecture
 
+[Retourner au sommaire](#-sommaire)
+
 _CRUD signifie Create, Read, Update, Delete_  
 _CUD signifie Create, Update, Delete_  
 _R signifie Read_
