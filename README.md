@@ -338,6 +338,8 @@ refactor(auth): simplification de la méthode ActionMethode()
 
 ## Gestion des rôles
 
+[Retourner au sommaire](#-sommaire)
+
 Quatre rôles ont été définis dans l'application :
 
 | Rôle                          | CRUD                            | Consultation                                  |
