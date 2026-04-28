@@ -285,28 +285,28 @@ namespace ApplicationUi
                     {
                         Login = "admin",
                         motPasse = "ADMINSIO2026+",
-                        Mail = "mailSio2026@gmail.com",
+                        Mail = "adminSio2026@gmail.com",
                         IdRole = context.Roles.First(r => r.Libelle == "Administrateur").IdRole
                     });
                     organisateurService.Creer(new Organisateur
                     {
                         Login = "adminStock",
                         motPasse = "ADMINSIO2026+",
-                        Mail = "mailSio2026@gmail.com",
+                        Mail = "adminStockSio2026@gmail.com",
                         IdRole = context.Roles.First(r => r.Libelle == "Gestionnaire du stock").IdRole
                     });
                     organisateurService.Creer(new Organisateur
                     {
                         Login = "adminEspace",
                         motPasse = "ADMINSIO2026+",
-                        Mail = "mailSio2026@gmail.com",
+                        Mail = "adminEspaceSio2026@gmail.com",
                         IdRole = context.Roles.First(r => r.Libelle == "Gestionnaire de l'espace").IdRole
                     });
                     organisateurService.Creer(new Organisateur
                     {
                         Login = "adminTournoi",
                         motPasse = "ADMINSIO2026+",
-                        Mail = "mailSio2026@gmail.com",
+                        Mail = "adminTournoiSio2026@gmail.com",
                         IdRole = context.Roles.First(r => r.Libelle == "Gestionnaire des tournois").IdRole
                     });
                 }

@@ -22,6 +22,7 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAuthentification));
             panelCard = new Panel();
             label4 = new Label();
             label3 = new Label();
@@ -216,6 +217,7 @@
             Controls.Add(panelCard);
             Font = new Font("Segoe UI", 9F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FormAuthentification";
             StartPosition = FormStartPosition.CenterScreen;
