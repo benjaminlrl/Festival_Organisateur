@@ -17,6 +17,18 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
   - [Contraintes](#contraintes)
   - [Répartition-du-travail](#répartition-du-travail)
 - [Fonctionnalités](#fonctionnalités)
+  - [Gestion des plateformes](#gestion-des-plateformes)
+  - [Gestion des espaces](#gestion-des-espaces)
+  - [Gestion des postes de jeu](#gestion-des-postes-de-jeu)
+  - [Gestion des jeux](#gestion-des-jeux)
+  - [Gestion des tournois](#gestion-des-tournois)
+  - [Gestion des participants](#gestion-des-participants)
+  - [Gestion des jeux soumis au vote](#gestion-des-jeux-soumis-au-vote)
+  - [👷 Gestion des organisateurs](#gestion-des-organisateurs)
+  - [👷 Gestion des lots](#gestion-des-lots)
+  - [👷 Gestion des composants des lots](#gestion-des-composants-des-lots)
+  - [👷 Gestion des roles](#gestion-des-roles)
+  - [👷 Gestion de l'authentification](#gestion-de-lauthentification)
 - [Diagramme de flux](#diagramme-de-flux)
 - [Choix techniques](#choix-techniques)
 - [Architecture](#architecture)
@@ -118,45 +130,127 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 - Création et gestion des comptes organisateurs
 - Gestion des rôles et permissions par module (Administrateur, Gestionnaire du stock, Gestionnaire de l'espace, Gestionnaire des tournois)
 
-### 🏟️ Espaces
+---
 
-- Création et gestion des espaces du festival (nom, description, superficie, capacité max)
-- Statut des espaces associés à des tournois
+### Gestion des plateformes
 
-### 🎮 Jeux & Plateformes
+-	Création et gestion des plateformes associés aux postes de jeu et aux jeux;
+-	Affichage des postes de jeux et des jeux associés à la plateforme lors du chargement de celle-ci dans le formulaire.
+-	En double cliquant sur un jeu lié à la plateforme, l’utilisateur est redirigé vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
+-	En double cliquant sur un poste de jeu lié à la plateforme, l’utilisateur est redirigé vers la gestion des postes de jeu, avec le poste de jeu cliqué préchargé pour faciliter la navigation dans l’application.
+-	Possibilité de filtrer les résultat via la barre de recherche.
+-	Pour charger une plateforme dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de toutes les plateformes).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle-ci.
+![Gestion des plateformes](Documentation/App/plateformes.png)
 
-- Ajout et gestion des jeux (titre, éditeur, année de sortie, PEGI, description)
-- Gestion des plateformes
-- Association des jeux aux plateformes
+---
 
-### 🏆 Tournois
+### Gestion des espaces
 
-- Création et suivi des tournois (date, durée prévue, nb participants, statut)
-- Plusieurs tournois peuvent avoir lieu simultanément dans des espaces différents
-- Indication si un tournoi est en cours sur un poste de jeu
+-	Création et gestion des espaces du festival (nom, description, superficie, capacité max).
+-	Statut des espaces associés à des tournois.
+-	Affichage du nombres de postes fonctionnels
+-	En double cliquant sur les postes de jeux associés à l’espace, cela redirige l’utilisateur vers la gestion des postes de jeu, avec le poste de jeu cliqué préchargé pour faciliter la navigation dans l’application.
+-	En double cliquant sur les tournois liés à l’espace, redirection vers la gestion des tournois, avec le tournoi cliqué préchargé pour faciliter la navigation dans l’application.
+-	Possibilité de filtrer les résultat via la barre de recherche.
+-	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
+  
+> Contrôle sur le nom de l’espace, pour l’instant, le formatage des postes de jeux repose sur le nom de l’espace, en particulier sur ses trois premières lettres. Si celles-ci correspondent à un autre espace lors de l’ajout ou de la modification du nom de celui-ci.
+![Gestion des espaces](Documentation/App/espaces.png)
 
-### 🖥️ Postes de jeu
+---
 
-- Gestion des postes de jeu associés aux espaces et plateformes
-- Suivi de l'état fonctionnel de chaque poste
+### Gestion des postes de jeu
 
-### 🎁 Lots
+-	Création et gestion des jeux du festival (Référence, État fonctionnel, plateforme, espace).
+-	Affichage des tournois en cours ou à venir associés à l'espace. Cela permet de savioir si le poste de jeu est actuelelemnt occupé
+-	En double cliquant sur un tournoi lié à l'espace du poste de jeu, l’utilisateur est redirigé vers la gestion des tornois, avec le tournoi cliqué préchargé pour faciliter la navigation dans l’application.
+-	En double cliquant sur l'espace du poste de jeu dans la dataGridView, l’utilisateur est redirigé vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
+-	Indication du nobres de postes de jeu fonctionnels.
+-	Pour charger un poste de jeu dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tou sles postes de jeu).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
+  
+> La référence du poste de jeu est formater automatiquement garantissement un meilleur suivi des postes de jeu. Elle n'est pas modifiable par l'organisateur. Ainsi un poste de jeu aura toujours la même plateforme et le même espace.
 
-- Création et gestion des lots (libellé, valeur totale, rang d'attribution)
-- Ajout de composants de lot (libellé, description, valeur)
-- Ajout automatique de lots dans le programme
-- Attribution des lots aux tournois
+![Gestion des postes de jeu](Documentation/App/postesJeu.png)
 
-### 🗳️ Système de vote
+---
 
-- Soumission de jeux au vote avec période configurable (date début / date fin)
-- Classement des binômes (jeu, plateforme) les plus votés
-- Gestion des votes par joueur
+### Gestion des jeux
 
-### 👥 Joueurs
+-	Création et gestion des jeux du festival (titre, éditeur, année de sortie, PEGI, description, plateformes).
+-	Possibilité de filtrer les résultat via la barre de recherche.
+-	Pour charger un jeu vote dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les jeux).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle-ci.
 
-- Inscription des joueurs (pseudo, email, nom, prénom)
-- Participation aux tournois avec rang, évaluation, commentaire et score final
+![Gestion des jeux](Documentation/App/jeux.png)
+
+---
+
+### Gestion des tournois
+
+-	Création et gestion des tournois du festival (nom, description, date et heure, durée prévue, jeu, espace, statut, nombre de participants max, nombre de participants inscrit).
+-	Affichage du nombres d'inscrit au tournois
+-	En double cliquant sur le jeu associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
+-	En double cliquant sur l'espace associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
+-	Possibilité de filtrer les résultat via la barre de recherche.
+-	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
+
+> Le statut du tournoi est géré automatiquement par le code métier, en conséquent l'organisateur ne peut pas le modifier
+
+![Gestion des tournois](Documentation/App/tournois.png)
+
+---
+
+### Gestion des participants
+
+-	Création et gestion des participations des utilisateurs aux tournois proposés durant le festival :
+  -	Affichage de la participation, (id du tournoi associé à l’id de l’utilisateur) ;
+  -	Saisie du rang et du score final par l’organisateur une fois le tournoi terminé ;
+  -	Indication si un lot a été remis à l’utilisateur ;
+  -	Affichage de l’évaluation et du commentaire du participants une fois le tournoi terminé.
+-	Affichage des autres participations de l’utilisateur.
+-	En double cliquant sur un tournoi lié à une participation, l’utilisateur  est redirigé vers la gestion des tournois, avec le tournoi cliqué préchargé pour faciliter la navigation dans l’application.
+-	Possibilité de filtrer les résultat via la barre de recherche.
+-	Pour charger une participation dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de toutes participations).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
+
+> Une évaluation est par défaut à 0, si le participant décide de laisser une évaluation à la fin du tournoi, celle-ci doit au moins valoir 1 pour la considérer comme modifier par le participant.
+> De même pour le commentaire par défaut, une chaîne de charactère vide "".
+
+![Gestion des participants](Documentation/App/participer.png)
+
+---
+
+### Gestion des jeux soumis au vote
+
+-	Création et gestion des jeux du festival (jeu, plateforme, date de début, date de fin).
+-	Possibilité de filtrer les résultat via la barre de recherche.
+-	Pour charger un jeu/plateforme soumis aux vote dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les binomes soumis aux votes).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle-ci.
+
+![Espace de votes dédié aux utilisateurs](Documentation/App/JeuSoumisVote.png)
+
+---
+
+### Gestion des lots
+
+![Gestion des lots](Documentation/App/lots.png)
+
+---
+
+### Gestion des composants des lots
+
+![Gestion des composants des lots](Documentation/App/lotsComposant.png)
+
+---
+
+### Gestion des organisateurs
+
+![Gestion des organisateurs](Documentation/App/organisateurs.png)
+
 
 ---
 
@@ -992,21 +1086,6 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ---
 
-### Gestion des tournois
--	Création et gestion des tournois du festival (nom, description, date et heure, durée prévue, jeu, espace, statut, nombre de participants max, nombre de participants inscrit).
--	Affichage du nombres d'inscrit au tournois
--	En double cliquant sur le jeu associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
--	En double cliquant sur l'espace associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
--	Possibilité de filtrer les résultat via la barre de recherche.
--	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
--	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
-
-> Le statut du tournoi est géré automatiquement par le code métier, en conséquent l'organisateur ne peut pas le modifier
-
-![Gestion des tournois](Documentation/App/tournois.png)
-
----
-
 ### Gestion des postes de jeu
 -	Création et gestion des jeux du festival (Référence, État fonctionnel, plateforme, espace).
 -	Affichage des tournois en cours ou à venir associés à l'espace. Cela permet de savioir si le poste de jeu est actuelelemnt occupé
@@ -1022,6 +1101,7 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ---
 
+
 ### Gestion des jeux
 
 -	Création et gestion des jeux du festival (jeu, plateforme, date de début, date de fin).
@@ -1033,14 +1113,18 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ---
 
-### Gestion des binômes jeu/plateforme ouverts aux votes
-
--	Création et gestion des jeux du festival (titre, éditeur, année de sortie, PEGI, description, plateformes).
+### Gestion des tournois
+-	Création et gestion des tournois du festival (nom, description, date et heure, durée prévue, jeu, espace, statut, nombre de participants max, nombre de participants inscrit).
+-	Affichage du nombres d'inscrit au tournois
+-	En double cliquant sur le jeu associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
+-	En double cliquant sur l'espace associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
 -	Possibilité de filtrer les résultat via la barre de recherche.
--	Pour charger un jeu dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les jeux).
+-	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
 -	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
 
-![Espace de votes dédié aux utilisateurs](Documentation/App/JeuSoumisVote.png)
+> Le statut du tournoi est géré automatiquement par le code métier, en conséquent l'organisateur ne peut pas le modifier
+
+![Gestion des tournois](Documentation/App/tournois.png)
 
 ---
 
@@ -1056,7 +1140,15 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 -	Pour charger une participation dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de toutes participations).
 -	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
 
+> Une évaluation est par défaut à 0, si le participant décide de laisser une évaluation à la fin du tournoi, celle-ci doit au moins valoir 1 pour la considérer comme modifier par le participant.
+> De même pour le commentaire par défaut, une chaîne de charactère vide "".
 ![Gestion des participants](Documentation/App/participer.png)
+
+---
+
+### Gestion des binômes jeu/plateforme ouverts aux votes
+
+![Espace de votes dédié aux utilisateurs](Documentation/App/JeuSoumisVote.png)
 
 ---
 
