@@ -191,7 +191,7 @@ namespace Lib_Services.Services
 
             // Role Gestionnaire des tournois
             // Consulter : Espace, PosteJeu, Plateforme, Jeu, Lot
-            // CRUD: Tournoi, Participer, SoumisVote
+            // CRUD: Tournoi, Participer, JeuSoumisVote
             if (role.Libelle == "Gestionnaire des tournois")
             {
                 if (action == "Consulter")

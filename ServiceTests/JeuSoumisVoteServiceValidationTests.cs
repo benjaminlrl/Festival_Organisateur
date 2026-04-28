@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 [TestClass]
-public class SoumisVoteServiceValidationTests
+public class JeuSoumisVoteServiceValidationTests
 {
-    private SoumisVoteService _service = null!;
+    private JeuSoumisVoteService _service = null!;
     private ApplicationDbContext _context = null!;
 
     // Dates fixes pour éviter les problèmes de comparaison DateTime.Now
@@ -23,7 +23,7 @@ public class SoumisVoteServiceValidationTests
             .Options;
 
         _context = new ApplicationDbContext(options);
-        _service = new SoumisVoteService(_context);
+        _service = new JeuSoumisVoteService(_context);
 
         // Jeu et Plateforme requis par JeuService.Obtenir() et PlateformeService.Obtenir()
         _context.Jeux.Add(new Jeu
@@ -47,7 +47,7 @@ public class SoumisVoteServiceValidationTests
     [TestCleanup]
     public void Cleanup() => _context.Dispose();
 
-    private SoumisVote SoumisVoteValide() => new SoumisVote
+    private JeuSoumisVote JeuSoumisVoteValide() => new JeuSoumisVote
     {
         IdJeu = 1,
         IdPlateforme = 1,
@@ -60,9 +60,9 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void SoumisVoteValide_AucuneException()
+    public void JeuSoumisVoteValide_AucuneException()
     {
-        _service.ValiderSoumisVote(SoumisVoteValide());
+        _service.ValiderJeuSoumisVote(JeuSoumisVoteValide());
     }
 
     // =========================================================================
@@ -70,15 +70,15 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void JeuInexistant_ThrowSoumisVoteException()
+    public void JeuInexistant_ThrowJeuSoumisVoteException()
     {
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.IdJeu = 999;
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(sv));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(sv));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.JeuInexistant, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.JeuInexistant, ex.CodeErreur);
     }
 
     // =========================================================================
@@ -86,15 +86,15 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void PlateformeInexistante_ThrowSoumisVoteException()
+    public void PlateformeInexistante_ThrowJeuSoumisVoteException()
     {
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.IdPlateforme = 999;
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(sv));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(sv));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.PlateformeInexistante, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.PlateformeInexistante, ex.CodeErreur);
     }
 
     // =========================================================================
@@ -102,10 +102,10 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void Creation_DoublonSoumisVote_ThrowSoumisVoteException()
+    public void Creation_DoublonJeuSoumisVote_ThrowJeuSoumisVoteException()
     {
-        // Arrange — SoumisVote déjà en BDD
-        _context.SoumisVotes.Add(new SoumisVote
+        // Arrange — JeuSoumisVote déjà en BDD
+        _context.JeuSoumisVotes.Add(new JeuSoumisVote
         {
             IdJeu = 1,
             IdPlateforme = 1,
@@ -114,10 +114,10 @@ public class SoumisVoteServiceValidationTests
         });
         _context.SaveChanges();
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(SoumisVoteValide(), false));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(JeuSoumisVoteValide(), false));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.DoublonSoumisVote, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.DoublonJeuSoumisVote, ex.CodeErreur);
     }
 
     // =========================================================================
@@ -125,10 +125,10 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void Modification_AucuneModification_ThrowSoumisVoteException()
+    public void Modification_AucuneModification_ThrowJeuSoumisVoteException()
     {
-        // Arrange — SoumisVote identique en BDD
-        _context.SoumisVotes.Add(new SoumisVote
+        // Arrange — JeuSoumisVote identique en BDD
+        _context.JeuSoumisVotes.Add(new JeuSoumisVote
         {
             IdJeu = 1,
             IdPlateforme = 1,
@@ -137,17 +137,17 @@ public class SoumisVoteServiceValidationTests
         });
         _context.SaveChanges();
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(SoumisVoteValide(), true));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(JeuSoumisVoteValide(), true));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.AucuneModification, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.AucuneModification, ex.CodeErreur);
     }
 
     [TestMethod]
     public void Modification_DateModifiee_AucuneException()
     {
-        // Arrange — SoumisVote en BDD avec dates différentes
-        _context.SoumisVotes.Add(new SoumisVote
+        // Arrange — JeuSoumisVote en BDD avec dates différentes
+        _context.JeuSoumisVotes.Add(new JeuSoumisVote
         {
             IdJeu = 1,
             IdPlateforme = 1,
@@ -157,10 +157,10 @@ public class SoumisVoteServiceValidationTests
         _context.SaveChanges();
 
         // Modification avec une date de fin différente → pas d'exception AucuneModification
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.DateFinVote = _dateFin.AddDays(1);
 
-        _service.ValiderSoumisVote(sv, true);
+        _service.ValiderJeuSoumisVote(sv, true);
     }
 
     // =========================================================================
@@ -168,28 +168,28 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void DateDebutEgaleADateFin_ThrowSoumisVoteException()
+    public void DateDebutEgaleADateFin_ThrowJeuSoumisVoteException()
     {
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.DateFinVote = sv.DateDebutVote; // égales
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(sv));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(sv));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateDebutSuperieureFin, ex.CodeErreur);
     }
 
     [TestMethod]
-    public void DateDebutSuperieureDateFin_ThrowSoumisVoteException()
+    public void DateDebutSuperieureDateFin_ThrowJeuSoumisVoteException()
     {
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.DateDebutVote = _dateFin.AddDays(1); // début après fin
         sv.DateFinVote = _dateFin;
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(sv));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(sv));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateDebutSuperieureFin, ex.CodeErreur);
     }
 
     // =========================================================================
@@ -197,16 +197,16 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void DateDebutDansLePasse_ThrowSoumisVoteException()
+    public void DateDebutDansLePasse_ThrowJeuSoumisVoteException()
     {
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.DateDebutVote = DateTime.Now.AddDays(-1); // hier
         sv.DateFinVote = DateTime.Now.AddDays(7);
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(sv));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(sv));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.DateDebutDansLePasse, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateDebutDansLePasse, ex.CodeErreur);
     }
 
     // =========================================================================
@@ -214,33 +214,33 @@ public class SoumisVoteServiceValidationTests
     // =========================================================================
 
     [TestMethod]
-    public void DateFinDansLePasse_ThrowSoumisVoteException()
+    public void DateFinDansLePasse_ThrowJeuSoumisVoteException()
     {
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.DateDebutVote = DateTime.Now.AddDays(-3); // pour que début < fin
         sv.DateFinVote = DateTime.Now.AddDays(-1); // hier
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(sv));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(sv));
 
         // DateDebut dans le passé sera levée en premier selon l'ordre de validation
         Assert.IsTrue(
-            ex.CodeErreur == (int)SoumisVoteException.SoumisVoteErreur.DateDebutDansLePasse
-            || ex.CodeErreur == (int)SoumisVoteException.SoumisVoteErreur.DateFinDansLePasse);
+            ex.CodeErreur == (int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateDebutDansLePasse
+            || ex.CodeErreur == (int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateFinDansLePasse);
     }
 
     [TestMethod]
-    public void DateFinSeulementDansLePasse_ThrowSoumisVoteException()
+    public void DateFinSeulementDansLePasse_ThrowJeuSoumisVoteException()
     {
         // DateDebut valide (futur) mais DateFin dans le passé → impossible car début < fin
         // Ce cas teste DateFin < Now avec DateDebut valide
-        var sv = SoumisVoteValide();
+        var sv = JeuSoumisVoteValide();
         sv.DateDebutVote = DateTime.Now.AddHours(1);
         sv.DateFinVote = DateTime.Now.AddDays(-1); // fin avant début → DateDebutSuperieureFin levée en premier
 
-        var ex = Assert.Throws<SoumisVoteException>(
-            () => _service.ValiderSoumisVote(sv));
+        var ex = Assert.Throws<JeuSoumisVoteException>(
+            () => _service.ValiderJeuSoumisVote(sv));
 
-        Assert.AreEqual((int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin, ex.CodeErreur);
+        Assert.AreEqual((int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateDebutSuperieureFin, ex.CodeErreur);
     }
 }

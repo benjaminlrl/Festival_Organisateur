@@ -1,6 +1,6 @@
 ﻿namespace ApplicationUi
 {
-    partial class UcVoter
+    partial class UcJeuxSoumisVote
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -54,7 +54,7 @@
             buttonEffacer = new Button();
             buttonSupprimer = new Button();
             label1 = new Label();
-            dataGridSoumisVote = new DataGridView();
+            dataGridJeuSoumisVote = new DataGridView();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridClassement).BeginInit();
@@ -63,7 +63,7 @@
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridSoumisVote).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridJeuSoumisVote).BeginInit();
             SuspendLayout();
             // 
             // label2
@@ -94,7 +94,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 720F));
             tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 1, 0);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
-            tableLayoutPanel1.Controls.Add(dataGridSoumisVote, 0, 1);
+            tableLayoutPanel1.Controls.Add(dataGridJeuSoumisVote, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -425,31 +425,31 @@
             label1.Size = new Size(0, 25);
             label1.TabIndex = 6;
             // 
-            // dataGridSoumisVote
+            // dataGridJeuSoumisVote
             // 
-            dataGridSoumisVote.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridSoumisVote.BackgroundColor = Color.White;
-            dataGridSoumisVote.BorderStyle = BorderStyle.None;
-            dataGridSoumisVote.ColumnHeadersHeight = 34;
-            dataGridSoumisVote.Dock = DockStyle.Fill;
-            dataGridSoumisVote.Location = new Point(6, 423);
-            dataGridSoumisVote.Margin = new Padding(6, 5, 6, 5);
-            dataGridSoumisVote.Name = "dataGridSoumisVote";
-            dataGridSoumisVote.ReadOnly = true;
-            dataGridSoumisVote.RowHeadersWidth = 62;
-            dataGridSoumisVote.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridSoumisVote.Size = new Size(1312, 352);
-            dataGridSoumisVote.TabIndex = 6;
-            dataGridSoumisVote.CellClick += DataGridSoumisVote_CellClick;
-            dataGridSoumisVote.CellContentDoubleClick += dataGridSoumisVote_CellContentDoubleClick;
+            dataGridJeuSoumisVote.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridJeuSoumisVote.BackgroundColor = Color.White;
+            dataGridJeuSoumisVote.BorderStyle = BorderStyle.None;
+            dataGridJeuSoumisVote.ColumnHeadersHeight = 34;
+            dataGridJeuSoumisVote.Dock = DockStyle.Fill;
+            dataGridJeuSoumisVote.Location = new Point(6, 423);
+            dataGridJeuSoumisVote.Margin = new Padding(6, 5, 6, 5);
+            dataGridJeuSoumisVote.Name = "dataGridJeuSoumisVote";
+            dataGridJeuSoumisVote.ReadOnly = true;
+            dataGridJeuSoumisVote.RowHeadersWidth = 62;
+            dataGridJeuSoumisVote.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridJeuSoumisVote.Size = new Size(1312, 352);
+            dataGridJeuSoumisVote.TabIndex = 6;
+            dataGridJeuSoumisVote.CellClick += DataGridJeuSoumisVote_CellClick;
+            dataGridJeuSoumisVote.CellContentDoubleClick += dataGridJeuSoumisVote_CellContentDoubleClick;
             // 
-            // UcVoter
+            // UcJeuxSoumisVote
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MintCream;
             Controls.Add(tableLayoutPanel1);
-            Name = "UcVoter";
+            Name = "UcJeuxSoumisVote";
             Size = new Size(2044, 1016);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
@@ -462,7 +462,7 @@
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridSoumisVote).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridJeuSoumisVote).EndInit();
             ResumeLayout(false);
         }
 
@@ -484,7 +484,7 @@
         private DateTimePicker dateTimePickerDateDebutVote;
         private Label labelDescription;
         private TextBox textBoxDescription;
-        private DataGridView dataGridSoumisVote;
+        private DataGridView dataGridJeuSoumisVote;
         private ComboBox comboBoxPlateforme;
         private TableLayoutPanel tableLayoutPanel3;
         private DataGridView dataGridClassement;

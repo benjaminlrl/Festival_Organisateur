@@ -12,7 +12,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using static Lib_Services.Exceptions.SoumisVoteException;
+using static Lib_Services.Exceptions.JeuSoumisVoteException;
 namespace ApplicationUi
 {
     public partial class FormMain : Form
@@ -292,7 +292,7 @@ namespace ApplicationUi
         {            
             try
             {
-                UcVoter uc = new(_organisateurConnecte);
+                UcJeuxSoumisVote uc = new(_organisateurConnecte);
 
                 uc.NaviguerVersJeux += (jeu) =>
                 {
@@ -306,7 +306,7 @@ namespace ApplicationUi
                 };
                 LoadUserControl(uc, "Gestion des jeux ouverts aux votes");
             }
-            catch (SoumisVoteException ex)
+            catch (JeuSoumisVoteException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                 MessageBox.Show(ex.Message);

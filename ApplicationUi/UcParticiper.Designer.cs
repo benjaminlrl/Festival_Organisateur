@@ -539,6 +539,7 @@
             dataGridParticipations.Size = new Size(1256, 428);
             dataGridParticipations.TabIndex = 4;
             dataGridParticipations.CellClick += DataGridParticipations_CellClick;
+            dataGridParticipations.CellContentDoubleClick += dataGridParticipations_CellContentDoubleClick;
             // 
             // tableLayoutPanel2
             // 

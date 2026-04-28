@@ -29,6 +29,7 @@ namespace ApplicationUi
         private string filtre;
         private string ordreChamp;
         private string ordreChampJoueur;
+        public Action<Tournoi>? NaviguerVersTournois;
 
         public UcParticiper(Organisateur unOrganisateurConnecte)
         {
@@ -45,7 +46,7 @@ namespace ApplicationUi
 
             dateTimePickerDateHeureInscription.Enabled = false;
             dateTimePickerDateHeureInscription.MinDate = DateTime.Now.AddMonths(-3);
-            dateTimePickerDateHeureInscription.MaxDate = DateTime.Now;            
+            dateTimePickerDateHeureInscription.MaxDate = DateTime.Now;
 
             filtre = "";
             ordreChamp = "DESC";
@@ -98,7 +99,7 @@ namespace ApplicationUi
             dataGridParticipationsJoueur.DataSource = null;
 
             if (_participationSelectionnee != null)
-                dataGridParticipationsJoueur.DataSource = _serviceParticiper.ListerParJoueur(_participationSelectionnee.IdUser,filtre);
+                dataGridParticipationsJoueur.DataSource = _serviceParticiper.ListerParJoueur(_participationSelectionnee.IdUser, filtre);
 
             MEP_DataGridParticipationsJoueur();
             ChargerStatistiques();
@@ -186,7 +187,7 @@ namespace ApplicationUi
         private void MEP_DataGridParticipationsJoueur()
         {
             DesactiverTrieAutomatique(dataGridParticipationsJoueur);
-            
+
             if (_participationSelectionnee != null)
             {
 
@@ -263,7 +264,7 @@ namespace ApplicationUi
             _participationSelectionnee.NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi;
             _participationSelectionnee.LotRemis = lotRemisSelectionne;
 
-            ModifierParticipation(_participationSelectionnee);            
+            ModifierParticipation(_participationSelectionnee);
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
         {
@@ -290,7 +291,7 @@ namespace ApplicationUi
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new ()
+                Dictionary<int, string> map = new()
                 {
                     {dataGridParticipations.Columns["IdUser"].Index, "IdUser"},
                     {dataGridParticipations.Columns["NomTournoi"].Index, "NomTournoi"},
@@ -305,7 +306,7 @@ namespace ApplicationUi
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 dataGridParticipations.DataSource = _serviceParticiper.Lister(filtre, colonne, ordreChamp);
-                dataGridParticipations.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = 
+                dataGridParticipations.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
                     ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
                 MEP_DataGridParticipations();
@@ -357,6 +358,12 @@ namespace ApplicationUi
             AfficherBoutons();
         }
 
+
+        private void dataGridParticipations_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
         /// <summary>
         /// Permet de filtrer les postes de jeu affichés dans le DataGrid en 
         /// fonction du texte saisi dans la zone de recherche.
@@ -395,7 +402,7 @@ namespace ApplicationUi
                 labelStatutTournoi.BackColor = Color.White;
                 return;
             }
-                
+
 
             switch (_participationSelectionnee.Tournoi.Statut)
             {
@@ -561,18 +568,18 @@ namespace ApplicationUi
             catch (ParticiperException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                    MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Erreur technique lors de la modification de la participation.");
-                    MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Erreur inattendue lors de la modification de la participation.");
-                    MessageBox.Show("Une erreur inattendue est survenue. \n" +
-                        ex.Message);
+                MessageBox.Show("Une erreur inattendue est survenue. \n" +
+                    ex.Message);
             }
         }
 

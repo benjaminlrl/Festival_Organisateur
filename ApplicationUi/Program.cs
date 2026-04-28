@@ -37,7 +37,7 @@ namespace ApplicationUi
                 var participerService = new ParticiperService(context);
                 var plateformeService = new PlateformeService(context);
                 var posteJeuService = new PosteJeuService(context);
-                var soumisVoteService = new SoumisVoteService(context);
+                var soumisVoteService = new JeuSoumisVoteService(context);
                 var voterService = new VoterService(context);
 
                 // -------------------------------------------------------
@@ -469,29 +469,29 @@ namespace ApplicationUi
                 // 11. SOUMIS VOTES  (FK → Jeu, FK → Plateforme)
                 //     On passe directement par les IDs — plus de jeu.Plateformes
                 // -------------------------------------------------------
-                if (!context.SoumisVotes.Any())
+                if (!context.JeuSoumisVotes.Any())
                 {
                     Jeu J(string titre) => context.Jeux.First(j => j.Titre == titre);
                     Plateforme P(string lib) => context.Plateformes.First(p => p.Libelle == lib);
 
-                    context.SoumisVotes.AddRange(new List<SoumisVote>
+                    context.JeuSoumisVotes.AddRange(new List<JeuSoumisVote>
                     {
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Mario Kart 8 Deluxe").IdJeu,        IdPlateforme = P("Nintendo Switch").IdPlateforme   },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Fortnite").IdJeu,                   IdPlateforme = P("PC (Windows)").IdPlateforme      },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Halo Infinite").IdJeu,              IdPlateforme = P("Xbox Series X/S").IdPlateforme   },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Valorant").IdJeu,                   IdPlateforme = P("PC (Windows)").IdPlateforme      },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("League of Legends").IdJeu,          IdPlateforme = P("PC (Windows)").IdPlateforme      },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Counter-Strike 2").IdJeu,           IdPlateforme = P("PC (Windows)").IdPlateforme      },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("EA Sports FC 25").IdJeu,            IdPlateforme = P("PlayStation 5").IdPlateforme     },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Elden Ring").IdJeu,                 IdPlateforme = P("PlayStation 5").IdPlateforme     },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Minecraft").IdJeu,                  IdPlateforme = P("PlayStation 5").IdPlateforme     },
-                        new SoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Super Smash Bros. Ultimate").IdJeu, IdPlateforme = P("Nintendo Switch").IdPlateforme   },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Mario Kart 8 Deluxe").IdJeu,        IdPlateforme = P("Nintendo Switch").IdPlateforme   },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Fortnite").IdJeu,                   IdPlateforme = P("PC (Windows)").IdPlateforme      },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Halo Infinite").IdJeu,              IdPlateforme = P("Xbox Series X/S").IdPlateforme   },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Valorant").IdJeu,                   IdPlateforme = P("PC (Windows)").IdPlateforme      },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("League of Legends").IdJeu,          IdPlateforme = P("PC (Windows)").IdPlateforme      },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Counter-Strike 2").IdJeu,           IdPlateforme = P("PC (Windows)").IdPlateforme      },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("EA Sports FC 25").IdJeu,            IdPlateforme = P("PlayStation 5").IdPlateforme     },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Elden Ring").IdJeu,                 IdPlateforme = P("PlayStation 5").IdPlateforme     },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Minecraft").IdJeu,                  IdPlateforme = P("PlayStation 5").IdPlateforme     },
+                        new JeuSoumisVote { DateDebutVote = DateTime.Now.AddDays(-5), DateFinVote = DateTime.Now.AddDays(15), IdJeu = J("Super Smash Bros. Ultimate").IdJeu, IdPlateforme = P("Nintendo Switch").IdPlateforme   },
                     });
                     context.SaveChanges();
                 }
 
                 // -------------------------------------------------------
-                // 12. VOTER  (FK → Joueur, FK → SoumisVote via Jeu+Plateforme)
+                // 12. VOTER  (FK → Joueur, FK → JeuSoumisVote via Jeu+Plateforme)
                 // -------------------------------------------------------
                 if (!context.Voter.Any())
                 {

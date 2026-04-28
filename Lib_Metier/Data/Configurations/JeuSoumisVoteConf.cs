@@ -7,12 +7,12 @@ using System.Text;
 
 namespace Lib_Metier.Data.Configurations
 {
-    public class SoumisVoteConf : IEntityTypeConfiguration<SoumisVote>
+    public class JeuSoumisVoteConf : IEntityTypeConfiguration<JeuSoumisVote>
     {
-        public void Configure(EntityTypeBuilder<SoumisVote> builder)
+        public void Configure(EntityTypeBuilder<JeuSoumisVote> builder)
         {
             // Nom de la table en base de données
-            builder.ToTable("SoumisVote");
+            builder.ToTable("JeuSoumisVote");
 
             // Définition de la clé primaire
             builder.HasKey(s =>

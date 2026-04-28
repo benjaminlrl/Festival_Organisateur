@@ -10,7 +10,7 @@ namespace Lib_Entities.Entities
     /// Il dispose d'une date de début de vote, d'une date de fin de vote, d'un identifiant de jeu, d'un identifiant de plateforme, 
     /// ainsi que des propriétés de navigation vers les entités Jeu et Plateforme.
     /// </summary>
-    public class SoumisVote
+    public class JeuSoumisVote
     {
         public DateTime DateDebutVote { get; set; }
         public DateTime DateFinVote { get; set; }

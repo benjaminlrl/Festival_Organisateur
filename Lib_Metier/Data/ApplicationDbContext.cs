@@ -76,9 +76,9 @@ namespace Lib_Metier.Data.Configurations
         public DbSet<Voter> Voter => Set<Voter>();
 
         /// <summary>
-        /// Ensemble des SoumisVotes (table `SoumisVotes`).
+        /// Ensemble des JeuSoumisVotes (table `JeuSoumisVotes`).
         /// </summary>
-        public DbSet<SoumisVote> SoumisVotes => Set<SoumisVote>();
+        public DbSet<JeuSoumisVote> JeuSoumisVotes => Set<JeuSoumisVote>();
 
         /// <summary>
         /// Ensemble des Participants (table `Participer`).

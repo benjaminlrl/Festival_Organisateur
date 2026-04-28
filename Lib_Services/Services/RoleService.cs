@@ -25,7 +25,7 @@ namespace Lib_Services.Services
     /// • Consultation : Plateforme, Jeu, Participer
     ///
     /// Gestionnaire des tournois :
-    /// • CRUD : Tournoi, Participer, SoumisVote
+    /// • CRUD : Tournoi, Participer, JeuSoumisVote
     /// • Consultation : Espace , PosteJeu, Plateforme, Jeu, Lot, Voter
     public class RoleService : IRoleService
     {

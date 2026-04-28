@@ -27,7 +27,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="UcVoter.cs">
+    <Compile Update="UcJeuxSoumisVote.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="UcLots.cs">
