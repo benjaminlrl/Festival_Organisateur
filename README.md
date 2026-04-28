@@ -107,7 +107,7 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 
 ---
 
-[@benjaminlrl](https://github.com/benjaminlrl) : _Responsable du repository_
+[@benjaminlrl](https://github.com/benjaminlrl) : _Responsable du repository git_
 
 > - Évolution des Espaces
 > - Évolution des Postes de jeu
