@@ -30,14 +30,15 @@
         ModificationParticiperScoreFinal = 14,
         ModificationParticiperUtilisateur = 15,
         ModificationParticiperLotRemisParDefaut = 16,
+        SuppressionParticiperException = 20,
 
         //-------------------
         // Exceptions uniques à la suppression
         //-------------------
         SuppressionParticiperTournoiExistant = 17,
         SuppressionParticiperForcerTournoiEnCours = 18,
+        SuppressionParticiperForcerTournoiTermine = 30,
         SuppressionParticiperDbUpdateException = 19,
-        SuppressionParticiperException = 20,
 
         //-------------------
         // Exceptions uniques à l'ajout

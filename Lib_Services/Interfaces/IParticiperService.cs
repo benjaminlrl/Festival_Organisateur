@@ -65,7 +65,7 @@ namespace Lib_Services.Interfaces
         /// L'appel à <c>Update</c> marque toutes les propriétés comme modifiées.
         /// </summary>
         /// <param name="espace">Instance modifiée de <see cref="Participer"/>.</param>
-        void Modifier(Participer participer);
+        void Modifier(Participer? participer);
 
         /// <summary>
         /// Supprime un Participant identifié par son id et son tournoi associé s'il existe.
@@ -108,11 +108,12 @@ namespace Lib_Services.Interfaces
         void ValiderParticipation(Participer participer, bool estModification = false);
 
         /// <summary>
-        /// Permet de vérifier les propriétés associés a une plateforme.
+        /// Valide les propriétés d'une instance de <see cref="Participer"/> peut être supprimer ou non.
         /// </summary>
-        /// <param name="participer">La participation à valider</param>
-        /// <returns>La liste contenant toutes les erreurs</returns>
-        void ValiderSuppressionParticipation(Participer participer);
+        /// <param name="participer">Instance de <see cref="Participer"/> à valider.</param>
+        /// <param name="forcerSupp">Vraie pour forcer la suppression malgrès un tournoi en cours</param>
+        /// <exception cref="ParticiperException">Exception levée si une validation échoue.</exception>
+        public void ValiderSuppressionParticipation(Participer? participer, bool forcerSupp = false);
         #endregion
     }
 }

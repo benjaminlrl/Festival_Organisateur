@@ -11,7 +11,7 @@ namespace Lib_Services.Services
     /// <summary>
     /// Service métier responsable des opérations CRUD sur l'entité <see cref="Participer"/>.
     /// </summary>
-    public class JoueurService
+    public class JoueurService : IJoueurService
     {
         private readonly ApplicationDbContext _context;
         private readonly IParticiperService _serviceParticiper;
@@ -64,8 +64,8 @@ namespace Lib_Services.Services
         /// Récupère un Participant par son id et son numéro de tournoi.
         /// </summary>
         /// <param name="Login">Login de l'Participer cherché.</param>
-        /// <returns>L'entité <see cref="Participer"/> si trouvée, sinon null.</returns>
-        public Joueur? Obtenir(int idUser, int numeroTournoi)
+        /// <returns>L'entité <see cref="Joueur"/> si trouvée, sinon null.</returns>
+        public Joueur? Obtenir(int idUser)
         {
             return _context.Joueurs
                            .Include(j => j.Participations)

@@ -42,7 +42,7 @@ namespace Lib_Services.Interfaces
         /// Crée un nouveau jeu et persiste la modification.
         /// </summary>
         /// <param name="jeu">Objet <see cref="Jeu"/> à ajouter.</param>
-        void Creer(Jeu jeu);
+        void Creer(Jeu? jeu);
 
         /// <summary>
         /// Met à jour un jeu existant et persiste la modification.
@@ -59,20 +59,19 @@ namespace Lib_Services.Interfaces
 
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un jeu avant l'ajout ou la modification.
+        /// Valide les propriétés d'une instance de <see cref="Jeu"/> avant sa création ou sa modification.
         /// </summary>
-        /// <param name="jeu">Le jeu à valider</param>
-        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
-        /// <returns></returns>
-        void ValiderJeu(Jeu jeu, bool estModification = false);
+        /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
+        void ValiderJeu(Jeu? jeu, bool estModification = false);
 
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un jeu avant la suppression.
+        /// Valide les propriétés d'une instance de <see cref="Jeu"/> peut être supprimer ou non.
         /// </summary>
-        /// <param name="jeu">Le jeu à valider</param>
-        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
-        /// <returns></returns>
-        void ValiderSuppressionJeu(Jeu jeu, bool estModification = false);
+        /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
+        /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
+        public void ValiderSuppressionJeu(Jeu? jeu);
         #endregion
     }
 }

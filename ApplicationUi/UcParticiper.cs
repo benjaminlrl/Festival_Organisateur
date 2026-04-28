@@ -22,6 +22,7 @@ namespace ApplicationUi
         private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
         private readonly IParticiperService _serviceParticiper;
+        private readonly IJoueurService _serviceJoueur;
         private readonly Organisateur _organisateurConnecte;
         private Participer? _participationSelectionnee;
         private bool lotRemisSelectionne;
@@ -36,6 +37,7 @@ namespace ApplicationUi
             _serviceTournoi = new TournoiService(_context);
             _serviceOrganisateur = new OrganisateurService(_context);
             _serviceParticiper = new ParticiperService(_context);
+            _serviceJoueur = new JoueurService(_context);
 
             _organisateurConnecte = unOrganisateurConnecte;
             _participationSelectionnee = null;
@@ -43,7 +45,7 @@ namespace ApplicationUi
 
             dateTimePickerDateHeureInscription.Enabled = false;
             dateTimePickerDateHeureInscription.MinDate = DateTime.Now.AddMonths(-3);
-            dateTimePickerDateHeureInscription.MaxDate = DateTime.Now;
+            dateTimePickerDateHeureInscription.MaxDate = DateTime.Now;            
 
             filtre = "";
             ordreChamp = "DESC";
@@ -128,7 +130,7 @@ namespace ApplicationUi
         private void ChargerUtilisateurs()
         {
             comboBoxUtilisateur.DataSource = null;
-            comboBoxUtilisateur.DataSource = _serviceParticiper.ListerIdsParticipants(); // TODO: remplacer par un service utilisateur lorsque les utilisateurs seront intégrés
+            comboBoxUtilisateur.DataSource = _serviceJoueur.Lister(""); // TODO: remplacer par un service utilisateur lorsque les utilisateurs seront intégrés
             // charge les participations dans le comboBox et affiche l'id tout en conservant l'id en valeur
             comboBoxUtilisateur.DisplayMember = "IdUser";
             comboBoxUtilisateur.ValueMember = "IdUser";
@@ -198,7 +200,6 @@ namespace ApplicationUi
                 dataGridParticipationsJoueur.Columns["DateHeureInscription"].Visible = false;
                 dataGridParticipationsJoueur.Columns["NomTournoi"].HeaderText = "Tournoi";
                 dataGridParticipationsJoueur.Columns["IdUser"].HeaderText = "Utilisateur";
-                dataGridParticipationsJoueur.Columns["NbParticipants"].HeaderText = "Utilisateur";
 
                 dataGridParticipationsJoueur.Columns["NomTournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dataGridParticipationsJoueur.Columns["IdUser"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -210,14 +211,14 @@ namespace ApplicationUi
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
-            Participer participation = new ()
+            Participer participation = new()
             {
                 Rang = (int)numericUpDownRang.Value,
                 ScoreFinal = (int)numericUpDownScoreFinal.Value,
                 Commentaire = textBoxCommentaire.Text,
                 Evaluation = trackBarEvaluation.Value,
                 DateHeureInscription = DateTime.Now,
-                IdUser = 1,//((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
+                IdUser = ((Joueur)comboBoxUtilisateur.SelectedItem).IdUser,
                 NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi,
                 LotRemis = lotRemisSelectionne
             };
@@ -256,36 +257,13 @@ namespace ApplicationUi
 
             _participationSelectionnee.Rang = (int)numericUpDownRang.Value;
             _participationSelectionnee.ScoreFinal = (int)numericUpDownScoreFinal.Value;
-            _participationSelectionnee.Commentaire = textBoxCommentaire.Text;
             _participationSelectionnee.Evaluation = trackBarEvaluation.Value;
-            _participationSelectionnee.IdUser = 1; //((Participer)comboBoxUtilisateur.SelectedItem).IdUser lorsque les utilisateurs seront intégrés
+            _participationSelectionnee.Commentaire = textBoxCommentaire.Text;
+            _participationSelectionnee.IdUser = ((Joueur)comboBoxUtilisateur.SelectedItem).IdUser;
             _participationSelectionnee.NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi;
-            // TODO: voir conflit lucien
-            // puisque NumeroTournoi est une clé primaire, elle ne peut pas être null
-            //_participationSelectionnee.NumeroTournoi = (int)((Tournoi)comboBoxTournoi.SelectedItem).NumeroTournoi;
             _participationSelectionnee.LotRemis = lotRemisSelectionne;
 
-            try
-            {
-                ModifierParticipation(_participationSelectionnee);
-                MessageBox.Show("La participation a bien été modifiée.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Raz_Zones();
-            }
-            catch (ParticiperException ex)
-            {
-                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
-            }
-            catch (DbException ex)
-            {
-                Log.Error(ex, "Une erreur technique est survenue lors de la modification de la participation.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
-            }
+            ModifierParticipation(_participationSelectionnee);            
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
         {
@@ -405,6 +383,49 @@ namespace ApplicationUi
 
         #region Méthodes
         /// <summary>
+        /// Permet de déterminer d'afficher une indication visuelle sur les tournois associés à l'espace sélectionné, 
+        /// en fonction de leur statut (en cours, planifié ou aucun tournoi).
+        /// </summary>
+        private void StatutTournois()
+        {
+            if (_participationSelectionnee?.Tournoi == null)
+            {
+                labelStatutTournoi.Text = "Statut";
+                labelStatutTournoi.ForeColor = Color.DarkGray;
+                labelStatutTournoi.BackColor = Color.White;
+                return;
+            }
+                
+
+            switch (_participationSelectionnee.Tournoi.Statut)
+            {
+                case "En cours":
+                    labelStatutTournoi.Text = "Tournoi en cours";
+                    labelStatutTournoi.ForeColor = Color.Maroon;
+                    labelStatutTournoi.BackColor = Color.FromArgb(255, 128, 128);
+                    break;
+
+                case "Planifié":
+                    labelStatutTournoi.Text = "Planifié";
+                    labelStatutTournoi.ForeColor = Color.Chocolate;
+                    labelStatutTournoi.BackColor = Color.FromArgb(255, 224, 192);
+                    break;
+
+                case "Terminé":
+                    labelStatutTournoi.Text = "Terminé";
+                    labelStatutTournoi.ForeColor = Color.DarkGreen;
+                    labelStatutTournoi.BackColor = Color.FromArgb(192, 255, 192);
+                    break;
+
+                default:
+                    labelStatutTournoi.Text = "Statut";
+                    labelStatutTournoi.ForeColor = Color.DarkGray;
+                    labelStatutTournoi.BackColor = Color.White;
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Permet de désactiver les champs de saisie du formulaire si l'utilisateur 
         /// n'a pas les droits nécessaires pour ajouter ou modifier des espaces.
         /// </summary>
@@ -449,6 +470,7 @@ namespace ApplicationUi
             ChargerTournois();
             ChargerUtilisateurs();
 
+            StatutTournois();
             AfficherBoutons();
         }
 
@@ -462,18 +484,18 @@ namespace ApplicationUi
         {
             if (_participationSelectionnee == null)
             {
-                MessageBox.Show("Aucun espace sélectionné.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucune participation sélectionné.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             numericUpDownRang.Maximum = _participationSelectionnee.Tournoi.NbParticipants;
             numericUpDownRang.Value = _participationSelectionnee.Rang;
-            numericUpDownScoreFinal.Value = _participationSelectionnee.ScoreFinal ?? numericUpDownScoreFinal.Minimum;
+            trackBarEvaluation.Value = _participationSelectionnee.Evaluation;
+            numericUpDownScoreFinal.Value = _participationSelectionnee.ScoreFinal;
             textBoxCommentaire.Text = _participationSelectionnee.Commentaire;
-            trackBarEvaluation.Value = _participationSelectionnee.Evaluation ?? trackBarEvaluation.Minimum;
             dateTimePickerDateHeureInscription.Value = _participationSelectionnee.DateHeureInscription;
 
-            comboBoxUtilisateur.SelectedItem = _participationSelectionnee.IdUser;
+            comboBoxUtilisateur.SelectedValue = _participationSelectionnee.IdUser;
 
             comboBoxTournoi.SelectedItem = _participationSelectionnee.Tournoi;
             comboBoxTournoi.SelectedValue = _participationSelectionnee.NumeroTournoi;
@@ -491,25 +513,28 @@ namespace ApplicationUi
             }
 
             ChargerParticipationsJoueur();
-
+            StatutTournois();
             AfficherBoutons();
         }
 
         /// <summary>
-        /// Permet d'afficher ou de masquer les boutons d'action en fonction de la sélection actuelle d'un espace.
+        /// Permet d'afficher ou de masquer les boutons d'action en 
+        /// fonction de la sélection actuelle d'une participation'.
         /// </summary>
         private void AfficherBoutons()
         {
             buttonAjouter.Enabled = true;
 
-            // Si aucune participation n'est sélectionnée, les boutons de modification, suppression et effacement sont désactivés
+            // Si aucune participation n'est sélectionnée, les boutons de modification,
+            // suppression et effacement sont désactivés
             buttonModifier.Enabled = _participationSelectionnee != null;
             buttonSupprimer.Enabled = _participationSelectionnee != null;
             buttonEffacer.Enabled = _participationSelectionnee != null;
         }
 
         /// <summary>
-        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView pour gérer le tri manuellement dans l'événement CellClick.
+        /// Permet de désactiver le tri automatique sur les colonnes d'un DataGridView 
+        /// pour gérer le tri manuellement dans l'événement CellClick.
         /// </summary>
         /// <param name="dataGrid">Le DataGridView dont les colonnes doivent être configurées.</param>
         static void DesactiverTrieAutomatique(DataGridView dataGrid)
@@ -521,38 +546,38 @@ namespace ApplicationUi
         }
 
         /// <summary>
-        /// Permet de modifier un espace en gérant les différentes exceptions qui peuvent survenir,
-        /// notamment lorsqu'il existe des postes de jeu associés à l'espace.
+        /// Permet de modifier une participation en gérant les différentes exceptions qui peuvent survenir,
+        /// notamment lorsqu'il existe des postes de jeu associés à la participation.
         /// </summary>
         private void ModifierParticipation(Participer? participation)
         {
             try
             {
-                _serviceParticiper.Modifier(participation!);
-                MessageBox.Show("L'espace a bien été renommé et les postes de jeu associés ont été mis à jour.",
-                   "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _serviceParticiper.Modifier(participation);
+                MessageBox.Show("La participation a bien été modifiée.", "Modification",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
-            }           
+            }
             catch (ParticiperException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
-
+                    MessageBox.Show(ex.Message);
             }
             catch (DbException ex)
             {
-                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                Log.Error(ex, "Erreur technique lors de la modification de la participation.");
+                    MessageBox.Show("Erreur technique, réessayez plus tard.");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                Log.Error(ex, "Erreur inattendue lors de la modification de la participation.");
+                    MessageBox.Show("Une erreur inattendue est survenue. \n" +
+                        ex.Message);
             }
         }
 
         /// <summary>
-        /// Permets de supprimer un espace en gérant les différentes exceptions qui peuvent survenir,
+        /// Permets de supprimer une participation en gérant les différentes exceptions qui peuvent survenir,
         /// notamment lorsque la participation est associé a un tournoi en cours
         /// <param name="forcerTournoi"></param>
         private void SupprimerParticipation(bool forcerTournoi)
@@ -561,7 +586,8 @@ namespace ApplicationUi
             {
                 _serviceParticiper.Supprimer(_participationSelectionnee!.IdUser, _participationSelectionnee!.NumeroTournoi,
                     forcerTournoi);
-                if(!forcerTournoi)
+
+                if (!forcerTournoi)
                     MessageBox.Show("La participation a bien été supprimée.", "Suppression",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
@@ -592,7 +618,8 @@ namespace ApplicationUi
             catch (Exception ex)
             {
                 Log.Error(ex, "Erreur inattendue lors de la suppression de la participation.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.\n" +
+                    ex.Message);
             }
         }
         #endregion

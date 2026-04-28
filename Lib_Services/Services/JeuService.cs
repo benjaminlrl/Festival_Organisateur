@@ -101,13 +101,14 @@ namespace Lib_Services.Services
         /// Crée un nouveau jeu et persiste la modification.
         /// </summary>
         /// <param name="jeu">Objet <see cref="Jeu"/> à ajouter.</param>
-        public void Creer(Jeu jeu)
+        public void Creer(Jeu? jeu)
         {
-            jeu.AnneeSortie = jeu.DateSortie.Year.ToString();// année de sortie calculée
             try
             {
-                ValiderJeu(jeu);
-                _context.Jeux.Add(jeu);
+                if (jeu != null)
+                    jeu!.AnneeSortie = jeu.DateSortie.Year.ToString();// année de sortie calculée
+                ValiderJeu(jeu);                
+                _context.Jeux.Add(jeu!);
                 _context.SaveChanges();
             }
             catch (JeuException ex)
@@ -183,7 +184,7 @@ namespace Lib_Services.Services
         /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
         /// <param name="estModification">Indique si la validation est pour une modification.</param>
         /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
-        private void ValiderJeu(Jeu? jeu, bool estModification = false)
+        public void ValiderJeu(Jeu? jeu, bool estModification = false)
         {
             if (jeu == null)
                 throw new JeuException("Le jeu ne peut pas être null.",
@@ -253,7 +254,7 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
         /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
-        private void ValiderSuppressionJeu(Jeu? jeu)
+        public void ValiderSuppressionJeu(Jeu? jeu)
         {
             if (jeu == null)
                 throw new JeuException("L'espace ne peut pas être null.",

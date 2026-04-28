@@ -174,24 +174,21 @@ namespace Lib_Services.Services
         /// L'appel à <c>Update</c> marque toutes les propriétés comme modifiées.
         /// </summary>
         /// <param name="espace">Instance modifiée de <see cref="Participer"/>.</param>
-        public void Modifier(Participer participer)
+        public void Modifier(Participer? participer)
         {
-            try
-            {
-                ValiderParticipation(participer, true);
-                _context.Participer.Update(participer!);
-                _context.SaveChanges();
-            }
-            catch (ParticiperException ex)
-            {
-                throw new ParticiperException("Erreur lors de la suppression de la participation : \n" + ex.Message,
-                    (int)ParticiperException.ParticiperErreur.SuppressionParticiperException);
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new ParticiperException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
-                    (int)ParticiperException.ParticiperErreur.SuppressionParticiperDbUpdateException);
-            }
+
+            ValiderParticipation(participer, true);
+
+            // Détache l'instance déjà trackée
+            Participer? local = _context.Participer.Local
+                .FirstOrDefault(p => p.IdUser == participer!.IdUser && p.NumeroTournoi == participer.NumeroTournoi);
+
+            if (local != null)
+                _context.Entry(local).State = EntityState.Detached;
+
+            participer!.Tournoi = null; // évite le conflit de tracking sur Tournoi
+            _context.Entry(participer).State = EntityState.Modified;
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -199,26 +196,22 @@ namespace Lib_Services.Services
         /// </summary>
         /// <param name="idUser">Id unique de l'utilisateur à supprimer.</param>
         /// <param name="numeroTournoi">Numero du tournoi associé à la participation à supprimer.</param>
-        public void Supprimer(int idUser, int numeroTournoi)
+        public void Supprimer(int idUser, int numeroTournoi, bool forcerSupp = false)
         {
-            // Recherche de l'entité (utilise le cache si possible).
-            Participer? participer = Obtenir(idUser, numeroTournoi);
-            try
-            {
-                ValiderSuppressionParticipation(participer);
-                _context.Participer.Remove(participer!);
-                _context.SaveChanges();
-            }
-            catch (ParticiperException ex)
-            {
-                throw new ParticiperException("Erreur lors de la suppression de la participation : \n" + ex.Message,
-                    (int)ParticiperException.ParticiperErreur.SuppressionParticiperException);
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new ParticiperException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
-                    (int)ParticiperException.ParticiperErreur.SuppressionParticiperDbUpdateException);
-            }
+            Participer? participer = Obtenir(idUser, numeroTournoi); // AsNoTracking
+
+            ValiderSuppressionParticipation(participer, forcerSupp);
+
+            // Détache l'instance déjà trackée par le Lister()
+            Participer? local = _context.Participer.Local
+                .FirstOrDefault(p => p.IdUser == idUser && p.NumeroTournoi == numeroTournoi);
+
+            if (local != null)
+                _context.Entry(local).State = EntityState.Detached;
+
+            _context.Participer.Remove(participer!);
+            _context.SaveChanges();
+
         }
         #endregion
 
@@ -274,17 +267,17 @@ namespace Lib_Services.Services
         /// <param name="participer">L'objet <see cref="Participer"/> à valider.</param>
         /// <remarks>Le tournoi d'une participation doit être chargé pour que cette validation fonctionne, sinon elle est ignorée.</remarks>
         /// <exception cref="ParticiperException"></exception>
-        private void ParticipationChevauchee(Participer participer)
+        private void ParticipationChevauchee(Participer participer, Tournoi tournoi)
         {
-            if (participer.Tournoi == null) return;
+            if (tournoi == null) return;
 
             List<Participer> participationsUtilisateur = ListerParticipationsUtilisateur(participer.IdUser);
 
             if (participationsUtilisateur.Any(p =>
                     p.Tournoi != null
                     && p.NumeroTournoi  != participer.NumeroTournoi
-                    && participer.Tournoi.DateHeure < p.Tournoi.DateHeure.AddMinutes(p.Tournoi.DureePrevue)
-                    && p.Tournoi.DateHeure < participer.Tournoi.DateHeure.AddMinutes(participer.Tournoi.DureePrevue)))
+                    && tournoi.DateHeure < p.Tournoi.DateHeure.AddMinutes(p.Tournoi.DureePrevue)
+                    && p.Tournoi.DateHeure < tournoi.DateHeure.AddMinutes(tournoi.DureePrevue)))
                 throw new ParticiperException("L'utilisateur ne peut pas participer à deux tournois en même temps.",
                     (int)ParticiperException.ParticiperErreur.ParticiperParticipationTournoiChevauchee);
 
@@ -296,18 +289,20 @@ namespace Lib_Services.Services
         /// <param name="participer">Objet <see cref="Participer"/> à valider.</param>
         /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification.</param>
         /// <exception cref="ParticiperException">Exception levée en cas de validation échouée.</exception>
-        public void ValiderParticipation(Participer participer, bool estModification = false)
+        public void ValiderParticipation(Participer? participer, bool estModification = false)
         {
-            // 1. Existence du tournoi en premier car les checks suivants en dépendent
-            participer.Tournoi = _serviceTournoi.Obtenir(participer.NumeroTournoi);
-
-            if (participer.Tournoi == null)
+            if (participer == null)
                 throw new ParticiperException("La participation ne peut pas être null.",
                     (int)ParticiperException.ParticiperErreur.ParticiperNull);
-           
+
+            // 1. Existence du tournoi en premier car les checks suivants en dépendent
+            Tournoi? tournoi = _serviceTournoi.Obtenir(participer.NumeroTournoi);
+            if (tournoi == null)
+                throw new ParticiperException("Le tournoi n'existe pas.",
+                    (int)ParticiperException.ParticiperErreur.ParticiperTournoiInexistant);
 
             /// Vérifie que l'utilisateur ne participe pas à un autre tournoi qui se déroule au même moment
-            ParticipationChevauchee(participer);
+            ParticipationChevauchee(participer, tournoi);
 
             int nbParticipantsEnBdd = ObtenirNombreParticipantsParTournoi(participer.NumeroTournoi);
 
@@ -318,16 +313,16 @@ namespace Lib_Services.Services
                     throw new ParticiperException("L'utilisateur participe déjà à ce tournoi.",
                         (int)ParticiperException.ParticiperErreur.AjoutParticiperDejaParticipant);
 
-                if (participer.Tournoi.Statut == "Terminé")
+                if (tournoi.Statut == "Terminé")
                     throw new ParticiperException("Le tournoi est terminé, il n'est plus possible de s'y inscrire.",
                         (int)ParticiperException.ParticiperErreur.AjoutParticiperTournoiTermine);
 
-                if (participer.Tournoi.Statut == "En cours")
+                if (tournoi.Statut == "En cours")
                     throw new ParticiperException("Le tournoi est en cours, il n'est plus possible de s'y inscrire.",
                         (int)ParticiperException.ParticiperErreur.AjoutParticiperTournoiEnCours);
 
 
-                if (nbParticipantsEnBdd >= participer.Tournoi.NbParticipants)
+                if (nbParticipantsEnBdd >= tournoi.NbParticipants)
                     throw new ParticiperException("Le nombre de participants a atteint la limite du tournoi.",
                         (int)ParticiperException.ParticiperErreur.AjoutParticiperTournoiComplet);
 
@@ -372,15 +367,15 @@ namespace Lib_Services.Services
                     throw new ParticiperException("Le rang ne peut pas dépasser le nombre de participants.",
                         (int)ParticiperException.ParticiperErreur.ParticiperRangInvalide);
 
-                if (participer.Rang > 0 && participer.Tournoi.Statut != "Terminé")
+                if (participer.Rang > 0 && tournoi.Statut != "Terminé")
                     throw new ParticiperException("Vous ne pouvez pas définir un rang tant que le tournoi n'est pas terminé.",
                         (int)ParticiperException.ParticiperErreur.ParticiperRangInvalideTournoiNonTermine);
 
-                if (participer.ScoreFinal != 0 && participer.Tournoi.Statut != "Terminé")
+                if (participer.ScoreFinal != 0 && tournoi.Statut != "Terminé")
                     throw new ParticiperException("Vous ne pouvez pas définir un score final tant que le tournoi n'est pas terminé.",
                         (int)ParticiperException.ParticiperErreur.ModificationParticiperScoreFinal);
 
-                if (participer.LotRemis == true && participer.Tournoi.Statut != "Terminé")
+                if (participer.LotRemis == true && tournoi.Statut != "Terminé")
                     throw new ParticiperException("Vous ne pouvez pas remettre un lot tant que le tournoi n'est pas terminé.",
                         (int)ParticiperException.ParticiperErreur.ModificationParticiperLotRemisParDefaut);
 
@@ -421,7 +416,7 @@ namespace Lib_Services.Services
                 && participer.Tournoi != null
                 && (participer.Tournoi.Statut == "Terminé"))
                 throw new ParticiperException("Il n'est pas possible de supprimer une participation dont le tournoi est terminé.",
-                    (int)ParticiperException.ParticiperErreur.SuppressionParticiperForcerTournoiEnCours);
+                    (int)ParticiperException.ParticiperErreur.SuppressionParticiperForcerTournoiTermine);
 
         }
         #endregion

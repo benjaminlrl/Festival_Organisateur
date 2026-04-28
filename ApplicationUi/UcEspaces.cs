@@ -280,7 +280,11 @@ namespace ApplicationUi
         {
             // Si aucune ligne n'est sélectionnée, ne rien faire
             if (dataGridEspaces.CurrentRow == null || _espaceSelectionnee == null)
+            {
+                MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+                
 
             _espaceSelectionnee.Nom = textBoxNom.Text;
             _espaceSelectionnee.Description = textBoxDescription.Text;
