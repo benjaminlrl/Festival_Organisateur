@@ -62,7 +62,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 ---
 
 ## Contexte et objectifs
-
+[Retourner au sommaire](#-sommaire)
 Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à un besoin de gestion complète d'un festival.
 
 ### Objectifs principaux
