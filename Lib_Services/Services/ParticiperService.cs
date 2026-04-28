@@ -155,6 +155,7 @@ namespace Lib_Services.Services
         }
 
         #endregion
+
         #region CUD
         /// <summary>
         /// Crée un nouvel Participer en base.

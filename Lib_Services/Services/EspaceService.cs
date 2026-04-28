@@ -47,6 +47,7 @@ namespace Lib_Services.Services
         public List<Espace> Lister(string filtre = "", string colonne = "", string ordre = "")
         {
             IQueryable<Espace> query = _context.Espaces
+                .AsNoTracking()
                 .Include(e => e.Tournois)
                 .Include(e => e.PostesJeu);
 
@@ -118,8 +119,12 @@ namespace Lib_Services.Services
         /// <returns>L'entité <see cref="Espace"/> si trouvée, sinon null.</returns>
         public Espace? Obtenir(int idEspace)
         {
-            // Find utilise le cache du contexte s'il existe, sinon interroge la base.
-            return _context.Espaces.AsNoTracking().FirstOrDefault(e => e.IdEspace == idEspace);
+            // Find utilise le cache du contexte s'il existe, sinon interroge la base
+            //return _context.Espaces.Find(idEspace);
+            return _context.Espaces.AsNoTracking()
+                .Include(e => e.Tournois)
+                .Include(e => e.PostesJeu)
+                .FirstOrDefault(e => e.IdEspace == idEspace);
         }
 
         /// <summary>
@@ -140,7 +145,7 @@ namespace Lib_Services.Services
         public Espace? ObtenirParNomPremieresLettres(string nom)
         {
             return _context.Espaces.AsNoTracking().FirstOrDefault(e => 
-                e.Nom.Substring(0,3).Contains(nom.Substring(0,3)));
+                e.Nom.Substring(0,3).ToUpper().Contains(nom.Substring(0,3).ToUpper()));
         }
         #endregion
 
@@ -152,22 +157,10 @@ namespace Lib_Services.Services
         /// <param name="espace">Instance de <see cref="Espace"/> à créer.</param>
         public void Creer(Espace espace)
         {
-            try
-            {
-                ValiderEspace(espace);
-                _context.Espaces.Add(espace!);
-                _context.SaveChanges();
-            }
-                catch (EspaceException ex)
-                {
-                throw new EspaceException("Erreur lors de la suppression de l'espace : \n" + ex.Message,
-                    (int)EspaceException.EspaceErreur.AjoutEspaceException);
-            }
-                catch (DbUpdateException ex)
-                {
-                throw new EspaceException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
-                    (int)EspaceException.EspaceErreur.AjoutEspaceDbUpdateException);
-            }
+            ValiderEspace(espace);
+            _context.Espaces.Add(espace!);
+            _context.SaveChanges();
+  
         }
 
         /// <summary>
@@ -184,44 +177,68 @@ namespace Lib_Services.Services
 
             try
             {
-                _posteJeuService ??= new PosteJeuService(_context);
+                // Charger l'espace AVEC tracking + ses postes
+                Espace? enBdd = _context.Espaces
+                    .Include(e => e.PostesJeu)
+                    .FirstOrDefault(e => e.IdEspace == espace.IdEspace);
 
+                // Validation métier
                 ValiderEspace(espace, true, modifPosteJeu);
-                _context.Espaces.Update(espace);
 
-                // Dans le cas ou les postes de jeux rencontre une exception, on ne veut pas que le nom de l'espace soit modifié
-                // sans que les postes de jeu soient modifiés pour garder la correspondance à l'espace.
+                // Mise à jour des propriétés simples sans passer par le update qui
+                // lui créer une nouvelle entité et créer un conflit de tracking
+                enBdd!.Nom = espace.Nom;
+                enBdd!.Description = espace.Description;
+                enBdd!.Superficie = espace.Superficie;
+                enBdd!.CapaciteMaxi = espace.CapaciteMaxi;
 
-                // Idée de passer par une transaction cependant chaque modification faite sur une poste de jeu est sauvegarder en bdd
-                // Et cela implique de passser les fonctions en asynchrone pour pouvoir faire un rollback en cas d'erreur, ce qui est plus complexe à mettre en place.
-                if (modifPosteJeu)
-                {
-                    List<PosteJeu> postesJeuAssocies = _posteJeuService.ListerPostesJeuDunEspace(espace);
-                    if (postesJeuAssocies.Count > 0)
+                // 4. Mise à jour des références des postes (SANS SaveChanges)
+                if (modifPosteJeu && enBdd.PostesJeu != null)
+                { 
+                    if (enBdd.PostesJeu.Count > 0)
                     {
+                        _posteJeuService ??= new PosteJeuService(_context);
+
                         try
                         {
-                            _posteJeuService.FormatRefPosteJeuEspaceNouvNom(postesJeuAssocies, espace.Nom);
+                            _posteJeuService.FormatRefPosteJeuEspaceNouvNom(
+                                enBdd.PostesJeu.ToList(),
+                                enBdd.Nom
+                            );
                         }
                         catch (PosteJeuException ex)
                         {
-                            transaction.Rollback();
-                            throw new EspaceException("Erreur lors de la modification des postes de jeu associés à l'espace : \n"
-                                + ex.Message,
+                            throw new EspaceException(
+                                "Erreur lors de la modification des postes de jeu associés : \n" + ex.Message,
                                 (int)EspaceException.EspaceErreur.ModificationEspacePosteJeuEspaceNom);
                         }
                     }
                     else
-                        throw new EspaceException("Aucun poste de jeux n'est associé à l'espace",
-                                (int)EspaceException.EspaceErreur.ModificationEspaceAucunPosteJeu);
-                }
+                        throw new EspaceException(
+                           "Erreur lors de la modification des postes de jeu associés : \n",
+                           (int)EspaceException.EspaceErreur.ModificationEspaceAucunPosteJeu);
+                }            
+
+                // Une seule sauvegarde pour toutes les modifs (transaction atomique)
                 _context.SaveChanges();
+
                 transaction.Commit();
+                
             }
             catch (EspaceException)
             {
                 transaction.Rollback();
                 throw;
+            }
+            catch (DbUpdateException ex)
+            {
+                transaction.Rollback();
+                throw new DbUpdateException("Erreur BDD : " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception("Erreur inattendue : " + ex.Message);
             }
         }
 
@@ -236,67 +253,62 @@ namespace Lib_Services.Services
         /// <exception cref="EspaceException">Exception levée si la validation échoue ou si une erreur survient lors de la suppression.</exception>
         public void Supprimer(int idEspace, bool suppPosteJeu = false)
         {
-            Espace? espace = _context.Espaces
-                .Include(e => e.PostesJeu)
-                .Include(e => e.Tournois)
-                .FirstOrDefault(e => e.IdEspace == idEspace);
+            IDbContextTransaction transaction = _context.Database.BeginTransaction();
 
-            ValiderSuppressionEspace(espace, suppPosteJeu);
-
-            if (suppPosteJeu)
+            try
             {
-                _posteJeuService ??= new PosteJeuService(_context);
+                // Charger l'espace AVEC tracking + ses postes
+                Espace? enBdd = Obtenir(idEspace);
 
-                IDbContextTransaction transaction = _context.Database.BeginTransaction();
-                try
+                // Validation métier
+                ValiderSuppressionEspace(enBdd, suppPosteJeu);
+
+
+                // 4. Mise à jour des références des postes (SANS SaveChanges)
+                if (suppPosteJeu && enBdd!.PostesJeu != null)
                 {
-                    foreach (PosteJeu posteJeu in espace!.PostesJeu)
+                    if (enBdd.PostesJeu.Count > 0)
                     {
+                        _posteJeuService ??= new PosteJeuService(_context);
+                        
                         try
                         {
-                            _posteJeuService.Supprimer(posteJeu.NumeroPoste);
+                            foreach (PosteJeu posteJeu in enBdd.PostesJeu)
+                                _posteJeuService.Supprimer(posteJeu.NumeroPoste);
                         }
                         catch (PosteJeuException ex)
                         {
-                            throw new EspaceException("Erreur lors de la suppression des postes de jeu : \n" + ex.Message,
+                            throw new EspaceException(
+                                "Erreur lors de la suppression des postes de jeu associés : \n" + ex.Message,
                                 (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuErreur);
                         }
                     }
+                    else
+                        throw new EspaceException(
+                           "Erreur lors de la suppressions des postes de jeu associés : \n",
+                           (int)EspaceException.EspaceErreur.SuppressionEspaceAucunPosteJeu);
+                }
+                _context.Remove(enBdd!);
+                // Une seule sauvegarde pour toutes les modifs (transaction atomique)
+                _context.SaveChanges();
 
-                    _context.Espaces.Remove(espace);
-                    _context.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (EspaceException)
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-                catch (DbUpdateException ex)
-                {
-                    transaction.Rollback();
-                    throw new EspaceException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
-                        (int)EspaceException.EspaceErreur.SuppressionEspaceDbUpdateException);
-                }
+                transaction.Commit();
+
             }
-            else
+            catch (EspaceException)
             {
-                try
-                {
-                    // cas simple sans postes de jeu
-                    _context.Espaces.Remove(espace!);
-                    _context.SaveChanges();
-                }
-                catch (EspaceException ex)
-                {
-                    throw new EspaceException("Erreur lors de la suppression de l'espace : \n" + ex.Message,
-                        (int)EspaceException.EspaceErreur.SuppressionEspaceException);
-                }
-                catch (DbUpdateException ex)
-                {
-                    throw new EspaceException("Erreur BDD lors de la suppression de l'espace : \n" + ex.Message,
-                        (int)EspaceException.EspaceErreur.SuppressionEspaceDbUpdateException);
-                }
+                transaction.Rollback();
+                throw;
+            }
+            catch (DbUpdateException ex)
+            {
+                transaction.Rollback();
+                throw new DbUpdateException("Erreur BDD : " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception("Erreur inattendue : " + ex.Message);
             }
         }
         #endregion
@@ -344,16 +356,17 @@ namespace Lib_Services.Services
                 throw new EspaceException("L'espace ne peut pas être null.",
                     (int)EspaceException.EspaceErreur.EspaceNull);
 
-            if (Obtenir(espace.IdEspace) == null)
+            Espace? enBdd = Obtenir(espace.IdEspace);
+            Espace? espaceNom = ObtenirParNom(espace.Nom);
+            Espace? espaceNomLet = ObtenirParNomPremieresLettres(espace.Nom);
+
+            if (modifPosteJeu && enBdd == null)
                 throw new EspaceException("L'espace n'existe pas en base de données'.",
                     (int)EspaceException.EspaceErreur.EspaceInexistant);
 
             if (string.IsNullOrWhiteSpace(espace.Nom))
                 throw new EspaceException("Le nom est requis.",
                     (int)EspaceException.EspaceErreur.EspaceNomRequis);
-
-            Espace? espaceNom = ObtenirParNom(espace.Nom);
-            Espace? espaceNomLet = ObtenirParNomPremieresLettres(espace.Nom);
 
             if (espaceNom != null && espaceNom.IdEspace != espace.IdEspace)
                 throw new EspaceException("Le nom est déjà attribué à un autre espace.",
@@ -389,12 +402,6 @@ namespace Lib_Services.Services
 
             if (estModification)
             {
-                Espace? enBdd = Obtenir(espace.IdEspace);
-
-                if (enBdd == null)
-                    throw new EspaceException("L'espace n'existe pas en base.",
-                        (int)EspaceException.EspaceErreur.ModificationEspaceInexistant);
-
                 if (enBdd.IdEspace != espace.IdEspace)
                     throw new EspaceException("Il n'est pas possible de modifier l'id de l'espace.",
                         (int)EspaceException.EspaceErreur.ModificationEspaceId);
@@ -410,8 +417,7 @@ namespace Lib_Services.Services
                 // On vérifie donc si la séquence de Lettre existe ou pas
                 if (enBdd.Nom != espace.Nom
                     && !modifPosteJeu)
-                    throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n" +
-                        "Les postes de jeux ne correspondront pas à l'espace",
+                    throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n",
                         (int)EspaceException.EspaceErreur.ModificationEspaceNomLettresExistePostesJeu);
             }                      
         }
@@ -436,7 +442,7 @@ namespace Lib_Services.Services
                 throw new EspaceException("Il n'est pas possible de supprimer un espace associé à un tournoi planifié ou en cours.",
                     (int)EspaceException.EspaceErreur.SuppressionEspaceTournoiExistant);
 
-            if (!suppPosteJeu && espace.PostesJeu != null && espace.PostesJeu.Any())
+            if (!suppPosteJeu && espace.PostesJeu.Count > 0)
                 throw new EspaceException("Il n'est pas possible de supprimer un espace associé à des postes de jeu.",
                     (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant);
 

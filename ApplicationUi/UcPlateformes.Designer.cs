@@ -152,7 +152,6 @@
             dataGridJeux.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridJeux.BackgroundColor = Color.White;
             dataGridJeux.BorderStyle = BorderStyle.None;
-            dataGridJeux.ColumnHeadersHeight = 34;
             tableLayoutPanel.SetColumnSpan(dataGridJeux, 2);
             dataGridJeux.Dock = DockStyle.Fill;
             dataGridJeux.Location = new Point(267, 23);

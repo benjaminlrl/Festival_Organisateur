@@ -35,7 +35,7 @@ namespace ApplicationUi
         public event Action<Tournoi>? NaviguerVersTournois;
         public event Action<PosteJeu>? NaviguerVersPostesJeu;
 
-        public UcEspaces(Organisateur unOrganisateurConnecte)
+        public UcEspaces(Organisateur unOrganisateurConnecte, Espace? espacePreselectionne = null)
         {
             InitializeComponent();
             var _context = new ApplicationDbContext();
@@ -57,6 +57,12 @@ namespace ApplicationUi
             filtre = "";
 
             Raz_Zones();
+
+            if (espacePreselectionne != null)
+            {
+                _espaceSelectionnee = espacePreselectionne;
+                RemplirFormulaire();
+            }
 
             if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
@@ -283,8 +289,7 @@ namespace ApplicationUi
             {
                 MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
-            }
-                
+            }                
 
             _espaceSelectionnee.Nom = textBoxNom.Text;
             _espaceSelectionnee.Description = textBoxDescription.Text;
@@ -570,7 +575,7 @@ namespace ApplicationUi
                         "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !modifPosteJeu)
+            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.ModificationEspaceNomLettresExistePostesJeu && !modifPosteJeu)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                 if (MessageBox.Show("Voulez vous renommer l'espace et reformatter le nom des postes de jeu associés ?",
@@ -602,13 +607,13 @@ namespace ApplicationUi
         /// Permets de supprimer un espace en gérant les différentes exceptions qui peuvent survenir,
         /// notamment lorsqu'il existe des postes de jeu associés à l'espace.
         /// </summary>
-        /// <param name="avecPostesJeu"></param>
-        private void SupprimerEspace(bool avecPostesJeu)
+        /// <param name="suppPostesJeu"></param>
+        private void SupprimerEspace(bool suppPostesJeu)
         {
             try
             {
-                _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, avecPostesJeu);
-                if(!avecPostesJeu)
+                _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, suppPostesJeu);
+                if(!suppPostesJeu)
                     MessageBox.Show("L'espace a bien été supprimé.", "Suppression",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else                
@@ -616,7 +621,7 @@ namespace ApplicationUi
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !avecPostesJeu)
+            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !suppPostesJeu)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                 if (MessageBox.Show("Impossible de supprimer l'espace car il est associé à un ou plusieurs postes de jeu.\n" +

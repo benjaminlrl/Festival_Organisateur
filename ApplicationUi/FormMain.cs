@@ -170,6 +170,12 @@ namespace ApplicationUi
                     LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
                 };
 
+                uc.NaviguerVersEspaces += (espace) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcEspaces(_organisateurConnecte, espace), "Gestion des espaces");
+                };
+
                 LoadUserControl(uc, "Gestion des postes de jeu");
             }
             catch (PosteJeuException ex)

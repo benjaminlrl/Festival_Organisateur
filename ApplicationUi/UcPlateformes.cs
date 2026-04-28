@@ -117,6 +117,9 @@ namespace ApplicationUi
             dataGridJeux.Columns["Description"].Visible = false;
             dataGridJeux.Columns["Tournois"].Visible = false;
             dataGridJeux.Columns["Plateformes"].Visible = false;
+            dataGridJeux.Columns["Editeur"].Visible = false;
+
+            dataGridJeux.Columns["AnneeSortie"].HeaderText = "Sortie";
         }
 
         private void MEP_DataGridPostesJeu()

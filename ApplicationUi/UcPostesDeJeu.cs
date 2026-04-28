@@ -34,6 +34,7 @@ namespace ApplicationUi
         // et l'utiliser lors du rechargement des espaces
         private string ordreChamp;
         public event Action<Tournoi>? NaviguerVersTournois;
+        public event Action<Espace>? NaviguerVersEspaces;
 
         public UcPostesDeJeu(Organisateur unOrganisateurConnecte, PosteJeu? posteJeuPreselectionne = null)
         {
@@ -46,7 +47,7 @@ namespace ApplicationUi
             _servicePlateforme = new PlateformeService(context);
 
             _organisateurConnecte = unOrganisateurConnecte;
-            
+
             _posteJeuSelectionne = null;
             _tournoiSelectionne = null;
 
@@ -201,14 +202,14 @@ namespace ApplicationUi
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
             // Validation de la sélection de l'espace et de la plateforme avant de créer le poste de jeu
-            if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne 
+            if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne
                 || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
             {
                 MessageBox.Show("Veuillez sélectionner une plateforme et un espace.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            PosteJeu posteJeu = new ()
+            PosteJeu posteJeu = new()
             {
                 Fonctionnel = fonctionnelSelectionne,
                 IdPlateforme = plateformeSelectionne.IdPlateforme,
@@ -241,7 +242,7 @@ namespace ApplicationUi
         private void ButtonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridPostesJeu.CurrentRow == null || _posteJeuSelectionne == null)
-                    return;
+                return;
 
             _posteJeuSelectionne.Fonctionnel = fonctionnelSelectionne; // true ou false selon le choix de l'utilisateur
             _posteJeuSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
@@ -313,7 +314,7 @@ namespace ApplicationUi
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new ()
+                Dictionary<int, string> map = new()
                 {
                     {dataGridPostesJeu.Columns["Reference"].Index, "Reference"},
                     {dataGridPostesJeu.Columns["Fonctionnel"].Index, "Fonctionnel"},
@@ -323,13 +324,13 @@ namespace ApplicationUi
 
                 // Vérifie si l'index de la colonne est associé a une propriété
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
-                    return; 
-                
+                    return;
+
                 // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 dataGridPostesJeu.DataSource = _servicePosteJeu.Lister(filtre, colonne, ordreChamp);
-                dataGridPostesJeu.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = 
+                dataGridPostesJeu.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
                     ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
 
@@ -467,7 +468,7 @@ namespace ApplicationUi
             _posteJeuSelectionne.Espace ??= _serviceEspace.Obtenir(_posteJeuSelectionne.IdEspace);
 
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
-            
+
             List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_posteJeuSelectionne.Espace.IdEspace);
             List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_posteJeuSelectionne.Espace.IdEspace);
 
@@ -532,6 +533,36 @@ namespace ApplicationUi
                 col.SortMode = DataGridViewColumnSortMode.Programmatic;
             }
         }
+
         #endregion
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des espaces en fonction du poste de jeu sélectionné dans le DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridPostesJeu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
+
+            DataGridViewRow row = dataGridPostesJeu.Rows[e.RowIndex];
+            PosteJeu? posteJeu = row.DataBoundItem as PosteJeu;
+
+            if (posteJeu == null)
+                return;
+
+            _posteJeuSelectionne = posteJeu;
+
+            string colonne = dataGridPostesJeu.Columns[e.ColumnIndex].Name;
+
+            if (colonne == "NomEspace")
+            {
+                if (posteJeu.Espace != null)
+                    NaviguerVersEspaces?.Invoke(posteJeu.Espace);
+            }
+
+        }
     }
 }
