@@ -28,7 +28,7 @@
             label2 = new Label();
             label1 = new Label();
             labelMdpMin = new Label();
-            labelTitle = new Label();
+            labelTitre = new Label();
             labelUsername = new Label();
             textBoxUsername = new TextBox();
             labelPassword = new Label();
@@ -46,7 +46,7 @@
             panelCard.Controls.Add(label2);
             panelCard.Controls.Add(label1);
             panelCard.Controls.Add(labelMdpMin);
-            panelCard.Controls.Add(labelTitle);
+            panelCard.Controls.Add(labelTitre);
             panelCard.Controls.Add(labelUsername);
             panelCard.Controls.Add(textBoxUsername);
             panelCard.Controls.Add(labelPassword);
@@ -113,16 +113,16 @@
             labelMdpMin.TabIndex = 7;
             labelMdpMin.Text = "Minimum 12 caractères";
             // 
-            // labelTitle
+            // labelTitre
             // 
-            labelTitle.AutoSize = true;
-            labelTitle.Font = new Font("Segoe UI Light", 24F);
-            labelTitle.ForeColor = Color.FromArgb(52, 73, 94);
-            labelTitle.Location = new Point(97, 53);
-            labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(163, 45);
-            labelTitle.TabIndex = 0;
-            labelTitle.Text = "Connexion";
+            labelTitre.AutoSize = true;
+            labelTitre.Font = new Font("Segoe UI Light", 24F);
+            labelTitre.ForeColor = Color.FromArgb(52, 73, 94);
+            labelTitre.Location = new Point(97, 53);
+            labelTitre.Name = "labelTitre";
+            labelTitre.Size = new Size(163, 45);
+            labelTitre.TabIndex = 0;
+            labelTitre.Text = "Connexion";
             // 
             // labelUsername
             // 
@@ -226,7 +226,7 @@
         }
 
         private System.Windows.Forms.Panel panelCard;
-        private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.Label labelTitre;
         private System.Windows.Forms.Label labelUsername;
         private System.Windows.Forms.TextBox textBoxUsername;
         private System.Windows.Forms.Label labelPassword;

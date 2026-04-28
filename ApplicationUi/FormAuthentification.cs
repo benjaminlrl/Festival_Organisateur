@@ -54,7 +54,6 @@ namespace ApplicationUi
         #endregion
 
         #region Évènements 
-        // Boutton Connexion
         private async void BoutonLogin_ClickAsync(object sender, EventArgs e)
         {
             // On check si le username n'est pas vide
@@ -88,6 +87,11 @@ namespace ApplicationUi
             new FormMain(organisateurConnecte).Show();
         }
 
+        private void BoutonQuitter_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
         // Validation par touche Entrée
         private void textBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -96,12 +100,6 @@ namespace ApplicationUi
                 BoutonLogin.PerformClick();
                 e.Handled = true;
             }
-        }
-
-        // Boutton Quitter
-        private void BoutonQuitter_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
         }
 
         #endregion
