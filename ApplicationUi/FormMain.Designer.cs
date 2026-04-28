@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using ApplicationUi.Properties;
+using System.Resources;
+using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using Font = System.Drawing.Font;
 
@@ -326,7 +328,7 @@ namespace ApplicationUi
             Controls.Add(panelMenu);
             FormBorderStyle = FormBorderStyle.None;
             Name = "FormMain";
-            Text = "Back-office organisateur";
+            Text = "Application de Festival Organisateur";
             WindowState = FormWindowState.Maximized;
             panelMenu.ResumeLayout(false);
             panelHeader.ResumeLayout(false);
