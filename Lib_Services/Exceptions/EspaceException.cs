@@ -37,6 +37,7 @@
         SuppressionEspaceException = 19,
         SuppressionEspacePosteJeuErreur = 20,
         SuppressionEspacePosteJeuDbErreur = 21,
+        SuppressionEspaceAucunPosteJeu = 22,
 
         //-------------------
         // Exceptions uniques à l'ajout d'un jeu

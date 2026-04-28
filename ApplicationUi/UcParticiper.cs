@@ -167,21 +167,21 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridParticipations);
 
-            dataGridParticipations.Columns["Tournoi"].Visible = false;
-            dataGridParticipations.Columns["NumeroTournoi"].Visible = false;
-            dataGridParticipations.Columns["Rang"].Visible = false;
-            dataGridParticipations.Columns["Evaluation"].Visible = false;
-            dataGridParticipations.Columns["Commentaire"].Visible = false;
-            dataGridParticipations.Columns["ScoreFinal"].Visible = false;
-            dataGridParticipations.Columns["LotRemis"].Visible = false;
+            dataGridParticipations.Columns["Tournoi"]!.Visible = false;
+            dataGridParticipations.Columns["NumeroTournoi"]!.Visible = false;
+            dataGridParticipations.Columns["Rang"]!.Visible = false;
+            dataGridParticipations.Columns["Evaluation"]!.Visible = false;
+            dataGridParticipations.Columns["Commentaire"]!.Visible = false;
+            dataGridParticipations.Columns["ScoreFinal"]!.Visible = false;
+            dataGridParticipations.Columns["LotRemis"]!.Visible = false;
 
-            dataGridParticipations.Columns["NomTournoi"].HeaderText = "Tournoi";
-            dataGridParticipations.Columns["IdUser"].HeaderText = "Utilisateur";
-            dataGridParticipations.Columns["DateHeureInscription"].HeaderText = "Date d'inscription";
+            dataGridParticipations.Columns["NomTournoi"]!.HeaderText = "Tournoi";
+            dataGridParticipations.Columns["IdUser"]!.HeaderText = "Utilisateur";
+            dataGridParticipations.Columns["DateHeureInscription"]!.HeaderText = "Date d'inscription";
 
-            dataGridParticipations.Columns["NomTournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridParticipations.Columns["IdUser"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridParticipations.Columns["DateHeureInscription"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridParticipations.Columns["NomTournoi"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridParticipations.Columns["IdUser"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridParticipations.Columns["DateHeureInscription"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void MEP_DataGridParticipationsJoueur()
@@ -191,19 +191,19 @@ namespace ApplicationUi
             if (_participationSelectionnee != null)
             {
 
-                dataGridParticipationsJoueur.Columns["Tournoi"].Visible = false;
-                dataGridParticipationsJoueur.Columns["NumeroTournoi"].Visible = false;
-                dataGridParticipationsJoueur.Columns["Rang"].Visible = false;
-                dataGridParticipationsJoueur.Columns["Evaluation"].Visible = false;
-                dataGridParticipationsJoueur.Columns["Commentaire"].Visible = false;
-                dataGridParticipationsJoueur.Columns["ScoreFinal"].Visible = false;
-                dataGridParticipationsJoueur.Columns["LotRemis"].Visible = false;
-                dataGridParticipationsJoueur.Columns["DateHeureInscription"].Visible = false;
-                dataGridParticipationsJoueur.Columns["NomTournoi"].HeaderText = "Tournoi";
-                dataGridParticipationsJoueur.Columns["IdUser"].HeaderText = "Utilisateur";
+                dataGridParticipationsJoueur.Columns["Tournoi"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["NumeroTournoi"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["Rang"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["Evaluation"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["Commentaire"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["ScoreFinal"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["LotRemis"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["DateHeureInscription"]!.Visible = false;
+                dataGridParticipationsJoueur.Columns["NomTournoi"]!.HeaderText = "Tournoi";
+                dataGridParticipationsJoueur.Columns["IdUser"]!.HeaderText = "Utilisateur";
 
-                dataGridParticipationsJoueur.Columns["NomTournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridParticipationsJoueur.Columns["IdUser"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridParticipationsJoueur.Columns["NomTournoi"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dataGridParticipationsJoueur.Columns["IdUser"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
         }
         #endregion
@@ -245,7 +245,6 @@ namespace ApplicationUi
                 Log.Error(ex, "Une erreur inattendue est survenue.");
                 MessageBox.Show("Une erreur inattendue est survenue.");
             }
-
         }
 
         private void ButtonModifier_Click(object sender, EventArgs e)
@@ -293,11 +292,11 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 Dictionary<int, string> map = new()
                 {
-                    {dataGridParticipations.Columns["IdUser"].Index, "IdUser"},
-                    {dataGridParticipations.Columns["NomTournoi"].Index, "NomTournoi"},
-                    {dataGridParticipations.Columns["DateHeureInscription"].Index, "DateHeureInscription"},
-                    {dataGridParticipations.Columns["Evaluation"].Index, "Evaluation"},
-                    {dataGridParticipations.Columns["Rang"].Index, "Rang"},
+                    {dataGridParticipations.Columns["IdUser"]!.Index, "IdUser"},
+                    {dataGridParticipations.Columns["NomTournoi"]!.Index, "NomTournoi"},
+                    {dataGridParticipations.Columns["DateHeureInscription"]!.Index, "DateHeureInscription"},
+                    {dataGridParticipations.Columns["Evaluation"]!.Index, "Evaluation"},
+                    {dataGridParticipations.Columns["Rang"]!.Index, "Rang"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
@@ -331,8 +330,8 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 Dictionary<int, string> map = new()
                 {
-                    {dataGridParticipationsJoueur.Columns["NomTournoi"].Index, "NomTournoi"},
-                    {dataGridParticipationsJoueur.Columns["IdUser"].Index, "IdUser"},
+                    {dataGridParticipationsJoueur.Columns["NomTournoi"]!.Index, "NomTournoi"},
+                    {dataGridParticipationsJoueur.Columns["IdUser"]!.Index, "IdUser"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))

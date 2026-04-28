@@ -65,9 +65,9 @@ namespace Lib_Entities.Entities
         /// Construit et assigne la référence du poste selon le format :
         /// PJ-{3 premiers caractères de l'espace}-{numéro sur 2 chiffres}
         /// </summary>
-        public void SetReference(Espace espace, int numeroPoste)
+        public void SetReference(string nomEspace, int numeroPoste)
         {
-            Reference = $"PJ-{espace.Nom.Substring(0, 3).ToUpper()}-{numeroPoste:D3}";
+            Reference = $"PJ-{nomEspace.Substring(0, 3).ToUpper()}-{numeroPoste:D3}";
         }
     }
 }
