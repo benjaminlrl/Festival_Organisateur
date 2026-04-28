@@ -339,7 +339,8 @@ namespace ApplicationUi
                 // On vérifie d'abord que le rang n'est pas vide
                 if (string.IsNullOrWhiteSpace(textBoxRang.Text))
                 {
-                    MessageBox.Show("Le rang ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Log.Warning("Le rang ne peut pas être vide.");
+                    MessageBox.Show("Le rang ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 // On crée un nouveau lot composant avec les données des champs
@@ -365,7 +366,7 @@ namespace ApplicationUi
             catch (LotException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -390,7 +391,8 @@ namespace ApplicationUi
                 // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
                 if (_lotSelectionnee == null)
                 {
-                    MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Log.Warning("Aucun lot sélectionné.");
+                    MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
@@ -403,7 +405,7 @@ namespace ApplicationUi
             catch (OrganisateurException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -427,7 +429,8 @@ namespace ApplicationUi
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotSelectionnee == null)
             {
-                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucun lot sélectionné.")
+                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -455,7 +458,7 @@ namespace ApplicationUi
             catch (LotException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -478,17 +481,20 @@ namespace ApplicationUi
         {
             if (_lotSelectionnee == null)
             {
-                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucun lot sélectionné.");
+                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (_lotComposantSelectionnee == null)
             {
-                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucun composant sélectionné.");
+                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (_lotComposantSelectionnee.NumeroLot == _lotSelectionnee.Numero)
             {
-                MessageBox.Show("Le Lot selectionné contient déjà ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Le lot sélectionné contient déjà ce composant.");
+                MessageBox.Show("Le Lot sélectionné contient déjà ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -512,17 +518,20 @@ namespace ApplicationUi
         {
             if (_lotSelectionnee == null)
             {
-                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucun lot sélectionné.");
+                MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (_lotComposantDunLotSelectionnee == null)
             {
-                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucun composant sélectionné.");
+                MessageBox.Show("Aucun Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (_lotComposantDunLotSelectionnee.NumeroLot != _lotSelectionnee.Numero)
             {
-                MessageBox.Show("Le Lot selectionné ne contient pas ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Le lot sélectionné ne contient pas ce composant.");
+                MessageBox.Show("Le Lot sélectionné ne contient pas ce composant.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (MessageBox.Show($"Êtes vous sûr de vouloir supprimer {_lotComposantDunLotSelectionnee.Libelle} du lot {_lotSelectionnee.Libelle} ?"

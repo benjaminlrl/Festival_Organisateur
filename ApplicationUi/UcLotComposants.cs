@@ -181,7 +181,8 @@ namespace ApplicationUi
             // On vérifie d'abord que la veleur n'est pas vide
             if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
             {
-                MessageBox.Show("La valeur ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("La valeur ne peut pas être vide.");
+                MessageBox.Show("La valeur ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             try
@@ -211,7 +212,7 @@ namespace ApplicationUi
             catch (LotComposantException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -234,6 +235,7 @@ namespace ApplicationUi
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotComposantSelectionne == null)
             {
+                Log.Warning("Aucun lot composant sélectionné.");
                 MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -288,7 +290,7 @@ namespace ApplicationUi
             catch (LotComposantException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -314,6 +316,7 @@ namespace ApplicationUi
                 // Ne pas pouvoir suppr si aucun lot composant n'est sélectionné
                 if (_lotComposantSelectionne == null)
                 {
+                    Log.Warning("Aucun lot composant sélectionné.");
                     MessageBox.Show("Aucun Lot Composant sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }

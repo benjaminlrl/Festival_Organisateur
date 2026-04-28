@@ -230,7 +230,7 @@ namespace ApplicationUi
             catch (ParticiperException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             }
             catch (DbException ex)
             {
@@ -248,7 +248,8 @@ namespace ApplicationUi
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
-                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucune participation sélectionné.");
+                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -269,7 +270,7 @@ namespace ApplicationUi
             catch (ParticiperException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -290,7 +291,8 @@ namespace ApplicationUi
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
-                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucune participation sélectionné.");
+                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -459,6 +461,7 @@ namespace ApplicationUi
         {
             if (_participerSelectionne == null)
             {
+                Log.Warning("Aucun espace sélectionné.");
                 MessageBox.Show("Aucun espace sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }

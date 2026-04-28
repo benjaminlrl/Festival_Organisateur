@@ -176,6 +176,7 @@ namespace ApplicationUi
             if (comboBoxJeu.SelectedItem is not Jeu jeuSelectionne
                 || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
             {
+                Log.Warning("Aucune plateforme et jeu sélectionné.");
                 MessageBox.Show("Veuillez sélectionner une plateforme et un jeu.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -199,7 +200,7 @@ namespace ApplicationUi
             catch (SoumisVoteException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -216,7 +217,8 @@ namespace ApplicationUi
         {
             if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
             {
-                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucun soumisVote sélectionné.");
+                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -231,7 +233,7 @@ namespace ApplicationUi
             catch (SoumisVoteException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -252,7 +254,8 @@ namespace ApplicationUi
         {
             if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
             {
-                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucun soumisVote sélectionné.");
+                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

@@ -152,7 +152,7 @@ namespace ApplicationUi
             catch (PlateformeException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -169,7 +169,8 @@ namespace ApplicationUi
         {
             if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
             {
-                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucune plateforme sélectionné.");
+                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             _plateformeSelectionee.Libelle = textBoxNom.Text;
@@ -183,7 +184,7 @@ namespace ApplicationUi
             catch (PlateformeException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -206,7 +207,8 @@ namespace ApplicationUi
         {
             if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
             {
-                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log.Warning("Aucune plateforme sélectionné.");
+                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -219,7 +221,7 @@ namespace ApplicationUi
             catch (PlateformeException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
