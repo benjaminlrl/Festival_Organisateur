@@ -75,38 +75,38 @@ namespace ApplicationUi
             if (unFormulaire == "Lots")
             {
                 DesactiverTrieAutomatique(dataGridLots);
-                dataGridLots.Columns["Numero"].DisplayIndex = 0;
-                dataGridLots.Columns["LotComposant"].Visible = false;
-                dataGridLots.Columns["NumeroTournoi"].Visible = false;
-                dataGridLots.Columns["Tournoi"].Visible = false;
-                dataGridLots.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["ValeurTotale"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["RangAttribution"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["NomTournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["NomTournoi"].HeaderText = "Tournoi associé";
+                dataGridLots.Columns["Numero"]!.DisplayIndex = 0;
+                dataGridLots.Columns["LotComposant"]!.Visible = false;
+                dataGridLots.Columns["NumeroTournoi"]!.Visible = false;
+                dataGridLots.Columns["Tournoi"]!.Visible = false;
+                dataGridLots.Columns["Numero"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["Libelle"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["ValeurTotale"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["RangAttribution"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["NomTournoi"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["NomTournoi"]!.HeaderText = "Tournoi associé";
             }
             else if (unFormulaire == "LotComposants")
             {
                 DesactiverTrieAutomatique(dataGridLotComposants);
-                dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
-                dataGridLotComposants.Columns["Lot"].Visible = false;
-                dataGridLotComposants.Columns["NumeroLot"].Visible = false;
-                dataGridLotComposants.Columns["Valeur"].Visible = false;
-                dataGridLotComposants.Columns["Description"].Visible = false;
-                dataGridLotComposants.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLotComposants.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLotComposants.Columns["Numero"]!.DisplayIndex = 0;
+                dataGridLotComposants.Columns["Lot"]!.Visible = false;
+                dataGridLotComposants.Columns["NumeroLot"]!.Visible = false;
+                dataGridLotComposants.Columns["Valeur"]!.Visible = false;
+                dataGridLotComposants.Columns["Description"]!.Visible = false;
+                dataGridLotComposants.Columns["Numero"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLotComposants.Columns["Libelle"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             else if (unFormulaire == "LotComposantsDunLot")
             {
                 DesactiverTrieAutomatique(dataGridLotComposantsDunLot);
-                dataGridLotComposantsDunLot.Columns["Numero"].DisplayIndex = 0;
-                dataGridLotComposantsDunLot.Columns["Lot"].Visible = false;
-                dataGridLotComposantsDunLot.Columns["NumeroLot"].Visible = false;
-                dataGridLotComposantsDunLot.Columns["Valeur"].Visible = false;
-                dataGridLotComposantsDunLot.Columns["Description"].Visible = false;
-                dataGridLotComposantsDunLot.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLotComposantsDunLot.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLotComposantsDunLot.Columns["Numero"]!.DisplayIndex = 0;
+                dataGridLotComposantsDunLot.Columns["Lot"]!.Visible = false;
+                dataGridLotComposantsDunLot.Columns["NumeroLot"]!.Visible = false;
+                dataGridLotComposantsDunLot.Columns["Valeur"]!.Visible = false;
+                dataGridLotComposantsDunLot.Columns["Description"]!.Visible = false;
+                dataGridLotComposantsDunLot.Columns["Numero"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLotComposantsDunLot.Columns["Libelle"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
         }
 
@@ -578,11 +578,11 @@ namespace ApplicationUi
                 // ordonner sur les champs numero, libelle, valeur totale, rang attribution et est attribue
                 Dictionary<int, string> map = new()
                 {
-                    { dataGridLots.Columns["Numero"].Index, "Numero"},
-                    { dataGridLots.Columns["Libelle"].Index, "Libelle" },
-                    { dataGridLots.Columns["ValeurTotale"].Index, "ValeurTotale" },
-                    { dataGridLots.Columns["RangAttribution"].Index, "RangAttribution" },
-                    { dataGridLots.Columns["EstAttribue"].Index, "EstAttribue" }
+                    { dataGridLots.Columns["Numero"]!.Index, "Numero"},
+                    { dataGridLots.Columns["Libelle"]!.Index, "Libelle" },
+                    { dataGridLots.Columns["ValeurTotale"]!.Index, "ValeurTotale" },
+                    { dataGridLots.Columns["RangAttribution"]!.Index, "RangAttribution" },
+                    { dataGridLots.Columns["EstAttribue"]!.Index, "EstAttribue" }
                 };
 
                 // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
@@ -629,8 +629,8 @@ namespace ApplicationUi
                 // ordonner sur les champs numero et libelle
                 Dictionary<int, string> map = new()
                 {
-                    { dataGridLotComposants.Columns["Numero"].Index, "Numero" },
-                    { dataGridLotComposants.Columns["Libelle"].Index, "Libelle" }
+                    { dataGridLotComposants.Columns["Numero"]!.Index, "Numero" },
+                    { dataGridLotComposants.Columns["Libelle"]!.Index, "Libelle" }
                 };
 
                 // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
@@ -670,8 +670,8 @@ namespace ApplicationUi
                 // ordonner sur les champs numero et libelle
                 Dictionary<int, string> map = new()
                 {
-                    { dataGridLotComposantsDunLot.Columns["Numero"].Index, "Numero" },
-                    { dataGridLotComposantsDunLot.Columns["Libelle"].Index, "Libelle"}
+                    { dataGridLotComposantsDunLot.Columns["Numero"]!.Index, "Numero" },
+                    { dataGridLotComposantsDunLot.Columns["Libelle"]!.Index, "Libelle"}
                 };
                 // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
                 // sinon récupérer le nom de la propriété associée à la colonne cliquée

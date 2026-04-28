@@ -88,18 +88,18 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridJeux);
 
-            dataGridJeux.Columns["Titre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridJeux.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridJeux.Columns["Pegi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-            dataGridJeux.Columns["AnneeSortie"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridJeux.Columns["Titre"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeux.Columns["Description"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeux.Columns["Pegi"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridJeux.Columns["AnneeSortie"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
 
-            dataGridJeux.Columns["IdJeu"].Visible = false;
-            dataGridJeux.Columns["Tournois"].Visible = false;
-            dataGridJeux.Columns["Plateformes"].Visible = false;
-            dataGridJeux.Columns["DateSortie"].Visible = false;
-            dataGridJeux.Columns["Editeur"].Visible = false;
+            dataGridJeux.Columns["IdJeu"]!.Visible = false;
+            dataGridJeux.Columns["Tournois"]!.Visible = false;
+            dataGridJeux.Columns["Plateformes"]!.Visible = false;
+            dataGridJeux.Columns["DateSortie"]!.Visible = false;
+            dataGridJeux.Columns["Editeur"]!.Visible = false;
 
-            dataGridJeux.Columns["AnneeSortie"].HeaderText = "Sortie";
+            dataGridJeux.Columns["AnneeSortie"]!.HeaderText = "Sortie";
         }
 
         #endregion
@@ -169,12 +169,12 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 Dictionary<int, string> map = new()
                 {
-                    {dataGridJeux.Columns["Titre"].Index, "Titre"},
-                    {dataGridJeux.Columns["Description"].Index, "Description"},
-                    {dataGridJeux.Columns["Pegi"].Index, "Pegi"},
-                    {dataGridJeux.Columns["AnneeSortie"].Index, "AnneeSortie"},
-                    {dataGridJeux.Columns["DateSortie"].Index, "DateSortie"},
-                    {dataGridJeux.Columns["Editeur"].Index, "Editeur"},
+                    {dataGridJeux.Columns["Titre"]!.Index, "Titre"},
+                    {dataGridJeux.Columns["Description"]!.Index, "Description"},
+                    {dataGridJeux.Columns["Pegi"]!.Index, "Pegi"},
+                    {dataGridJeux.Columns["AnneeSortie"]!.Index, "AnneeSortie"},
+                    {dataGridJeux.Columns["DateSortie"]!.Index, "DateSortie"},
+                    {dataGridJeux.Columns["Editeur"]!.Index, "Editeur"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))

@@ -163,7 +163,7 @@
             dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridJeux.Size = new Size(337, 84);
             dataGridJeux.TabIndex = 9;
-            dataGridJeux.CellContentDoubleClick += dataGridJeux_CellContentDoubleClick;
+            dataGridJeux.CellContentDoubleClick += DataGridJeux_CellContentDoubleClick;
             // 
             // labelJeux
             // 

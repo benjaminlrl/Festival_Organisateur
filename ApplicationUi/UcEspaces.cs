@@ -176,30 +176,30 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridEspaces);
 
-            dataGridEspaces.Columns["idEspace"].Visible = false;
-            dataGridEspaces.Columns["Tournois"].Visible = false;
-            dataGridEspaces.Columns["PostesJeu"].Visible = false;
-            dataGridEspaces.Columns["Capacitemaxi"].Visible = false;
-            dataGridEspaces.Columns["Superficie"].Visible = false;
+            dataGridEspaces.Columns["idEspace"]!.Visible = false;
+            dataGridEspaces.Columns["Tournois"]!.Visible = false;
+            dataGridEspaces.Columns["PostesJeu"]!.Visible = false;
+            dataGridEspaces.Columns["Capacitemaxi"]!.Visible = false;
+            dataGridEspaces.Columns["Superficie"]!.Visible = false;
 
-            dataGridEspaces.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridEspaces.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridEspaces.Columns["Nom"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridEspaces.Columns["Description"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void MEP_DataGridPostesJeu()
         {
             DesactiverTrieAutomatique(dataGridPostesJeu);
 
-            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
-            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
-            dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
-            dataGridPostesJeu.Columns["Espace"].Visible = false;
-            dataGridPostesJeu.Columns["NomEspace"].Visible = false;
+            dataGridPostesJeu.Columns["NumeroPoste"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["NomPlateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"]!.Visible = false;
+            dataGridPostesJeu.Columns["Espace"]!.Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"]!.Visible = false;
 
-            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridPostesJeu.Columns["Fonctionnel"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Reference"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridPostesJeu.Columns["Fonctionnel"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void MEP_DataGridTournois()
@@ -207,25 +207,25 @@ namespace ApplicationUi
             DesactiverTrieAutomatique(dataGridTournois);
 
             dataGridTournois.Visible = true;
-            dataGridTournois.Columns["NumeroTournoi"].Visible = false;
-            dataGridTournois.Columns["IdEspace"].Visible = false;
-            dataGridTournois.Columns["Espace"].Visible = false;
-            dataGridTournois.Columns["IdJeu"].Visible = false;
-            dataGridTournois.Columns["Jeu"].Visible = false;
-            dataGridTournois.Columns["NbParticipants"].Visible = false;
-            dataGridTournois.Columns["NomEspace"].Visible = false;
-            dataGridTournois.Columns["TitreJeu"].Visible = false;
-            dataGridTournois.Columns["Statut"].Visible = false;
-            dataGridTournois.Columns["DureePrevue"].Visible = false;
-            dataGridTournois.Columns["Lot"].Visible = false;
-            dataGridTournois.Columns["Inscriptions"].Visible = false;
+            dataGridTournois.Columns["NumeroTournoi"]!.Visible = false;
+            dataGridTournois.Columns["IdEspace"]!.Visible = false;
+            dataGridTournois.Columns["Espace"]!.Visible = false;
+            dataGridTournois.Columns["IdJeu"]!.Visible = false;
+            dataGridTournois.Columns["Jeu"]!.Visible = false;
+            dataGridTournois.Columns["NbParticipants"]!.Visible = false;
+            dataGridTournois.Columns["NomEspace"]!.Visible = false;
+            dataGridTournois.Columns["TitreJeu"]!.Visible = false;
+            dataGridTournois.Columns["Statut"]!.Visible = false;
+            dataGridTournois.Columns["DureePrevue"]!.Visible = false;
+            dataGridTournois.Columns["Lot"]!.Visible = false;
+            dataGridTournois.Columns["Inscriptions"]!.Visible = false;
 
-            dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["DateHeure"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["Nom"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
-            dataGridTournois.Columns["DateHeure"].HeaderText = "Début";
+            dataGridTournois.Columns["DateHeure"]!.HeaderText = "Début";
 
-            dataGridTournois.Columns["Nom"].DisplayIndex = 1;
+            dataGridTournois.Columns["Nom"]!.DisplayIndex = 1;
         }
 
         #endregion  
@@ -367,10 +367,10 @@ namespace ApplicationUi
                 // Association des index avec les propriétés de l'objet
                 Dictionary<int, string> map = new()
                 {
-                    { dataGridEspaces.Columns["Nom"].Index,          "Nom" },
-                    { dataGridEspaces.Columns["Description"].Index,  "Description" },
-                    { dataGridEspaces.Columns["Superficie"].Index,   "Superficie" },
-                    { dataGridEspaces.Columns["CapaciteMaxi"].Index, "CapaciteMaxi" },
+                    { dataGridEspaces.Columns["Nom"]!.Index,          "Nom" },
+                    { dataGridEspaces.Columns["Description"]!.Index,  "Description" },
+                    { dataGridEspaces.Columns["Superficie"]!.Index,   "Superficie" },
+                    { dataGridEspaces.Columns["CapaciteMaxi"]!.Index, "CapaciteMaxi" },
                 };
                 // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
                 // sinon récupérer le nom de la propriété associée à la colonne cliquée
@@ -440,8 +440,8 @@ namespace ApplicationUi
 
             labelStatutTournoi.Visible = _espaceSelectionnee != null;
 
-            List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee.IdEspace);
-            List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee.IdEspace);
+            List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee!.IdEspace);
+            List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee!.IdEspace);
 
             if (enCours.Count > 0)
             {

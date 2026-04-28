@@ -124,21 +124,21 @@ namespace ApplicationUi
             DesactiverTrieAutomatique(dataGridSoumisVote);
 
 
-            dataGridSoumisVote.Columns["LibellePlateforme"].DisplayIndex = 1;
-            dataGridSoumisVote.Columns["TitreJeu"].DisplayIndex = 2;
-            dataGridSoumisVote.Columns["DateDebutVote"].DisplayIndex = 3;
-            dataGridSoumisVote.Columns["DateFinVote"].DisplayIndex = 4;
+            dataGridSoumisVote.Columns["LibellePlateforme"]!.DisplayIndex = 1;
+            dataGridSoumisVote.Columns["TitreJeu"]!.DisplayIndex = 2;
+            dataGridSoumisVote.Columns["DateDebutVote"]!.DisplayIndex = 3;
+            dataGridSoumisVote.Columns["DateFinVote"]!.DisplayIndex = 4;
 
-            dataGridSoumisVote.Columns["IdJeu"].Visible = false;
-            dataGridSoumisVote.Columns["IdPlateforme"].Visible = false;
-            dataGridSoumisVote.Columns["Plateforme"].Visible = false;
-            dataGridSoumisVote.Columns["Jeu"].Visible = false;
-            dataGridSoumisVote.Columns["TauxVoteJeu"].Visible = false;
+            dataGridSoumisVote.Columns["IdJeu"]!.Visible = false;
+            dataGridSoumisVote.Columns["IdPlateforme"]!.Visible = false;
+            dataGridSoumisVote.Columns["Plateforme"]!.Visible = false;
+            dataGridSoumisVote.Columns["Jeu"]!.Visible = false;
+            dataGridSoumisVote.Columns["TauxVoteJeu"]!.Visible = false;
 
-            dataGridSoumisVote.Columns["LibellePlateforme"].HeaderText = "Plateforme";
-            dataGridSoumisVote.Columns["TitreJeu"].HeaderText = "Jeu";
-            dataGridSoumisVote.Columns["DateFinVote"].HeaderText = "Date butoire des votes";
-            dataGridSoumisVote.Columns["DateDebutVote"].HeaderText = "Date d'ouverture des votes";
+            dataGridSoumisVote.Columns["LibellePlateforme"]!.HeaderText = "Plateforme";
+            dataGridSoumisVote.Columns["TitreJeu"]!.HeaderText = "Jeu";
+            dataGridSoumisVote.Columns["DateFinVote"]!.HeaderText = "Date butoire des votes";
+            dataGridSoumisVote.Columns["DateDebutVote"]!.HeaderText = "Date d'ouverture des votes";
         }
 
         private void MEP_DataGridClassement()
@@ -146,23 +146,23 @@ namespace ApplicationUi
             // Après avoir lié la DataSource, définir le SortMode de chaque colonne
             DesactiverTrieAutomatique(dataGridClassement);
 
-            dataGridClassement.Columns["NbVotes"].DisplayIndex = 2; // A placer en premier à cause des conflits de propriétés calculés
-            dataGridClassement.Columns["TitreJeu"].DisplayIndex = 0;
-            dataGridClassement.Columns["LibellePlateforme"].DisplayIndex = 1;
+            dataGridClassement.Columns["NbVotes"]!.DisplayIndex = 2; // A placer en premier à cause des conflits de propriétés calculés
+            dataGridClassement.Columns["TitreJeu"]!.DisplayIndex = 0;
+            dataGridClassement.Columns["LibellePlateforme"]!.DisplayIndex = 1;
 
-            dataGridClassement.Columns["IdPlateforme"].Visible = false;
-            dataGridClassement.Columns["IdUser"].Visible = false;
-            dataGridClassement.Columns["IdJeu"].Visible = false;
-            dataGridClassement.Columns["Plateforme"].Visible = false;
-            dataGridClassement.Columns["Jeu"].Visible = false;
-            dataGridClassement.Columns["DateVote"].Visible = false;
+            dataGridClassement.Columns["IdPlateforme"]!.Visible = false;
+            dataGridClassement.Columns["IdUser"]!.Visible = false;
+            dataGridClassement.Columns["IdJeu"]!.Visible = false;
+            dataGridClassement.Columns["Plateforme"]!.Visible = false;
+            dataGridClassement.Columns["Jeu"]!.Visible = false;
+            dataGridClassement.Columns["DateVote"]!.Visible = false;
 
-            dataGridClassement.Columns["TitreJeu"].HeaderText = "Jeu";
-            dataGridClassement.Columns["LibellePlateforme"].HeaderText = "Plateforme";
-            dataGridClassement.Columns["NbVotes"].HeaderText = "Nombre de votes";
+            dataGridClassement.Columns["TitreJeu"]!.HeaderText = "Jeu";
+            dataGridClassement.Columns["LibellePlateforme"]!.HeaderText = "Plateforme";
+            dataGridClassement.Columns["NbVotes"]!.HeaderText = "Nombre de votes";
 
-            dataGridClassement.Columns["TitreJeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridClassement.Columns["LibellePlateforme"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridClassement.Columns["TitreJeu"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridClassement.Columns["LibellePlateforme"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         #endregion
@@ -289,9 +289,9 @@ namespace ApplicationUi
             // à des fonctions de sélection de clé
             Dictionary<int, string> map = new()
                 {
-                    {dataGridClassement.Columns["NbVotes"].Index, "NbVotes"},
-                    {dataGridClassement.Columns["LibellePlateforme"].Index, "LibellePlateforme"},
-                    {dataGridClassement.Columns["TitreJeu"].Index, "TitreJeu"},
+                    {dataGridClassement.Columns["NbVotes"]!.Index, "NbVotes"},
+                    {dataGridClassement.Columns["LibellePlateforme"]!.Index, "LibellePlateforme"},
+                    {dataGridClassement.Columns["TitreJeu"]!.Index, "TitreJeu"},
                 };
 
             if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
@@ -321,10 +321,10 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 Dictionary<int, string> map = new()
                 {
-                    {dataGridSoumisVote.Columns["DateDebutVote"].Index, "DateDebutVote"},
-                    {dataGridSoumisVote.Columns["DateFinVote"].Index, "DateFinVote"},
-                    {dataGridSoumisVote.Columns["TitreJeu"].Index, "TitreJeu"},
-                    {dataGridSoumisVote.Columns["LibellePlateforme"].Index, "LibellePlateforme"},
+                    {dataGridSoumisVote.Columns["DateDebutVote"]!.Index, "DateDebutVote"},
+                    {dataGridSoumisVote.Columns["DateFinVote"]!.Index, "DateFinVote"},
+                    {dataGridSoumisVote.Columns["TitreJeu"]!.Index, "TitreJeu"},
+                    {dataGridSoumisVote.Columns["LibellePlateforme"]!.Index, "LibellePlateforme"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
