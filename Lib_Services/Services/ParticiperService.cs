@@ -56,7 +56,7 @@ namespace Lib_Services.Services
             {
                 // tri par la colonne spécifiée, en fonction de l'ordre demandé
                 "NumeroTournoi" => ordre == "ASC" ? query.OrderBy(p => p.NumeroTournoi) : query.OrderByDescending(p => p.NumeroTournoi),
-                "NomTournoi" => ordre == "ASC" ? query.OrderBy(p => p.Tournoi.Nom) : query.OrderByDescending(p => p.Tournoi.Nom),
+                "NomTournoi" => ordre == "ASC" ? query.OrderBy(p => p.Tournoi!.Nom) : query.OrderByDescending(p => p.Tournoi!.Nom),
                 "IdUser" => ordre == "ASC" ? query.OrderBy(p => p.IdUser) : query.OrderByDescending(p => p.IdUser),
                 "Evaluation" => ordre == "ASC" ? query.OrderBy(p => p.Evaluation) : query.OrderByDescending(p => p.Evaluation),
                 "ScoreFinal" => ordre == "ASC" ? query.OrderBy(p => p.ScoreFinal) : query.OrderByDescending(p => p.ScoreFinal),
@@ -112,20 +112,6 @@ namespace Lib_Services.Services
             };
 
             return query.ToList();
-        }
-
-        /// <summary>
-        /// Permet d'obtenir la liste des id des participants inscrits à au moins un tournoi.
-        /// </summary>
-        /// <returns>Liste des identifiants des participants.</returns>
-        public List<object> ListerIdsParticipants()
-        {
-            return _context.Participer
-                .Select(p => new {
-                    IdUser = p.IdUser,
-                })
-                .Distinct()
-                .ToList<object>();
         }
 
         /// <summary>

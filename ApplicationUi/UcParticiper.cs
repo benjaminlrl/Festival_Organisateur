@@ -84,7 +84,6 @@ namespace ApplicationUi
             dataGridParticipations.DataSource = null;
             dataGridParticipations.DataSource = _serviceParticiper.Lister(filtre);
             MEP_DataGridParticipations();
-            ChargerStatistiques();
         }
 
         /// <summary>
@@ -102,7 +101,6 @@ namespace ApplicationUi
                 dataGridParticipationsJoueur.DataSource = _serviceParticiper.ListerParJoueur(_participationSelectionnee.IdUser, filtre);
 
             MEP_DataGridParticipationsJoueur();
-            ChargerStatistiques();
         }
 
         /// <summary>
@@ -137,32 +135,6 @@ namespace ApplicationUi
             comboBoxUtilisateur.ValueMember = "IdUser";
         }
 
-        /// <summary>
-        /// Permet de charger les statistiques liées aux postes de jeu, notamment le nombre total de postes 
-        /// et le nombre de postes fonctionnels.
-        /// Les statistiques sont affichées dans des labels dédiés, 
-        /// avec une indication visuelle (couleur) pour les postes fonctionnels.
-        /// Cette méthode est appelée après le chargement des postes pour garantir 
-        /// que les statistiques sont à jour.
-        /// </summary>
-        private void ChargerStatistiques()
-        {
-            //// Un espace libre est un espae qui n'a pas de tournoi associé
-            //int nbPostesJeuFonctionnels = _serviceParticiper.Lister("").Count(e => e.Fonctionnel == true);
-
-            //labelStatPostesJeuTotal.Text = $"{_serviceParticiper.Lister("").Count()}";
-
-            //if (nbPostesJeuFonctionnels == 0)
-            //{
-            //    labelStatPostesJeuFonctionnels.Text = "Aucun poste fonctionnel";
-            //    labelStatPostesJeuFonctionnels.ForeColor = Color.Red;
-            //}
-            //else
-            //{
-            //    labelStatPostesJeuFonctionnels.Text = $"Fonctionnels : {nbPostesJeuFonctionnels}";
-            //    labelStatPostesJeuFonctionnels.ForeColor = Color.Green;
-            //}
-        }
         private void MEP_DataGridParticipations()
         {
             DesactiverTrieAutomatique(dataGridParticipations);
@@ -219,8 +191,8 @@ namespace ApplicationUi
                 Commentaire = textBoxCommentaire.Text,
                 Evaluation = trackBarEvaluation.Value,
                 DateHeureInscription = DateTime.Now,
-                IdUser = ((Joueur)comboBoxUtilisateur.SelectedItem).IdUser,
-                NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi,
+                IdUser = ((Joueur)comboBoxUtilisateur.SelectedItem!).IdUser,
+                NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi)!.NumeroTournoi,
                 LotRemis = lotRemisSelectionne
             };
 
@@ -259,8 +231,8 @@ namespace ApplicationUi
             _participationSelectionnee.ScoreFinal = (int)numericUpDownScoreFinal.Value;
             _participationSelectionnee.Evaluation = trackBarEvaluation.Value;
             _participationSelectionnee.Commentaire = textBoxCommentaire.Text;
-            _participationSelectionnee.IdUser = ((Joueur)comboBoxUtilisateur.SelectedItem).IdUser;
-            _participationSelectionnee.NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi).NumeroTournoi;
+            _participationSelectionnee.IdUser = ((Joueur)comboBoxUtilisateur.SelectedItem!).IdUser;
+            _participationSelectionnee.NumeroTournoi = (comboBoxTournoi.SelectedItem as Tournoi)!.NumeroTournoi;
             _participationSelectionnee.LotRemis = lotRemisSelectionne;
 
             ModifierParticipation(_participationSelectionnee);
@@ -494,7 +466,7 @@ namespace ApplicationUi
                 return;
             }
 
-            numericUpDownRang.Maximum = _participationSelectionnee.Tournoi.NbParticipants;
+            numericUpDownRang.Maximum = _participationSelectionnee.Tournoi!.NbParticipants;
             numericUpDownRang.Value = _participationSelectionnee.Rang;
             trackBarEvaluation.Value = _participationSelectionnee.Evaluation;
             numericUpDownScoreFinal.Value = _participationSelectionnee.ScoreFinal;

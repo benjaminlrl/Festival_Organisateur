@@ -441,7 +441,7 @@
             dataGridJeuSoumisVote.Size = new Size(1312, 352);
             dataGridJeuSoumisVote.TabIndex = 6;
             dataGridJeuSoumisVote.CellClick += DataGridJeuSoumisVote_CellClick;
-            dataGridJeuSoumisVote.CellContentDoubleClick += dataGridJeuSoumisVote_CellContentDoubleClick;
+            dataGridJeuSoumisVote.CellContentDoubleClick += DataGridJeuSoumisVote_CellContentDoubleClick;
             // 
             // UcJeuxSoumisVote
             // 

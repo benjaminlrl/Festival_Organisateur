@@ -53,7 +53,7 @@ namespace ApplicationUi
             {
                 btnLots.Visible = false;
             }
-            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Consulter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcJeuxSoumisVote, "Consulter") == false)
             {
                 btnVoter.Visible = false;
             }
@@ -168,6 +168,12 @@ namespace ApplicationUi
                 {
                     // Récupère le premier poste de jeu de la plateforme 
                     LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
+                };
+
+                uc.NaviguerVersEspaces += (espace) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcEspaces(_organisateurConnecte, espace), "Gestion des espaces");
                 };
 
                 LoadUserControl(uc, "Gestion des postes de jeu");

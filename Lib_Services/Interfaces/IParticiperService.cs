@@ -38,11 +38,6 @@ namespace Lib_Services.Interfaces
         public List<Participer> ListerParJoueur(int idUser, string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
-        /// Permet d'obtenir la liste des id des participants inscrits à au moins un tournoi.
-        /// </summary>
-        /// <returns>Liste des identifiants des participants.</returns>
-        List<object> ListerIdsParticipants();
-        /// <summary>
         /// Récupère un Participant par son id et son numéro de tournoi.
         /// </summary>
         /// <param name="Login">Login de l'Participer cherché.</param>

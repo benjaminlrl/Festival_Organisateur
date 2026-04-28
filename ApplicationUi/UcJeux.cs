@@ -113,7 +113,7 @@ namespace ApplicationUi
                 Titre = textBoxTitre.Text,
                 Description = textBoxDescription.Text,
                 Editeur = textBoxEditeur.Text,
-                Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue,
+                Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue!,
                 Plateformes = checkedListBoxPlateforme.CheckedItems
                                   .Cast<Plateforme>()
                                   .ToList(),
@@ -133,7 +133,7 @@ namespace ApplicationUi
             _jeuSelectionne.Titre = textBoxTitre.Text;
             _jeuSelectionne.Description = textBoxDescription.Text; ;
             _jeuSelectionne.Editeur = textBoxEditeur.Text;
-            _jeuSelectionne.Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue;
+            _jeuSelectionne.Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue!;
             _jeuSelectionne.Plateformes = checkedListBoxPlateforme.CheckedItems
                           .Cast<Plateforme>()
                           .ToList();
