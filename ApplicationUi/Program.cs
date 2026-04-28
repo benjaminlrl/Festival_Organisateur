@@ -82,46 +82,7 @@ namespace ApplicationUi
                 }
 
                 // -------------------------------------------------------
-                // 2. LOTS  (pas de FK sortante)
-                // -------------------------------------------------------
-                if (!context.Lots.Any())
-                {
-                    context.Lots.AddRange(new List<Lot>
-                    {
-                        new Lot { Libelle = "Lot de jeux vidéo",    RangAttribution = 1 },
-                        new Lot { Libelle = "Lot de casque",        RangAttribution = 2 },
-                        new Lot { Libelle = "Lot de tapis de souris", RangAttribution = 3 },
-                        new Lot { Libelle = "Lot de cartes cadeaux", RangAttribution = 1 },
-                        new Lot { Libelle = "Lot de clavier",       RangAttribution = 2 },
-                        new Lot { Libelle = "Lot de manettes",      RangAttribution = 3 },
-                    });
-                    context.SaveChanges();
-                }
-
-                // -------------------------------------------------------
-                // 3. LOT COMPOSANTS  (pas de FK sortante)
-                // -------------------------------------------------------
-                if (!context.LotComposants.Any())
-                {
-                    context.LotComposants.AddRange(new List<LotComposant>
-                    {
-                        new LotComposant { Libelle = "PS4",                      Description = "Console de jeu de type Playstation",   Valeur = 250 },
-                        new LotComposant { Libelle = "PS5",                      Description = "Console de jeu de type Playstation",   Valeur = 350 },
-                        new LotComposant { Libelle = "Xbox One",                 Description = "Console de jeu de type Xbox",          Valeur = 325 },
-                        new LotComposant { Libelle = "Clavier Razer Ornata V2",  Description = "Clavier gamer de marque Razer",        Valeur = 80  },
-                        new LotComposant { Libelle = "Clavier Klim",             Description = "Clavier gamer de marque Klim",         Valeur = 30  },
-                        new LotComposant { Libelle = "Souris Razer Naga Trinity",Description = "Souris gamer de marque Razer",         Valeur = 70  },
-                        new LotComposant { Libelle = "Souris Logitech G Pro X",  Description = "Souris gamer de marque Logitech",      Valeur = 75  },
-                        new LotComposant { Libelle = "Manette PS4",              Description = "Manette de marque Playstation",        Valeur = 40  },
-                        new LotComposant { Libelle = "Manette Xbox",             Description = "Manette de marque Xbox",               Valeur = 50  },
-                        new LotComposant { Libelle = "Casque Razer Kraken",      Description = "Casque gamer de marque Razer",         Valeur = 60  },
-                        new LotComposant { Libelle = "Casque HyperX Cloud 2",    Description = "Casque gamer de marque HyperX",        Valeur = 54  },
-                    });
-                    context.SaveChanges();
-                }
-
-                // -------------------------------------------------------
-                // 4. ESPACES  (pas de FK sortante)
+                // 2. ESPACES  (pas de FK sortante)
                 // -------------------------------------------------------
                 if (!context.Espaces.Any())
                 {
@@ -154,7 +115,7 @@ namespace ApplicationUi
                 }
 
                 // -------------------------------------------------------
-                // 5. PLATEFORMES  (pas de FK sortante)
+                // 3. PLATEFORMES  (pas de FK sortante)
                 // -------------------------------------------------------
                 if (!context.Plateformes.Any())
                 {
@@ -184,7 +145,7 @@ namespace ApplicationUi
                 }
 
                 // -------------------------------------------------------
-                // 6. POSTES JEU  (FK → Espace, FK → Plateforme)
+                // 4. POSTES JEU  (FK → Espace, FK → Plateforme)
                 // -------------------------------------------------------
                 if (!context.PostesJeu.Any())
                 {
@@ -266,7 +227,7 @@ namespace ApplicationUi
                 }
 
                 // -------------------------------------------------------
-                // 7. ROLES  (pas de FK sortante)
+                // 5. ROLES  (pas de FK sortante)
                 // -------------------------------------------------------
                 if (!context.Roles.Any())
                 {
@@ -277,7 +238,7 @@ namespace ApplicationUi
                 }
 
                 // -------------------------------------------------------
-                // 8. ORGANISATEURS  (FK → Role)
+                // 6. ORGANISATEURS  (FK → Role)
                 // -------------------------------------------------------
                 if (!context.Organisateurs.Any())
                 {
@@ -312,7 +273,7 @@ namespace ApplicationUi
                 }
 
                 // -------------------------------------------------------
-                // 9. JEUX  (plus de lien direct vers Plateforme)
+                // 7. JEUX  (plus de lien direct vers Plateforme)
                 // -------------------------------------------------------
                 if (!context.Jeux.Any())
                 {
@@ -446,7 +407,7 @@ namespace ApplicationUi
                 }
 
                 // -------------------------------------------------------
-                // 10. TOURNOIS  (FK → Espace, FK → Jeu)
+                // 8. TOURNOIS  (FK → Espace, FK → Jeu)
                 // -------------------------------------------------------
                 if (!context.Tournois.Any())
                 {
@@ -463,6 +424,45 @@ namespace ApplicationUi
                     tournoisService.Creer(new Tournoi { Nom = "Tournoi Valorant Invitatio", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 10, DureePrevue = 25, Statut = "En cours", IdEspace = E("Esport Arena").IdEspace, IdJeu = J("Valorant").IdJeu });
                     tournoisService.Creer(new Tournoi { Nom = "Tournoi Elden Ring No Hit", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 8, DureePrevue = 30, Statut = "En cours", IdEspace = E("PlayStation").IdEspace, IdJeu = J("Elden Ring").IdJeu });
                     tournoisService.Creer(new Tournoi { Nom = "Tournoi Minecraft Build", DateHeure = new DateTime(2026, 05, 24, 11, 0, 0), NbParticipants = 12, DureePrevue = 50, Statut = "Planifié", IdEspace = E("X Box").IdEspace, IdJeu = J("Minecraft").IdJeu });
+                }
+
+                // -------------------------------------------------------
+                // 9. LOTS  (FK → Tournoi)
+                // -------------------------------------------------------
+                if (!context.Lots.Any())
+                {
+                    context.Lots.AddRange(new List<Lot>
+                    {
+                        new Lot { Libelle = "Lot de jeux vidéo",    RangAttribution = 1, NumeroTournoi = 1, ValeurTotale = 925 },
+                        new Lot { Libelle = "Lot de casque",        RangAttribution = 2, NumeroTournoi = 2, ValeurTotale = 255 },
+                        new Lot { Libelle = "Lot de tapis de souris", RangAttribution = 3, NumeroTournoi = 3, ValeurTotale = 90 },
+                        new Lot { Libelle = "Lot de cartes cadeaux", RangAttribution = 1, NumeroTournoi = 4, ValeurTotale = 114 },
+                        new Lot { Libelle = "Lot de clavier",       RangAttribution = 2, NumeroTournoi = 5, ValeurTotale = 0 },
+                        new Lot { Libelle = "Lot de manettes",      RangAttribution = 3, NumeroTournoi = 6, ValeurTotale = 0 },
+                    });
+                    context.SaveChanges();
+                }
+
+                // -------------------------------------------------------
+                // 10. LOT COMPOSANTS  (FK → Lot)
+                // -------------------------------------------------------
+                if (!context.LotComposants.Any())
+                {
+                    context.LotComposants.AddRange(new List<LotComposant>
+                    {
+                        new LotComposant { Libelle = "PS4",                      Description = "Console de jeu de type Playstation",   Valeur = 250, NumeroLot = 1 },
+                        new LotComposant { Libelle = "PS5",                      Description = "Console de jeu de type Playstation",   Valeur = 350, NumeroLot = 1 },
+                        new LotComposant { Libelle = "Xbox One",                 Description = "Console de jeu de type Xbox",          Valeur = 325, NumeroLot = 1 },
+                        new LotComposant { Libelle = "Clavier Razer Ornata V2",  Description = "Clavier gamer de marque Razer",        Valeur = 80,  NumeroLot = 2 },
+                        new LotComposant { Libelle = "Clavier Klim",             Description = "Clavier gamer de marque Klim",         Valeur = 30,  NumeroLot = 2 },
+                        new LotComposant { Libelle = "Souris Razer Naga Trinity",Description = "Souris gamer de marque Razer",         Valeur = 70,  NumeroLot = 2 },
+                        new LotComposant { Libelle = "Souris Logitech G Pro X",  Description = "Souris gamer de marque Logitech",      Valeur = 75,  NumeroLot = 2 },
+                        new LotComposant { Libelle = "Manette PS4",              Description = "Manette de marque Playstation",        Valeur = 40,  NumeroLot = 3 },
+                        new LotComposant { Libelle = "Manette Xbox",             Description = "Manette de marque Xbox",               Valeur = 50,  NumeroLot = 3 },
+                        new LotComposant { Libelle = "Casque Razer Kraken",      Description = "Casque gamer de marque Razer",         Valeur = 60,  NumeroLot = 4 },
+                        new LotComposant { Libelle = "Casque HyperX Cloud 2",    Description = "Casque gamer de marque HyperX",        Valeur = 54,  NumeroLot = 4 },
+                    });
+                    context.SaveChanges();
                 }
 
                 // -------------------------------------------------------
