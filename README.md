@@ -41,7 +41,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
     - [Plateforme](#plateforme)
     - [Poste de jeu](#poste-de-jeu)
     - [Tournoi](#tournoi)
-    - [JeuSoumisVote](#soumisvotre)
+    - [JeuSoumisVote](#jeusoumisvote)
     - [Participer](#participer-inscription-à-un-tournoi)
     - [Vote](#vote-voter)
 - [Limites et axes d'amélioration](#limites-et-axes-damélioration)
