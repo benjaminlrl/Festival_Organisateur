@@ -41,6 +41,7 @@ namespace ApplicationUi
             listeLots = new List<Lot>();
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
+            ChargerLots();
             Raz_Zones();
             boutonModifier.Enabled = _lotComposantSelectionne != null;
             boutonSupprimer.Enabled = _lotComposantSelectionne != null;
@@ -123,13 +124,11 @@ namespace ApplicationUi
             textBoxLibelle.Clear();
             textBoxDescription.Clear();
             textBoxValeur.Clear();
-            comboBoxLot.SelectedItem = null;
             _lotComposantSelectionne = null;
             boutonModifier.Enabled = _lotComposantSelectionne != null;
             boutonSupprimer.Enabled = _lotComposantSelectionne != null;
             ChargerStatistiques();
             ChargerLotComposants();
-            ChargerLots();
         }
 
         /// <summary>
@@ -166,20 +165,7 @@ namespace ApplicationUi
             // Un lot composant est considéré comme non attribués quand il dispose d'aucun lot associé
             var liste = _serviceLotComposant.Lister(filtre);
             int nbTotal = liste.Count();
-            int nbComposantNonAttribue = liste.Count(e => e.Lot == null);
-
             labelStatComposantsTotal.Text = $"{nbTotal}";
-
-            if (nbComposantNonAttribue == 0)
-            {
-                labelStatComposantNonAttribuer.Text = "Aucun composant non attribué";
-                labelStatComposantNonAttribuer.ForeColor = Color.Red;
-            }
-            else
-            {
-                labelStatComposantNonAttribuer.Text = $"Composants non attribués : {nbComposantNonAttribue}";
-                labelStatComposantNonAttribuer.ForeColor = Color.Green;
-            }
         }
 
         #endregion

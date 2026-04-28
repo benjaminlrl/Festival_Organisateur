@@ -42,9 +42,9 @@ namespace ApplicationUi
             _serviceLotComposant = new LotComposantService(context);
             _organisateurConnecte = unOrganisateurConnecte;
             filtre = "";
-            Raz_Zones();
             ChargerLots();
             ChargerTournoi();
+            Raz_Zones();
             DemarrageLotComposants();
             DemarrageLotComposantsDunlot();
             boutonModifier.Enabled = _lotSelectionnee != null;
@@ -78,6 +78,7 @@ namespace ApplicationUi
                 DesactiverTrieAutomatique(dataGridLots);
                 dataGridLots.Columns["Numero"].DisplayIndex = 0;
                 dataGridLots.Columns["LotComposant"].Visible = false;
+                dataGridLots.Columns["EstAttribue"].Visible = false;
                 dataGridLots.Columns["NumeroTournoi"].Visible = false;
                 dataGridLots.Columns["Tournoi"].Visible = false;
                 dataGridLots.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -284,7 +285,6 @@ namespace ApplicationUi
             // On remet tous les champs à vide
             textBoxLibelle.Clear();
             textBoxRang.Clear();
-            comboBoxTournoi.SelectedItem = null;
             _lotSelectionnee = null;
             boutonModifier.Enabled = _lotSelectionnee != null;
             boutonSupprimerLot.Enabled = _lotSelectionnee != null;
@@ -320,20 +320,7 @@ namespace ApplicationUi
         {
             var liste = _serviceLot.Lister(filtre);
             int nbTotal = liste.Count();
-            int nbLotNonAttribue = liste.Count(e => e.Tournoi == null);
-
             labelStatLotsTotal.Text = $"{nbTotal}";
-
-            if (nbLotNonAttribue == 0)
-            {
-                labelStatLotNonAttribue.Text = "Aucun lot non attribué";
-                labelStatLotNonAttribue.ForeColor = Color.Red;
-            }
-            else
-            {
-                labelStatLotNonAttribue.Text = $"Lots non attribués : {nbLotNonAttribue}";
-                labelStatLotNonAttribue.ForeColor = Color.Green;
-            }
         }
 
         #endregion
