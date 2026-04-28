@@ -199,7 +199,7 @@ namespace Lib_Services.Services
                     if (unUC == Organisateur.LesUC.UcEspaces        || unUC == Organisateur.LesUC.UcPostesDeJeu 
                         || unUC == Organisateur.LesUC.UcPlateformes || unUC == Organisateur.LesUC.UcPostesDeJeu
                         || unUC == Organisateur.LesUC.UcJeux        || unUC == Organisateur.LesUC.UcLots 
-                        || unUC == Organisateur.LesUC.UcVoter) 
+                        || unUC == Organisateur.LesUC.UcSoumisVote) 
                     {
                         return true;
                     }
@@ -207,7 +207,7 @@ namespace Lib_Services.Services
                 else if (action == "Modifier" || action == "Supprimer" || action == "Ajouter")
                 {
                     if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcParticiper 
-                        || unUC == Organisateur.LesUC.UcVoter) 
+                        || unUC == Organisateur.LesUC.UcSoumisVote) 
                     {
                         return true;
                     }

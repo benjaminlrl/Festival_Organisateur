@@ -53,7 +53,7 @@ namespace ApplicationUi
             {
                 btnLots.Visible = false;
             }
-            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Consulter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcSoumisVote, "Consulter") == false)
             {
                 btnVoter.Visible = false;
             }
@@ -298,7 +298,7 @@ namespace ApplicationUi
         {            
             try
             {
-                UcVoter uc = new(_organisateurConnecte);
+                UcSoumisVote uc = new(_organisateurConnecte);
 
                 uc.NaviguerVersJeux += (jeu) =>
                 {
