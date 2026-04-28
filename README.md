@@ -13,7 +13,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 - [Contexte et objectifs](#contexte-et-objectifs)
   - [Objectifs principaux](#objectifs-principaux)
   - [Contraintes](#contraintes)
-  - [Répartition-du-travail](#repartition-du-travail)
+  - [Répartition-du-travail](#répartition-du-travail)
 - [Fonctionnalités](#fonctionnalités)
 - [Diagramme de flux](#diagramme-de-flux)
 - [Choix techniques](#choix-techniques)
@@ -96,7 +96,7 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 > - Évolution des Espaces
 > - Évolution des Postes de jeu
 > - Évolution des Tournois
-> - Évolution des Plateformes
+> - Gestion des Plateformes
 > - Gestion des Jeux
 > - Gestion des Votes
 > - Gestion des SoumisVote
