@@ -32,357 +32,375 @@
             textBoxRecherche = new TextBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel3 = new TableLayoutPanel();
-            dataGridClassement = new DataGridView();
+            dataGridJeuxVotes = new DataGridView();
             tableLayoutPanel4 = new TableLayoutPanel();
-            labelClassement = new Label();
+            labelNbVotes = new Label();
+            labelVotes = new Label();
             panelForm = new Panel();
             tableLayoutPanel = new TableLayoutPanel();
-            comboBoxJeu = new ComboBox();
-            label3 = new Label();
-            dateTimePickerDateFinVote = new DateTimePicker();
+            textBoxPegi = new TextBox();
             comboBoxPlateforme = new ComboBox();
+            labelPegi = new Label();
+            textBoxTitre = new TextBox();
             labelPlateforme = new Label();
+            textBoxEditeur = new TextBox();
+            labelEditeur = new Label();
             labelTitre = new Label();
             labelDescription = new Label();
             textBoxDescription = new TextBox();
-            labelDateDebutVote = new Label();
-            dateTimePickerDateDebutVote = new DateTimePicker();
+            labelDateSortie = new Label();
+            dateTimePickerDateSortie = new DateTimePicker();
             panelButtons = new Panel();
             groupBox1 = new GroupBox();
-            buttonModifier = new Button();
-            buttonAjouter = new Button();
+            buttonVoter = new Button();
             buttonEffacer = new Button();
             buttonSupprimer = new Button();
             label1 = new Label();
-            dataGridSoumisVote = new DataGridView();
+            dataGridJeux = new DataGridView();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridClassement).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridJeuxVotes).BeginInit();
             tableLayoutPanel4.SuspendLayout();
             panelForm.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             panelButtons.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridSoumisVote).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridJeux).BeginInit();
             SuspendLayout();
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(107, 106);
+            label2.Location = new Point(35, 166);
+            label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(131, 30);
+            label2.Size = new Size(89, 20);
             label2.TabIndex = 1;
             label2.Text = "Recherche :";
             // 
             // textBoxRecherche
             // 
             textBoxRecherche.Font = new Font("Segoe UI", 11F);
-            textBoxRecherche.Location = new Point(244, 99);
+            textBoxRecherche.Location = new Point(131, 165);
+            textBoxRecherche.Margin = new Padding(2, 2, 2, 2);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.PlaceholderText = "Ex: Mari...";
-            textBoxRecherche.Size = new Size(925, 37);
+            textBoxRecherche.Size = new Size(649, 27);
             textBoxRecherche.TabIndex = 0;
-            textBoxRecherche.TextChanged += TextBoxRecherche_TextChanged;
+            textBoxRecherche.TextChanged += textBoxRecherche_TextChanged;
             // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnCount = 3;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.49249F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 720F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 1, 0);
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 6F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 403F));
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 2, 0);
             tableLayoutPanel1.Controls.Add(panelForm, 0, 0);
-            tableLayoutPanel1.Controls.Add(dataGridSoumisVote, 0, 1);
+            tableLayoutPanel1.Controls.Add(dataGridJeux, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Margin = new Padding(2, 2, 2, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 53.5897446F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 46.4102554F));
-            tableLayoutPanel1.Size = new Size(2044, 780);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 45.8974342F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 54.1025658F));
+            tableLayoutPanel1.Size = new Size(1210, 468);
             tableLayoutPanel1.TabIndex = 8;
             // 
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Controls.Add(dataGridClassement, 0, 1);
+            tableLayoutPanel3.Controls.Add(dataGridJeuxVotes, 0, 1);
             tableLayoutPanel3.Controls.Add(tableLayoutPanel4, 0, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(1328, 5);
-            tableLayoutPanel3.Margin = new Padding(4, 5, 4, 5);
+            tableLayoutPanel3.Location = new Point(809, 2);
+            tableLayoutPanel3.Margin = new Padding(2, 2, 2, 2);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 14.6788988F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 85.3211F));
-            tableLayoutPanel3.Size = new Size(712, 408);
+            tableLayoutPanel3.Size = new Size(399, 210);
             tableLayoutPanel3.TabIndex = 10;
             // 
-            // dataGridClassement
+            // dataGridJeuxVotes
             // 
-            dataGridClassement.AccessibleDescription = "Jeux déjà votés par l'utilisateur";
-            dataGridClassement.AllowUserToAddRows = false;
-            dataGridClassement.AllowUserToDeleteRows = false;
-            dataGridClassement.BackgroundColor = Color.White;
-            dataGridClassement.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridClassement.Dock = DockStyle.Fill;
-            dataGridClassement.Location = new Point(4, 64);
-            dataGridClassement.Margin = new Padding(4, 5, 4, 5);
-            dataGridClassement.Name = "dataGridClassement";
-            dataGridClassement.ReadOnly = true;
-            dataGridClassement.RowHeadersWidth = 62;
-            dataGridClassement.Size = new Size(704, 339);
-            dataGridClassement.TabIndex = 7;
-            dataGridClassement.CellClick += DataGridClassement_CellClick;
+            dataGridJeuxVotes.AccessibleDescription = "Jeux déjà votés par l'utilisateur";
+            dataGridJeuxVotes.AllowUserToAddRows = false;
+            dataGridJeuxVotes.AllowUserToDeleteRows = false;
+            dataGridJeuxVotes.BackgroundColor = Color.White;
+            dataGridJeuxVotes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridJeuxVotes.Dock = DockStyle.Fill;
+            dataGridJeuxVotes.Location = new Point(2, 32);
+            dataGridJeuxVotes.Margin = new Padding(2, 2, 2, 2);
+            dataGridJeuxVotes.Name = "dataGridJeuxVotes";
+            dataGridJeuxVotes.ReadOnly = true;
+            dataGridJeuxVotes.RowHeadersWidth = 62;
+            dataGridJeuxVotes.Size = new Size(395, 176);
+            dataGridJeuxVotes.TabIndex = 7;
+            dataGridJeuxVotes.CellClick += dataGridJeuxVotes_CellClick;
             // 
             // tableLayoutPanel4
             // 
-            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnCount = 3;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Controls.Add(labelClassement, 0, 0);
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 68F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 165F));
+            tableLayoutPanel4.Controls.Add(labelNbVotes, 2, 0);
+            tableLayoutPanel4.Controls.Add(labelVotes, 0, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(3, 3);
+            tableLayoutPanel4.Location = new Point(2, 2);
+            tableLayoutPanel4.Margin = new Padding(2, 2, 2, 2);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(706, 53);
+            tableLayoutPanel4.Size = new Size(395, 26);
             tableLayoutPanel4.TabIndex = 8;
             // 
-            // labelClassement
+            // labelNbVotes
             // 
-            labelClassement.BackColor = Color.FromArgb(192, 192, 255);
-            labelClassement.Dock = DockStyle.Fill;
-            labelClassement.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelClassement.ForeColor = Color.FromArgb(0, 0, 64);
-            labelClassement.Location = new Point(4, 0);
-            labelClassement.Margin = new Padding(4, 0, 4, 0);
-            labelClassement.Name = "labelClassement";
-            labelClassement.Size = new Size(698, 53);
-            labelClassement.TabIndex = 11;
-            labelClassement.Text = "Classement des jeux et plateformes";
-            labelClassement.TextAlign = ContentAlignment.MiddleCenter;
+            labelNbVotes.BackColor = Color.YellowGreen;
+            labelNbVotes.Dock = DockStyle.Fill;
+            labelNbVotes.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelNbVotes.ForeColor = Color.FromArgb(0, 0, 64);
+            labelNbVotes.Location = new Point(232, 0);
+            labelNbVotes.Margin = new Padding(2, 0, 2, 0);
+            labelNbVotes.Name = "labelNbVotes";
+            labelNbVotes.Size = new Size(161, 26);
+            labelNbVotes.TabIndex = 12;
+            labelNbVotes.Text = "x votes restants";
+            labelNbVotes.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // labelVotes
+            // 
+            labelVotes.BackColor = Color.FromArgb(192, 192, 255);
+            labelVotes.Dock = DockStyle.Fill;
+            labelVotes.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelVotes.ForeColor = Color.FromArgb(0, 0, 64);
+            labelVotes.Location = new Point(2, 0);
+            labelVotes.Margin = new Padding(2, 0, 2, 0);
+            labelVotes.Name = "labelVotes";
+            labelVotes.Size = new Size(158, 26);
+            labelVotes.TabIndex = 11;
+            labelVotes.Text = "Jeux votés";
+            labelVotes.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panelForm
             // 
             panelForm.BackColor = Color.White;
+            panelForm.Controls.Add(label2);
             panelForm.Controls.Add(tableLayoutPanel);
+            panelForm.Controls.Add(textBoxRecherche);
             panelForm.Controls.Add(panelButtons);
             panelForm.Dock = DockStyle.Fill;
-            panelForm.Location = new Point(4, 3);
-            panelForm.Margin = new Padding(4, 3, 4, 3);
+            panelForm.Location = new Point(3, 2);
+            panelForm.Margin = new Padding(3, 2, 3, 2);
             panelForm.Name = "panelForm";
-            panelForm.Size = new Size(1316, 412);
+            panelForm.Size = new Size(795, 210);
             panelForm.TabIndex = 5;
             // 
             // tableLayoutPanel
             // 
             tableLayoutPanel.ColumnCount = 4;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40.8163261F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 59.1836739F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 294F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 297F));
-            tableLayoutPanel.Controls.Add(comboBoxJeu, 0, 1);
-            tableLayoutPanel.Controls.Add(label3, 3, 2);
-            tableLayoutPanel.Controls.Add(dateTimePickerDateFinVote, 3, 3);
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 167F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 196F));
+            tableLayoutPanel.Controls.Add(textBoxPegi, 2, 3);
             tableLayoutPanel.Controls.Add(comboBoxPlateforme, 2, 1);
+            tableLayoutPanel.Controls.Add(labelPegi, 2, 2);
+            tableLayoutPanel.Controls.Add(textBoxTitre, 0, 1);
             tableLayoutPanel.Controls.Add(labelPlateforme, 2, 0);
+            tableLayoutPanel.Controls.Add(textBoxEditeur, 0, 3);
+            tableLayoutPanel.Controls.Add(labelEditeur, 0, 2);
             tableLayoutPanel.Controls.Add(labelTitre, 0, 0);
             tableLayoutPanel.Controls.Add(labelDescription, 1, 0);
             tableLayoutPanel.Controls.Add(textBoxDescription, 1, 1);
-            tableLayoutPanel.Controls.Add(labelDateDebutVote, 3, 0);
-            tableLayoutPanel.Controls.Add(dateTimePickerDateDebutVote, 3, 1);
-            tableLayoutPanel.Location = new Point(14, 20);
-            tableLayoutPanel.Margin = new Padding(6, 5, 6, 5);
+            tableLayoutPanel.Controls.Add(labelDateSortie, 3, 0);
+            tableLayoutPanel.Controls.Add(dateTimePickerDateSortie, 3, 1);
+            tableLayoutPanel.Location = new Point(7, 7);
+            tableLayoutPanel.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 5;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 58F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 72F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
-            tableLayoutPanel.Size = new Size(1272, 222);
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 16F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 12F));
+            tableLayoutPanel.Size = new Size(790, 86);
             tableLayoutPanel.TabIndex = 0;
             // 
-            // comboBoxJeu
+            // textBoxPegi
             // 
-            comboBoxJeu.Dock = DockStyle.Fill;
-            comboBoxJeu.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxJeu.Location = new Point(6, 65);
-            comboBoxJeu.Margin = new Padding(6, 7, 6, 7);
-            comboBoxJeu.Name = "comboBoxJeu";
-            comboBoxJeu.Size = new Size(265, 33);
-            comboBoxJeu.TabIndex = 33;
-            comboBoxJeu.SelectedIndexChanged += ComboBoxJeu_SelectedIndexChanged;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Fill;
-            label3.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            label3.Location = new Point(980, 130);
-            label3.Margin = new Padding(6, 0, 6, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(286, 45);
-            label3.TabIndex = 31;
-            label3.Text = "Date butoire des votes :";
-            label3.TextAlign = ContentAlignment.BottomLeft;
-            // 
-            // dateTimePickerDateFinVote
-            // 
-            dateTimePickerDateFinVote.Dock = DockStyle.Fill;
-            dateTimePickerDateFinVote.Format = DateTimePickerFormat.Short;
-            dateTimePickerDateFinVote.Location = new Point(978, 180);
-            dateTimePickerDateFinVote.Margin = new Padding(4, 5, 4, 5);
-            dateTimePickerDateFinVote.Name = "dateTimePickerDateFinVote";
-            dateTimePickerDateFinVote.Size = new Size(290, 31);
-            dateTimePickerDateFinVote.TabIndex = 32;
+            textBoxPegi.Dock = DockStyle.Fill;
+            textBoxPegi.Enabled = false;
+            textBoxPegi.Location = new Point(428, 65);
+            textBoxPegi.Margin = new Padding(2, 2, 2, 2);
+            textBoxPegi.Name = "textBoxPegi";
+            textBoxPegi.PlaceholderText = "3";
+            textBoxPegi.Size = new Size(163, 23);
+            textBoxPegi.TabIndex = 30;
             // 
             // comboBoxPlateforme
             // 
             comboBoxPlateforme.Dock = DockStyle.Fill;
             comboBoxPlateforme.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPlateforme.Location = new Point(686, 65);
-            comboBoxPlateforme.Margin = new Padding(6, 7, 6, 7);
+            comboBoxPlateforme.Location = new Point(429, 23);
+            comboBoxPlateforme.Margin = new Padding(3, 2, 3, 2);
             comboBoxPlateforme.Name = "comboBoxPlateforme";
-            comboBoxPlateforme.Size = new Size(282, 33);
+            comboBoxPlateforme.Size = new Size(161, 23);
             comboBoxPlateforme.TabIndex = 29;
-            comboBoxPlateforme.SelectedIndexChanged += ComboBoxPlateforme_SelectedIndexChanged;
+            comboBoxPlateforme.SelectedIndexChanged += comboBoxPlateforme_SelectedIndexChanged;
+            // 
+            // labelPegi
+            // 
+            labelPegi.AutoSize = true;
+            labelPegi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelPegi.Location = new Point(429, 47);
+            labelPegi.Name = "labelPegi";
+            labelPegi.Size = new Size(43, 16);
+            labelPegi.TabIndex = 27;
+            labelPegi.Text = "Pegi :";
+            // 
+            // textBoxTitre
+            // 
+            textBoxTitre.Dock = DockStyle.Fill;
+            textBoxTitre.Enabled = false;
+            textBoxTitre.Location = new Point(3, 23);
+            textBoxTitre.Margin = new Padding(3, 2, 3, 2);
+            textBoxTitre.Name = "textBoxTitre";
+            textBoxTitre.PlaceholderText = "Ex: Mariokart 8";
+            textBoxTitre.Size = new Size(207, 23);
+            textBoxTitre.TabIndex = 0;
             // 
             // labelPlateforme
             // 
             labelPlateforme.AutoSize = true;
-            labelPlateforme.Dock = DockStyle.Fill;
             labelPlateforme.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelPlateforme.Location = new Point(686, 0);
-            labelPlateforme.Margin = new Padding(6, 0, 6, 0);
+            labelPlateforme.Location = new Point(429, 0);
             labelPlateforme.Name = "labelPlateforme";
-            labelPlateforme.Size = new Size(282, 58);
+            labelPlateforme.Size = new Size(84, 17);
             labelPlateforme.TabIndex = 21;
             labelPlateforme.Text = "Plateforme :";
-            labelPlateforme.TextAlign = ContentAlignment.BottomLeft;
+            // 
+            // textBoxEditeur
+            // 
+            textBoxEditeur.Dock = DockStyle.Fill;
+            textBoxEditeur.Enabled = false;
+            textBoxEditeur.Location = new Point(2, 65);
+            textBoxEditeur.Margin = new Padding(2, 2, 2, 2);
+            textBoxEditeur.Name = "textBoxEditeur";
+            textBoxEditeur.PlaceholderText = "Editeur";
+            textBoxEditeur.Size = new Size(209, 23);
+            textBoxEditeur.TabIndex = 23;
+            // 
+            // labelEditeur
+            // 
+            labelEditeur.AutoSize = true;
+            labelEditeur.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelEditeur.Location = new Point(3, 47);
+            labelEditeur.Name = "labelEditeur";
+            labelEditeur.Size = new Size(52, 16);
+            labelEditeur.TabIndex = 8;
+            labelEditeur.Text = "Editeur";
             // 
             // labelTitre
             // 
             labelTitre.AutoSize = true;
-            labelTitre.Dock = DockStyle.Fill;
             labelTitre.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelTitre.Location = new Point(4, 0);
-            labelTitre.Margin = new Padding(4, 0, 4, 0);
+            labelTitre.Location = new Point(3, 0);
             labelTitre.Name = "labelTitre";
-            labelTitre.Size = new Size(269, 58);
+            labelTitre.Size = new Size(45, 17);
             labelTitre.TabIndex = 6;
-            labelTitre.Text = "Jeu :";
-            labelTitre.TextAlign = ContentAlignment.BottomLeft;
+            labelTitre.Text = "Titre :";
             // 
             // labelDescription
             // 
             labelDescription.AutoSize = true;
-            labelDescription.Dock = DockStyle.Fill;
             labelDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDescription.Location = new Point(283, 0);
-            labelDescription.Margin = new Padding(6, 0, 6, 0);
+            labelDescription.Location = new Point(216, 0);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(391, 58);
+            labelDescription.Size = new Size(87, 17);
             labelDescription.TabIndex = 26;
             labelDescription.Text = "Description :";
-            labelDescription.TextAlign = ContentAlignment.BottomLeft;
             // 
             // textBoxDescription
             // 
             textBoxDescription.Dock = DockStyle.Fill;
             textBoxDescription.Enabled = false;
-            textBoxDescription.Location = new Point(283, 63);
-            textBoxDescription.Margin = new Padding(6, 5, 6, 5);
+            textBoxDescription.Location = new Point(216, 23);
+            textBoxDescription.Margin = new Padding(3, 2, 3, 2);
             textBoxDescription.Multiline = true;
             textBoxDescription.Name = "textBoxDescription";
             textBoxDescription.PlaceholderText = "Ex: Mariokart 8 est un jeu de courses";
-            textBoxDescription.ReadOnly = true;
             tableLayoutPanel.SetRowSpan(textBoxDescription, 3);
-            textBoxDescription.Size = new Size(391, 177);
+            textBoxDescription.Size = new Size(207, 63);
             textBoxDescription.TabIndex = 25;
             // 
-            // labelDateDebutVote
+            // labelDateSortie
             // 
-            labelDateDebutVote.AutoSize = true;
-            labelDateDebutVote.Dock = DockStyle.Fill;
-            labelDateDebutVote.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDateDebutVote.Location = new Point(980, 0);
-            labelDateDebutVote.Margin = new Padding(6, 0, 6, 0);
-            labelDateDebutVote.Name = "labelDateDebutVote";
-            labelDateDebutVote.Size = new Size(286, 58);
-            labelDateDebutVote.TabIndex = 19;
-            labelDateDebutVote.Text = "Date d'ouverture des votes:";
-            labelDateDebutVote.TextAlign = ContentAlignment.BottomLeft;
+            labelDateSortie.AutoSize = true;
+            labelDateSortie.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelDateSortie.Location = new Point(596, 0);
+            labelDateSortie.Name = "labelDateSortie";
+            labelDateSortie.Size = new Size(103, 17);
+            labelDateSortie.TabIndex = 19;
+            labelDateSortie.Text = "Date de sortie :";
             // 
-            // dateTimePickerDateDebutVote
+            // dateTimePickerDateSortie
             // 
-            dateTimePickerDateDebutVote.Dock = DockStyle.Fill;
-            dateTimePickerDateDebutVote.Format = DateTimePickerFormat.Short;
-            dateTimePickerDateDebutVote.Location = new Point(978, 63);
-            dateTimePickerDateDebutVote.Margin = new Padding(4, 5, 4, 5);
-            dateTimePickerDateDebutVote.Name = "dateTimePickerDateDebutVote";
-            dateTimePickerDateDebutVote.Size = new Size(290, 31);
-            dateTimePickerDateDebutVote.TabIndex = 24;
+            dateTimePickerDateSortie.Dock = DockStyle.Fill;
+            dateTimePickerDateSortie.Enabled = false;
+            dateTimePickerDateSortie.Format = DateTimePickerFormat.Short;
+            dateTimePickerDateSortie.Location = new Point(595, 23);
+            dateTimePickerDateSortie.Margin = new Padding(2, 2, 2, 2);
+            dateTimePickerDateSortie.Name = "dateTimePickerDateSortie";
+            dateTimePickerDateSortie.Size = new Size(193, 23);
+            dateTimePickerDateSortie.TabIndex = 24;
             // 
             // panelButtons
             // 
             panelButtons.Controls.Add(groupBox1);
             panelButtons.Controls.Add(label1);
-            panelButtons.Location = new Point(4, 250);
-            panelButtons.Margin = new Padding(4, 3, 4, 3);
+            panelButtons.Location = new Point(7, 93);
+            panelButtons.Margin = new Padding(3, 2, 3, 2);
             panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(1288, 140);
+            panelButtons.Size = new Size(615, 49);
             panelButtons.TabIndex = 1;
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(buttonModifier);
-            groupBox1.Controls.Add(buttonAjouter);
-            groupBox1.Controls.Add(textBoxRecherche);
+            groupBox1.Controls.Add(buttonVoter);
             groupBox1.Controls.Add(buttonEffacer);
             groupBox1.Controls.Add(buttonSupprimer);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
+            groupBox1.Margin = new Padding(2, 2, 2, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1288, 140);
+            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Size = new Size(615, 49);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "⚡ Actions";
             // 
-            // buttonModifier
+            // buttonVoter
             // 
-            buttonModifier.BackColor = Color.FromArgb(33, 150, 243);
-            buttonModifier.FlatAppearance.BorderSize = 0;
-            buttonModifier.FlatStyle = FlatStyle.Flat;
-            buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(483, 25);
-            buttonModifier.Margin = new Padding(6, 7, 6, 7);
-            buttonModifier.Name = "buttonModifier";
-            buttonModifier.Size = new Size(195, 45);
-            buttonModifier.TabIndex = 7;
-            buttonModifier.Text = "✏️    Modifier";
-            buttonModifier.UseVisualStyleBackColor = false;
-            buttonModifier.Click += ButtonModifier_Click;
-            // 
-            // buttonAjouter
-            // 
-            buttonAjouter.BackColor = Color.FromArgb(76, 175, 80);
-            buttonAjouter.FlatAppearance.BorderSize = 0;
-            buttonAjouter.FlatStyle = FlatStyle.Flat;
-            buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(244, 25);
-            buttonAjouter.Margin = new Padding(6, 5, 6, 5);
-            buttonAjouter.Name = "buttonAjouter";
-            buttonAjouter.Size = new Size(188, 45);
-            buttonAjouter.TabIndex = 6;
-            buttonAjouter.Text = "➕  Ajouter";
-            buttonAjouter.UseVisualStyleBackColor = false;
-            buttonAjouter.Click += ButtonAjouter_Click;
+            buttonVoter.BackColor = Color.FromArgb(76, 175, 80);
+            buttonVoter.FlatAppearance.BorderSize = 0;
+            buttonVoter.FlatStyle = FlatStyle.Flat;
+            buttonVoter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            buttonVoter.ForeColor = Color.White;
+            buttonVoter.Location = new Point(162, 15);
+            buttonVoter.Margin = new Padding(3, 2, 3, 2);
+            buttonVoter.Name = "buttonVoter";
+            buttonVoter.Size = new Size(214, 27);
+            buttonVoter.TabIndex = 6;
+            buttonVoter.Text = "➕  Voter";
+            buttonVoter.UseVisualStyleBackColor = false;
+            buttonVoter.Click += buttonVoter_Click;
             // 
             // buttonEffacer
             // 
@@ -391,14 +409,14 @@
             buttonEffacer.FlatStyle = FlatStyle.Flat;
             buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonEffacer.ForeColor = Color.White;
-            buttonEffacer.Location = new Point(40, 25);
-            buttonEffacer.Margin = new Padding(4, 3, 4, 3);
+            buttonEffacer.Location = new Point(28, 15);
+            buttonEffacer.Margin = new Padding(3, 2, 3, 2);
             buttonEffacer.Name = "buttonEffacer";
-            buttonEffacer.Size = new Size(150, 45);
+            buttonEffacer.Size = new Size(105, 27);
             buttonEffacer.TabIndex = 3;
             buttonEffacer.Text = " Effacer";
             buttonEffacer.UseVisualStyleBackColor = false;
-            buttonEffacer.Click += ButtonEffacer_Click;
+            buttonEffacer.Click += buttonEffacer_Click;
             // 
             // buttonSupprimer
             // 
@@ -407,62 +425,61 @@
             buttonSupprimer.FlatStyle = FlatStyle.Flat;
             buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(720, 25);
-            buttonSupprimer.Margin = new Padding(6, 5, 6, 5);
+            buttonSupprimer.Location = new Point(397, 15);
+            buttonSupprimer.Margin = new Padding(3, 2, 3, 2);
             buttonSupprimer.Name = "buttonSupprimer";
-            buttonSupprimer.Size = new Size(225, 45);
+            buttonSupprimer.Size = new Size(214, 27);
             buttonSupprimer.TabIndex = 5;
-            buttonSupprimer.Text = "🗑️    Supprimer";
+            buttonSupprimer.Text = "🗑️    Supprimer mon vote";
             buttonSupprimer.UseVisualStyleBackColor = false;
-            buttonSupprimer.Click += ButtonSupprimer_Click;
+            buttonSupprimer.Click += buttonSupprimer_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(0, 0);
-            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(0, 25);
+            label1.Size = new Size(0, 15);
             label1.TabIndex = 6;
             // 
-            // dataGridSoumisVote
+            // dataGridJeux
             // 
-            dataGridSoumisVote.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridSoumisVote.BackgroundColor = Color.White;
-            dataGridSoumisVote.BorderStyle = BorderStyle.None;
-            dataGridSoumisVote.ColumnHeadersHeight = 34;
-            dataGridSoumisVote.Dock = DockStyle.Fill;
-            dataGridSoumisVote.Location = new Point(6, 423);
-            dataGridSoumisVote.Margin = new Padding(6, 5, 6, 5);
-            dataGridSoumisVote.Name = "dataGridSoumisVote";
-            dataGridSoumisVote.ReadOnly = true;
-            dataGridSoumisVote.RowHeadersWidth = 62;
-            dataGridSoumisVote.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridSoumisVote.Size = new Size(1312, 352);
-            dataGridSoumisVote.TabIndex = 6;
-            dataGridSoumisVote.CellClick += DataGridSoumisVote_CellClick;
-            dataGridSoumisVote.CellContentDoubleClick += dataGridSoumisVote_CellContentDoubleClick;
+            dataGridJeux.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridJeux.BackgroundColor = Color.White;
+            dataGridJeux.BorderStyle = BorderStyle.None;
+            dataGridJeux.ColumnHeadersHeight = 34;
+            dataGridJeux.Dock = DockStyle.Fill;
+            dataGridJeux.Location = new Point(3, 216);
+            dataGridJeux.Margin = new Padding(3, 2, 3, 2);
+            dataGridJeux.Name = "dataGridJeux";
+            dataGridJeux.ReadOnly = true;
+            dataGridJeux.RowHeadersWidth = 62;
+            dataGridJeux.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridJeux.Size = new Size(795, 250);
+            dataGridJeux.TabIndex = 6;
+            dataGridJeux.CellClick += dataGridJeux_CellClick;
             // 
             // UcVoter
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MintCream;
             Controls.Add(tableLayoutPanel1);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "UcVoter";
-            Size = new Size(2044, 1016);
+            Size = new Size(1210, 468);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridClassement).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridJeuxVotes).EndInit();
             tableLayoutPanel4.ResumeLayout(false);
             panelForm.ResumeLayout(false);
+            panelForm.PerformLayout();
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             panelButtons.ResumeLayout(false);
             panelButtons.PerformLayout();
             groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridSoumisVote).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridJeux).EndInit();
             ResumeLayout(false);
         }
 
@@ -472,27 +489,29 @@
         private TableLayoutPanel tableLayoutPanel1;
         private Panel panelForm;
         private TableLayoutPanel tableLayoutPanel;
+        private TextBox textBoxTitre;
         private Label labelTitre;
+        private Label labelEditeur;
         private Label labelPlateforme;
-        private Label labelDateDebutVote;
+        private Label labelDateSortie;
         private Panel panelButtons;
         private GroupBox groupBox1;
-        private Button buttonAjouter;
+        private Button buttonVoter;
         private Button buttonEffacer;
         private Button buttonSupprimer;
         private Label label1;
-        private DateTimePicker dateTimePickerDateDebutVote;
+        private TextBox textBoxEditeur;
+        private DateTimePicker dateTimePickerDateSortie;
         private Label labelDescription;
         private TextBox textBoxDescription;
-        private DataGridView dataGridSoumisVote;
+        private Label labelPegi;
+        private DataGridView dataGridJeux;
+        private TextBox textBoxPegi;
         private ComboBox comboBoxPlateforme;
         private TableLayoutPanel tableLayoutPanel3;
-        private DataGridView dataGridClassement;
-        private Label labelClassement;
+        private DataGridView dataGridJeuxVotes;
+        private Label labelVotes;
         private TableLayoutPanel tableLayoutPanel4;
-        private Label label3;
-        private DateTimePicker dateTimePickerDateFinVote;
-        private ComboBox comboBoxJeu;
-        private Button buttonModifier;
+        private Label labelNbVotes;
     }
 }
