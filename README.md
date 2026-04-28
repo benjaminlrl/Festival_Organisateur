@@ -5,6 +5,8 @@ Application de bureau **Windows Forms** développée en **C#** dans le cadre d'u
 Elle permet la gestion complète d'un festival : organisateurs, espaces, tournois, jeux, plateformes, lots et système de vote.
 
 > ⚠️ Projet en cours de développement — versions alpha uniquement, ne pas déployer en production.
+> 
+> ℹ️ Renommage de SoumisVote en JeuSoumisVote pour une prise en main plus facile de l'application
 
 ---
 
