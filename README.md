@@ -41,7 +41,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
     - [Plateforme](#plateforme)
     - [Poste de jeu](#poste-de-jeu)
     - [Tournoi](#tournoi)
-    - [JeuxSoumisVote](#soumisvotre)
+    - [JeuSoumisVote](#soumisvotre)
     - [Participer](#participer-inscription-à-un-tournoi)
     - [Vote](#vote-voter)
 - [Limites et axes d'amélioration](#limites-et-axes-damélioration)
@@ -101,7 +101,7 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 > - Gestion des Plateformes
 > - Gestion des Jeux
 > - Gestion des Votes
-> - Gestion des jeux soumis aux votes (JeuxSoumisVote)
+> - Gestion des jeux soumis aux votes (JeuSoumisVote)
 > - Gestion des Participants
 
 ---
@@ -347,7 +347,7 @@ Quatre rôles ont été définis dans l'application :
 | **Administrateur**            | Toutes les tables                   | —                                             |
 | **Gestionnaire du stock**     | Lot, LotComposant                   | Tournoi, Jeu, Espace, PosteJeu, Plateforme    |
 | **Gestionnaire de l'espace**  | Espace, PosteJeu, Tournoi           | Plateforme, Jeu, Participer                   |
-| **Gestionnaire des tournois** | Tournoi, Participer, JeuxSoumisVote | Espace, PosteJeu, Plateforme, Jeu, Lot, Voter |
+| **Gestionnaire des tournois** | Tournoi, Participer, JeuSoumisVote | Espace, PosteJeu, Plateforme, Jeu, Lot, Voter |
 
 ---
 
@@ -357,7 +357,7 @@ Quatre rôles ont été définis dans l'application :
 
 ### Schémas de la base de données
 
-> **Comprendre :** Les entités principales sont : `Organisateur`, `Role`, `Joueur`, `Jeu`, `Plateforme`, `Tournoi`, `Espace`, `Poste_Jeu`, `Lot`, `LotComposant`, `JeuxSoumisVote`, `Voter`, `Participer`.
+> **Comprendre :** Les entités principales sont : `Organisateur`, `Role`, `Joueur`, `Jeu`, `Plateforme`, `Tournoi`, `Espace`, `Poste_Jeu`, `Lot`, `LotComposant`, `JeuSoumisVote`, `Voter`, `Participer`.
 
 La connexion à la base de données est gérée via `ApplicationDbContext`, instancié directement dans chaque service :
 
@@ -783,7 +783,7 @@ namespace Lib_Services.Exceptions
 
 ---
 
-#### JeuxSoumisVote
+#### JeuSoumisVote
 
 ##### Création et modification
 
@@ -979,7 +979,7 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Gestion des binômes jeu/plateforme ouverts aux votes
 
-![Espace de votes dédié aux utilisateurs](Documentation/App/JeuxSoumisVote.png)
+![Espace de votes dédié aux utilisateurs](Documentation/App/JeuSoumisVote.png)
 
 ### Gestion des participants
 
