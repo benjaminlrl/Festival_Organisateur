@@ -95,7 +95,7 @@ namespace ApplicationUi
             labelJeux.Visible = true;
             dataGridJeux.Visible = true;
             dataGridJeux.DataSource = null;
-            dataGridJeux.DataSource = _plateformeSelectionee.Jeux.ToList();
+            dataGridJeux.DataSource = _plateformeSelectionee.Jeux;
             MEP_DataGridJeux();
         }
 

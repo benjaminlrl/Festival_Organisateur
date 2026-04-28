@@ -33,6 +33,10 @@ namespace Lib_Metier.Data.Configurations
 
             builder.Property(p => p.Libelle)
                    .HasColumnName("libelle");
+
+            // Relation vers jeux : un jeux contient plusieurs postes
+            builder.HasMany(p => p.Jeux)
+                   .WithMany(j => j.Plateformes);            
         }
     }
 }

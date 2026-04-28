@@ -444,6 +444,120 @@ namespace ApplicationUi
                     });
                     context.SaveChanges();
                 }
+                // -------------------------------------------------------
+                // 9.5 ASSOCIATIONS JEUX <-> PLATEFORMES
+                // -------------------------------------------------------
+                if (!context.Set<Dictionary<string, object>>("JeuPlateforme").Any()) // ou vérifie autrement
+                {
+                    var jeux = context.Jeux.ToList();
+                    var plateformes = context.Plateformes.ToList();
+
+                    Jeu J(string titre) => jeux.First(j => j.Titre == titre);
+                    Plateforme P(string lib) => plateformes.First(p => p.Libelle == lib);
+
+                    J("Mario Kart 8 Deluxe").Plateformes.Add(P("Nintendo Switch"));
+                    J("Mario Kart 8 Deluxe").Plateformes.Add(P("Nintendo Switch 2"));
+
+                    J("The Legend of Zelda: BOTW").Plateformes.Add(P("Nintendo Switch"));
+                    J("The Legend of Zelda: TOTK").Plateformes.Add(P("Nintendo Switch"));
+                    J("The Legend of Zelda: TOTK").Plateformes.Add(P("Nintendo Switch 2"));
+
+                    J("Super Smash Bros. Ultimate").Plateformes.Add(P("Nintendo Switch"));
+                    J("Splatoon 3").Plateformes.Add(P("Nintendo Switch"));
+                    J("Pokémon Écarlate").Plateformes.Add(P("Nintendo Switch"));
+                    J("Animal Crossing: NH").Plateformes.Add(P("Nintendo Switch"));
+                    J("Super Mario Odyssey").Plateformes.Add(P("Nintendo Switch"));
+
+                    J("God of War Ragnarök").Plateformes.Add(P("PlayStation 4"));
+                    J("God of War Ragnarök").Plateformes.Add(P("PlayStation 5"));
+
+                    J("Spider-Man 2").Plateformes.Add(P("PlayStation 5"));
+                    J("Horizon Forbidden West").Plateformes.Add(P("PlayStation 4"));
+                    J("Horizon Forbidden West").Plateformes.Add(P("PlayStation 5"));
+                    J("The Last of Us Part I").Plateformes.Add(P("PlayStation 5"));
+                    J("Gran Turismo 7").Plateformes.Add(P("PlayStation 4"));
+                    J("Gran Turismo 7").Plateformes.Add(P("PlayStation 5"));
+
+                    J("Halo Infinite").Plateformes.Add(P("Xbox One"));
+                    J("Halo Infinite").Plateformes.Add(P("Xbox Series X/S"));
+                    J("Halo Infinite").Plateformes.Add(P("PC (Windows)"));
+                    J("Forza Horizon 5").Plateformes.Add(P("Xbox One"));
+                    J("Forza Horizon 5").Plateformes.Add(P("Xbox Series X/S"));
+                    J("Forza Horizon 5").Plateformes.Add(P("PC (Windows)"));
+                    J("Sea of Thieves").Plateformes.Add(P("Xbox One"));
+                    J("Sea of Thieves").Plateformes.Add(P("Xbox Series X/S"));
+                    J("Sea of Thieves").Plateformes.Add(P("PC (Windows)"));
+
+                    J("Minecraft").Plateformes.Add(P("PC (Windows)"));
+                    J("Minecraft").Plateformes.Add(P("PlayStation 4"));
+                    J("Minecraft").Plateformes.Add(P("PlayStation 5"));
+                    J("Minecraft").Plateformes.Add(P("Xbox One"));
+                    J("Minecraft").Plateformes.Add(P("Xbox Series X/S"));
+                    J("Minecraft").Plateformes.Add(P("Nintendo Switch"));
+                    J("Minecraft").Plateformes.Add(P("iOS"));
+                    J("Minecraft").Plateformes.Add(P("Android"));
+
+                    J("Cyberpunk 2077").Plateformes.Add(P("PC (Windows)"));
+                    J("Cyberpunk 2077").Plateformes.Add(P("PlayStation 4"));
+                    J("Cyberpunk 2077").Plateformes.Add(P("PlayStation 5"));
+                    J("Cyberpunk 2077").Plateformes.Add(P("Xbox One"));
+                    J("Cyberpunk 2077").Plateformes.Add(P("Xbox Series X/S"));
+
+                    J("Elden Ring").Plateformes.Add(P("PC (Windows)"));
+                    J("Elden Ring").Plateformes.Add(P("PlayStation 4"));
+                    J("Elden Ring").Plateformes.Add(P("PlayStation 5"));
+                    J("Elden Ring").Plateformes.Add(P("Xbox One"));
+                    J("Elden Ring").Plateformes.Add(P("Xbox Series X/S"));
+
+                    J("Baldur's Gate 3").Plateformes.Add(P("PC (Windows)"));
+                    J("Baldur's Gate 3").Plateformes.Add(P("PlayStation 5"));
+                    J("Baldur's Gate 3").Plateformes.Add(P("Xbox Series X/S"));
+
+                    J("Stardew Valley").Plateformes.Add(P("PC (Windows)"));
+                    J("Stardew Valley").Plateformes.Add(P("Nintendo Switch"));
+                    J("Stardew Valley").Plateformes.Add(P("PlayStation 4"));
+                    J("Stardew Valley").Plateformes.Add(P("Xbox One"));
+
+                    J("Among Us").Plateformes.Add(P("PC (Windows)"));
+                    J("Among Us").Plateformes.Add(P("iOS"));
+                    J("Among Us").Plateformes.Add(P("Android"));
+                    J("Among Us").Plateformes.Add(P("Nintendo Switch"));
+
+                    J("Valorant").Plateformes.Add(P("PC (Windows)"));
+                    J("League of Legends").Plateformes.Add(P("PC (Windows)"));
+                    J("Counter-Strike 2").Plateformes.Add(P("PC (Windows)"));
+                    J("Schedule 1").Plateformes.Add(P("PC (Windows)"));
+
+                    J("Hogwarts Legacy").Plateformes.Add(P("PC (Windows)"));
+                    J("Hogwarts Legacy").Plateformes.Add(P("PlayStation 4"));
+                    J("Hogwarts Legacy").Plateformes.Add(P("PlayStation 5"));
+                    J("Hogwarts Legacy").Plateformes.Add(P("Xbox One"));
+                    J("Hogwarts Legacy").Plateformes.Add(P("Xbox Series X/S"));
+                    J("Hogwarts Legacy").Plateformes.Add(P("Nintendo Switch"));
+
+                    J("EA Sports FC 25").Plateformes.Add(P("PC (Windows)"));
+                    J("EA Sports FC 25").Plateformes.Add(P("PlayStation 4"));
+                    J("EA Sports FC 25").Plateformes.Add(P("PlayStation 5"));
+                    J("EA Sports FC 25").Plateformes.Add(P("Xbox One"));
+                    J("EA Sports FC 25").Plateformes.Add(P("Xbox Series X/S"));
+
+                    J("Call of Duty: Black Ops 6").Plateformes.Add(P("PC (Windows)"));
+                    J("Call of Duty: Black Ops 6").Plateformes.Add(P("PlayStation 4"));
+                    J("Call of Duty: Black Ops 6").Plateformes.Add(P("PlayStation 5"));
+                    J("Call of Duty: Black Ops 6").Plateformes.Add(P("Xbox One"));
+                    J("Call of Duty: Black Ops 6").Plateformes.Add(P("Xbox Series X/S"));
+
+                    J("Fortnite").Plateformes.Add(P("PC (Windows)"));
+                    J("Fortnite").Plateformes.Add(P("PlayStation 4"));
+                    J("Fortnite").Plateformes.Add(P("PlayStation 5"));
+                    J("Fortnite").Plateformes.Add(P("Xbox One"));
+                    J("Fortnite").Plateformes.Add(P("Xbox Series X/S"));
+                    J("Fortnite").Plateformes.Add(P("Nintendo Switch"));
+                    J("Fortnite").Plateformes.Add(P("iOS"));
+                    J("Fortnite").Plateformes.Add(P("Android"));
+
+                    context.SaveChanges();
+                }
 
                 // -------------------------------------------------------
                 // 10. TOURNOIS  (FK → Espace, FK → Jeu)
