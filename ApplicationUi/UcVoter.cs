@@ -216,7 +216,7 @@ namespace ApplicationUi
         {
             if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
             {
-                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -252,7 +252,7 @@ namespace ApplicationUi
         {
             if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
             {
-                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

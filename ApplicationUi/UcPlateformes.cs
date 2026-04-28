@@ -169,7 +169,7 @@ namespace ApplicationUi
         {
             if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
             {
-                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             _plateformeSelectionee.Libelle = textBoxNom.Text;
@@ -206,7 +206,7 @@ namespace ApplicationUi
         {
             if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
             {
-                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

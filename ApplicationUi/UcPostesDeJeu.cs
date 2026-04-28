@@ -204,7 +204,7 @@ namespace ApplicationUi
             if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne 
                 || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
             {
-                MessageBox.Show("Veuillez sélectionner une plateforme et un espace.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Veuillez sélectionner une plateforme et un espace.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

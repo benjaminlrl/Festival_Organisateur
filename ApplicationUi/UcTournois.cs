@@ -148,7 +148,7 @@ namespace ApplicationUi
             catch (TournoiException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show("Veuillez vérifier les informations saisies.\n" + ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Veuillez vérifier les informations saisies.\n" + ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
@@ -188,7 +188,7 @@ namespace ApplicationUi
         {
             if (dataGridTournois.CurrentRow == null || _tournoiSelectionne == null)
             {
-                MessageBox.Show("Aucun tournoi sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun tournoi sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

@@ -248,7 +248,7 @@ namespace ApplicationUi
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
-                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -290,7 +290,7 @@ namespace ApplicationUi
         {
             if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
             {
-                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

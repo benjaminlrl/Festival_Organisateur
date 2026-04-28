@@ -181,7 +181,7 @@ namespace ApplicationUi
             // On vérifie d'abord que la veleur n'est pas vide
             if (string.IsNullOrWhiteSpace(textBoxValeur.Text))
             {
-                MessageBox.Show("La valeur ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("La valeur ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
@@ -211,7 +211,7 @@ namespace ApplicationUi
             catch (LotComposantException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
@@ -288,7 +288,7 @@ namespace ApplicationUi
             catch (LotComposantException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
@@ -334,17 +334,17 @@ namespace ApplicationUi
             catch (OrganisateurException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'organisateur.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

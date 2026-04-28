@@ -156,7 +156,7 @@ namespace ApplicationUi
             catch (OrganisateurException ex)
             { 
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
@@ -180,7 +180,7 @@ namespace ApplicationUi
             // On check s'il a bien selectionné un organisateur à modifier
             if (_organisateurSelectionne == null)
             {
-                MessageBox.Show("Aucun Organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Aucun Organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             // On check si il essaye de modifier le login (on a pas le droit)
@@ -209,7 +209,7 @@ namespace ApplicationUi
             catch (OrganisateurException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
@@ -235,12 +235,12 @@ namespace ApplicationUi
                 // On check s'il essaye pas de supprimer l'organisateur connecté
                 if (_organisateurSelectionne == null)
                 {
-                    MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 if (_organisateurSelectionne == _organisateurConnecte)
                 {
-                    MessageBox.Show("Vous ne pouvez pas supprimer votre propre compte.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vous ne pouvez pas supprimer votre propre compte.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
@@ -253,7 +253,7 @@ namespace ApplicationUi
             catch (OrganisateurException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (DbException ex)
             {
