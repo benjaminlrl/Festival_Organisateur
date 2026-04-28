@@ -971,10 +971,10 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 -	En double cliquant sur les postes de jeux associés à l’espace, cela redirige l’utilisateur vers la gestion des postes de jeu, avec le poste de jeu cliqué préchargé pour faciliter la navigation dans l’application.
 -	En double cliquant sur les tournois liés à l’espace, redirection vers la gestion des tournois, avec le tournoi cliqué préchargé pour faciliter la navigation dans l’application.
 -	Possibilité de filtrer les résultat via la barre de recherche.
--	Contrôle sur le nom de l’espace, pour l’instant, le formatage des postes de jeux repose sur le nom de l’espace, en particulier sur ses trois premières lettres. Si celles-ci correspondent à un autre espace lors de l’ajout ou de la modification du nom de celui-ci.
 -	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
 -	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
-
+  
+> Contrôle sur le nom de l’espace, pour l’instant, le formatage des postes de jeux repose sur le nom de l’espace, en particulier sur ses trois premières lettres. Si celles-ci correspondent à un autre espace lors de l’ajout ou de la modification du nom de celui-ci.
 ![Gestion des espaces](Documentation/App/espaces.png)
 
 ---
@@ -988,12 +988,20 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 -	Possibilité de filtrer les résultat via la barre de recherche.
 -	Pour charger une plateforme dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de toutes les plateformes).
 -	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle-ci.
-
 ![Gestion des plateformes](Documentation/App/plateformes.png)
 
 ---
 
 ### Gestion des tournois
+-	Création et gestion des tournois du festival (nom, description, date et heure, durée prévue, jeu, espace, statut, nombre de participants max, nombre de participants inscrit).
+-	Affichage du nombres d'inscrit au tournois
+-	En double cliquant sur le jeu associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
+-	En double cliquant sur l'espace associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
+-	Possibilité de filtrer les résultat via la barre de recherche.
+-	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
+-	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
+
+> Le statut du tournoi est géré automatiquement par le code métier, en conséquent l'organisateur ne peut pas le modifier
 
 ![Gestion des tournois](Documentation/App/tournois.png)
 
