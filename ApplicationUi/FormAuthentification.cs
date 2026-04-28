@@ -26,14 +26,14 @@ namespace ApplicationUi
 
         #region Chargements
         // Effet de focus sur les champs (fait par IA)
-        private void txt_Enter(object sender, EventArgs e)
+        private void textBox_Enter(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
             tb.BackColor = Color.FromArgb(245, 248, 250);
             tb.BorderStyle = BorderStyle.FixedSingle;
         }
 
-        private void txt_Leave(object sender, EventArgs e)
+        private void textBox_Leave(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
             tb.BackColor = Color.White;
@@ -55,30 +55,30 @@ namespace ApplicationUi
 
         #region Évènements 
         // Boutton Connexion
-        private async void btnLogin_ClickAsync(object sender, EventArgs e)
+        private async void BoutonLogin_ClickAsync(object sender, EventArgs e)
         {
             // On check si le username n'est pas vide
-            if(string.IsNullOrWhiteSpace(txtUsername.Text))
+            if (string.IsNullOrWhiteSpace(textBoxUsername.Text))
             {
                 MessageBox.Show("L'Identifiant ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             // On check si le mot de passe n'est pas vide
-            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            if (string.IsNullOrWhiteSpace(textBoxPassword.Text))
             {
                 MessageBox.Show("Le Mot de Passe ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // On check si l'identifiant & le mot de passe correspondent à un compte dans la base de données
-            if (!_organisateurService.EstIdentique(txtPassword.Text, txtUsername.Text.Trim()))
+            if (!_organisateurService.EstIdentique(textBoxPassword.Text, textBoxUsername.Text.Trim()))
             {
                 MessageBox.Show("Login ou mot de passe incorrect.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // On check s'il n'y a aucune erreur sur le compte récupéré
-            organisateurConnecte = _organisateurService.Obtenir(txtUsername.Text);
+            organisateurConnecte = _organisateurService.Obtenir(textBoxUsername.Text);
             if (organisateurConnecte == null)
             {
                 MessageBox.Show("Erreur de récupération de votre compte.\nVeuillez contacter un administrateur.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -89,17 +89,17 @@ namespace ApplicationUi
         }
 
         // Validation par touche Entrée
-        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                btnLogin.PerformClick();
+                BoutonLogin.PerformClick();
                 e.Handled = true;
             }
         }
 
         // Boutton Quitter
-        private void btnQuitter_Click(object sender, EventArgs e)
+        private void BoutonQuitter_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
