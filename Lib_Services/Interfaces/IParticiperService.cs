@@ -72,7 +72,8 @@ namespace Lib_Services.Interfaces
         /// </summary>
         /// <param name="idUser">Id unique de l'utilisateur à supprimer.</param>
         /// <param name="numeroTournoi">Numero du tournoi associé à la participation à supprimer.</param>
-        void Supprimer(int idUser, int numeroTournoi);
+        /// <param name="forcerTournoi">Vraie si on veutr forcer la suppression malgrès un tournoi En cours<param>
+        void Supprimer(int idUser, int numeroTournoi, bool forcerTournoi = false);
         #endregion
 
         #region Statistiques
@@ -105,6 +106,13 @@ namespace Lib_Services.Interfaces
         /// <param name="participer">La participation à valider</param>
         /// <returns>La liste contenant toutes les erreurs</returns>
         void ValiderParticipation(Participer participer, bool estModification = false);
+
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a une plateforme.
+        /// </summary>
+        /// <param name="participer">La participation à valider</param>
+        /// <returns>La liste contenant toutes les erreurs</returns>
+        void ValiderSuppressionParticipation(Participer participer);
         #endregion
     }
 }

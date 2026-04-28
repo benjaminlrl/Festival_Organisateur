@@ -420,8 +420,7 @@ namespace Lib_Services.Services
         /// Valide les propriétés d'une instance de <see cref="Espace"/> peut être supprimer ou non.
         /// </summary>
         /// <param name="espace">Instance de <see cref="Espace"/> à valider.</param>
-        /// <param name="estModification">Indique si la validation est pour une modification.</param>
-        /// <param name="modifPosteJeu">Indique si la validation concerne une modification des postes de jeu associés.</param>
+        /// <param name="suppPosteJeu">Indique si la validation concerne une suppression des postes de jeu associés.</param>
         /// <exception cref="EspaceException">Exception levée si une validation échoue.</exception>
         public void ValiderSuppressionEspace(Espace? espace, bool suppPosteJeu = false)
         {
@@ -432,8 +431,6 @@ namespace Lib_Services.Services
             if (Obtenir(espace.IdEspace) == null)
                 throw new EspaceException("L'espace n'existe pas en base de données'.",
                     (int)EspaceException.EspaceErreur.EspaceInexistant);
-
-            //List<Tournoi> tornois = _serviceTournoi.
 
             if (espace.Tournois != null && espace.Tournois.Any(t => t.Statut == "Planifié" || t.Statut == "En cours"))
                 throw new EspaceException("Il n'est pas possible de supprimer un espace associé à un tournoi planifié ou en cours.",

@@ -56,5 +56,23 @@ namespace Lib_Services.Interfaces
         /// <param name="idPlateforme">Identifiant du jeu à supprimer.</param>
         void Supprimer(int idJeu);
         #endregion
+
+        #region Validations
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a un jeu avant l'ajout ou la modification.
+        /// </summary>
+        /// <param name="jeu">Le jeu à valider</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
+        /// <returns></returns>
+        void ValiderJeu(Jeu jeu, bool estModification = false);
+
+        /// <summary>
+        /// Permet de vérifier les propriétés associés a un jeu avant la suppression.
+        /// </summary>
+        /// <param name="jeu">Le jeu à valider</param>
+        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
+        /// <returns></returns>
+        void ValiderSuppressionJeu(Jeu jeu, bool estModification = false);
+        #endregion
     }
 }
