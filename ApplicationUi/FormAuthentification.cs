@@ -68,7 +68,7 @@ namespace ApplicationUi
             if (string.IsNullOrWhiteSpace(textBoxPassword.Text))
             {
                 Log.Error("Le mot de passe est vide.");
-                MessageBox.Show("Le Mot de Passe ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Le Mot de passe ne peut pas être vide.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace ApplicationUi
             if (!_organisateurService.EstIdentique(textBoxPassword.Text, textBoxUsername.Text.Trim()))
             {
                 Log.Error("Login ou mot de passe incorrect.");
-                MessageBox.Show("Login ou mot de passe incorrect.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Login ou Mot de passe incorrect.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
