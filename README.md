@@ -231,7 +231,7 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 -	Pour charger un jeu/plateforme soumis aux vote dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les binomes soumis aux votes).
 -	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle-ci.
 
-![Espace de votes dédié aux utilisateurs](Documentation/App/JeuSoumisVote.png)
+![Espace de votes dédié aux utilisateurs](Documentation/App/JeuxSoumisVote.png)
 
 ---
 
