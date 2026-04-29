@@ -25,8 +25,8 @@ namespace ApplicationUi
         private LotComposant? _lotComposantDunLotSelectionnee = null;
         private Lot? _lotSelectionnee = null;
         private Lot? unNouveauLot;
-        private List<LotComposant> listeLotComposants;
-        private List<LotComposant> listeLotComposantsDunLot;
+        private List<LotComposant>? listeLotComposants;
+        private List<LotComposant>? listeLotComposantsDunLot;
         string filtre;
         string ordreChampLots = "DESC";
         string ordreChampComposants = "DESC";
@@ -76,17 +76,17 @@ namespace ApplicationUi
             if (unFormulaire == "Lots")
             {
                 DesactiverTrieAutomatique(dataGridLots);
-                dataGridLots.Columns["Numero"].DisplayIndex = 0;
-                dataGridLots.Columns["LotComposant"].Visible = false;
-                dataGridLots.Columns["EstAttribue"].Visible = false;
-                dataGridLots.Columns["NumeroTournoi"].Visible = false;
-                dataGridLots.Columns["Tournoi"].Visible = false;
-                dataGridLots.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["ValeurTotale"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["RangAttribution"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["NomTournoi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridLots.Columns["NomTournoi"].HeaderText = "Tournoi associé";
+                dataGridLots.Columns["Numero"]!.DisplayIndex = 0;
+                dataGridLots.Columns["LotComposant"]!.Visible = false;
+                dataGridLots.Columns["EstAttribue"]!.Visible = false;
+                dataGridLots.Columns["NumeroTournoi"]!.Visible = false;
+                dataGridLots.Columns["Tournoi"]!.Visible = false;
+                dataGridLots.Columns["Numero"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["Libelle"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["ValeurTotale"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["RangAttribution"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["NomTournoi"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridLots.Columns["NomTournoi"]!.HeaderText = "Tournoi associé";
             }
             else if (unFormulaire == "LotComposants")
             {
@@ -176,7 +176,7 @@ namespace ApplicationUi
         {
             // On charge les lots composants du lot selectionné dans le dataGrid
             dataGridLotComposantsDunLot.DataSource = null;
-            var listeLotComposantsDunLotCharger = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee.Numero)
+            var listeLotComposantsDunLotCharger = _serviceLotComposant.ListerParNumeroDunLot(_lotSelectionnee!.Numero)
                 .Where(t => t.NumeroLot != null) // On affiche que les lots composants qui sont associés à un lot
                 .ToList();
             dataGridLotComposantsDunLot.DataSource = listeLotComposantsDunLotCharger;
@@ -299,7 +299,7 @@ namespace ApplicationUi
             // Code fait par IA (ChatGPT)
             var row = dataGridLots.Rows
                 .Cast<DataGridViewRow>()
-                .FirstOrDefault(r => (r.DataBoundItem as Lot)?.Numero == _lotSelectionnee.Numero);
+                .FirstOrDefault(r => (r.DataBoundItem as Lot)?.Numero == _lotSelectionnee!.Numero);
 
             if (row != null)
             {
@@ -349,7 +349,7 @@ namespace ApplicationUi
                     Libelle = textBoxLibelle.Text,
                     RangAttribution = int.Parse(textBoxRang.Text),
                     ValeurTotale = 0,
-                    NumeroTournoi = (int)comboBoxTournoi.SelectedValue
+                    NumeroTournoi = (int)comboBoxTournoi.SelectedValue!
                 };
 
                 // On oublie pas de mettre "estAttribue" à true si un tournoi est sélectionné (= le NumeroTournoi pas null)
@@ -429,7 +429,7 @@ namespace ApplicationUi
             // On check s'il a bien selectionné un lot composant à modifier
             if (_lotSelectionnee == null)
             {
-                Log.Warning("Aucun lot sélectionné.")
+                Log.Warning("Aucun lot sélectionné.");
                 MessageBox.Show("Aucun Lot sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -675,7 +675,7 @@ namespace ApplicationUi
                 ordreChampComposantsDunLot = ordreChampComposantsDunLot == "ASC" ? "DESC" : "ASC";
 
                 // Appliquer le tri
-                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotComposantDunLotSelectionnee.Numero, colonne, ordreChampComposantsDunLot);
+                dataGridLotComposantsDunLot.DataSource = _serviceLotComposant.ListerParNumeroDunLot(_lotComposantDunLotSelectionnee!.Numero, colonne, ordreChampComposantsDunLot);
                 dataGridLotComposantsDunLot.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
                     ordreChampComposantsDunLot == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 

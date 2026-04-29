@@ -136,8 +136,8 @@ namespace ApplicationUi
                 NbParticipants = (int)numericUpDownNbParticip.Value,
                 DureePrevue = (int)numericUpDownDuree.Value,
                 Statut = statutSelectionne,
-                IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace,
-                IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu,
+                IdEspace = (comboBoxEspace.SelectedItem as Espace)!.IdEspace,
+                IdJeu = (comboBoxJeu.SelectedItem as Jeu)!.IdJeu,
             };
 
             try
@@ -176,8 +176,8 @@ namespace ApplicationUi
             _tournoiSelectionne.NbParticipants = (int)numericUpDownNbParticip.Value;
             _tournoiSelectionne.DureePrevue = (int)numericUpDownDuree.Value;
             _tournoiSelectionne.Statut = statutSelectionne;
-            _tournoiSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
-            _tournoiSelectionne.IdJeu = (comboBoxJeu.SelectedItem as Jeu).IdJeu;
+            _tournoiSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace)!.IdEspace;
+            _tournoiSelectionne.IdJeu = (comboBoxJeu.SelectedItem as Jeu)!.IdJeu;
 
             ModifierTournoi();
         }

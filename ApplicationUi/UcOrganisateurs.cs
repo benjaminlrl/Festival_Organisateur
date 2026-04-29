@@ -145,7 +145,7 @@ namespace ApplicationUi
                     Login = textBoxLogin.Text,
                     Mail = textBoxMail.Text,
                     motPasse = textBoxMotDePasse.Text,
-                    IdRole = (int)comboBoxRole.SelectedValue
+                    IdRole = (int)comboBoxRole.SelectedValue!
                 };
 
                 _serviceOrganisateur.Creer(_unNouveauOrganisateur);
@@ -180,7 +180,7 @@ namespace ApplicationUi
             // On check s'il a bien selectionné un organisateur à modifier
             if (_organisateurSelectionne == null)
             {
-                Log.Warning("Aucun organisateur sélectionné.")
+                Log.Warning("Aucun organisateur sélectionné.");
                 MessageBox.Show("Aucun Organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -199,7 +199,7 @@ namespace ApplicationUi
                     _organisateurSelectionne.Mail = textBoxMail.Text;
                 if (textBoxMotDePasse.Text != "" || _organisateurSelectionne.motPasse != textBoxMotDePasse.Text)
                     _organisateurSelectionne.motPasse = textBoxMotDePasse.Text;
-                if ((int)comboBoxRole.SelectedValue != _organisateurSelectionne.IdRole)
+                if ((int)comboBoxRole.SelectedValue! != _organisateurSelectionne.IdRole)
                     _organisateurSelectionne.IdRole = (int)comboBoxRole.SelectedValue;
 
                 MessageBox.Show("L'organisateur a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);

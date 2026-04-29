@@ -287,7 +287,7 @@ namespace ApplicationUi
             {
                 MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
-            }                
+            }
 
             _espaceSelectionnee.Nom = textBoxNom.Text;
             _espaceSelectionnee.Description = textBoxDescription.Text;
@@ -569,7 +569,7 @@ namespace ApplicationUi
                 if (!modifPosteJeu)
                     MessageBox.Show("L'espace a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
-                    MessageBox.Show("L'espace a bien été renommé et les postes de jeu associés ont été mis à jour.", 
+                    MessageBox.Show("L'espace a bien été renommé et les postes de jeu associés ont été mis à jour.",
                         "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
@@ -585,18 +585,18 @@ namespace ApplicationUi
             catch (EspaceException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'espace.");
-                    MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                    MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -611,10 +611,10 @@ namespace ApplicationUi
             try
             {
                 _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, suppPostesJeu);
-                if(!suppPostesJeu)
+                if (!suppPostesJeu)
                     MessageBox.Show("L'espace a bien été supprimé.", "Suppression",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                else                
+                else
                     MessageBox.Show("L'espace et les postes de jeu associés ont bien été supprimés.", "Suppression",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
@@ -626,26 +626,27 @@ namespace ApplicationUi
                     "Voulez-vous supprimer les postes de jeux également ?", "Suppression",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                     return;
-                
+
                 SupprimerEspace(true); // rappel avec les postes
-                
+
             }
             catch (EspaceException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                    MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Erreur technique lors de la suppression de l'espace.");
-                    MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Erreur inattendue lors de la suppression de l'espace.");
-                    MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
     }
 }

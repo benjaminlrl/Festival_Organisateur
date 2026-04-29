@@ -205,7 +205,7 @@ namespace ApplicationUi
             catch (ParticiperException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
@@ -244,7 +244,7 @@ namespace ApplicationUi
         }
         private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
-            if (dataGridParticipations.CurrentRow == null || _participerSelectionne == null)
+            if (dataGridParticipations.CurrentRow == null || _participationSelectionnee == null)
             {
                 Log.Warning("Aucune participation sélectionné.");
                 MessageBox.Show("Aucune participation sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
