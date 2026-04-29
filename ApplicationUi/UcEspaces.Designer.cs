@@ -487,7 +487,7 @@
             dataGridPostesJeu.RowHeadersWidth = 62;
             dataGridPostesJeu.Size = new Size(287, 229);
             dataGridPostesJeu.TabIndex = 5;
-            dataGridPostesJeu.CellContentDoubleClick += dataGridPostesJeu_CellContentDoubleClick;
+            dataGridPostesJeu.CellContentDoubleClick += DataGridPostesJeu_CellContentDoubleClick;
             // 
             // process1
             // 

@@ -105,9 +105,11 @@
             dataGridParticipationsJoueur.Name = "dataGridParticipationsJoueur";
             dataGridParticipationsJoueur.ReadOnly = true;
             dataGridParticipationsJoueur.RowHeadersWidth = 62;
+            dataGridParticipationsJoueur.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridParticipationsJoueur.Size = new Size(298, 230);
             dataGridParticipationsJoueur.TabIndex = 5;
             dataGridParticipationsJoueur.CellClick += DataGridParticipationsJoueur_CellClick;
+            dataGridParticipationsJoueur.CellContentDoubleClick += DataGridParticipationsJoueur_CellContentDoubleClick;
             // 
             // label1
             // 
@@ -546,7 +548,7 @@
             dataGridParticipations.Size = new Size(878, 257);
             dataGridParticipations.TabIndex = 4;
             dataGridParticipations.CellClick += DataGridParticipations_CellClick;
-            dataGridParticipations.CellContentDoubleClick += dataGridParticipations_CellContentDoubleClick;
+            dataGridParticipations.CellContentDoubleClick += DataGridParticipations_CellContentDoubleClick;
             // 
             // tableLayoutPanel2
             // 

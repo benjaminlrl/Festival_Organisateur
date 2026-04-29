@@ -335,8 +335,46 @@ namespace ApplicationUi
         }
 
 
-        private void dataGridParticipations_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des espaces en fonction du poste de jeu sélectionné dans le DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridParticipationsJoueur_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0) return;
+
+            _participationSelectionnee = dataGridParticipationsJoueur.Rows[e.RowIndex].DataBoundItem as Participer;
+
+            DataGridViewRow row = dataGridParticipationsJoueur.Rows[e.RowIndex];
+
+            if (row.DataBoundItem is not Participer participer)
+                return;
+
+            string colonne = dataGridParticipationsJoueur.Columns[e.ColumnIndex].Name;
+
+            if (colonne == "NomTournoi")
+                if (participer.Tournoi != null)
+                    NaviguerVersTournois?.Invoke(participer.Tournoi);
+
+        }
+
+        private void DataGridParticipations_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _participationSelectionnee = dataGridParticipations.Rows[e.RowIndex].DataBoundItem as Participer;
+
+            DataGridViewRow row = dataGridParticipations.Rows[e.RowIndex];
+
+            if (row.DataBoundItem is not Participer participer)
+                return;
+
+            string colonne = dataGridParticipations.Columns[e.ColumnIndex].Name;
+
+            if (colonne == "NomTournoi")
+                if (participer.Tournoi != null)
+                    NaviguerVersTournois?.Invoke(participer.Tournoi);
 
         }
 
@@ -495,7 +533,7 @@ namespace ApplicationUi
                 radioButtonLotRemisFalse.Checked = true;
                 lotRemisSelectionne = false;
             }
-
+            
             ChargerParticipationsJoueur();
             StatutTournois();
             AfficherBoutons();

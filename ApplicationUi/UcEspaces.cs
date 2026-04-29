@@ -334,7 +334,7 @@ namespace ApplicationUi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void dataGridPostesJeu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridPostesJeu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
