@@ -1059,43 +1059,17 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Gestion des espaces
 
--	Création et gestion des espaces du festival (nom, description, superficie, capacité max).
--	Statut des espaces associés à des tournois.
--	Affichage du nombres de postes fonctionnels
--	En double cliquant sur les postes de jeux associés à l’espace, cela redirige l’utilisateur vers la gestion des postes de jeu, avec le poste de jeu cliqué préchargé pour faciliter la navigation dans l’application.
--	En double cliquant sur les tournois liés à l’espace, redirection vers la gestion des tournois, avec le tournoi cliqué préchargé pour faciliter la navigation dans l’application.
--	Possibilité de filtrer les résultat via la barre de recherche.
--	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
--	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
-  
-> Contrôle sur le nom de l’espace, pour l’instant, le formatage des postes de jeux repose sur le nom de l’espace, en particulier sur ses trois premières lettres. Si celles-ci correspondent à un autre espace lors de l’ajout ou de la modification du nom de celui-ci.
 ![Gestion des espaces](Documentation/App/espaces.png)
 
 ---
 
 ### Gestion des plateformes
 
--	Création et gestion des plateformes associés aux postes de jeu et aux jeux;
--	Affichage des postes de jeux et des jeux associés à la plateforme lors du chargement de celle-ci dans le formulaire.
--	En double cliquant sur un jeu lié à la plateforme, l’utilisateur est redirigé vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
--	En double cliquant sur un poste de jeu lié à la plateforme, l’utilisateur est redirigé vers la gestion des postes de jeu, avec le poste de jeu cliqué préchargé pour faciliter la navigation dans l’application.
--	Possibilité de filtrer les résultat via la barre de recherche.
--	Pour charger une plateforme dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de toutes les plateformes).
--	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle-ci.
 ![Gestion des plateformes](Documentation/App/plateformes.png)
 
 ---
 
 ### Gestion des postes de jeu
--	Création et gestion des jeux du festival (Référence, État fonctionnel, plateforme, espace).
--	Affichage des tournois en cours ou à venir associés à l'espace. Cela permet de savioir si le poste de jeu est actuelelemnt occupé
--	En double cliquant sur un tournoi lié à l'espace du poste de jeu, l’utilisateur est redirigé vers la gestion des tornois, avec le tournoi cliqué préchargé pour faciliter la navigation dans l’application.
--	En double cliquant sur l'espace du poste de jeu dans la dataGridView, l’utilisateur est redirigé vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
--	Indication du nobres de postes de jeu fonctionnels.
--	Pour charger un poste de jeu dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tou sles postes de jeu).
--	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
-  
-> La référence du poste de jeu est formater automatiquement garantissement un meilleur suivi des postes de jeu. Elle n'est pas modifiable par l'organisateur. Ainsi un poste de jeu aura toujours la même plateforme et le même espace.
 
 ![Gestion des postes de jeu](Documentation/App/postesJeu.png)
 
@@ -1104,44 +1078,18 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Gestion des jeux
 
--	Création et gestion des jeux du festival (jeu, plateforme, date de début, date de fin).
--	Possibilité de filtrer les résultat via la barre de recherche.
--	Pour charger un jeu/plateforme soumis aux vote dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les binomes soumis aux votes).
--	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle-ci.
-
 ![Gestion des jeux](Documentation/App/jeux.png)
 
 ---
 
 ### Gestion des tournois
--	Création et gestion des tournois du festival (nom, description, date et heure, durée prévue, jeu, espace, statut, nombre de participants max, nombre de participants inscrit).
--	Affichage du nombres d'inscrit au tournois
--	En double cliquant sur le jeu associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
--	En double cliquant sur l'espace associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
--	Possibilité de filtrer les résultat via la barre de recherche.
--	Pour charger un espace dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de tous les espaces).
--	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
-
-> Le statut du tournoi est géré automatiquement par le code métier, en conséquent l'organisateur ne peut pas le modifier
 
 ![Gestion des tournois](Documentation/App/tournois.png)
 
 ---
 
 ### Gestion des participants
--	Création et gestion des participations des utilisateurs aux tournois proposés durant le festival :
-  -	Affichage de la participation, (id du tournoi associé à l’id de l’utilisateur) ;
-  -	Saisie du rang et du score final par l’organisateur une fois le tournoi terminé ;
-  -	Indication si un lot a été remis à l’utilisateur ;
-  -	Affichage de l’évaluation et du commentaire du participants une fois le tournoi terminé.
--	Affichage des autres participations de l’utilisateur.
--	En double cliquant sur un tournoi lié à une participation, l’utilisateur  est redirigé vers la gestion des tournois, avec le tournoi cliqué préchargé pour faciliter la navigation dans l’application.
--	Possibilité de filtrer les résultat via la barre de recherche.
--	Pour charger une participation dans le formulaire il suffit de cliquer sur celui souhaité dans la dataGridView (tableau d’affichage de toutes participations).
--	L’utilisateur peut trier l’ordre d’affichage sur une colonne en cliquant sur le nom de celle.
 
-> Une évaluation est par défaut à 0, si le participant décide de laisser une évaluation à la fin du tournoi, celle-ci doit au moins valoir 1 pour la considérer comme modifier par le participant.
-> De même pour le commentaire par défaut, une chaîne de charactère vide "".
 ![Gestion des participants](Documentation/App/participer.png)
 
 ---
