@@ -1,12 +1,10 @@
 # 🎪 Festival Organisateur
 
-Application de bureau **Windows Forms** développée en **C#** dans le cadre d'un BTS SIO Option SLAM (2024-2026).
-
-Elle permet la gestion complète d'un festival : organisateurs, espaces, tournois, jeux, plateformes, lots et système de vote.
-
-> ⚠️ Projet en cours de développement — versions alpha uniquement, ne pas déployer en production.
+> 🆕 **Découvrez notre application de gestion de tournois dédiée aux organisateur de festivales numériques.**
 > 
-> ℹ️ Renommage de SoumisVote en JeuSoumisVote pour une prise en main plus facile de l'application
+> Application de bureau **Windows Forms** développée en **C#** dans le cadre d'un BTS SIO Option SLAM (2024-2026).
+> Elle permet la gestion complète d'un festival : organisateurs, espaces, tournois, jeux, plateformes, lots et système de vote.
+
 
 ---
 
@@ -49,7 +47,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
   - [UserControl Tournois](#démarche-à-suivre-dans-le-usercontrol-dédié-aux-tournois-configuration-minimale)
   - [Interface & Service](#faire-le-lien-entre-linterface-et-le-service)
   - [Exceptions métier](#création-des-exceptions)
-  - [Liste des contrôles](#listes-des-controles-présents-actuellement)
+  - [Liste des contrôles](#liste-des-contrôles-avec-les-exceptions-présentes-actuellement)
     - [Espace](#espace)
     - [Jeu](#jeu)
     - [Plateforme](#plateforme)
@@ -774,7 +772,7 @@ namespace Lib_Services.Exceptions
 
 ---
 
-### Listes des controles avec les Exceptions présentes actuellement
+### Liste des contrôles avec les Exceptions présentes actuellement
 
 #### Espace
 
@@ -948,8 +946,8 @@ namespace Lib_Services.Exceptions
 ### Limites actuelles
 
 - Interface WinForms peu moderne
-- Absence d'API (application uniquement locale)
 - Gestion des utilisateurs simplifiée
+- Gstion des contexts simplifiée
 
 ### Améliorations possibles
 
@@ -958,7 +956,7 @@ namespace Lib_Services.Exceptions
 - Ajout d'un système d'authentification sécurisé (JWT)
 - Amélioration de l'UX/UI
 - Déploiement sur serveur distant
-
+  
 ---
 
 ## 🛠️ Prérequis
@@ -1028,7 +1026,8 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 | Version                                                                                        | Date      | Type    | Description                                                                |
 | ---------------------------------------------------------------------------------------------- | --------- | ------- | -------------------------------------------------------------------------- |
-| [v1.4.1](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.4.1)             | Avr. 2026 | Stable  | Correction bugs critiques, amélioration navigation UC, gestion des erreurs |
+| [v1.4.1](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.5.0)             | Avr. 2026 | Stable  | Correction bugs liés à la navigations entre les Uc, enrichiseement des exceptions |
+| [v1.4.1](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.4.1)             | Avr. 2026 | Dev     | Correction bugs critiques, amélioration navigation UC, gestion des erreurs |
 | [v1.4.0](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.4.0)             | Avr. 2026 | Dev     | Mise en place des exceptions métier, navigation dynamique, tests unitaires |
 | [v1.3.2-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.3.2-alpha) | Avr. 2026 | Alpha   | Nettoyage de code                                                          |
 | [v1.3.1-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.3.1-alpha) | Avr. 2026 | Alpha   | Gestion participations, rôles, tests espaces                               |
