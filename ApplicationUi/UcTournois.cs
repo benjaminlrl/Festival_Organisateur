@@ -30,7 +30,8 @@ namespace ApplicationUi
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
         private string ordreChamp;
-
+        public event Action<Espace>? NaviguerVersEspaces;
+        public event Action<Jeu>? NaviguerVersJeux;
         public UcTournois(Organisateur unOrganisateurConnecte, Tournoi? tournoiPreselectionne = null)
         {
             InitializeComponent();
@@ -53,7 +54,7 @@ namespace ApplicationUi
 
             if (tournoiPreselectionne != null)
             {
-                _tournoiSelectionne = tournoiPreselectionne;
+                _tournoiSelectionne = _serviceTournoi.Obtenir(tournoiPreselectionne.IdEspace);
                 RemplirFormulaire();
             }
 
@@ -235,6 +236,64 @@ namespace ApplicationUi
 
             AfficherBoutons();
         }
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des espaces ou de gestion des jeux,
+        /// en fonction de la cellule doulble cliquée
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridTournois_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _tournoiSelectionne = dataGridTournois.Rows[e.RowIndex].DataBoundItem as Tournoi;
+
+            DataGridViewRow row = dataGridTournois.Rows[e.RowIndex];
+
+            if (row.DataBoundItem is not Tournoi tournoi)
+                return;
+
+            _tournoiSelectionne = tournoi;
+
+            string colonne = dataGridTournois.Columns[e.ColumnIndex].Name;
+
+            if (colonne == "NomEspace")
+            {
+                if (tournoi.Espace != null)
+                {
+                    try
+                    {
+                        NaviguerVersEspaces?.Invoke(tournoi.Espace);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Une erreur technique est survenue lors de la redirection de tournois vers espaces");
+                        MessageBox.Show("Erreur technique, réessayez plus tard.");
+                    }
+                }
+            }
+                
+
+            if (colonne == "TitreJeu")
+            {
+                if (tournoi.Jeu != null)
+                {
+                    try
+                    {
+                        NaviguerVersJeux?.Invoke(tournoi.Jeu);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Une erreur technique est survenue lors de la redirection de tournois vers jeux");
+                        MessageBox.Show("Erreur technique, réessayez plus tard.");
+                    }
+                }
+
+            }
+        }
+
+                
         private void RadioButtonPlanifie_CheckedChanged(object sender, EventArgs e)
         {
             statutSelectionne = "Planifié";

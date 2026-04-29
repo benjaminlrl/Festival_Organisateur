@@ -52,7 +52,7 @@ namespace ApplicationUi
 
             if (plateformePreselectionnee != null)
             {
-                _plateformeSelectionee = plateformePreselectionnee;
+                _plateformeSelectionee = _servicePlateforme.Obtenir(plateformePreselectionnee.IdPlateforme);
                 RemplirFormulaire();
             }
 

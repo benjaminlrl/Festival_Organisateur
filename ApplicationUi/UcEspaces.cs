@@ -22,7 +22,6 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
-        private readonly IPosteJeuService _servicePosteJeu;
         private readonly Organisateur _organisateurConnecte;
         private Espace? _espaceSelectionnee;
         private Tournoi? _tournoiSelectionne;
@@ -42,7 +41,6 @@ namespace ApplicationUi
             _serviceOrganisateur = new OrganisateurService(_context);
             _serviceEspace = new EspaceService(_context);
             _serviceTournoi = new TournoiService(_context);
-            _servicePosteJeu = new PosteJeuService(_context);
 
             _organisateurConnecte = unOrganisateurConnecte;
             _espaceSelectionnee = null;
@@ -60,7 +58,7 @@ namespace ApplicationUi
 
             if (espacePreselectionne != null)
             {
-                _espaceSelectionnee = espacePreselectionne;
+                _espaceSelectionnee = _serviceEspace.Obtenir(espacePreselectionne.IdEspace);
                 RemplirFormulaire();
             }
 
@@ -100,7 +98,7 @@ namespace ApplicationUi
         private void ChargerPostesJeu()
         {
             // Si l'espace est null, on ne fait rien
-            if (_espaceSelectionnee == null)
+            if (_espaceSelectionnee == null || _espaceSelectionnee.PostesJeu == null)
             {
                 dataGridPostesJeu.DataSource = null;
                 dataGridPostesJeu.Visible = true;

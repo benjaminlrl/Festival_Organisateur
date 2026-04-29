@@ -65,7 +65,7 @@ namespace ApplicationUi
             // le formulaire est rempli avec ses données
             if (posteJeuPreselectionne != null)
             {
-                _posteJeuSelectionne = posteJeuPreselectionne;
+                _posteJeuSelectionne = _servicePosteJeu.Obtenir(posteJeuPreselectionne.NumeroPoste);
                 RemplirFormulaire();
             }
 
