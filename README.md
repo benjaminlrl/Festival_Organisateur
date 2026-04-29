@@ -15,7 +15,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 - [Contexte et objectifs](#contexte-et-objectifs)
   - [Objectifs principaux](#objectifs-principaux)
   - [Contraintes](#contraintes)
-  - [Répartition-du-travail](#répartition-du-travail)
+  - [Répartition du travail](#répartition-du-travail)
 - [Fonctionnalités](#fonctionnalités)
   - [Gestion des plateformes](#gestion-des-plateformes)
   - [Gestion des espaces](#gestion-des-espaces)
