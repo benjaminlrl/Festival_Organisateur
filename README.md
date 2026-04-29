@@ -1,6 +1,8 @@
 # 🎪 Festival Organisateur
 
-> 🆕 **Découvrez notre application de gestion de tournois dédiée aux organisateur de festivales numériques.**
+## Version: 1.5.0 🆕
+
+> **Découvrez notre application de gestion de tournois dédiée aux organisateur de festivales numériques.**
 > 
 > Application de bureau **Windows Forms** développée en **C#** dans le cadre d'un BTS SIO Option SLAM (2024-2026).
 > Elle permet la gestion complète d'un festival : organisateurs, espaces, tournois, jeux, plateformes, lots et système de vote.
