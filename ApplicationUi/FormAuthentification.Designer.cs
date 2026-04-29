@@ -22,19 +22,20 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAuthentification));
             panelCard = new Panel();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
             labelMdpMin = new Label();
-            labelTitle = new Label();
+            labelTitre = new Label();
             labelUsername = new Label();
-            txtUsername = new TextBox();
+            textBoxUsername = new TextBox();
             labelPassword = new Label();
-            txtPassword = new TextBox();
-            btnLogin = new Button();
-            btnQuitter = new Button();
+            textBoxPassword = new TextBox();
+            BoutonLogin = new Button();
+            BoutonQuitter = new Button();
             panelCard.SuspendLayout();
             SuspendLayout();
             // 
@@ -46,12 +47,12 @@
             panelCard.Controls.Add(label2);
             panelCard.Controls.Add(label1);
             panelCard.Controls.Add(labelMdpMin);
-            panelCard.Controls.Add(labelTitle);
+            panelCard.Controls.Add(labelTitre);
             panelCard.Controls.Add(labelUsername);
-            panelCard.Controls.Add(txtUsername);
+            panelCard.Controls.Add(textBoxUsername);
             panelCard.Controls.Add(labelPassword);
-            panelCard.Controls.Add(txtPassword);
-            panelCard.Controls.Add(btnLogin);
+            panelCard.Controls.Add(textBoxPassword);
+            panelCard.Controls.Add(BoutonLogin);
             panelCard.Location = new Point(38, 35);
             panelCard.Name = "panelCard";
             panelCard.Padding = new Padding(25, 30, 25, 19);
@@ -113,16 +114,16 @@
             labelMdpMin.TabIndex = 7;
             labelMdpMin.Text = "Minimum 12 caractères";
             // 
-            // labelTitle
+            // labelTitre
             // 
-            labelTitle.AutoSize = true;
-            labelTitle.Font = new Font("Segoe UI Light", 24F);
-            labelTitle.ForeColor = Color.FromArgb(52, 73, 94);
-            labelTitle.Location = new Point(97, 53);
-            labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(163, 45);
-            labelTitle.TabIndex = 0;
-            labelTitle.Text = "Connexion";
+            labelTitre.AutoSize = true;
+            labelTitre.Font = new Font("Segoe UI Light", 24F);
+            labelTitre.ForeColor = Color.FromArgb(52, 73, 94);
+            labelTitre.Location = new Point(97, 53);
+            labelTitre.Name = "labelTitre";
+            labelTitre.Size = new Size(163, 45);
+            labelTitre.TabIndex = 0;
+            labelTitre.Text = "Connexion";
             // 
             // labelUsername
             // 
@@ -135,18 +136,18 @@
             labelUsername.TabIndex = 1;
             labelUsername.Text = "Nom d'utilisateur";
             // 
-            // txtUsername
+            // textBoxUsername
             // 
-            txtUsername.AccessibleDescription = "";
-            txtUsername.BorderStyle = BorderStyle.FixedSingle;
-            txtUsername.Font = new Font("Segoe UI", 10F);
-            txtUsername.Location = new Point(32, 156);
-            txtUsername.Name = "txtUsername";
-            txtUsername.PlaceholderText = " Votre identifiant";
-            txtUsername.Size = new Size(300, 25);
-            txtUsername.TabIndex = 2;
-            txtUsername.Enter += txt_Enter;
-            txtUsername.Leave += txt_Leave;
+            textBoxUsername.AccessibleDescription = "";
+            textBoxUsername.BorderStyle = BorderStyle.FixedSingle;
+            textBoxUsername.Font = new Font("Segoe UI", 10F);
+            textBoxUsername.Location = new Point(32, 156);
+            textBoxUsername.Name = "textBoxUsername";
+            textBoxUsername.PlaceholderText = " Votre identifiant";
+            textBoxUsername.Size = new Size(300, 25);
+            textBoxUsername.TabIndex = 2;
+            textBoxUsername.Enter += textBox_Enter;
+            textBoxUsername.Leave += textBox_Leave;
             // 
             // labelPassword
             // 
@@ -159,52 +160,52 @@
             labelPassword.TabIndex = 3;
             labelPassword.Text = "Mot de passe";
             // 
-            // txtPassword
+            // textBoxPassword
             // 
-            txtPassword.BorderStyle = BorderStyle.FixedSingle;
-            txtPassword.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPassword.Location = new Point(32, 231);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PasswordChar = '*';
-            txtPassword.PlaceholderText = " Votre mot de passe";
-            txtPassword.Size = new Size(300, 25);
-            txtPassword.TabIndex = 4;
-            txtPassword.Enter += txt_Enter;
-            txtPassword.KeyPress += txtPassword_KeyPress;
-            txtPassword.Leave += txt_Leave;
+            textBoxPassword.BorderStyle = BorderStyle.FixedSingle;
+            textBoxPassword.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBoxPassword.Location = new Point(32, 231);
+            textBoxPassword.Name = "textBoxPassword";
+            textBoxPassword.PasswordChar = '*';
+            textBoxPassword.PlaceholderText = " Votre mot de passe";
+            textBoxPassword.Size = new Size(300, 25);
+            textBoxPassword.TabIndex = 4;
+            textBoxPassword.Enter += textBox_Enter;
+            textBoxPassword.KeyPress += textBoxPassword_KeyPress;
+            textBoxPassword.Leave += textBox_Leave;
             // 
-            // btnLogin
+            // BoutonLogin
             // 
-            btnLogin.BackColor = Color.FromArgb(52, 152, 219);
-            btnLogin.Cursor = Cursors.Hand;
-            btnLogin.FlatAppearance.BorderSize = 0;
-            btnLogin.FlatStyle = FlatStyle.Flat;
-            btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(32, 335);
-            btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(300, 45);
-            btnLogin.TabIndex = 5;
-            btnLogin.Text = "Se connecter";
-            btnLogin.UseVisualStyleBackColor = false;
-            btnLogin.Click += btnLogin_ClickAsync;
+            BoutonLogin.BackColor = Color.FromArgb(52, 152, 219);
+            BoutonLogin.Cursor = Cursors.Hand;
+            BoutonLogin.FlatAppearance.BorderSize = 0;
+            BoutonLogin.FlatStyle = FlatStyle.Flat;
+            BoutonLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            BoutonLogin.ForeColor = Color.White;
+            BoutonLogin.Location = new Point(32, 335);
+            BoutonLogin.Name = "BoutonLogin";
+            BoutonLogin.Size = new Size(300, 45);
+            BoutonLogin.TabIndex = 5;
+            BoutonLogin.Text = "Se connecter";
+            BoutonLogin.UseVisualStyleBackColor = false;
+            BoutonLogin.Click += BoutonLogin_ClickAsync;
             // 
-            // btnQuitter
+            // BoutonQuitter
             // 
-            btnQuitter.BackColor = Color.FromArgb(60, 60, 60);
-            btnQuitter.FlatAppearance.BorderSize = 0;
-            btnQuitter.FlatStyle = FlatStyle.Flat;
-            btnQuitter.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnQuitter.ForeColor = Color.White;
-            btnQuitter.Image = Properties.Resources.deconnecter;
-            btnQuitter.ImageAlign = ContentAlignment.MiddleLeft;
-            btnQuitter.Location = new Point(308, 444);
-            btnQuitter.Name = "btnQuitter";
-            btnQuitter.Size = new Size(133, 54);
-            btnQuitter.TabIndex = 8;
-            btnQuitter.Text = "       Quitter";
-            btnQuitter.UseVisualStyleBackColor = false;
-            btnQuitter.Click += btnQuitter_Click;
+            BoutonQuitter.BackColor = Color.FromArgb(60, 60, 60);
+            BoutonQuitter.FlatAppearance.BorderSize = 0;
+            BoutonQuitter.FlatStyle = FlatStyle.Flat;
+            BoutonQuitter.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            BoutonQuitter.ForeColor = Color.White;
+            BoutonQuitter.Image = Properties.Resources.deconnecter;
+            BoutonQuitter.ImageAlign = ContentAlignment.MiddleLeft;
+            BoutonQuitter.Location = new Point(308, 444);
+            BoutonQuitter.Name = "BoutonQuitter";
+            BoutonQuitter.Size = new Size(133, 54);
+            BoutonQuitter.TabIndex = 8;
+            BoutonQuitter.Text = "       Quitter";
+            BoutonQuitter.UseVisualStyleBackColor = false;
+            BoutonQuitter.Click += BoutonQuitter_Click;
             // 
             // FormAuthentification
             // 
@@ -212,10 +213,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(240, 242, 245);
             ClientSize = new Size(440, 499);
-            Controls.Add(btnQuitter);
+            Controls.Add(BoutonQuitter);
             Controls.Add(panelCard);
             Font = new Font("Segoe UI", 9F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FormAuthentification";
             StartPosition = FormStartPosition.CenterScreen;
@@ -226,13 +228,13 @@
         }
 
         private System.Windows.Forms.Panel panelCard;
-        private System.Windows.Forms.Label labelTitle;
+        private System.Windows.Forms.Label labelTitre;
         private System.Windows.Forms.Label labelUsername;
-        private System.Windows.Forms.TextBox txtUsername;
+        private System.Windows.Forms.TextBox textBoxUsername;
         private System.Windows.Forms.Label labelPassword;
-        private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.Button btnLogin;
-        private Button btnQuitter;
+        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.Button BoutonLogin;
+        private Button BoutonQuitter;
         private Label labelMdpMin;
         private Label label1;
         private Label label4;

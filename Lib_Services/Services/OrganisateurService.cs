@@ -77,7 +77,7 @@ namespace Lib_Services.Services
         /// Crée un nouvel organisateur en base.
         /// Appelle immédiatement <c>SaveChanges()</c> pour persister l'entité.
         /// </summary>
-        /// <param name="espace">Instance de <see cref="Organisateur"/> à créer.</param>
+        /// <param name="organisateur">Instance de <see cref="Organisateur"/> à créer.</param>
         public void Creer(Organisateur organisateur)
         {
             ValiderOrganisateur(organisateur, false);
@@ -100,18 +100,14 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Supprime un organisateur identifié par son login s'il existe.
+        /// Supprime un organisateur identifié en base
         /// </summary>
-        /// <param name="login">login de l'organisateur à supprimer.</param>
-        public void Supprimer(string login)
+        /// <param name="organisateur">Instance de <see cref="Organisateur"/> à supprimer.</param>
+        public void Supprimer(Organisateur organisateur)
         {
-            // Recherche de l'entité (utilise le cache si possible).
-            var organisateur = _context.Organisateurs.Find(login);
-            if (organisateur != null)
-            {
-                _context.Organisateurs.Remove(organisateur);
-                _context.SaveChanges();
-            }
+            ValiderSuppressionOrganisateur(organisateur);
+            _context.Organisateurs.Remove(organisateur);
+            _context.SaveChanges();
         }
         #endregion
 
@@ -224,13 +220,21 @@ namespace Lib_Services.Services
         /// <exception cref="OrganisateurException">Exception levée si une validation échoue.</exception>
         public void ValiderOrganisateur(Organisateur organisateur, bool estModification = false)
         {
-            if (organisateur.Login.Length > 12)
-                throw new OrganisateurException("Le login ne peut pas dépasser 12 caractères.",
-                    (int)OrganisateurException.OrganisateurErreur.LibelleTropLong);
+            if (string.IsNullOrWhiteSpace(organisateur.Login))
+                throw new OrganisateurException("Le login ne peut pas être vide.",
+                    (int)OrganisateurException.OrganisateurErreur.LoginVide);
 
-            if (organisateur.Login.Length < 3)
-                throw new OrganisateurException("Le login ne peut pas être inférieur à 3 caractères.",
-                    (int)OrganisateurException.OrganisateurErreur.LibelleTropCourt);
+            if (string.IsNullOrWhiteSpace(organisateur.Mail))
+                throw new OrganisateurException("Le mail ne peut pas être vide.",
+                    (int)OrganisateurException.OrganisateurErreur.MailVide);
+
+            if (string.IsNullOrWhiteSpace(organisateur.motPasse))
+                throw new OrganisateurException("Le mot de passe ne peut pas être vide.",
+                    (int)OrganisateurException.OrganisateurErreur.MdpVide);
+
+            if(string.IsNullOrWhiteSpace(organisateur.IdRole.ToString()))
+                throw new OrganisateurException("Le rôle ne peut pas être vide.",
+                    (int)OrganisateurException.OrganisateurErreur.RoleVide);
 
             if (organisateur.motPasse.Contains(" "))
                 throw new OrganisateurException("Le mot de passe ne peut pas contenir d'espaces.",
@@ -252,9 +256,38 @@ namespace Lib_Services.Services
                 throw new OrganisateurException("Le mot de passe doit contenir au moin 1 caractère spécial.",
                     (int)OrganisateurException.OrganisateurErreur.MdpPasDeCaractereSpecial);
 
-            if(!estModification && _context.Organisateurs.Any(o => o.Login == organisateur.Login))
+            if (!estModification && _context.Organisateurs.Any(o => o.Login == organisateur.Login))
                 throw new OrganisateurException("Un organisateur avec ce login existe déjà.",
                     (int)OrganisateurException.OrganisateurErreur.LoginExistant);
+
+            if (organisateur.Login.Length > 12)
+                throw new OrganisateurException("Le login ne peut pas dépasser 12 caractères.",
+                    (int)OrganisateurException.OrganisateurErreur.LoginTropLong);
+
+            if (organisateur.Login.Length < 3)
+                throw new OrganisateurException("Le login ne peut pas être inférieur à 3 caractères.",
+                    (int)OrganisateurException.OrganisateurErreur.LoginTropCourt);
+
+            if (_context.Organisateurs.Any(o => o.Mail == organisateur.Mail))
+                throw new OrganisateurException("Ce mail est déjà associée à un autre organisateur.",
+                    (int)OrganisateurException.OrganisateurErreur.MailExistant);
+
+        }
+
+        /// <summary>
+        /// Valide les propriétés d'une instance de <see cref="Organisateur"/> peut être supprimer ou non.
+        /// </summary>
+        /// <param name="organisateur">Instance de <see cref="Organisateur"/> à valider.</param>
+        /// <exception cref="OrganisateurException">Exception levée si une validation échoue.</exception>
+        public void ValiderSuppressionOrganisateur(Organisateur organisateur)
+        {
+            if (Obtenir(organisateur.Login) == null)
+                throw new OrganisateurException("L'organisateur n'existe pas en base de données'.",
+                    (int)OrganisateurException.OrganisateurErreur.OrganisateurInexistant);
+
+            if(organisateur.NomRole == "Administrateur")
+                throw new OrganisateurException("L'organisateur est un administrateur et ne peut pas être supprimé.",
+                    (int)OrganisateurException.OrganisateurErreur.OrganisateurEstAdmin);
         }
         #endregion
     }

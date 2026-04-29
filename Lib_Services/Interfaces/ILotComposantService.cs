@@ -55,19 +55,26 @@ namespace Lib_Services.Interfaces
         void Modifier(LotComposant lotComposant);
 
         /// <summary>
-        /// Supprime un lotcomposant identifié par son login s'il existe.
+        /// Supprime un lotcomposant identifié en base.
         /// </summary>
-        /// <param name="numero">numero du lotcomposant à supprimer.</param>
-        void Supprimer(int numero);
+        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à supprimer.</param>
+        void Supprimer(LotComposant lotComposant);
         #endregion
         #region validations
         /// <summary>
-        /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes
+        /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes lors de l'ajout et la modification
         /// </summary>
         /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
         /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification (true) ou d'une création (false).</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
         void ValiderLotComposant(LotComposant lotComposant, bool estModification = false);
+
+        /// <summary>
+        /// Permet de voir si un lot composant est conformes aux règles de sécurité suivantes lors de la suppression
+        /// </summary>
+        /// <param name="lotComposant">Instance de <see cref="LotComposant"/> à créer.</param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        void ValiderSuppressionLotComposant(LotComposant lotComposant);
         #endregion
     }
 }

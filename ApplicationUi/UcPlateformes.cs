@@ -152,24 +152,25 @@ namespace ApplicationUi
             catch (PlateformeException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de la plateforme.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ButtonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
             {
-                MessageBox.Show("Aucune plateforme sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Log.Warning("Aucune plateforme sélectionné.");
+                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             _plateformeSelectionee.Libelle = textBoxNom.Text;
@@ -183,17 +184,17 @@ namespace ApplicationUi
             catch (PlateformeException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification de la plateforme.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -206,7 +207,8 @@ namespace ApplicationUi
         {
             if (dataGridPlateformes.CurrentRow == null || _plateformeSelectionee == null)
             {
-                MessageBox.Show("Aucune plateforme sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Log.Warning("Aucune plateforme sélectionné.");
+                MessageBox.Show("Aucune plateforme sélectionnée", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -219,17 +221,17 @@ namespace ApplicationUi
             catch (PlateformeException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de la plateforme.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }

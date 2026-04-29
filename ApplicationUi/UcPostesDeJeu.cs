@@ -204,7 +204,8 @@ namespace ApplicationUi
             if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne 
                 || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
             {
-                MessageBox.Show("Veuillez sélectionner une plateforme et un espace.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Log.Warning("Aucun plateforme et espace sélectionné.");
+                MessageBox.Show("Veuillez sélectionner une plateforme et un espace.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -224,17 +225,17 @@ namespace ApplicationUi
             catch (PosteJeuException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du poste de jeu.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -256,17 +257,17 @@ namespace ApplicationUi
             catch (PosteJeuException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification du poste de jeu.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -278,11 +279,11 @@ namespace ApplicationUi
             if (dataGridPostesJeu.CurrentRow == null || _posteJeuSelectionne == null)
                 return;
 
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Supression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
 
             _servicePosteJeu.Supprimer(_posteJeuSelectionne.NumeroPoste);
-            MessageBox.Show("Le poste de jeu a bien été supprimé.", "Supression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Le poste de jeu a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Raz_Zones();
 
         }

@@ -46,20 +46,27 @@ namespace Lib_Services.Interfaces
         void Modifier(Lot lot);
 
         /// <summary>
-        /// Supprime un Lot identifié par son numero s'il existe.
+        /// Supprime un Lot identifié en base.
         /// </summary>
-        /// <param name="numero">numero du Lot à supprimer.</param>
-        void Supprimer(int numero);
+        /// <param name="lot">Instance de <see cref="Lot"/> à supprimer.</param>
+        void Supprimer(Lot lot);
         #endregion
 
         #region Validations
         /// <summary>
-        /// Permet de voir si un lot est conformes aux règles de sécurité suivantes
+        /// Permet de voir si un lot est conformes aux règles de sécurité suivantes lors de l'ajout et la modification
         /// </summary>
         /// <param name="lot">Instance de <see cref="Lot"/> à créer.</param>
         /// <param name="estModification">Indique si la validation est pour une modification (true) ou une création (false).</param>
         /// <returns>la liste des msgs d'erreurs.</returns>
         void ValiderLot(Lot lot, bool estModification = false);
+
+        /// <summary>
+        /// Permet de voir si un lot est conformes aux règles de sécurité suivantes lors de la suppression
+        /// </summary>
+        /// <param name="lot">Instance de <see cref="Lot"/> à créer.</param>
+        /// <returns>la liste des msgs d'erreurs.</returns>
+        void ValiderSuppressionLot(Lot lot);
         #endregion
     }
 }

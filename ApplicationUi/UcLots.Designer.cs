@@ -58,7 +58,6 @@ namespace ApplicationUi
             labelTitreComposantDunLot = new Label();
             dataGridLots = new DataGridView();
             groupBoxStatsEspaces = new GroupBox();
-            labelStatLotNonAttribue = new Label();
             labelStatLotsTotal = new Label();
             labelTitreLot = new Label();
             panelForm.SuspendLayout();
@@ -248,7 +247,7 @@ namespace ApplicationUi
             boutonModifier.TabIndex = 4;
             boutonModifier.Text = "✏️    Modifier";
             boutonModifier.UseVisualStyleBackColor = false;
-            boutonModifier.Click += BoutonModifier_Click;
+            boutonModifier.Click += BoutonModifierLot_Click;
             // 
             // boutonSupprimerLot
             // 
@@ -605,7 +604,6 @@ namespace ApplicationUi
             // groupBoxStatsEspaces
             // 
             groupBoxStatsEspaces.BackColor = Color.White;
-            groupBoxStatsEspaces.Controls.Add(labelStatLotNonAttribue);
             groupBoxStatsEspaces.Controls.Add(labelStatLotsTotal);
             groupBoxStatsEspaces.Controls.Add(labelTitreLot);
             groupBoxStatsEspaces.Dock = DockStyle.Fill;
@@ -616,16 +614,6 @@ namespace ApplicationUi
             groupBoxStatsEspaces.Size = new Size(908, 253);
             groupBoxStatsEspaces.TabIndex = 9;
             groupBoxStatsEspaces.TabStop = false;
-            // 
-            // labelStatLotNonAttribue
-            // 
-            labelStatLotNonAttribue.Font = new Font("Segoe UI", 9.75F);
-            labelStatLotNonAttribue.Location = new Point(1, 172);
-            labelStatLotNonAttribue.Name = "labelStatLotNonAttribue";
-            labelStatLotNonAttribue.Size = new Size(907, 27);
-            labelStatLotNonAttribue.TabIndex = 2;
-            labelStatLotNonAttribue.Text = "Lots non attribués : 8";
-            labelStatLotNonAttribue.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // labelStatLotsTotal
             // 
@@ -727,7 +715,6 @@ namespace ApplicationUi
         private TableLayoutPanel tableLayoutPanel3;
         private DataGridView dataGridLots;
         private GroupBox groupBoxStatsEspaces;
-        private Label labelStatLotNonAttribue;
         private Label labelStatLotsTotal;
         private Label labelTitreLot;
         private GroupBox groupBox4;

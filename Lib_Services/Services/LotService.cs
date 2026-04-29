@@ -106,18 +106,14 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Supprime un Lot identifié par son numero s'il existe.
+        /// Supprime un Lot identifié en base.
         /// </summary>
-        /// <param name="numero">numero du Lot à supprimer.</param>
-        public void Supprimer(int numero)
+        /// <param name="lot">Instance de <see cref="Lot"/> à supprimer.</param>
+        public void Supprimer(Lot lot)
         {
-            // Recherche de l'entité (utilise le cache si possible).
-            var lot = _context.Lots.Find(numero);
-            if (lot != null)
-            {
-                _context.Lots.Remove(lot);
-                _context.SaveChanges();
-            }
+            ValiderSuppressionLot(lot);
+            _context.Lots.Remove(lot);
+            _context.SaveChanges();
         }
 
         #endregion
@@ -131,6 +127,13 @@ namespace Lib_Services.Services
         /// <exception cref="LotException">Exception levée si une validation échoue.</exception>
         public void ValiderLot(Lot lot, bool estModification = false)
         {
+            if (string.IsNullOrWhiteSpace(lot.Libelle))
+                throw new LotException("Le libellé ne peut pas être vide.",
+                    (int)LotException.LotErreur.LibelleVide);
+
+            if (string.IsNullOrWhiteSpace(lot.NumeroTournoi.ToString()))
+                throw new LotException("Le tournoi ne peut pas être vide.",
+                    (int)LotException.LotErreur.TournoiVide);
 
             if (lot.Libelle.Length > 50)
                 throw new LotException("Le libellé ne peut pas dépasser 50 caractères.",
@@ -139,6 +142,26 @@ namespace Lib_Services.Services
             if (lot.RangAttribution < 0)
                 throw new LotException("Le rang ne peut pas être négatif.",
                     (int)LotException.LotErreur.RangNegatif);
+
+            if (lot.RangAttribution == 0)
+                throw new LotException("Le rang ne peut pas être égale à 0.",
+                    (int)LotException.LotErreur.RangZero);
+
+            if (lot.RangAttribution > 10)
+                throw new LotException("Le rang ne peut pas être supérieur à 10.",
+                    (int)LotException.LotErreur.RangTropGrand);
+        }
+
+        /// <summary>
+        /// Valide les propriétés d'une instance de <see cref="Lot"/> peut être supprimer ou non.
+        /// </summary>
+        /// <param name="lot">Instance de <see cref="Lot"/> à valider.</param>
+        /// <exception cref="LotException">Exception levée si une validation échoue.</exception>
+        public void ValiderSuppressionLot(Lot lot)
+        {
+            if (Obtenir(lot.Numero) == null)
+                throw new LotException("Le lot n'existe pas en base de données'.",
+                    (int)LotException.LotErreur.LotInexistant);
         }
         #endregion
     }

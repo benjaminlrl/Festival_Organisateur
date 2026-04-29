@@ -176,7 +176,8 @@ namespace ApplicationUi
             if (comboBoxJeu.SelectedItem is not Jeu jeuSelectionne
                 || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
             {
-                MessageBox.Show("Veuillez sélectionner une plateforme et un jeu.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Log.Warning("Aucune plateforme et jeu sélectionné.");
+                MessageBox.Show("Veuillez sélectionner une plateforme et un jeu.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             SoumisVote soumisVote = new()
@@ -199,24 +200,25 @@ namespace ApplicationUi
             catch (SoumisVoteException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du tournoi.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ButtonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
             {
-                MessageBox.Show("Aucun soumisVote sélectionné", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Log.Warning("Aucun soumisVote sélectionné.");
+                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -231,17 +233,17 @@ namespace ApplicationUi
             catch (SoumisVoteException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification du tournoi.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
@@ -252,7 +254,8 @@ namespace ApplicationUi
         {
             if (dataGridSoumisVote.CurrentRow == null || _soumisVoteSelectionne == null)
             {
-                MessageBox.Show("Aucun soumisVote sélectionné", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Log.Warning("Aucun soumisVote sélectionné.");
+                MessageBox.Show("Aucun soumisVote sélectionné", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

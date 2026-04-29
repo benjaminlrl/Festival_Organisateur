@@ -38,7 +38,6 @@ namespace ApplicationUi
             label2 = new Label();
             textBoxRecherche = new TextBox();
             groupBoxStatsEspaces = new GroupBox();
-            labelStatComposantNonAttribuer = new Label();
             labelStatComposantsTotal = new Label();
             labelTitreComposant = new Label();
             panelForm.SuspendLayout();
@@ -302,7 +301,6 @@ namespace ApplicationUi
             // groupBoxStatsEspaces
             // 
             groupBoxStatsEspaces.BackColor = Color.White;
-            groupBoxStatsEspaces.Controls.Add(labelStatComposantNonAttribuer);
             groupBoxStatsEspaces.Controls.Add(labelStatComposantsTotal);
             groupBoxStatsEspaces.Controls.Add(labelTitreComposant);
             groupBoxStatsEspaces.Location = new Point(939, 61);
@@ -312,16 +310,6 @@ namespace ApplicationUi
             groupBoxStatsEspaces.Size = new Size(329, 170);
             groupBoxStatsEspaces.TabIndex = 8;
             groupBoxStatsEspaces.TabStop = false;
-            // 
-            // labelStatComposantNonAttribuer
-            // 
-            labelStatComposantNonAttribuer.Font = new Font("Segoe UI", 9.75F);
-            labelStatComposantNonAttribuer.Location = new Point(-1, 115);
-            labelStatComposantNonAttribuer.Name = "labelStatComposantNonAttribuer";
-            labelStatComposantNonAttribuer.Size = new Size(329, 27);
-            labelStatComposantNonAttribuer.TabIndex = 2;
-            labelStatComposantNonAttribuer.Text = "Composants non attribués : 8";
-            labelStatComposantNonAttribuer.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // labelStatComposantsTotal
             // 
@@ -394,7 +382,6 @@ namespace ApplicationUi
         private Label label2;
         private TextBox textBoxRecherche;
         private GroupBox groupBoxStatsEspaces;
-        private Label labelStatComposantNonAttribuer;
         private Label labelStatComposantsTotal;
         private Label labelTitreComposant;
     }

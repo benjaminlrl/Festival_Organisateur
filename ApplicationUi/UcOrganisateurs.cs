@@ -128,38 +128,6 @@ namespace ApplicationUi
 
         #endregion
 
-        #region Validations
-        /// <summary>
-        /// Permet de voir si tout les champs d'un organisateur ne sont pas vides
-        /// </summary>
-        /// <returns>true si tout est respectés, sinon false.</returns>
-        public bool ChampVide()
-        {
-            if (string.IsNullOrWhiteSpace(textBoxLogin.Text))
-            {
-                MessageBox.Show("Le Login ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxMail.Text))
-            {
-                MessageBox.Show("Le Mail ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(textBoxMotDePasse.Text))
-            {
-                MessageBox.Show("Le Mot de Passe ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (comboBoxRole.SelectedValue == null)
-            {
-                MessageBox.Show("Le Rôle ne peut pas être vide", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        #endregion
-
         #region Evènements
 
         /// <summary>
@@ -169,23 +137,17 @@ namespace ApplicationUi
         /// </summary>
         private void BoutonAjouter_Click(object sender, EventArgs e)
         {
-            // On check si les champs sont vides
-            if (ChampVide() == false)
-            {
-                return;
-            }
-
-            // On crée un nouveau organisateur avec les données des champs
-            _unNouveauOrganisateur = new Organisateur
-            {
-                Login = textBoxLogin.Text,
-                Mail = textBoxMail.Text,
-                motPasse = textBoxMotDePasse.Text,
-                IdRole = (int)comboBoxRole.SelectedValue
-            };
-
             try
             {
+                // On crée un nouveau organisateur avec les données des champs
+                _unNouveauOrganisateur = new Organisateur
+                {
+                    Login = textBoxLogin.Text,
+                    Mail = textBoxMail.Text,
+                    motPasse = textBoxMotDePasse.Text,
+                    IdRole = (int)comboBoxRole.SelectedValue
+                };
+
                 _serviceOrganisateur.Creer(_unNouveauOrganisateur);
                 MessageBox.Show("L'organisateur a bien été ajouté.", "Ajout", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ChargerOrganisateurs();
@@ -194,17 +156,17 @@ namespace ApplicationUi
             catch (OrganisateurException ex)
             { 
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout de l'organisateur.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -218,6 +180,7 @@ namespace ApplicationUi
             // On check s'il a bien selectionné un organisateur à modifier
             if (_organisateurSelectionne == null)
             {
+                Log.Warning("Aucun organisateur sélectionné.")
                 MessageBox.Show("Aucun Organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -247,17 +210,17 @@ namespace ApplicationUi
             catch (OrganisateurException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'organisateur.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -267,29 +230,44 @@ namespace ApplicationUi
         /// </summary>
         private void BoutonSupprimer_Click(object sender, EventArgs e)
         {
-            // On check s'il a bien selectionné un organisateur à supprimé
-            // On check s'il essaye pas de supprimer l'organisateur connecté
-            if (_organisateurSelectionne == null)
+            try
             {
-                MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // On check s'il a bien selectionné un organisateur à supprimé
+                // On check s'il essaye pas de supprimer l'organisateur connecté
+                if (_organisateurSelectionne == null)
+                {
+                    Log.Warning("Aucun organisateur sélectionné.");
+                    MessageBox.Show("Aucun organisateur sélectionné.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (_organisateurSelectionne == _organisateurConnecte)
+                {
+                    Log.Warning("Vous ne pouvez pas supprimer votre propre compte.");
+                    MessageBox.Show("Vous ne pouvez pas supprimer votre propre compte.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    return;
+                _serviceOrganisateur.Supprimer(_organisateurSelectionne);
+                MessageBox.Show("L'organisateur a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ChargerOrganisateurs();
+                Raz_Zones();
             }
-            if (_organisateurSelectionne == _organisateurConnecte)
+            catch (OrganisateurException ex)
             {
-                MessageBox.Show("Vous ne pouvez pas supprimer votre propre compte.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            if (_organisateurSelectionne.NomRole == "Administrateur")
+            catch (DbException ex)
             {
-                MessageBox.Show("Vous ne pouvez pas supprimer de compte Administrateur.\nVeuillez contacter un SuperAdmin.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification de l'organisateur.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                return;
-            _serviceOrganisateur.Supprimer(_organisateurSelectionne.Login);
-            MessageBox.Show("L'organisateur a bien été supprimé.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            ChargerOrganisateurs();
-            Raz_Zones();
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
