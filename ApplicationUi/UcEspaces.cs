@@ -67,11 +67,13 @@ namespace ApplicationUi
                 buttonAjouter.Visible = false;
                 DesactiverInputs();
             }
+
             if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Modifier") == false)
             {
                 buttonModifier.Visible = false;
                 DesactiverInputs();
             }
+
             if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Supprimer") == false)
             {
                 buttonSupprimer.Visible = false;

@@ -215,7 +215,8 @@ namespace Lib_Services.Services
                     }
                     else
                         throw new EspaceException(
-                           "Erreur lors de la modification des postes de jeu associés : \n",
+                           "Erreur lors de la modification des postes de jeu associés : \n" +
+                           "Aucun poste de jeu n'est associé à l'espace",
                            (int)EspaceException.EspaceErreur.ModificationEspaceAucunPosteJeu);
                 }            
 
@@ -419,7 +420,7 @@ namespace Lib_Services.Services
 
                 // Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.
                 // On vérifie donc si la séquence de Lettre existe ou pas
-                if (enBdd.Nom != espace.Nom
+                if (enBdd.Nom.Substring(0,3) != espace.Nom.Substring(0,3)
                     && !modifPosteJeu)
                     throw new EspaceException("Le formattage de la reference des postes de jeu s'appuie sur les trois premières lettres de l'espace.\n",
                         (int)EspaceException.EspaceErreur.ModificationEspaceNomLettresExistePostesJeu);
