@@ -164,12 +164,12 @@ namespace Lib_Services.Services
                 ? int.Parse(dernierPoste.Reference.Substring(dernierPoste.Reference.Length - 3, 3)) +1
                 : 1;
 
-            posteJeu.SetReference(espace, numeroPoste);
+            posteJeu.SetReference(espace.Nom, numeroPoste);
 
             while (ReferenceExiste(posteJeu.Reference) != null)
             {
                 numeroPoste++;
-                posteJeu.SetReference(espace, numeroPoste);
+                posteJeu.SetReference(espace.Nom, numeroPoste);
             }
 
             ValiderPosteJeu(posteJeu, false);
@@ -353,20 +353,15 @@ namespace Lib_Services.Services
         /// <exception cref="Exception"></exception>
         public void FormatRefPosteJeuEspaceNouvNom(List<PosteJeu> postesJeu, string nouveauNomEspace)
         {
-            Espace? nouvEspace = _serviceEspace.ObtenirParNom(nouveauNomEspace);
-
-            if (nouvEspace == null)
-                throw new Exception("Espace inconnu");
-
             foreach (PosteJeu posteJeu in postesJeu)
             {
                 // Récupère le numéro de poste à partir de la référence actuelle du poste de jeu
                 int numeroPoste = int.Parse(posteJeu.Reference.Substring(posteJeu.Reference.Length - 3, 3));
 
-                posteJeu.SetReference(nouvEspace, numeroPoste);
-                Modifier(posteJeu);
+                posteJeu.SetReference(nouveauNomEspace, numeroPoste);
             }
         }
+
 
         #endregion
     }

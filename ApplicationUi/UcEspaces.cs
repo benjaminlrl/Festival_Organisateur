@@ -22,7 +22,6 @@ namespace ApplicationUi
         private readonly IEspaceService _serviceEspace;
         private readonly ITournoiService _serviceTournoi;
         private readonly IOrganisateurService _serviceOrganisateur;
-        private readonly IPosteJeuService _servicePosteJeu;
         private readonly Organisateur _organisateurConnecte;
         private Espace? _espaceSelectionnee;
         private Tournoi? _tournoiSelectionne;
@@ -35,14 +34,13 @@ namespace ApplicationUi
         public event Action<Tournoi>? NaviguerVersTournois;
         public event Action<PosteJeu>? NaviguerVersPostesJeu;
 
-        public UcEspaces(Organisateur unOrganisateurConnecte)
+        public UcEspaces(Organisateur unOrganisateurConnecte, Espace? espacePreselectionne = null)
         {
             InitializeComponent();
             var _context = new ApplicationDbContext();
             _serviceOrganisateur = new OrganisateurService(_context);
             _serviceEspace = new EspaceService(_context);
             _serviceTournoi = new TournoiService(_context);
-            _servicePosteJeu = new PosteJeuService(_context);
 
             _organisateurConnecte = unOrganisateurConnecte;
             _espaceSelectionnee = null;
@@ -57,6 +55,12 @@ namespace ApplicationUi
             filtre = "";
 
             Raz_Zones();
+
+            if (espacePreselectionne != null)
+            {
+                _espaceSelectionnee = _serviceEspace.Obtenir(espacePreselectionne.IdEspace);
+                RemplirFormulaire();
+            }
 
             if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcEspaces, "Ajouter") == false)
             {
@@ -94,7 +98,7 @@ namespace ApplicationUi
         private void ChargerPostesJeu()
         {
             // Si l'espace est null, on ne fait rien
-            if (_espaceSelectionnee == null)
+            if (_espaceSelectionnee == null || _espaceSelectionnee.PostesJeu == null)
             {
                 dataGridPostesJeu.DataSource = null;
                 dataGridPostesJeu.Visible = true;
@@ -170,30 +174,30 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridEspaces);
 
-            dataGridEspaces.Columns["idEspace"].Visible = false;
-            dataGridEspaces.Columns["Tournois"].Visible = false;
-            dataGridEspaces.Columns["PostesJeu"].Visible = false;
-            dataGridEspaces.Columns["Capacitemaxi"].Visible = false;
-            dataGridEspaces.Columns["Superficie"].Visible = false;
+            dataGridEspaces.Columns["idEspace"]!.Visible = false;
+            dataGridEspaces.Columns["Tournois"]!.Visible = false;
+            dataGridEspaces.Columns["PostesJeu"]!.Visible = false;
+            dataGridEspaces.Columns["Capacitemaxi"]!.Visible = false;
+            dataGridEspaces.Columns["Superficie"]!.Visible = false;
 
-            dataGridEspaces.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridEspaces.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridEspaces.Columns["Nom"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridEspaces.Columns["Description"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
         private void MEP_DataGridPostesJeu()
         {
             DesactiverTrieAutomatique(dataGridPostesJeu);
 
-            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
-            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
-            dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
-            dataGridPostesJeu.Columns["Espace"].Visible = false;
-            dataGridPostesJeu.Columns["NomEspace"].Visible = false;
+            dataGridPostesJeu.Columns["NumeroPoste"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["NomPlateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"]!.Visible = false;
+            dataGridPostesJeu.Columns["Espace"]!.Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"]!.Visible = false;
 
-            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridPostesJeu.Columns["Fonctionnel"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Reference"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridPostesJeu.Columns["Fonctionnel"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void MEP_DataGridTournois()
@@ -201,25 +205,25 @@ namespace ApplicationUi
             DesactiverTrieAutomatique(dataGridTournois);
 
             dataGridTournois.Visible = true;
-            dataGridTournois.Columns["NumeroTournoi"].Visible = false;
-            dataGridTournois.Columns["IdEspace"].Visible = false;
-            dataGridTournois.Columns["Espace"].Visible = false;
-            dataGridTournois.Columns["IdJeu"].Visible = false;
-            dataGridTournois.Columns["Jeu"].Visible = false;
-            dataGridTournois.Columns["NbParticipants"].Visible = false;
-            dataGridTournois.Columns["NomEspace"].Visible = false;
-            dataGridTournois.Columns["TitreJeu"].Visible = false;
-            dataGridTournois.Columns["Statut"].Visible = false;
-            dataGridTournois.Columns["DureePrevue"].Visible = false;
-            dataGridTournois.Columns["Lot"].Visible = false;
-            dataGridTournois.Columns["Inscriptions"].Visible = false;
+            dataGridTournois.Columns["NumeroTournoi"]!.Visible = false;
+            dataGridTournois.Columns["IdEspace"]!.Visible = false;
+            dataGridTournois.Columns["Espace"]!.Visible = false;
+            dataGridTournois.Columns["IdJeu"]!.Visible = false;
+            dataGridTournois.Columns["Jeu"]!.Visible = false;
+            dataGridTournois.Columns["NbParticipants"]!.Visible = false;
+            dataGridTournois.Columns["NomEspace"]!.Visible = false;
+            dataGridTournois.Columns["TitreJeu"]!.Visible = false;
+            dataGridTournois.Columns["Statut"]!.Visible = false;
+            dataGridTournois.Columns["DureePrevue"]!.Visible = false;
+            dataGridTournois.Columns["Lot"]!.Visible = false;
+            dataGridTournois.Columns["Inscriptions"]!.Visible = false;
 
-            dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["DateHeure"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["Nom"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
-            dataGridTournois.Columns["DateHeure"].HeaderText = "Début";
+            dataGridTournois.Columns["DateHeure"]!.HeaderText = "Début";
 
-            dataGridTournois.Columns["Nom"].DisplayIndex = 1;
+            dataGridTournois.Columns["Nom"]!.DisplayIndex = 1;
         }
 
         #endregion  
@@ -280,7 +284,10 @@ namespace ApplicationUi
         {
             // Si aucune ligne n'est sélectionnée, ne rien faire
             if (dataGridEspaces.CurrentRow == null || _espaceSelectionnee == null)
+            {
+                MessageBox.Show("Aucune participation sélectionnée", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }                
 
             _espaceSelectionnee.Nom = textBoxNom.Text;
             _espaceSelectionnee.Description = textBoxDescription.Text;
@@ -358,10 +365,10 @@ namespace ApplicationUi
                 // Association des index avec les propriétés de l'objet
                 Dictionary<int, string> map = new()
                 {
-                    { dataGridEspaces.Columns["Nom"].Index,          "Nom" },
-                    { dataGridEspaces.Columns["Description"].Index,  "Description" },
-                    { dataGridEspaces.Columns["Superficie"].Index,   "Superficie" },
-                    { dataGridEspaces.Columns["CapaciteMaxi"].Index, "CapaciteMaxi" },
+                    { dataGridEspaces.Columns["Nom"]!.Index,          "Nom" },
+                    { dataGridEspaces.Columns["Description"]!.Index,  "Description" },
+                    { dataGridEspaces.Columns["Superficie"]!.Index,   "Superficie" },
+                    { dataGridEspaces.Columns["CapaciteMaxi"]!.Index, "CapaciteMaxi" },
                 };
                 // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,
                 // sinon récupérer le nom de la propriété associée à la colonne cliquée
@@ -431,8 +438,8 @@ namespace ApplicationUi
 
             labelStatutTournoi.Visible = _espaceSelectionnee != null;
 
-            List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee.IdEspace);
-            List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee.IdEspace);
+            List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_espaceSelectionnee!.IdEspace);
+            List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_espaceSelectionnee!.IdEspace);
 
             if (enCours.Count > 0)
             {
@@ -566,7 +573,7 @@ namespace ApplicationUi
                         "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !modifPosteJeu)
+            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.ModificationEspaceNomLettresExistePostesJeu && !modifPosteJeu)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                 if (MessageBox.Show("Voulez vous renommer l'espace et reformatter le nom des postes de jeu associés ?",
@@ -598,13 +605,13 @@ namespace ApplicationUi
         /// Permets de supprimer un espace en gérant les différentes exceptions qui peuvent survenir,
         /// notamment lorsqu'il existe des postes de jeu associés à l'espace.
         /// </summary>
-        /// <param name="avecPostesJeu"></param>
-        private void SupprimerEspace(bool avecPostesJeu)
+        /// <param name="suppPostesJeu"></param>
+        private void SupprimerEspace(bool suppPostesJeu)
         {
             try
             {
-                _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, avecPostesJeu);
-                if(!avecPostesJeu)
+                _serviceEspace.Supprimer(_espaceSelectionnee!.IdEspace, suppPostesJeu);
+                if(!suppPostesJeu)
                     MessageBox.Show("L'espace a bien été supprimé.", "Suppression",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else                
@@ -612,7 +619,7 @@ namespace ApplicationUi
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
-            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !avecPostesJeu)
+            catch (EspaceException ex) when (ex.CodeErreur == (int)EspaceException.EspaceErreur.SuppressionEspacePosteJeuExistant && !suppPostesJeu)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
                 if (MessageBox.Show("Impossible de supprimer l'espace car il est associé à un ou plusieurs postes de jeu.\n" +

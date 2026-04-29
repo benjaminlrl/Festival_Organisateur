@@ -43,7 +43,7 @@
             numericUpDownRang = new NumericUpDown();
             comboBoxUtilisateur = new ComboBox();
             comboBoxTournoi = new ComboBox();
-            labelStatutTournoi = new Label();
+            labelComentaire = new Label();
             textBoxCommentaire = new TextBox();
             labelEvaluation = new Label();
             trackBarEvaluation = new TrackBar();
@@ -54,6 +54,8 @@
             labelRang = new Label();
             label2 = new Label();
             numericUpDownScoreFinal = new NumericUpDown();
+            label84 = new Label();
+            labelStatutTournoi = new Label();
             groupBox1 = new GroupBox();
             buttonAjouter = new Button();
             buttonEffacer = new Button();
@@ -121,16 +123,16 @@
             labelNom.AutoSize = true;
             labelNom.Dock = DockStyle.Fill;
             labelNom.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelNom.Location = new Point(220, 0);
+            labelNom.Location = new Point(252, 73);
             labelNom.Margin = new Padding(4, 0, 4, 0);
             labelNom.Name = "labelNom";
-            labelNom.Size = new Size(141, 35);
+            labelNom.Size = new Size(258, 32);
             labelNom.TabIndex = 6;
             labelNom.Text = "Id utilisateur :";
             // 
             // textBoxRecherche
             // 
-            textBoxRecherche.Location = new Point(197, 126);
+            textBoxRecherche.Location = new Point(197, 127);
             textBoxRecherche.Name = "textBoxRecherche";
             textBoxRecherche.Size = new Size(888, 31);
             textBoxRecherche.TabIndex = 0;
@@ -185,34 +187,36 @@
             tableLayoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel.ColumnCount = 5;
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 39.38849F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.1582737F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.4532356F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 238F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 461F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.2712936F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.29653F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 226F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 391F));
             tableLayoutPanel.Controls.Add(flowLayoutPanel1, 3, 3);
             tableLayoutPanel.Controls.Add(numericUpDownRang, 2, 1);
-            tableLayoutPanel.Controls.Add(comboBoxUtilisateur, 1, 1);
+            tableLayoutPanel.Controls.Add(comboBoxUtilisateur, 1, 3);
             tableLayoutPanel.Controls.Add(comboBoxTournoi, 0, 1);
-            tableLayoutPanel.Controls.Add(labelStatutTournoi, 4, 0);
+            tableLayoutPanel.Controls.Add(labelComentaire, 4, 0);
             tableLayoutPanel.Controls.Add(textBoxCommentaire, 4, 1);
             tableLayoutPanel.Controls.Add(labelEvaluation, 3, 0);
             tableLayoutPanel.Controls.Add(trackBarEvaluation, 3, 1);
             tableLayoutPanel.Controls.Add(labelTournoi, 0, 0);
-            tableLayoutPanel.Controls.Add(labelNom, 1, 0);
+            tableLayoutPanel.Controls.Add(labelNom, 1, 2);
             tableLayoutPanel.Controls.Add(labelDateHeureInscription, 0, 2);
             tableLayoutPanel.Controls.Add(labelLot, 3, 2);
             tableLayoutPanel.Controls.Add(dateTimePickerDateHeureInscription, 0, 3);
             tableLayoutPanel.Controls.Add(labelRang, 2, 0);
             tableLayoutPanel.Controls.Add(label2, 2, 2);
             tableLayoutPanel.Controls.Add(numericUpDownScoreFinal, 2, 3);
+            tableLayoutPanel.Controls.Add(label84, 1, 0);
+            tableLayoutPanel.Controls.Add(labelStatutTournoi, 1, 1);
             tableLayoutPanel.Location = new Point(4, 3);
             tableLayoutPanel.Margin = new Padding(4, 3, 4, 3);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 4;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.Size = new Size(1248, 219);
@@ -223,9 +227,9 @@
             flowLayoutPanel1.Controls.Add(radioButtonLotRemisTrue);
             flowLayoutPanel1.Controls.Add(radioButtonLotRemisFalse);
             flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(551, 132);
+            flowLayoutPanel1.Location = new Point(632, 108);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(232, 84);
+            flowLayoutPanel1.Size = new Size(220, 108);
             flowLayoutPanel1.TabIndex = 39;
             // 
             // radioButtonLotRemisTrue
@@ -256,57 +260,56 @@
             // 
             numericUpDownRang.Dock = DockStyle.Fill;
             numericUpDownRang.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownRang.Location = new Point(369, 39);
-            numericUpDownRang.Margin = new Padding(4);
+            numericUpDownRang.Location = new Point(518, 38);
+            numericUpDownRang.Margin = new Padding(4, 3, 4, 3);
             numericUpDownRang.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             numericUpDownRang.Name = "numericUpDownRang";
-            numericUpDownRang.Size = new Size(175, 31);
+            numericUpDownRang.Size = new Size(107, 31);
             numericUpDownRang.TabIndex = 37;
-            numericUpDownRang.Value = new decimal(new int[] { 10, 0, 0, 0 });
             // 
             // comboBoxUtilisateur
             // 
             comboBoxUtilisateur.Dock = DockStyle.Fill;
             comboBoxUtilisateur.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxUtilisateur.Location = new Point(220, 39);
-            comboBoxUtilisateur.Margin = new Padding(4);
+            comboBoxUtilisateur.Location = new Point(252, 108);
+            comboBoxUtilisateur.Margin = new Padding(4, 3, 4, 3);
             comboBoxUtilisateur.Name = "comboBoxUtilisateur";
-            comboBoxUtilisateur.Size = new Size(141, 33);
+            comboBoxUtilisateur.Size = new Size(258, 33);
             comboBoxUtilisateur.TabIndex = 33;
             // 
             // comboBoxTournoi
             // 
             comboBoxTournoi.Dock = DockStyle.Fill;
             comboBoxTournoi.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxTournoi.Location = new Point(4, 39);
-            comboBoxTournoi.Margin = new Padding(4);
+            comboBoxTournoi.Location = new Point(4, 38);
+            comboBoxTournoi.Margin = new Padding(4, 3, 4, 3);
             comboBoxTournoi.Name = "comboBoxTournoi";
-            comboBoxTournoi.Size = new Size(208, 33);
+            comboBoxTournoi.Size = new Size(240, 33);
             comboBoxTournoi.TabIndex = 32;
             // 
-            // labelStatutTournoi
+            // labelComentaire
             // 
-            labelStatutTournoi.BackColor = Color.MidnightBlue;
-            labelStatutTournoi.Dock = DockStyle.Fill;
-            labelStatutTournoi.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelStatutTournoi.ForeColor = Color.AliceBlue;
-            labelStatutTournoi.Location = new Point(790, 0);
-            labelStatutTournoi.Margin = new Padding(4, 0, 4, 0);
-            labelStatutTournoi.Name = "labelStatutTournoi";
-            labelStatutTournoi.Size = new Size(454, 35);
-            labelStatutTournoi.TabIndex = 18;
-            labelStatutTournoi.Text = "Commentaire";
-            labelStatutTournoi.TextAlign = ContentAlignment.MiddleCenter;
+            labelComentaire.BackColor = Color.MidnightBlue;
+            labelComentaire.Dock = DockStyle.Fill;
+            labelComentaire.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
+            labelComentaire.ForeColor = Color.AliceBlue;
+            labelComentaire.Location = new Point(859, 0);
+            labelComentaire.Margin = new Padding(4, 0, 4, 0);
+            labelComentaire.Name = "labelComentaire";
+            labelComentaire.Size = new Size(385, 35);
+            labelComentaire.TabIndex = 18;
+            labelComentaire.Text = "Commentaire";
+            labelComentaire.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // textBoxCommentaire
             // 
             textBoxCommentaire.Dock = DockStyle.Fill;
-            textBoxCommentaire.Location = new Point(789, 38);
+            textBoxCommentaire.Location = new Point(858, 38);
             textBoxCommentaire.Multiline = true;
             textBoxCommentaire.Name = "textBoxCommentaire";
             textBoxCommentaire.PlaceholderText = "Laisser un commentaire sur le tournoi...";
             tableLayoutPanel.SetRowSpan(textBoxCommentaire, 3);
-            textBoxCommentaire.Size = new Size(456, 178);
+            textBoxCommentaire.Size = new Size(387, 178);
             textBoxCommentaire.TabIndex = 19;
             // 
             // labelEvaluation
@@ -314,10 +317,10 @@
             labelEvaluation.AutoSize = true;
             labelEvaluation.Dock = DockStyle.Fill;
             labelEvaluation.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelEvaluation.Location = new Point(552, 0);
+            labelEvaluation.Location = new Point(633, 0);
             labelEvaluation.Margin = new Padding(4, 0, 4, 0);
             labelEvaluation.Name = "labelEvaluation";
-            labelEvaluation.Size = new Size(230, 35);
+            labelEvaluation.Size = new Size(218, 35);
             labelEvaluation.TabIndex = 8;
             labelEvaluation.Text = "Évaluation :";
             // 
@@ -325,9 +328,9 @@
             // 
             trackBarEvaluation.BackColor = Color.White;
             trackBarEvaluation.Dock = DockStyle.Fill;
-            trackBarEvaluation.Location = new Point(551, 38);
+            trackBarEvaluation.Location = new Point(632, 38);
             trackBarEvaluation.Name = "trackBarEvaluation";
-            trackBarEvaluation.Size = new Size(232, 53);
+            trackBarEvaluation.Size = new Size(220, 32);
             trackBarEvaluation.TabIndex = 20;
             // 
             // labelTournoi
@@ -338,7 +341,7 @@
             labelTournoi.Location = new Point(4, 0);
             labelTournoi.Margin = new Padding(4, 0, 4, 0);
             labelTournoi.Name = "labelTournoi";
-            labelTournoi.Size = new Size(208, 35);
+            labelTournoi.Size = new Size(240, 35);
             labelTournoi.TabIndex = 16;
             labelTournoi.Text = "Nom du tournoi:";
             // 
@@ -347,10 +350,10 @@
             labelDateHeureInscription.AutoSize = true;
             labelDateHeureInscription.Dock = DockStyle.Fill;
             labelDateHeureInscription.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelDateHeureInscription.Location = new Point(4, 94);
+            labelDateHeureInscription.Location = new Point(4, 73);
             labelDateHeureInscription.Margin = new Padding(4, 0, 4, 0);
             labelDateHeureInscription.Name = "labelDateHeureInscription";
-            labelDateHeureInscription.Size = new Size(208, 35);
+            labelDateHeureInscription.Size = new Size(240, 32);
             labelDateHeureInscription.TabIndex = 21;
             labelDateHeureInscription.Text = "Date d'inscription :";
             // 
@@ -359,10 +362,10 @@
             labelLot.AutoSize = true;
             labelLot.Dock = DockStyle.Fill;
             labelLot.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelLot.Location = new Point(552, 94);
+            labelLot.Location = new Point(633, 73);
             labelLot.Margin = new Padding(4, 0, 4, 0);
             labelLot.Name = "labelLot";
-            labelLot.Size = new Size(230, 35);
+            labelLot.Size = new Size(218, 32);
             labelLot.TabIndex = 25;
             labelLot.Text = "Lot remis :";
             // 
@@ -371,13 +374,13 @@
             dateTimePickerDateHeureInscription.CustomFormat = "dd/MM/yyyy HH:mm";
             dateTimePickerDateHeureInscription.Dock = DockStyle.Fill;
             dateTimePickerDateHeureInscription.Format = DateTimePickerFormat.Custom;
-            dateTimePickerDateHeureInscription.Location = new Point(4, 133);
-            dateTimePickerDateHeureInscription.Margin = new Padding(4);
+            dateTimePickerDateHeureInscription.Location = new Point(4, 108);
+            dateTimePickerDateHeureInscription.Margin = new Padding(4, 3, 4, 3);
             dateTimePickerDateHeureInscription.MaxDate = new DateTime(2026, 5, 25, 17, 0, 0, 0);
             dateTimePickerDateHeureInscription.MinDate = new DateTime(2026, 5, 23, 9, 0, 0, 0);
             dateTimePickerDateHeureInscription.Name = "dateTimePickerDateHeureInscription";
             dateTimePickerDateHeureInscription.ShowUpDown = true;
-            dateTimePickerDateHeureInscription.Size = new Size(208, 31);
+            dateTimePickerDateHeureInscription.Size = new Size(240, 31);
             dateTimePickerDateHeureInscription.TabIndex = 34;
             dateTimePickerDateHeureInscription.Value = new DateTime(2026, 5, 23, 9, 0, 0, 0);
             // 
@@ -386,10 +389,10 @@
             labelRang.AutoSize = true;
             labelRang.Dock = DockStyle.Fill;
             labelRang.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            labelRang.Location = new Point(369, 0);
+            labelRang.Location = new Point(518, 0);
             labelRang.Margin = new Padding(4, 0, 4, 0);
             labelRang.Name = "labelRang";
-            labelRang.Size = new Size(175, 35);
+            labelRang.Size = new Size(107, 35);
             labelRang.TabIndex = 23;
             labelRang.Text = "Rang :";
             // 
@@ -398,10 +401,10 @@
             label2.AutoSize = true;
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold);
-            label2.Location = new Point(369, 94);
+            label2.Location = new Point(518, 73);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(175, 35);
+            label2.Size = new Size(107, 32);
             label2.TabIndex = 35;
             label2.Text = "Score final :";
             // 
@@ -409,14 +412,36 @@
             // 
             numericUpDownScoreFinal.Dock = DockStyle.Fill;
             numericUpDownScoreFinal.Increment = new decimal(new int[] { 5, 0, 0, 0 });
-            numericUpDownScoreFinal.Location = new Point(369, 133);
-            numericUpDownScoreFinal.Margin = new Padding(4);
+            numericUpDownScoreFinal.Location = new Point(518, 108);
+            numericUpDownScoreFinal.Margin = new Padding(4, 3, 4, 3);
             numericUpDownScoreFinal.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
-            numericUpDownScoreFinal.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             numericUpDownScoreFinal.Name = "numericUpDownScoreFinal";
-            numericUpDownScoreFinal.Size = new Size(175, 31);
+            numericUpDownScoreFinal.Size = new Size(107, 31);
             numericUpDownScoreFinal.TabIndex = 38;
-            numericUpDownScoreFinal.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            // 
+            // label84
+            // 
+            label84.AutoSize = true;
+            label84.Dock = DockStyle.Fill;
+            label84.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label84.Location = new Point(251, 0);
+            label84.Name = "label84";
+            label84.Size = new Size(260, 35);
+            label84.TabIndex = 40;
+            label84.Text = "Satut :";
+            label84.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // labelStatutTournoi
+            // 
+            labelStatutTournoi.AutoSize = true;
+            labelStatutTournoi.Dock = DockStyle.Fill;
+            labelStatutTournoi.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelStatutTournoi.Location = new Point(251, 35);
+            labelStatutTournoi.Name = "labelStatutTournoi";
+            labelStatutTournoi.Size = new Size(260, 38);
+            labelStatutTournoi.TabIndex = 41;
+            labelStatutTournoi.Text = "labelStatutTournoi";
+            labelStatutTournoi.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox1
             // 
@@ -441,7 +466,7 @@
             buttonAjouter.FlatStyle = FlatStyle.Flat;
             buttonAjouter.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonAjouter.ForeColor = Color.White;
-            buttonAjouter.Location = new Point(255, 41);
+            buttonAjouter.Location = new Point(254, 42);
             buttonAjouter.Margin = new Padding(4, 3, 4, 3);
             buttonAjouter.Name = "buttonAjouter";
             buttonAjouter.Size = new Size(150, 45);
@@ -457,7 +482,7 @@
             buttonEffacer.FlatStyle = FlatStyle.Flat;
             buttonEffacer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonEffacer.ForeColor = Color.White;
-            buttonEffacer.Location = new Point(70, 41);
+            buttonEffacer.Location = new Point(70, 42);
             buttonEffacer.Margin = new Padding(4, 3, 4, 3);
             buttonEffacer.Name = "buttonEffacer";
             buttonEffacer.Size = new Size(150, 45);
@@ -473,7 +498,7 @@
             buttonModifier.FlatStyle = FlatStyle.Flat;
             buttonModifier.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonModifier.ForeColor = Color.White;
-            buttonModifier.Location = new Point(445, 41);
+            buttonModifier.Location = new Point(446, 42);
             buttonModifier.Margin = new Padding(4, 3, 4, 3);
             buttonModifier.Name = "buttonModifier";
             buttonModifier.Size = new Size(193, 45);
@@ -489,7 +514,7 @@
             buttonSupprimer.FlatStyle = FlatStyle.Flat;
             buttonSupprimer.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             buttonSupprimer.ForeColor = Color.White;
-            buttonSupprimer.Location = new Point(671, 41);
+            buttonSupprimer.Location = new Point(671, 42);
             buttonSupprimer.Margin = new Padding(4, 3, 4, 3);
             buttonSupprimer.Name = "buttonSupprimer";
             buttonSupprimer.Size = new Size(196, 45);
@@ -514,6 +539,7 @@
             dataGridParticipations.Size = new Size(1256, 428);
             dataGridParticipations.TabIndex = 4;
             dataGridParticipations.CellClick += DataGridParticipations_CellClick;
+            dataGridParticipations.CellContentDoubleClick += dataGridParticipations_CellContentDoubleClick;
             // 
             // tableLayoutPanel2
             // 
@@ -579,7 +605,7 @@
         private Label labelNom;
         private Label labelTournoi;
         private Label labelEvaluation;
-        private Label labelStatutTournoi;
+        private Label labelComentaire;
         private GroupBox groupBox1;
         private Button buttonAjouter;
         private Button buttonEffacer;
@@ -605,5 +631,7 @@
         private RadioButton radioButtonLotRemisFalse;
         private NumericUpDown numericUpDownScoreFinal;
         private Label label3;
+        private Label label84;
+        private Label labelStatutTournoi;
     }
 }

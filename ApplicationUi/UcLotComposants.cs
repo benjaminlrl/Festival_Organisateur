@@ -71,14 +71,14 @@ namespace ApplicationUi
             // On affiche et modifie l'affichage des colonnes du dataGrid
             DesactiverTrieAutomatique(dataGridLotComposants);
 
-            dataGridLotComposants.Columns["Numero"].DisplayIndex = 0;
-            dataGridLotComposants.Columns["Lot"].Visible = false;
-            dataGridLotComposants.Columns["NumeroLot"].Visible = false;
-            dataGridLotComposants.Columns["Numero"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridLotComposants.Columns["Libelle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridLotComposants.Columns["Valeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridLotComposants.Columns["NomLot"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridLotComposants.Columns["NomLot"].HeaderText = "Lot associé";
+            dataGridLotComposants.Columns["Numero"]!.DisplayIndex = 0;
+            dataGridLotComposants.Columns["Lot"]!.Visible = false;
+            dataGridLotComposants.Columns["NumeroLot"]!.Visible = false;
+            dataGridLotComposants.Columns["Numero"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["Libelle"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["Valeur"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NomLot"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridLotComposants.Columns["NomLot"]!.HeaderText = "Lot associé";
         }
 
         /// <summary>
@@ -372,10 +372,10 @@ namespace ApplicationUi
                 // ordonner sur les champs numero, libelle, description et valeur
                 Dictionary<int, string> map = new()
                 {
-                    { dataGridLotComposants.Columns["Numero"].Index, "Numero" },
-                    { dataGridLotComposants.Columns["Libelle"].Index, "Libelle" },
-                    { dataGridLotComposants.Columns["Description"].Index, "Description" },
-                    { dataGridLotComposants.Columns["Valeur"].Index, "Valeur" }
+                    { dataGridLotComposants.Columns["Numero"]!.Index, "Numero" },
+                    { dataGridLotComposants.Columns["Libelle"]!.Index, "Libelle" },
+                    { dataGridLotComposants.Columns["Description"]!.Index, "Description" },
+                    { dataGridLotComposants.Columns["Valeur"]!.Index, "Valeur" }
                 };
 
                 // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,

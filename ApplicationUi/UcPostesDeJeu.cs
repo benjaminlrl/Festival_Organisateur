@@ -34,6 +34,8 @@ namespace ApplicationUi
         // et l'utiliser lors du rechargement des espaces
         private string ordreChamp;
         public event Action<Tournoi>? NaviguerVersTournois;
+        public event Action<Espace>? NaviguerVersEspaces;
+        public event Action<Plateforme>? NaviguerVersPlateformes;
 
         public UcPostesDeJeu(Organisateur unOrganisateurConnecte, PosteJeu? posteJeuPreselectionne = null)
         {
@@ -46,7 +48,7 @@ namespace ApplicationUi
             _servicePlateforme = new PlateformeService(context);
 
             _organisateurConnecte = unOrganisateurConnecte;
-            
+
             _posteJeuSelectionne = null;
             _tournoiSelectionne = null;
 
@@ -63,7 +65,7 @@ namespace ApplicationUi
             // le formulaire est rempli avec ses données
             if (posteJeuPreselectionne != null)
             {
-                _posteJeuSelectionne = posteJeuPreselectionne;
+                _posteJeuSelectionne = _servicePosteJeu.Obtenir(posteJeuPreselectionne.NumeroPoste);
                 RemplirFormulaire();
             }
 
@@ -159,39 +161,39 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridPostesJeu);
 
-            dataGridPostesJeu.Columns["Espace"].Visible = false;
-            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
-            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
-            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
-            dataGridPostesJeu.Columns["NomEspace"].HeaderText = "Espace";
-            dataGridPostesJeu.Columns["NomPlateforme"].HeaderText = "Plateforme";
-            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridPostesJeu.Columns["Espace"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["NumeroPoste"]!.Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"]!.HeaderText = "Espace";
+            dataGridPostesJeu.Columns["NomPlateforme"]!.HeaderText = "Plateforme";
+            dataGridPostesJeu.Columns["Reference"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void MEP_DataGridTournois()
         {
             dataGridTournois.Visible = true;
-            dataGridTournois.Columns["NumeroTournoi"].Visible = false;
-            dataGridTournois.Columns["IdEspace"].Visible = false;
-            dataGridTournois.Columns["Espace"].Visible = false;
-            dataGridTournois.Columns["IdJeu"].Visible = false;
-            dataGridTournois.Columns["Jeu"].Visible = false;
-            dataGridTournois.Columns["NbParticipants"].Visible = false;
-            dataGridTournois.Columns["NomEspace"].Visible = false;
-            dataGridTournois.Columns["TitreJeu"].Visible = false;
-            dataGridTournois.Columns["Statut"].Visible = false;
-            dataGridTournois.Columns["Statut"].Visible = false;
-            dataGridTournois.Columns["DureePrevue"].Visible = false;
-            dataGridTournois.Columns["Lot"].Visible = false;
-            dataGridTournois.Columns["Inscriptions"].Visible = false;
+            dataGridTournois.Columns["NumeroTournoi"]!.Visible = false;
+            dataGridTournois.Columns["IdEspace"]!.Visible = false;
+            dataGridTournois.Columns["Espace"]!.Visible = false;
+            dataGridTournois.Columns["IdJeu"]!.Visible = false;
+            dataGridTournois.Columns["Jeu"]!.Visible = false;
+            dataGridTournois.Columns["NbParticipants"]!.Visible = false;
+            dataGridTournois.Columns["NomEspace"]!.Visible = false;
+            dataGridTournois.Columns["TitreJeu"]!.Visible = false;
+            dataGridTournois.Columns["Statut"]!.Visible = false;
+            dataGridTournois.Columns["Statut"]!.Visible = false;
+            dataGridTournois.Columns["DureePrevue"]!.Visible = false;
+            dataGridTournois.Columns["Lot"]!.Visible = false;
+            dataGridTournois.Columns["Inscriptions"]!.Visible = false;
 
-            dataGridTournois.Columns["DateHeure"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["DateHeure"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["Nom"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
-            dataGridTournois.Columns["DateHeure"].HeaderText = "Début";
+            dataGridTournois.Columns["DateHeure"]!.HeaderText = "Début";
 
-            dataGridTournois.Columns["Nom"].DisplayIndex = 1;
+            dataGridTournois.Columns["Nom"]!.DisplayIndex = 1;
         }
 
         #endregion
@@ -201,7 +203,7 @@ namespace ApplicationUi
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
             // Validation de la sélection de l'espace et de la plateforme avant de créer le poste de jeu
-            if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne 
+            if (comboBoxEspace.SelectedItem is not Espace espaceSelectionne
                 || comboBoxPlateforme.SelectedItem is not Plateforme plateformeSelectionne)
             {
                 Log.Warning("Aucun plateforme et espace sélectionné.");
@@ -209,7 +211,7 @@ namespace ApplicationUi
                 return;
             }
 
-            PosteJeu posteJeu = new ()
+            PosteJeu posteJeu = new()
             {
                 Fonctionnel = fonctionnelSelectionne,
                 IdPlateforme = plateformeSelectionne.IdPlateforme,
@@ -242,11 +244,11 @@ namespace ApplicationUi
         private void ButtonModifier_Click(object sender, EventArgs e)
         {
             if (dataGridPostesJeu.CurrentRow == null || _posteJeuSelectionne == null)
-                    return;
+                return;
 
             _posteJeuSelectionne.Fonctionnel = fonctionnelSelectionne; // true ou false selon le choix de l'utilisateur
-            _posteJeuSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace).IdEspace;
-            _posteJeuSelectionne.IdPlateforme = (comboBoxPlateforme.SelectedItem as Plateforme).IdPlateforme;
+            _posteJeuSelectionne.IdEspace = (comboBoxEspace.SelectedItem as Espace)!.IdEspace;
+            _posteJeuSelectionne.IdPlateforme = (comboBoxPlateforme.SelectedItem as Plateforme)!.IdPlateforme;
 
             try
             {
@@ -314,23 +316,23 @@ namespace ApplicationUi
 
                 // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
                 // à des fonctions de sélection de clé
-                Dictionary<int, string> map = new ()
+                Dictionary<int, string> map = new()
                 {
-                    {dataGridPostesJeu.Columns["Reference"].Index, "Reference"},
-                    {dataGridPostesJeu.Columns["Fonctionnel"].Index, "Fonctionnel"},
-                    {dataGridPostesJeu.Columns["NomEspace"].Index, "NomEspace"},
-                    {dataGridPostesJeu.Columns["Nomplateforme"].Index, "NomPlateforme"},
+                    {dataGridPostesJeu.Columns["Reference"]!.Index, "Reference"},
+                    {dataGridPostesJeu.Columns["Fonctionnel"]!.Index, "Fonctionnel"},
+                    {dataGridPostesJeu.Columns["NomEspace"]!.Index, "NomEspace"},
+                    {dataGridPostesJeu.Columns["NomPlateforme"]!.Index, "NomPlateforme"},
                 };
 
                 // Vérifie si l'index de la colonne est associé a une propriété
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
-                    return; 
-                
+                    return;
+
                 // permutation de l'ordre stocké
                 ordreChamp = ordreChamp == "ASC" ? "DESC" : "ASC";
 
                 dataGridPostesJeu.DataSource = _servicePosteJeu.Lister(filtre, colonne, ordreChamp);
-                dataGridPostesJeu.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = 
+                dataGridPostesJeu.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
                     ordreChamp == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
 
@@ -345,6 +347,36 @@ namespace ApplicationUi
 
             buttonModifier.Enabled = _posteJeuSelectionne != null;
             buttonSupprimer.Enabled = _posteJeuSelectionne != null;
+
+        }
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des espaces en fonction du poste de jeu sélectionné dans le DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridPostesJeu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _posteJeuSelectionne = dataGridPostesJeu.Rows[e.RowIndex].DataBoundItem as PosteJeu;
+
+            DataGridViewRow row = dataGridPostesJeu.Rows[e.RowIndex];
+
+            if (row.DataBoundItem is not PosteJeu posteJeu)
+                return;
+
+            _posteJeuSelectionne = posteJeu;
+
+            string colonne = dataGridPostesJeu.Columns[e.ColumnIndex].Name;
+
+            if (colonne == "NomEspace")
+                if (posteJeu.Espace != null)
+                    NaviguerVersEspaces?.Invoke(posteJeu.Espace);
+
+            if(colonne == "NomPlateforme")
+                if(posteJeu.Plateforme != null)
+                    NaviguerVersPlateformes?.Invoke(posteJeu.Plateforme);
 
         }
 
@@ -465,12 +497,12 @@ namespace ApplicationUi
                 return;
             }
 
-            _posteJeuSelectionne.Espace ??= _serviceEspace.Obtenir(_posteJeuSelectionne.IdEspace);
+            _posteJeuSelectionne.Espace ??= _serviceEspace.Obtenir(_posteJeuSelectionne.IdEspace)!;
 
             labelStatutTournoi.Visible = _posteJeuSelectionne != null;
-            
-            List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_posteJeuSelectionne.Espace.IdEspace);
-            List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_posteJeuSelectionne.Espace.IdEspace);
+
+            List<Tournoi> enCours = _serviceTournoi.ListerTournoisEnCoursEspace(_posteJeuSelectionne!.Espace.IdEspace);
+            List<Tournoi> futurs = _serviceTournoi.ListerTournoisPlanifiesEspace(_posteJeuSelectionne!.Espace.IdEspace);
 
             if (enCours.Count > 0)
             {
@@ -533,6 +565,7 @@ namespace ApplicationUi
                 col.SortMode = DataGridViewColumnSortMode.Programmatic;
             }
         }
+
         #endregion
     }
 }

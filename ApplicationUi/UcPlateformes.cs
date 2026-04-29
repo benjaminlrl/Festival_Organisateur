@@ -52,7 +52,7 @@ namespace ApplicationUi
 
             if (plateformePreselectionnee != null)
             {
-                _plateformeSelectionee = plateformePreselectionnee;
+                _plateformeSelectionee = _servicePlateforme.Obtenir(plateformePreselectionnee.IdPlateforme);
                 RemplirFormulaire();
             }
 
@@ -86,7 +86,7 @@ namespace ApplicationUi
             labelPostesJeu.Visible = true;
             dataGridPostesJeu.Visible = true;
             dataGridPostesJeu.DataSource = null;
-            dataGridPostesJeu.DataSource = _plateformeSelectionee.PostesJeu.ToList();
+            dataGridPostesJeu.DataSource = _plateformeSelectionee!.PostesJeu.ToList();
             MEP_DataGridPostesJeu();
         }
 
@@ -95,41 +95,44 @@ namespace ApplicationUi
             labelJeux.Visible = true;
             dataGridJeux.Visible = true;
             dataGridJeux.DataSource = null;
-            dataGridJeux.DataSource = _plateformeSelectionee.Jeux.ToList();
+            dataGridJeux.DataSource = _plateformeSelectionee!.Jeux;
             MEP_DataGridJeux();
         }
 
         private void MEP_DataGridPlateformes()
         {
-            dataGridPlateformes.Columns["idPlateforme"].Visible = false;
-            dataGridPlateformes.Columns["PostesJeu"].Visible = false;
-            dataGridPlateformes.Columns["Jeux"].Visible = false;
+            dataGridPlateformes.Columns["idPlateforme"]!.Visible = false;
+            dataGridPlateformes.Columns["PostesJeu"]!.Visible = false;
+            dataGridPlateformes.Columns["Jeux"]!.Visible = false;
         }
         private void MEP_DataGridJeux()
         {
-            dataGridJeux.Columns["Titre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridJeux.Columns["Editeur"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-            dataGridJeux.Columns["Pegi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-            dataGridJeux.Columns["AnneeSortie"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeux.Columns["Titre"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeux.Columns["Editeur"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridJeux.Columns["Pegi"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridJeux.Columns["AnneeSortie"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            dataGridJeux.Columns["IdJeu"].Visible = false;
-            dataGridJeux.Columns["DateSortie"].Visible = false;
-            dataGridJeux.Columns["Description"].Visible = false;
-            dataGridJeux.Columns["Tournois"].Visible = false;
-            dataGridJeux.Columns["Plateformes"].Visible = false;
+            dataGridJeux.Columns["IdJeu"]!.Visible = false;
+            dataGridJeux.Columns["DateSortie"]!.Visible = false;
+            dataGridJeux.Columns["Description"]!.Visible = false;
+            dataGridJeux.Columns["Tournois"]!.Visible = false;
+            dataGridJeux.Columns["Plateformes"]!.Visible = false;
+            dataGridJeux.Columns["Editeur"]!.Visible = false;
+
+            dataGridJeux.Columns["AnneeSortie"]!.HeaderText = "Sortie";
         }
 
         private void MEP_DataGridPostesJeu()
         {
-            dataGridPostesJeu.Columns["Espace"].Visible = false;
-            dataGridPostesJeu.Columns["IdPlateforme"].Visible = false;
-            dataGridPostesJeu.Columns["IdEspace"].Visible = false;
-            dataGridPostesJeu.Columns["Plateforme"].Visible = false;
-            dataGridPostesJeu.Columns["NumeroPoste"].Visible = false;
-            dataGridPostesJeu.Columns["NomEspace"].Visible = false;
-            dataGridPostesJeu.Columns["NomPlateforme"].Visible = false;
+            dataGridPostesJeu.Columns["Espace"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdPlateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["IdEspace"]!.Visible = false;
+            dataGridPostesJeu.Columns["Plateforme"]!.Visible = false;
+            dataGridPostesJeu.Columns["NumeroPoste"]!.Visible = false;
+            dataGridPostesJeu.Columns["NomEspace"]!.Visible = false;
+            dataGridPostesJeu.Columns["NomPlateforme"]!.Visible = false;
 
-            dataGridPostesJeu.Columns["Reference"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridPostesJeu.Columns["Reference"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
         #endregion
 
@@ -178,7 +181,8 @@ namespace ApplicationUi
             try
             {
                 _servicePlateforme.Modifier(_plateformeSelectionee);
-                MessageBox.Show("La plateforme a bien été modifiée.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("La plateforme a bien été modifiée.", "Modification", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
             catch (PlateformeException ex)
@@ -215,7 +219,8 @@ namespace ApplicationUi
             try
             {
                 _servicePlateforme.Supprimer(_plateformeSelectionee.IdPlateforme);
-                MessageBox.Show("La plateforme a bien été supprimée.", "Suppression", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("La plateforme a bien été supprimée.", "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Raz_Zones();
             }
             catch (PlateformeException ex)
@@ -256,7 +261,7 @@ namespace ApplicationUi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void dataGridJeux_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridJeux_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
@@ -275,7 +280,7 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 Dictionary<int, string> map = new()
                 {
-                    {dataGridPlateformes.Columns["Libelle"].Index, "Libelle"},
+                    {dataGridPlateformes.Columns["Libelle"]!.Index, "Libelle"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))

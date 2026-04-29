@@ -30,7 +30,8 @@ namespace ApplicationUi
         private Tournoi? _tournoiSelectionne = null;
         private string filtre;
         private string ordreChamp;
-
+        public event Action<Espace>? NaviguerVersEspaces;
+        public event Action<Jeu>? NaviguerVersJeux;
         public UcTournois(Organisateur unOrganisateurConnecte, Tournoi? tournoiPreselectionne = null)
         {
             InitializeComponent();
@@ -53,7 +54,7 @@ namespace ApplicationUi
 
             if (tournoiPreselectionne != null)
             {
-                _tournoiSelectionne = tournoiPreselectionne;
+                _tournoiSelectionne = _serviceTournoi.Obtenir(tournoiPreselectionne.IdEspace);
                 RemplirFormulaire();
             }
 
@@ -94,25 +95,25 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridTournois);
 
-            dataGridTournois.Columns["DateHeure"].DisplayIndex = 4;
-            dataGridTournois.Columns["Statut"].DisplayIndex = 3;
-            dataGridTournois.Columns["Nom"].DisplayIndex = 0;
-            dataGridTournois.Columns["NomEspace"].DisplayIndex = 1;
-            dataGridTournois.Columns["TitreJeu"].DisplayIndex = 2;
+            dataGridTournois.Columns["DateHeure"]!.DisplayIndex = 4;
+            dataGridTournois.Columns["Statut"]!.DisplayIndex = 3;
+            dataGridTournois.Columns["Nom"]!.DisplayIndex = 0;
+            dataGridTournois.Columns["NomEspace"]!.DisplayIndex = 1;
+            dataGridTournois.Columns["TitreJeu"]!.DisplayIndex = 2;
 
-            dataGridTournois.Columns["NumeroTournoi"].Visible = false;
-            dataGridTournois.Columns["IdEspace"].Visible = false;
-            dataGridTournois.Columns["Espace"].Visible = false;
-            dataGridTournois.Columns["IdJeu"].Visible = false;
-            dataGridTournois.Columns["Jeu"].Visible = false;
-            dataGridTournois.Columns["NbParticipants"].Visible = false;
-            dataGridTournois.Columns["Lot"].Visible = false;
-            dataGridTournois.Columns["DureePrevue"].Visible = false;
+            dataGridTournois.Columns["NumeroTournoi"]!.Visible = false;
+            dataGridTournois.Columns["IdEspace"]!.Visible = false;
+            dataGridTournois.Columns["Espace"]!.Visible = false;
+            dataGridTournois.Columns["IdJeu"]!.Visible = false;
+            dataGridTournois.Columns["Jeu"]!.Visible = false;
+            dataGridTournois.Columns["NbParticipants"]!.Visible = false;
+            dataGridTournois.Columns["Lot"]!.Visible = false;
+            dataGridTournois.Columns["DureePrevue"]!.Visible = false;
 
-            dataGridTournois.Columns["NomEspace"].HeaderText = "Espace";
-            dataGridTournois.Columns["TitreJeu"].HeaderText = "Jeu";
+            dataGridTournois.Columns["NomEspace"]!.HeaderText = "Espace";
+            dataGridTournois.Columns["TitreJeu"]!.HeaderText = "Jeu";
 
-            dataGridTournois.Columns["Nom"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridTournois.Columns["Nom"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
         private void ChargerEspaces()
         {
@@ -206,13 +207,13 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 Dictionary<int, string> map = new()
                 {
-                    {dataGridTournois.Columns["DateHeure"].Index, "DateHeure"},
-                    {dataGridTournois.Columns["NbParticipants"].Index, "NbParticipants"},
-                    {dataGridTournois.Columns["DureePrevue"].Index, "DureePrevue"},
-                    {dataGridTournois.Columns["Nom"].Index, "Nom"},
-                    {dataGridTournois.Columns["Statut"].Index, "Statut"},
-                    {dataGridTournois.Columns["NomEspace"].Index, "NomEspace"},
-                    {dataGridTournois.Columns["TitreJeu"].Index, "TitreJeu"},
+                    {dataGridTournois.Columns["DateHeure"]!.Index, "DateHeure"},
+                    {dataGridTournois.Columns["NbParticipants"]!.Index, "NbParticipants"},
+                    {dataGridTournois.Columns["DureePrevue"]!.Index, "DureePrevue"},
+                    {dataGridTournois.Columns["Nom"]!.Index, "Nom"},
+                    {dataGridTournois.Columns["Statut"]!.Index, "Statut"},
+                    {dataGridTournois.Columns["NomEspace"]!.Index, "NomEspace"},
+                    {dataGridTournois.Columns["TitreJeu"]!.Index, "TitreJeu"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
@@ -236,6 +237,64 @@ namespace ApplicationUi
 
             AfficherBoutons();
         }
+
+        /// <summary>
+        /// Redirige vers le formulaire de gestion des espaces ou de gestion des jeux,
+        /// en fonction de la cellule doulble cliquée
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridTournois_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            _tournoiSelectionne = dataGridTournois.Rows[e.RowIndex].DataBoundItem as Tournoi;
+
+            DataGridViewRow row = dataGridTournois.Rows[e.RowIndex];
+
+            if (row.DataBoundItem is not Tournoi tournoi)
+                return;
+
+            _tournoiSelectionne = tournoi;
+
+            string colonne = dataGridTournois.Columns[e.ColumnIndex].Name;
+
+            if (colonne == "NomEspace")
+            {
+                if (tournoi.Espace != null)
+                {
+                    try
+                    {
+                        NaviguerVersEspaces?.Invoke(tournoi.Espace);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Une erreur technique est survenue lors de la redirection de tournois vers espaces");
+                        MessageBox.Show("Erreur technique, réessayez plus tard.");
+                    }
+                }
+            }
+                
+
+            if (colonne == "TitreJeu")
+            {
+                if (tournoi.Jeu != null)
+                {
+                    try
+                    {
+                        NaviguerVersJeux?.Invoke(tournoi.Jeu);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Une erreur technique est survenue lors de la redirection de tournois vers jeux");
+                        MessageBox.Show("Erreur technique, réessayez plus tard.");
+                    }
+                }
+
+            }
+        }
+
+                
         private void RadioButtonPlanifie_CheckedChanged(object sender, EventArgs e)
         {
             statutSelectionne = "Planifié";
@@ -314,7 +373,7 @@ namespace ApplicationUi
             numericUpDownNbParticip.Value = numericUpDownNbParticip.Minimum;
             numericUpDownDuree.Value = numericUpDownDuree.Minimum;
             radioButtonEnCours.Checked = false;
-            radioButtonPlanifie.Checked = false;
+            radioButtonPlanifie.Checked = true;
             radioButtonTermine.Checked = false;
             labelParticipantsInscrits.Visible = false;
 

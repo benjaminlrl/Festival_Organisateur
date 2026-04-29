@@ -21,21 +21,57 @@ namespace Lib_Services.Interfaces
         /// <param name="ordre">Optionnel, ordre de trie</param>
         /// <returns>Liste d'objets <see cref="Jeu"/>.</returns>
         List<Jeu> Lister(string filtre = "", string propriete = "", string ordre = "");
+
+        /// <summary>
+        /// Récupère un jeu par son identifiant.
+        /// </summary>
+        /// <param name="idPlateforme">Identifiant du jeu recherché.</param>
+        /// <returns>Instance de <see cref="Jeu"/> si trouvée, sinon null.</returns>
         Jeu? Obtenir(int idJeu);
+
+        /// <summary>
+        /// Récupère un jeu par son titre.
+        /// </summary>
+        /// <param name="titreJeu">Titre du jeu recherché.</param>
+        /// <returns>Instance de <see cref="Jeu"/> si trouvée, sinon null.</returns>
+        public Jeu? ObtenirParTitre(string titreJeu);
         #endregion
         #region CUD
-        void Creer(Jeu jeu);
-        void Modifier(Jeu jeu);
+
+        /// <summary>
+        /// Crée un nouveau jeu et persiste la modification.
+        /// </summary>
+        /// <param name="jeu">Objet <see cref="Jeu"/> à ajouter.</param>
+        void Creer(Jeu? jeu);
+
+        /// <summary>
+        /// Met à jour un jeu existant et persiste la modification.
+        /// </summary>
+        /// <param name="jeu">Objet <see cref="Jeu"/> contenant les valeurs mises à jour.</param>
+        void Modifier(Jeu? jeu);
+
+        /// <summary>
+        /// Supprime un jeu identifié par son identifiant si il existe.
+        /// </summary>
+        /// <param name="idPlateforme">Identifiant du jeu à supprimer.</param>
         void Supprimer(int idJeu);
         #endregion
+
         #region Validations
         /// <summary>
-        /// Permet de vérifier les propriétés associés a un jeu.
+        /// Valide les propriétés d'une instance de <see cref="Jeu"/> avant sa création ou sa modification.
         /// </summary>
-        /// <param name="jeu">Le jeu à valider</param>
-        /// <param name="estModification">Indique si la validation est effectuée dans le cadre d'une modification</param>
-        /// <returns></returns>
-        void ValiderJeu(Jeu jeu, bool estModification = false);
+        /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
+        /// <param name="estModification">Indique si la validation est pour une modification.</param>
+        /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
+        void ValiderJeu(Jeu? jeu, bool estModification = false);
+
+        /// <summary>
+        /// Valide les propriétés d'une instance de <see cref="Jeu"/> peut être supprimer ou non.
+        /// </summary>
+        /// <param name="jeu">Instance de <see cref="Jeu"/> à valider.</param>
+        /// <exception cref="JeuException">Exception levée si une validation échoue.</exception>
+        public void ValiderSuppressionJeu(Jeu? jeu);
         #endregion
     }
 }

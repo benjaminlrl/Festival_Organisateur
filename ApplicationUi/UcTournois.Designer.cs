@@ -128,6 +128,7 @@ namespace ApplicationUi
             dataGridTournois.Size = new Size(1393, 383);
             dataGridTournois.TabIndex = 2;
             dataGridTournois.CellClick += DataGridTournois_CellClick;
+            dataGridTournois.CellContentDoubleClick += DataGridTournois_CellContentDoubleClick;
             // 
             // panelForm
             // 

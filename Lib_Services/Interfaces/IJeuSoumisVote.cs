@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lib_Services.Interfaces
 {
-    public interface ISoumisVoteService
+    public interface IJeuSoumisVoteService
     {
         #region Lecture
         /// <summary>
@@ -19,8 +19,8 @@ namespace Lib_Services.Interfaces
         /// <param name="filtre">Optionnel, filtre</param>
         /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
-        /// <returns>Liste d'objets <see cref="SoumisVote"/>.</returns>
-        List<SoumisVote> Lister(string filtre = "", string propriete = "", string ordre = "");
+        /// <returns>Liste d'objets <see cref="JeuSoumisVote"/>.</returns>
+        List<JeuSoumisVote> Lister(string filtre = "", string propriete = "", string ordre = "");
 
         /// <summary>
         ///  Retourne la liste complète des roles présents en base, 
@@ -42,30 +42,30 @@ namespace Lib_Services.Interfaces
         List<Voter> ListerClassmentJeuxVotes(string filtre = "", string propriete = "", string ordre = "", DateTime? dateDebut = null, DateTime? dateFin = null);
 
         /// <summary>
-        /// Retourne un SoumisVote identifié par l'id du jeu et l'id de la plateforme.
+        /// Retourne un JeuSoumisVote identifié par l'id du jeu et l'id de la plateforme.
         /// AsNoTracking() est utilisé pour éviter les conflits de tracking lors des modifications.
         /// </summary>
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
-        /// <returns>Le SoumisVote correspondant ou null s'il n'existe pas</returns>
-        SoumisVote? Obtenir(int idJeu, int idPlateforme);
+        /// <returns>Le JeuSoumisVote correspondant ou null s'il n'existe pas</returns>
+        JeuSoumisVote? Obtenir(int idJeu, int idPlateforme);
         #endregion
         #region CUD
 
         /// <summary>
-        /// Crée un nouveau SoumisVote et persiste la modification.
+        /// Crée un nouveau JeuSoumisVote et persiste la modification.
         /// </summary>
-        /// <param name="soumisVote">Objet <see cref="SoumisVote"/> à ajouter.</param>
-        void Creer(SoumisVote soumisVote);
+        /// <param name="soumisVote">Objet <see cref="JeuSoumisVote"/> à ajouter.</param>
+        void Creer(JeuSoumisVote soumisVote);
 
         /// <summary>
-        /// Met à jour un SoumisVote existant et persiste la modification.
+        /// Met à jour un JeuSoumisVote existant et persiste la modification.
         /// </summary>
-        /// <param name="soumisVote">Objet <see cref="SoumisVote"/> contenant les valeurs mises à jour.</param>
-        void Modifier(SoumisVote soumisVote);
+        /// <param name="soumisVote">Objet <see cref="JeuSoumisVote"/> contenant les valeurs mises à jour.</param>
+        void Modifier(JeuSoumisVote soumisVote);
 
         /// <summary>
-        /// Supprime un SoumisVote identifié par l'id de l'utilisateur, 
+        /// Supprime un JeuSoumisVote identifié par l'id de l'utilisateur, 
         /// l'id du jeu et l'id de la plateforme, 
         /// puis persiste la modification.
         /// </summary>
@@ -75,12 +75,12 @@ namespace Lib_Services.Interfaces
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de valider les données d'un SoumisVote avant création ou modification.
+        /// Permet de valider les données d'un JeuSoumisVote avant création ou modification.
         /// </summary>
-        /// <param name="soumisVote">SoumisVote à valider</param>
+        /// <param name="soumisVote">JeuSoumisVote à valider</param>
         /// <param name="estModification">Indique si c'est une modification ou une création</param>
-        /// <exception cref="SoumisVoteException">Exception si les données du SoumisVote sont invalides</exception>
-        void ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false);
+        /// <exception cref="JeuSoumisVoteException">Exception si les données du JeuSoumisVote sont invalides</exception>
+        void ValiderJeuSoumisVote(JeuSoumisVote soumisVote, bool estModification = false);
         #endregion
     }
 }

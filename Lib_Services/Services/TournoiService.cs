@@ -38,6 +38,7 @@ namespace Lib_Services.Services
         public List<Tournoi> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
             IQueryable<Tournoi> query = _context.Tournois
+                .AsNoTracking()
                 .Include(t => t.Espace)
                 .Include(t => t.Inscriptions)
                 .Include(t => t.Jeu);
@@ -77,6 +78,7 @@ namespace Lib_Services.Services
         public List<Tournoi> ListerTournoisEnCoursEspace(int idEspace)
         {
             return _context.Tournois
+                .AsNoTracking()
                 .Include(t => t.Espace)
                 .Include(t => t.Jeu)
                 .Where(t => t.Statut == "En cours" && t.IdEspace == idEspace)
@@ -91,6 +93,7 @@ namespace Lib_Services.Services
         public List<Tournoi> ListerTournoisPlanifiesEspace(int idEspace)
         {
             return _context.Tournois
+                .AsNoTracking()
                 .Include(t => t.Espace)
                 .Include(t => t.Jeu)
                 .Where(t => t.Statut == "Planifié" && t.IdEspace == idEspace)                
@@ -105,15 +108,17 @@ namespace Lib_Services.Services
         public List<Tournoi> ListerTournoisTerminesEspace(int idEspace)
         {
             return _context.Tournois
+                .AsNoTracking()
                 .Include(t => t.Espace)
                 .Include(t => t.Jeu)
                 .Where(t => t.Statut == "Terminé" && t.IdEspace == idEspace)                
                 .ToList();
         }
 
-        public List<Tournoi> ObtenirAvecNom(string nomEspace)
+        public List<Tournoi> ObtenirParNom(string nomEspace)
         {
             return _context.Tournois
+                .AsNoTracking()
                 .Include(t => t.Espace)
                 .Include(t => t.Jeu)
                 .Where(t => t.Nom.Equals(nomEspace))
@@ -131,7 +136,6 @@ namespace Lib_Services.Services
             // Utilisation de FirstOrDefault avec Include pour obtenir l'entité complète.
             return _context.Tournois
                            .Include(t => t.Espace)
-                           .AsNoTracking()
                            .FirstOrDefault(t => t.NumeroTournoi == numeroTournoi);
         }
         #endregion  
@@ -155,22 +159,24 @@ namespace Lib_Services.Services
         /// <param name="tournoi">Instance modifiée du tournoi</param>
         public void Modifier(Tournoi tournoi)
         {
-            try
-            {
-                ValiderTournoi(tournoi, true);
-                _context.Tournois.Update(tournoi);
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new TournoiException("Erreur lors de la modification du tournoi.\n" + ex.Message,
-                    (int)TournoiException.TournoiErreur.ModificationTournoiDbUpdateException);
-            }
-            catch (Exception ex)
-            {
-                throw new TournoiException(ex.Message,
-                    (int)TournoiException.TournoiErreur.ModificationTournoiException);
-            }
+
+            Tournoi? tournoiDb = Obtenir(tournoi.NumeroTournoi);
+
+            if (tournoiDb == null)
+                throw new TournoiException("Tournoi inexistant",
+                    (int)TournoiException.TournoiErreur.ModificationTournoiInexistantDb);
+
+            ValiderTournoi(tournoi, true);
+
+            tournoiDb.Nom = tournoi.Nom;
+            tournoiDb.DateHeure = tournoi.DateHeure;
+            tournoiDb.DureePrevue = tournoi.DureePrevue;
+            tournoiDb.Statut = tournoi.Statut;
+            tournoiDb.NbParticipants = tournoi.NbParticipants;
+            tournoiDb.IdEspace = tournoi.IdEspace;
+
+            // Save unique
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -179,25 +185,13 @@ namespace Lib_Services.Services
         /// <param name="numeroTournoi">Identifiant du tournoi à supprimer.</param>
         public void Supprimer(int numeroTournoi)
         {
-            // Find utilise le cache du contexte si l'entité est déjà suivie.
-            Tournoi? tournoi = _context.Tournois.Find(numeroTournoi);
+            Tournoi? tournoi = _context.Tournois
+                .FirstOrDefault(t => t.NumeroTournoi == numeroTournoi);
 
-            try
-            {
-                ValiderSuppressionTournoi(tournoi);
-                _context.Tournois.Remove(tournoi);
-                _context.SaveChanges();
-            }
-            catch (DbException ex)
-            {
-                throw new TournoiException("Erreur lors de la suppression du tournoi : \n" + ex.Message,
-                    (int)TournoiException.TournoiErreur.SuppressionTournoiDbException);
-            }
-            catch (Exception ex)
-            {
-                throw new TournoiException("Une erreur est survenue lors de la suppression du tournoi : \n" + ex.Message,
-                    (int)TournoiException.TournoiErreur.SuppressionTournoiException);
-            }
+            ValiderSuppressionTournoi(tournoi);
+
+            _context.Tournois.Remove(tournoi!);
+            _context.SaveChanges();
         }
         #endregion
         #region validations
@@ -236,10 +230,12 @@ namespace Lib_Services.Services
                 throw new TournoiException("Le nom est requis.",
                     (int)TournoiException.TournoiErreur.TournoiNomRequis);
 
-            List<Tournoi> tournoiBdd = ObtenirAvecNom(tournoi.Nom);
+            List<Tournoi> tournoiBdd = ObtenirParNom(tournoi.Nom);
+            bool existe = _context.Tournois.Any(t =>
+                        t.Nom == tournoi.Nom &&
+                        (!estModification || t.NumeroTournoi != tournoi.NumeroTournoi));
 
-            if (tournoiBdd.Count > 0 && 
-                (!estModification || tournoiBdd.Any(t => t.NumeroTournoi != tournoi.NumeroTournoi)))
+            if (existe)
                 throw new TournoiException("Un tournoi avec ce nom existe déjà.",
                     (int)TournoiException.TournoiErreur.TournoiNomExiste);
 
@@ -263,11 +259,15 @@ namespace Lib_Services.Services
                 throw new TournoiException("Le tournoi doit avoir un statut défini.",
                     (int)TournoiException.TournoiErreur.TournoiStatutRequis);
 
-            if (Lister("").Any(t => t.NumeroTournoi != tournoi.NumeroTournoi
-                                && t.IdEspace == tournoi.IdEspace
-                                && ((t.Statut == "En cours" && tournoi.Statut == "En cours")
-                                    || (tournoi.DateHeure >= t.DateHeure
-                                        && tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue)))))
+            if (_context.Tournois.Any(t =>
+                    t.NumeroTournoi != tournoi.NumeroTournoi &&
+                    t.IdEspace == tournoi.IdEspace &&
+                    (
+                        (t.Statut == "En cours" && tournoi.Statut == "En cours") ||
+                        (tournoi.DateHeure >= t.DateHeure &&
+                         tournoi.DateHeure <= t.DateHeure.AddMinutes(t.DureePrevue))
+                    )
+                ))
                 throw new TournoiException("Un autre tournoi est déjà en cours à cette période.",
                     (int)TournoiException.TournoiErreur.TournoiConflitHoraire);
 

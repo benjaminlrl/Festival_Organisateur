@@ -74,14 +74,14 @@ namespace ApplicationUi
             // On affiche et modifie l'affichage des colonnes du dataGrid
             DesactiverTrieAutomatique(dataGridOrganisateurs);
 
-            dataGridOrganisateurs.Columns["IdRole"].Visible = false;
-            dataGridOrganisateurs.Columns["Login"].DisplayIndex = 0;
-            dataGridOrganisateurs.Columns["Mail"].DisplayIndex = 1;
-            dataGridOrganisateurs.Columns["motPasse"].Visible = false;
-            dataGridOrganisateurs.Columns["Role"].Visible = false;
-            dataGridOrganisateurs.Columns["NomRole"].HeaderText = "Rôle";
-            dataGridOrganisateurs.Columns["Login"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridOrganisateurs.Columns["Mail"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridOrganisateurs.Columns["IdRole"]!.Visible = false;
+            dataGridOrganisateurs.Columns["Login"]!.DisplayIndex = 0;
+            dataGridOrganisateurs.Columns["Mail"]!.DisplayIndex = 1;
+            dataGridOrganisateurs.Columns["motPasse"]!.Visible = false;
+            dataGridOrganisateurs.Columns["Role"]!.Visible = false;
+            dataGridOrganisateurs.Columns["NomRole"]!.HeaderText = "Rôle";
+            dataGridOrganisateurs.Columns["Login"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridOrganisateurs.Columns["Mail"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         /// <summary>
@@ -291,9 +291,9 @@ namespace ApplicationUi
                 // ordonner sur les champs login, mail et nom de rôle
                 Dictionary<int, string> map = new()
                 {
-                    { dataGridOrganisateurs.Columns["Login"].Index, "Login" },
-                    { dataGridOrganisateurs.Columns["Mail"].Index, "Mail" },
-                    { dataGridOrganisateurs.Columns["NomRole"].Index, "NomRole" }
+                    { dataGridOrganisateurs.Columns["Login"]!.Index, "Login" },
+                    { dataGridOrganisateurs.Columns["Mail"]!.Index, "Mail" },
+                    { dataGridOrganisateurs.Columns["NomRole"]!.Index, "NomRole" }
                 };
 
                 // Si la colonne cliquée n'appartient pas aux propriétés ci-dessus, ne rien faire,

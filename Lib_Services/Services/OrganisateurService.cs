@@ -187,7 +187,7 @@ namespace Lib_Services.Services
 
             // Role Gestionnaire des tournois
             // Consulter : Espace, PosteJeu, Plateforme, Jeu, Lot
-            // CRUD: Tournoi, Participer, SoumisVote
+            // CRUD: Tournoi, Participer, JeuSoumisVote
             if (role.Libelle == "Gestionnaire des tournois")
             {
                 if (action == "Consulter")
@@ -195,7 +195,7 @@ namespace Lib_Services.Services
                     if (unUC == Organisateur.LesUC.UcEspaces        || unUC == Organisateur.LesUC.UcPostesDeJeu 
                         || unUC == Organisateur.LesUC.UcPlateformes || unUC == Organisateur.LesUC.UcPostesDeJeu
                         || unUC == Organisateur.LesUC.UcJeux        || unUC == Organisateur.LesUC.UcLots 
-                        || unUC == Organisateur.LesUC.UcVoter) 
+                        || unUC == Organisateur.LesUC.UcJeuxSoumisVote) 
                     {
                         return true;
                     }
@@ -203,7 +203,7 @@ namespace Lib_Services.Services
                 else if (action == "Modifier" || action == "Supprimer" || action == "Ajouter")
                 {
                     if (unUC == Organisateur.LesUC.UcTournois || unUC == Organisateur.LesUC.UcParticiper 
-                        || unUC == Organisateur.LesUC.UcVoter) 
+                        || unUC == Organisateur.LesUC.UcJeuxSoumisVote) 
                     {
                         return true;
                     }

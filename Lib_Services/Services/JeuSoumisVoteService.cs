@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Lib_Services.Services
 {
-    public class SoumisVoteService : ISoumisVoteService
+    public class JeuSoumisVoteService : IJeuSoumisVoteService
     {
         private readonly ApplicationDbContext _context;
         private IJeuService _jeuService;
@@ -19,7 +19,7 @@ namespace Lib_Services.Services
         /// Constructeur avec injection du contexte de données.
         /// </summary>
         /// <param name="context">Contexte EF <see cref="ApplicationDbContext"/>.</param>
-        public SoumisVoteService(ApplicationDbContext context)
+        public JeuSoumisVoteService(ApplicationDbContext context)
         {
             _context = context;
             _jeuService = new JeuService(context);
@@ -37,10 +37,10 @@ namespace Lib_Services.Services
         /// <param name="filtre">Optionnel, filtre</param>
         /// <param name="propriete">Optionnel, propriété de trie</param>
         /// <param name="ordre">Optionnel, ordre de trie</param>
-        /// <returns>Liste d'objets <see cref="SoumisVote"/>.</returns>
-        public List<SoumisVote> Lister(string filtre = "", string propriete = "", string ordre = "")
+        /// <returns>Liste d'objets <see cref="JeuSoumisVote"/>.</returns>
+        public List<JeuSoumisVote> Lister(string filtre = "", string propriete = "", string ordre = "")
         {
-            IQueryable<SoumisVote> query = _context.SoumisVotes
+            IQueryable<JeuSoumisVote> query = _context.JeuSoumisVotes
                 .Include(sv => sv.Plateforme)
                 .Include(sv => sv.Jeu);
 
@@ -116,19 +116,19 @@ namespace Lib_Services.Services
         }
 
         /// <summary>
-        /// Retourne un SoumisVote identifié par l'id du jeu et l'id de la plateforme.
+        /// Retourne un JeuSoumisVote identifié par l'id du jeu et l'id de la plateforme.
         /// AsNoTracking() est utilisé pour éviter les conflits de tracking lors des modifications.
         /// </summary>
         /// <param name="idJeu">Id du jeu voté</param>
         /// <param name="idPlateforme">Id de la plateforme associé au jeu</param>
-        /// <returns>Le SoumisVote correspondant ou null s'il n'existe pas</returns>
-        public SoumisVote? Obtenir(int idJeu, int idPlateforme)
+        /// <returns>Le JeuSoumisVote correspondant ou null s'il n'existe pas</returns>
+        public JeuSoumisVote? Obtenir(int idJeu, int idPlateforme)
         {
             // AsNoTracking() force EF Core à aller chercher l'entité directement en base de données
             // et non depuis le cache local (ChangeTracker).
             // Cela garantit que l'on compare les données réelles en BDD avec les données modifiées,
             // et évite les conflits de tracking lors des appels à Valider() puis Modifier().
-            return _context.SoumisVotes
+            return _context.JeuSoumisVotes
                 .AsNoTracking()
                 .FirstOrDefault(s => s.IdJeu == idJeu && s.IdPlateforme == idPlateforme);
         }
@@ -137,30 +137,30 @@ namespace Lib_Services.Services
         #region CUD
 
         /// <summary>
-        /// Crée un nouveau SoumisVote et persiste la modification.
+        /// Crée un nouveau JeuSoumisVote et persiste la modification.
         /// </summary>
-        /// <param name="soumisVote">Objet <see cref="SoumisVote"/> à ajouter.</param>
-        public void Creer(SoumisVote soumisVote)
+        /// <param name="soumisVote">Objet <see cref="JeuSoumisVote"/> à ajouter.</param>
+        public void Creer(JeuSoumisVote soumisVote)
         {
-            ValiderSoumisVote(soumisVote, false);
-            _context.SoumisVotes.Add(soumisVote);
+            ValiderJeuSoumisVote(soumisVote, false);
+            _context.JeuSoumisVotes.Add(soumisVote);
             _context.SaveChanges();
         }
 
         /// <summary>
-        /// Met à jour un SoumisVote existant et persiste la modification.
+        /// Met à jour un JeuSoumisVote existant et persiste la modification.
         /// </summary>
-        /// <param name="soumisVote">Objet <see cref="SoumisVote"/> contenant les valeurs mises à jour.</param>
-        public void Modifier(SoumisVote soumisVote)
+        /// <param name="soumisVote">Objet <see cref="JeuSoumisVote"/> contenant les valeurs mises à jour.</param>
+        public void Modifier(JeuSoumisVote soumisVote)
         {
-            ValiderSoumisVote(soumisVote, true);
+            ValiderJeuSoumisVote(soumisVote, true);
             // Marque l'entité comme modifiée puis sauvegarde.
-            _context.SoumisVotes.Update(soumisVote);
+            _context.JeuSoumisVotes.Update(soumisVote);
             _context.SaveChanges();
         }
 
         /// <summary>
-        /// Supprime un SoumisVote identifié par l'id de l'utilisateur, 
+        /// Supprime un JeuSoumisVote identifié par l'id de l'utilisateur, 
         /// l'id du jeu et l'id de la plateforme, 
         /// puis persiste la modification.
         /// </summary>
@@ -169,12 +169,12 @@ namespace Lib_Services.Services
         public void Supprimer(int idJeu, int idPlateforme)
         {
             // Récupération de l'entité ; vérification de nullité avant suppression.
-            var soumisVote = _context.SoumisVotes.Find(idJeu, idPlateforme);
+            var soumisVote = _context.JeuSoumisVotes.Find(idJeu, idPlateforme);
             if (soumisVote != null)
             {
-                _context.SoumisVotes.Remove(soumisVote);
-                // Suppression en cascade des postes de jeu associés à la SoumisVote. 
-                // Puisqu'un poste de jeu a obligatoirmeent une SoumisVote.
+                _context.JeuSoumisVotes.Remove(soumisVote);
+                // Suppression en cascade des postes de jeu associés à la JeuSoumisVote. 
+                // Puisqu'un poste de jeu a obligatoirmeent une JeuSoumisVote.
                 _context.SaveChanges();
             }
         }
@@ -196,7 +196,7 @@ namespace Lib_Services.Services
             return votesJeu / totalVotes * 100;
         }
 
-        public int ObtenirVotesJeu(int idJeu,SoumisVote soumisVote)
+        public int ObtenirVotesJeu(int idJeu,JeuSoumisVote soumisVote)
         {
             int totalVotes = _context.Voter.Count(v => v.DateVote >= soumisVote.DateDebutVote 
                 && v.DateVote <= soumisVote.DateFinVote);
@@ -228,44 +228,44 @@ namespace Lib_Services.Services
         #endregion
         #region Validations
         /// <summary>
-        /// Permet de valider les données d'un SoumisVote avant création ou modification.
+        /// Permet de valider les données d'un JeuSoumisVote avant création ou modification.
         /// </summary>
-        /// <param name="soumisVote">SoumisVote à valider</param>
+        /// <param name="soumisVote">JeuSoumisVote à valider</param>
         /// <param name="estModification">Indique si c'est une modification ou une création</param>
-        /// <exception cref="SoumisVoteException">Exception si les données du SoumisVote sont invalides</exception>
-        public void ValiderSoumisVote(SoumisVote soumisVote, bool estModification = false)
+        /// <exception cref="JeuSoumisVoteException">Exception si les données du JeuSoumisVote sont invalides</exception>
+        public void ValiderJeuSoumisVote(JeuSoumisVote soumisVote, bool estModification = false)
         {
             if (_jeuService.Obtenir(soumisVote.IdJeu) == null)
-                throw new SoumisVoteException("Le jeu associé n'existe pas.",
-                    (int)SoumisVoteException.SoumisVoteErreur.JeuInexistant);
+                throw new JeuSoumisVoteException("Le jeu associé n'existe pas.",
+                    (int)JeuSoumisVoteException.JeuSoumisVoteErreur.JeuInexistant);
 
             if (_plateformeService.Obtenir(soumisVote.IdPlateforme) == null)
-                throw new SoumisVoteException("La plateforme associée n'existe pas.",
-                    (int)SoumisVoteException.SoumisVoteErreur.PlateformeInexistante);
+                throw new JeuSoumisVoteException("La plateforme associée n'existe pas.",
+                    (int)JeuSoumisVoteException.JeuSoumisVoteErreur.PlateformeInexistante);
 
             if (Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme) != null && !estModification)
-                throw new SoumisVoteException("Une autre SoumisVote existe déjà.",
-                    (int)SoumisVoteException.SoumisVoteErreur.DoublonSoumisVote);
+                throw new JeuSoumisVoteException("Une autre JeuSoumisVote existe déjà.",
+                    (int)JeuSoumisVoteException.JeuSoumisVoteErreur.DoublonJeuSoumisVote);
 
             if (soumisVote.DateDebutVote.Date >= soumisVote.DateFinVote.Date)
-                throw new SoumisVoteException("La date de début du soumisVote doit être antérieure à la date de fin.",
-                    (int)SoumisVoteException.SoumisVoteErreur.DateDebutSuperieureFin);
+                throw new JeuSoumisVoteException("La date de début du soumisVote doit être antérieure à la date de fin.",
+                    (int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateDebutSuperieureFin);
 
             if (soumisVote.DateDebutVote.Date < DateTime.Now.Date)
-                throw new SoumisVoteException("La date de début du soumisVote ne peut pas être dans le passé.",
-                    (int)SoumisVoteException.SoumisVoteErreur.DateDebutDansLePasse);
+                throw new JeuSoumisVoteException("La date de début du soumisVote ne peut pas être dans le passé.",
+                    (int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateDebutDansLePasse);
 
             if (soumisVote.DateFinVote.Date < DateTime.Now.Date)
-                throw new SoumisVoteException("La date de fin du soumisVote ne peut pas être dans le passé.",
-                    (int)SoumisVoteException.SoumisVoteErreur.DateFinDansLePasse);
+                throw new JeuSoumisVoteException("La date de fin du soumisVote ne peut pas être dans le passé.",
+                    (int)JeuSoumisVoteException.JeuSoumisVoteErreur.DateFinDansLePasse);
 
             if (estModification)
             {
-                SoumisVote? enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
+                JeuSoumisVote? enBdd = Obtenir(soumisVote.IdJeu, soumisVote.IdPlateforme);
                 if (enBdd != null && enBdd.DateDebutVote.Date == soumisVote.DateDebutVote.Date
                     && enBdd.DateFinVote.Date == soumisVote.DateFinVote.Date)
-                    throw new SoumisVoteException("Aucune modification détectée.",
-                        (int)SoumisVoteException.SoumisVoteErreur.AucuneModification);
+                    throw new JeuSoumisVoteException("Aucune modification détectée.",
+                        (int)JeuSoumisVoteException.JeuSoumisVoteErreur.AucuneModification);
                 
             }
         }

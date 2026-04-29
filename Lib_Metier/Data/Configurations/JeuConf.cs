@@ -44,10 +44,6 @@ namespace Lib_Metier.Data.Configurations
 
             builder.Property(j => j.DateSortie)
                    .HasColumnName("dateSortie");
-
-            // Relation vers Plateforme : une plateforme peut posséder des jeux, un jeu possède au moins plateforme
-            builder.HasMany(j => j.Plateformes)
-                   .WithMany(pl => pl.Jeux);
         }
     }
 }

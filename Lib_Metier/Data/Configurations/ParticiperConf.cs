@@ -20,15 +20,20 @@ namespace Lib_Metier.Data.Configurations
 
             // Mapping explicite des colonnes : utile pour conserver la compatibilité
             // avec un schéma existant ou des conventions de nommage particulières.
-            builder.Property(p => p.Rang)
-                    .HasColumnName("rang");
-
-            // Clés étrangères (noms de colonnes explicites)
             builder.Property(p => p.Evaluation)
-                   .HasColumnName("evaluation");
+                     .HasColumnName("evaluation")
+                     .HasDefaultValue(0)
+                     .IsRequired();
 
             builder.Property(p => p.Commentaire)
-                   .HasColumnName("commentaire");
+                    .HasColumnName("commentaire")
+                    .HasDefaultValue("")
+                    .IsRequired();
+
+            builder.Property(p => p.ScoreFinal)
+                    .HasColumnName("scoreFinal")
+                    .HasDefaultValue(0)
+                    .IsRequired();
 
             builder.Property(p => p.DateHeureInscription)
                    .HasColumnName("dateHeureInscription");

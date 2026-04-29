@@ -25,7 +25,7 @@ namespace ApplicationUi
         private string filtre;
         private string ordreChamp;
         private readonly Organisateur _organisateurConnecte;
-        public UcJeux(Organisateur unOrganisateurConnecte, Jeu? JeuPreselectionne = null)
+        public UcJeux(Organisateur unOrganisateurConnecte, Jeu? jeuPreselectionne = null)
         {
             InitializeComponent();
             var context = new ApplicationDbContext();
@@ -41,6 +41,12 @@ namespace ApplicationUi
             buttonEffacer.Text = " 🧽  Effacer";
 
             Raz_Zones();
+
+            if (jeuPreselectionne != null)
+            {
+                _jeuSelectionne = _serviceJeu.Obtenir(jeuPreselectionne.IdJeu);
+                RemplirFormulaire();
+            }
 
             if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcPostesDeJeu, "Ajouter") == false)
             {
@@ -59,6 +65,7 @@ namespace ApplicationUi
             }
             // TODO: Ajouter un tooltip sur les boutons pour expliquer leur fonction à l'utilisateur
         }
+
         #region Données
         private void ChargerJeux()
         {
@@ -87,10 +94,18 @@ namespace ApplicationUi
         {
             DesactiverTrieAutomatique(dataGridJeux);
 
-            dataGridJeux.Columns["Titre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridJeux.Columns["IdJeu"].Visible = false;
-            dataGridJeux.Columns["Tournois"].Visible = false;
-            dataGridJeux.Columns["Plateformes"].Visible = false;
+            dataGridJeux.Columns["Titre"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridJeux.Columns["Description"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridJeux.Columns["Pegi"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridJeux.Columns["AnneeSortie"]!.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+
+            dataGridJeux.Columns["IdJeu"]!.Visible = false;
+            dataGridJeux.Columns["Tournois"]!.Visible = false;
+            dataGridJeux.Columns["Plateformes"]!.Visible = false;
+            dataGridJeux.Columns["DateSortie"]!.Visible = false;
+            dataGridJeux.Columns["Editeur"]!.Visible = false;
+
+            dataGridJeux.Columns["AnneeSortie"]!.HeaderText = "Sortie";
         }
 
         #endregion
@@ -99,12 +114,12 @@ namespace ApplicationUi
         #region Boutons
         public void ButtonAjouter_Click(object sender, EventArgs e)
         {
-            Jeu jeu = new ()
+            Jeu jeu = new()
             {
                 Titre = textBoxTitre.Text,
                 Description = textBoxDescription.Text,
                 Editeur = textBoxEditeur.Text,
-                Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0,
+                Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue!,
                 Plateformes = checkedListBoxPlateforme.CheckedItems
                                   .Cast<Plateforme>()
                                   .ToList(),
@@ -119,19 +134,20 @@ namespace ApplicationUi
             catch (JeuException ex)
             {
                 Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message);
             }
             catch (DbException ex)
             {
                 Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du jeu.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erreur technique, réessayez plus tard.");
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Une erreur inattendue est survenue.");
             }
 
+            AjouterJeu(jeu);
         }
         private void ButtonModifier_Click(object sender, EventArgs e)
         {
@@ -144,34 +160,13 @@ namespace ApplicationUi
             _jeuSelectionne.Titre = textBoxTitre.Text;
             _jeuSelectionne.Description = textBoxDescription.Text; ;
             _jeuSelectionne.Editeur = textBoxEditeur.Text;
-            _jeuSelectionne.Pegi = (int?)(comboBoxPegi.SelectedValue) ?? 0;
+            _jeuSelectionne.Pegi = (int)(ConstanteService.PEGI)comboBoxPegi.SelectedValue!;
             _jeuSelectionne.Plateformes = checkedListBoxPlateforme.CheckedItems
                           .Cast<Plateforme>()
                           .ToList();
             _jeuSelectionne.DateSortie = dateTimePickerDateSortie.Value;
 
-            try
-            {
-                _serviceJeu.Modifier(_jeuSelectionne);
-                MessageBox.Show("Le jeu a bien été modifié.", "Modification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Raz_Zones();
-            }
-            catch (JeuException ex)
-            {
-                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (DbException ex)
-            {
-                Log.Error(ex, "Une erreur technique est survenue lors de la modification du jeu.");
-                MessageBox.Show("Erreur technique, réessayez plus tard.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Une erreur inattendue est survenue.");
-                MessageBox.Show("Une erreur inattendue est survenue.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            ModifierJeu(_jeuSelectionne);
         }
         private void ButtonEffacer_Click(object sender, EventArgs e)
         {
@@ -179,20 +174,18 @@ namespace ApplicationUi
         }
         private void ButtonSupprimer_Click(object sender, EventArgs e)
         {
-            if (dataGridJeux.CurrentRow == null)
+            if (dataGridJeux.CurrentRow == null || _jeuSelectionne == null)
                 return;
 
-            if (_jeuSelectionne == null)
+            if (MessageBox.Show("Êtes vous sûr de vouloir supprimer ?", "Suppression",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
 
-            _serviceJeu.Supprimer(_jeuSelectionne.IdJeu);
-            _jeuSelectionne = null;
-            ChargerJeux();
-            Raz_Zones();
-
+            SupprimerJeu();
         }
 
         #endregion
+
         private void DataGridJeux_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Gérer le trie par ordre des champs en fonction du clique sur la cellule d'en-tête
@@ -203,12 +196,12 @@ namespace ApplicationUi
                 // à des fonctions de sélection de clé
                 Dictionary<int, string> map = new()
                 {
-                    {dataGridJeux.Columns["Titre"].Index, "Titre"},
-                    {dataGridJeux.Columns["Description"].Index, "Description"},
-                    {dataGridJeux.Columns["Pegi"].Index, "Pegi"},
-                    {dataGridJeux.Columns["AnneeSortie"].Index, "AnneeSortie"},
-                    {dataGridJeux.Columns["DateSortie"].Index, "DateSortie"},
-                    {dataGridJeux.Columns["Editeur"].Index, "Editeur"},
+                    {dataGridJeux.Columns["Titre"]!.Index, "Titre"},
+                    {dataGridJeux.Columns["Description"]!.Index, "Description"},
+                    {dataGridJeux.Columns["Pegi"]!.Index, "Pegi"},
+                    {dataGridJeux.Columns["AnneeSortie"]!.Index, "AnneeSortie"},
+                    {dataGridJeux.Columns["DateSortie"]!.Index, "DateSortie"},
+                    {dataGridJeux.Columns["Editeur"]!.Index, "Editeur"},
                 };
 
                 if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
@@ -272,8 +265,6 @@ namespace ApplicationUi
             textBoxDescription.Clear();
             textBoxEditeur.Clear();
 
-            filtre = "";
-
             _jeuSelectionne = null;
 
             checkedListBoxPlateforme.SelectedItem = null;
@@ -303,7 +294,7 @@ namespace ApplicationUi
             textBoxDescription.Text = _jeuSelectionne.Description;
             textBoxEditeur.Text = _jeuSelectionne.Editeur;
 
-            comboBoxPegi.SelectedItem = _jeuSelectionne.Pegi;
+            comboBoxPegi.SelectedItem = (ConstanteService.PEGI)_jeuSelectionne.Pegi;
 
             // CheckBox plateforme, pour l aséléction multiple des plateformes
             // on dit explicitement "ces object sont des Plateforme"
@@ -342,6 +333,102 @@ namespace ApplicationUi
             foreach (DataGridViewColumn col in dataGrid.Columns)
             {
                 col.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
+        }
+        /// <summary>
+        /// Permets de modifier un jeu en gérant les différentes exceptions qui peuvent survenir,
+        /// </summary>
+        private void ModifierJeu(Jeu? jeu)
+        {
+            try
+            {
+                _serviceJeu.Modifier(jeu);
+                MessageBox.Show("Le jeu a bien été modifié.", "Modification",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message, "Modification",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de la modification du jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Modification",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Modification",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        /// <summary>
+        /// Permets de supprimer un jeu en gérant les différentes exceptions qui peuvent survenir,
+        /// </summary>
+        private void SupprimerJeu()
+        {
+            try
+            {
+                _serviceJeu.Supprimer(_jeuSelectionne!.IdJeu);                
+                MessageBox.Show("Le jeu a bien été supprimé.", "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message, "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Erreur technique lors de la suppression du jeu");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors de la suppression du jeu");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Suppression",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        /// <summary>
+        /// Permet d'ajouter un jeu
+        /// </summary>
+        /// <param name="jeu"></param>
+        private void AjouterJeu(Jeu? jeu)
+        {
+            try
+            {
+                _serviceJeu.Creer(jeu);
+                MessageBox.Show("Le jeu a bien été ajouté.", "Ajout",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Raz_Zones();
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message, "Ajout",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (DbException ex)
+            {
+                Log.Error(ex, "Une erreur technique est survenue lors de l'ajout du jeu.");
+                MessageBox.Show("Erreur technique, réessayez plus tard.", "Ajout",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Une erreur inattendue est survenue.");
+                MessageBox.Show("Une erreur inattendue est survenue.", "Ajout",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         #endregion

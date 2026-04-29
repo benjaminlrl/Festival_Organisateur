@@ -1,8 +1,10 @@
 ﻿using Lib_Entities.Entities;
 using Lib_Metier.Data.Configurations;
+using Lib_Services.Exceptions;
 using Lib_Services.Interfaces;
 using Lib_Services.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +12,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
+using static Lib_Services.Exceptions.JeuSoumisVoteException;
 namespace ApplicationUi
 {
     public partial class FormMain : Form
@@ -51,7 +53,7 @@ namespace ApplicationUi
             {
                 btnLots.Visible = false;
             }
-            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcVoter, "Consulter") == false)
+            if (_serviceOrganisateur.EstAutoriser(_organisateurConnecte, Organisateur.LesUC.UcJeuxSoumisVote, "Consulter") == false)
             {
                 btnVoter.Visible = false;
             }
@@ -90,9 +92,17 @@ namespace ApplicationUi
         // ===============================
         private void BtnDeconnexion_Click(object? sender, EventArgs e)
         {
-            var formAuth = new FormAuthentification();
-            formAuth.Show();
-            this.Hide();
+            try
+            {
+                var formAuth = new FormAuthentification();
+                formAuth.Show();
+                this.Hide();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }           
         }
         private void BtnQuitter_Click(object? sender, EventArgs e)
         {
@@ -100,105 +110,256 @@ namespace ApplicationUi
         }
         private void BtnTournois_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcTournois(_organisateurConnecte), "Gestion des tournois");
+            try
+            {
+                UcTournois uc = new(_organisateurConnecte);
+
+                uc.NaviguerVersEspaces += (espace) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcEspaces(_organisateurConnecte, espace), "Gestion des espaces");
+                };
+
+                uc.NaviguerVersJeux += (jeu) =>
+                {
+                    // Récupère le premier tournoi de l'espace 
+                    LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
+                };
+
+                LoadUserControl(uc, "Gestion des tournois");
+            }
+            catch (TournoiException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnEspaces_Click(object sender, EventArgs e)
-        {
-            UcEspaces uc = new(_organisateurConnecte);
-
-            uc.NaviguerVersPostesJeu += (posteJeu) =>
+        {            
+            try
             {
-                // Récupère le premier poste de jeu de la plateforme 
-                LoadUserControl(new UcPostesDeJeu(_organisateurConnecte, posteJeu), "Gestion des postes de jeu");
-            };
+                UcEspaces uc = new(_organisateurConnecte);
 
-            uc.NaviguerVersTournois += (tournoi) =>
+                uc.NaviguerVersPostesJeu += (posteJeu) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcPostesDeJeu(_organisateurConnecte, posteJeu), "Gestion des postes de jeu");
+                };
+
+                uc.NaviguerVersTournois += (tournoi) =>
+                {
+                    // Récupère le premier tournoi de l'espace 
+                    LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
+                };
+
+                LoadUserControl(uc, "Gestion des espaces");
+            }
+            catch (EspaceException ex)
             {
-                // Récupère le premier tournoi de l'espace 
-                LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
-            };
-
-            LoadUserControl(uc, "Gestion des espaces");
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnPostes_Click(object sender, EventArgs e)
-        {
-            UcPostesDeJeu uc = new(_organisateurConnecte);
-
-            uc.NaviguerVersTournois += (tournoi) =>
+        {            
+            try
             {
-                // Récupère le premier poste de jeu de la plateforme 
-                LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
-            };
+                UcPostesDeJeu uc = new(_organisateurConnecte);
 
-            LoadUserControl(uc, "Gestion des postes de jeu");
+                uc.NaviguerVersTournois += (tournoi) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcTournois(_organisateurConnecte, tournoi), "Gestion des tournois");
+                };
+
+                uc.NaviguerVersEspaces += (espace) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcEspaces(_organisateurConnecte, espace), "Gestion des espaces");
+                };
+
+                uc.NaviguerVersPlateformes += (plateforme) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcPlateformes(_organisateurConnecte, plateforme), "Gestion des plateformes");
+                };
+
+                LoadUserControl(uc, "Gestion des postes de jeu");
+            }
+            catch (PosteJeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnPlateformes_Click(object sender, EventArgs e)
-        {
-            var uc = new UcPlateformes(_organisateurConnecte);
-
-            uc.NaviguerVersPostesJeu += (posteJeu) =>
+        {            
+            try
             {
-                // Récupère le premier poste de jeu de la plateforme 
-                LoadUserControl(new UcPostesDeJeu(_organisateurConnecte, posteJeu), "Gestion des postes de jeu");
-            };
+                UcPlateformes uc = new (_organisateurConnecte);
 
-            uc.NaviguerVersJeux += (jeu) =>
+                uc.NaviguerVersPostesJeu += (posteJeu) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcPostesDeJeu(_organisateurConnecte, posteJeu), "Gestion des postes de jeu");
+                };
+
+                uc.NaviguerVersJeux += (jeu) =>
+                {
+                    // Récupère le premier jeu de la plateforme 
+                    LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
+                };
+
+                LoadUserControl(uc, "Gestion des plateformes");
+            }
+            catch (PlateformeException ex)
             {
-                // Récupère le premier jeu de la plateforme 
-                LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
-            };
-
-            LoadUserControl(uc, "Gestion des plateformes");
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnOrganisateurs_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcOrganisateurs(_organisateurConnecte), "Gestion des Organisateurs");
+            try
+            {
+                LoadUserControl(new UcOrganisateurs(_organisateurConnecte), "Gestion des Organisateurs");
+            }
+            catch (OrganisateurException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnLotComposants_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcLotComposants(_organisateurConnecte), "Gestion des Lots Composants");
+            try
+            {
+                LoadUserControl(new UcLotComposants(_organisateurConnecte), "Gestion des Lots Composants");
+            }
+            catch (LotComposantException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
         private void BtnLots_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcLots(_organisateurConnecte), "Gestion des Lots");
+            try
+            {
+                LoadUserControl(new UcLots(_organisateurConnecte), "Gestion des Lots");
+            }
+            catch (LotException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnJeux_Click(object sender, EventArgs e)
-        {
-            UcJeux uc = new(_organisateurConnecte);
-            LoadUserControl(uc, "Gestion des jeux");
+        {           
+            try
+            {
+                UcJeux uc = new(_organisateurConnecte);
+                LoadUserControl(uc, "Gestion des jeux");
+            }
+            catch (JeuException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnVoter_Click(object sender, EventArgs e)
-        {
-            UcVoter uc = new(_organisateurConnecte);
+        {            
+            try
+            {
+                UcJeuxSoumisVote uc = new(_organisateurConnecte);
 
-            uc.NaviguerVersJeux += (jeu) =>
+                uc.NaviguerVersJeux += (jeu) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
+                };
+                uc.NaviguerVersPlateformes += (plateforme) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcPlateformes(_organisateurConnecte, plateforme), "Gestion des plateformes");
+                };
+                LoadUserControl(uc, "Gestion des jeux ouverts aux votes");
+            }
+            catch (JeuSoumisVoteException ex)
             {
-                // Récupère le premier poste de jeu de la plateforme 
-                LoadUserControl(new UcJeux(_organisateurConnecte, jeu), "Gestion des jeux");
-            };
-            uc.NaviguerVersPlateformes += (plateforme) =>
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
             {
-                // Récupère le premier poste de jeu de la plateforme 
-                LoadUserControl(new UcPlateformes(_organisateurConnecte, plateforme), "Gestion des plateformes");
-            };
-            LoadUserControl(uc, "Gestion des jeux ouverts aux votes");
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
 
         private void BtnParticiper_Click(object sender, EventArgs e)
         {
-            LoadUserControl(new UcParticiper(_organisateurConnecte), "Gestion des participations");
-        }
-
-        private void panelContent_Paint(object sender, PaintEventArgs e)
-        {
-
+            try
+            {
+                LoadUserControl(new UcParticiper(_organisateurConnecte), "Gestion des participations");
+            }
+            catch (ParticiperException ex)
+            {
+                Log.Warning("[{Code}] {Message}", ex.CodeErreur, ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Erreur inattendue lors du chargement du formulaire.");
+                MessageBox.Show("Une erreur inattendue est survenue.");
+            }
         }
     }
 }
