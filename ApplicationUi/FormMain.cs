@@ -176,6 +176,12 @@ namespace ApplicationUi
                     LoadUserControl(new UcEspaces(_organisateurConnecte, espace), "Gestion des espaces");
                 };
 
+                uc.NaviguerVersPlateformes += (plateforme) =>
+                {
+                    // Récupère le premier poste de jeu de la plateforme 
+                    LoadUserControl(new UcPlateformes(_organisateurConnecte, plateforme), "Gestion des plateformes");
+                };
+
                 LoadUserControl(uc, "Gestion des postes de jeu");
             }
             catch (PosteJeuException ex)
