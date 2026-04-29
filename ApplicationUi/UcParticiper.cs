@@ -326,7 +326,7 @@ namespace ApplicationUi
                 return;
             }
 
-            _participationSelectionnee = dataGridParticipations.Rows[e.RowIndex].DataBoundItem as Participer;
+            _participationSelectionnee = dataGridParticipationsJoueur.Rows[e.RowIndex].DataBoundItem as Participer;
 
             if (_participationSelectionnee != null)
                 RemplirFormulaire();
