@@ -15,7 +15,7 @@ Elle permet la gestion complète d'un festival : organisateurs, espaces, tournoi
 - [Contexte et objectifs](#contexte-et-objectifs)
   - [Objectifs principaux](#objectifs-principaux)
   - [Contraintes](#contraintes)
-  - [Répartition-du-travail](#répartition-du-travail)
+  - [Répartition du travail](#répartition-du-travail)
 - [Fonctionnalités](#fonctionnalités)
   - [Gestion des plateformes](#gestion-des-plateformes)
   - [Gestion des espaces](#gestion-des-espaces)
@@ -190,7 +190,7 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 
 ### Gestion des tournois
 
--	Création et gestion des tournois du festival (nom, description, date et heure, durée prévue, jeu, espace, statut, nombre de participants max, nombre de participants inscrit).
+-	Création et gestion des tournois du festival (nom, date et heure, durée prévue, jeu, espace, statut, nombre de participants max, nombre de participants inscrit).
 -	Affichage du nombres d'inscrit au tournois
 -	En double cliquant sur le jeu associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des jeux, avec le jeu cliqué préchargé pour faciliter la navigation dans l’application.
 -	En double cliquant sur l'espace associé au tournoi dans la dataGridView, cela redirige l’utilisateur vers la gestion des espaces, avec l'espace cliqué préchargé pour faciliter la navigation dans l’application.
