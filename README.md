@@ -1097,7 +1097,7 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 ### Gestion des binômes jeu/plateforme ouverts aux votes
 
-![Espace de votes dédié aux utilisateurs](Documentation/App/JeuSoumisVote.png)
+![Espace de votes dédié aux utilisateurs](Documentation/App/JeuxSoumisVote.png)
 
 ---
 
