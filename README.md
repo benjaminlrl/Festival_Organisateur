@@ -1026,7 +1026,7 @@ Supprimer le dossier `Migrations` et le fichier `.db`, puis relancer les command
 
 | Version                                                                                        | Date      | Type    | Description                                                                |
 | ---------------------------------------------------------------------------------------------- | --------- | ------- | -------------------------------------------------------------------------- |
-| [v1.4.1](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.5.0)             | Avr. 2026 | Stable  | Correction bugs liés à la navigations entre les Uc, enrichiseement des exceptions |
+| [v1.5.0](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.5.0)             | Avr. 2026 | Stable  | Correction bugs liés à la navigations entre les Uc, enrichiseement des exceptions |
 | [v1.4.1](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.4.1)             | Avr. 2026 | Dev     | Correction bugs critiques, amélioration navigation UC, gestion des erreurs |
 | [v1.4.0](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.4.0)             | Avr. 2026 | Dev     | Mise en place des exceptions métier, navigation dynamique, tests unitaires |
 | [v1.3.2-alpha](https://github.com/benjaminlrl/Festival_Organisateur/releases/tag/v1.3.2-alpha) | Avr. 2026 | Alpha   | Nettoyage de code                                                          |
