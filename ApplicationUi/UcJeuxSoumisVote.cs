@@ -32,6 +32,7 @@ namespace ApplicationUi
         private readonly Organisateur _organisateurConnecte;
         public event Action<Jeu>? NaviguerVersJeux;
         public event Action<Plateforme>? NaviguerVersPlateformes;
+        public event Action<Tournoi>? NaviguerVersTournois;
 
         public UcJeuxSoumisVote(Organisateur unOrganisateurConnecte)
         {
@@ -288,25 +289,28 @@ namespace ApplicationUi
             if (e.ColumnIndex < 0)
                 return;
 
-            // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
-            // à des fonctions de sélection de clé
-            Dictionary<int, string> map = new()
-                {
-                    {dataGridClassement.Columns["NbVotes"]!.Index, "NbVotes"},
-                    {dataGridClassement.Columns["LibellePlateforme"]!.Index, "LibellePlateforme"},
-                    {dataGridClassement.Columns["TitreJeu"]!.Index, "TitreJeu"},
-                };
+            if (e.RowIndex < 0)
+            {
+                // Utiliser un dictionnaire plutôt qu'un switch pour associer les index de colonnes
+                // à des fonctions de sélection de clé
+                Dictionary<int, string> map = new()
+                    {
+                        {dataGridClassement.Columns["NbVotes"]!.Index, "NbVotes"},
+                        {dataGridClassement.Columns["LibellePlateforme"]!.Index, "LibellePlateforme"},
+                        {dataGridClassement.Columns["TitreJeu"]!.Index, "TitreJeu"},
+                    };
 
-            if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
-                return;
+                if (!map.TryGetValue(e.ColumnIndex, out string? colonne))
+                    return;
 
-            ordreChampClassement = ordreChampClassement == "ASC" ? "DESC" : "ASC";
+                ordreChampClassement = ordreChampClassement == "ASC" ? "DESC" : "ASC";
 
-            dataGridClassement.DataSource = _serviceJeuSoumisVote.ListerClassmentJeuxVotes(filtre, colonne, ordreChampClassement);
-            dataGridClassement.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
-                ordreChampClassement == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
+                dataGridClassement.DataSource = _serviceJeuSoumisVote.ListerClassmentJeuxVotes(filtre, colonne, ordreChampClassement);
+                dataGridClassement.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection =
+                    ordreChampClassement == "ASC" ? SortOrder.Ascending : SortOrder.Descending;
 
-            MEP_DataGridClassement();
+                MEP_DataGridClassement();
+            }
 
             return;
         }
@@ -368,15 +372,13 @@ namespace ApplicationUi
             string colonne = dataGridJeuSoumisVote.Columns[e.ColumnIndex].Name;
 
             if (colonne == "TitreJeu")
-            {
                 if (soumisVote.Jeu != null)
                     NaviguerVersJeux?.Invoke(soumisVote.Jeu);
-            }
+            
             else if (colonne == "LibellePlateforme")
-            {
                 if (soumisVote.Plateforme != null)
                     NaviguerVersPlateformes?.Invoke(soumisVote.Plateforme);
-            }
+            
 
         }
 
@@ -487,5 +489,6 @@ namespace ApplicationUi
             }
         }
         #endregion
+
     }
 }
