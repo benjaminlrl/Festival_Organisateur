@@ -117,7 +117,11 @@ Ce projet a été réalisé dans le cadre du BTS SIO SLAM afin de répondre à u
 > - Gestion des Votes
 > - Gestion des jeux soumis aux votes (JeuSoumisVote)
 > - Gestion des Participants
-
+> - Création des Exceptions
+> - Mise en place de la navigations entre les Uc
+> - Mise en place des logs
+> - Mise en place de premiers tests unitaires
+> - Création de la documentation technique
 ---
 
 ## Fonctionnalités
